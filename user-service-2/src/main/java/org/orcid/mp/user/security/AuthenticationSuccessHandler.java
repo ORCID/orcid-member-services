@@ -12,26 +12,13 @@ import java.io.IOException;
 
 public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
-    @Value("${application.ui.baseUrl}")
-    private String uiBaseUrl;
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
-
-        // Find the original /oauth2/authorize URL that Spring saved earlier
-        SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
-
-        // If there's no saved request (e.g. user went directly to /login),
-        // we send them to a default landing page
-        String targetUrl = (savedRequest != null)
-                ? savedRequest.getRedirectUrl()
-                : uiBaseUrl;
-
-        // Send a JSON response so Angular can handle it
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType("application/json");
-        response.getWriter().write("{\"status\": \"success\", \"redirectUrl\": \"" + targetUrl + "\"}");
+        response.getWriter().write("{\"status\": \"success\"}");
+        response.getWriter().flush();
     }
 }
