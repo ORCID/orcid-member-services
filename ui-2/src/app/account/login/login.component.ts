@@ -106,10 +106,9 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
 
     this.eventService.broadcast(new Event(EventType.LOG_IN_SUCCESS))
 
-    // previousState was set in the authExpiredInterceptor before being redirected to login modal.
-    // since login is successful, go to stored previousState and clear previousState
     const redirect = this.stateStorageService.getUrl()
     if (redirect) {
+      console.log('Redirecting to stored url after login:', redirect)
       this.stateStorageService.storeUrl(null)
       this.router.navigateByUrl(redirect)
     }
