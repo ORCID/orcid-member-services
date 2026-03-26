@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   issuerUrl: (window as any).__env?.issuerUrl || 'http://localhost:9000',
-  redirectUri: window.location.origin,
+  redirectUri: window.location.origin + '/auth/callback',
   postLogoutRedirectUri: window.location.origin,
 }
 
