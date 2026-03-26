@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  issuerUrl: (window as any).__env?.issuerUrl || 'http://localhost:9000'
+  issuerUrl: (window as any).__env?.issuerUrl || 'http://localhost:9000',
+  redirectUri: window.location.origin,
+  postLogoutRedirectUri: window.location.origin,
 }
 
 /*

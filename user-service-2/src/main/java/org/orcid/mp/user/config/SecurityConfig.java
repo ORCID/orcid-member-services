@@ -90,6 +90,12 @@ public class SecurityConfig {
     @Value("${application.security.issuerUrl}")
     private String issuerUrl;
 
+    @Value("${application.ui.redirectUri}")
+    private String uiClientRedirectUri;
+
+    @Value("${application.ui.postLogoutRedirectUri}")
+    private String uiClientPostLogoutRedirectUri;
+
     @Bean
     @Order(1)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
