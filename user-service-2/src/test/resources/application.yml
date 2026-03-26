@@ -18,6 +18,8 @@ spring:
 application:
   ui:
     baseUrl: http://localhost:4200
+    postLogoutRedirectUri: http://localhost:4200
+    redirectUri: http://localhost:4200
   releaseVersion: 1.2.3
   internal:
     clientId: userservice

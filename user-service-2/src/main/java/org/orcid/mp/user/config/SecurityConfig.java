@@ -90,6 +90,12 @@ public class SecurityConfig {
     @Value("${application.security.issuerUrl}")
     private String issuerUrl;
 
+    @Value("${application.ui.redirectUri}")
+    private String uiClientRedirectUri;
+
+    @Value("${application.ui.postLogoutRedirectUri}")
+    private String uiClientPostLogoutRedirectUri;
+
     @Bean
     @Order(1)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
@@ -172,8 +178,8 @@ public class SecurityConfig {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri(uiBaseUrl)
-                .postLogoutRedirectUri(uiBaseUrl)
+                .redirectUri(uiClientRedirectUri)
+                .postLogoutRedirectUri(uiClientPostLogoutRedirectUri)
                 .scope(OidcScopes.OPENID)
                 .scope("MP")
                 .tokenSettings(tokenSettings)

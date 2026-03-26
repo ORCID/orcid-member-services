@@ -57,6 +57,8 @@ logging:
 application:
   ui:
     baseUrl: ${APPLICATION_UI_BASE_URL}
+    postLogoutRedirectUri: ${UI_POST_LOGOUT_REDIRECT_URI}
+    redirectUri: ${UI_REDIRECT_URI}
   releaseVersion: ${APPLICATION_RELEASE_VERSION}
   encrypt:
     salt: ${APPLICATION_ENCRYPT_SALT}

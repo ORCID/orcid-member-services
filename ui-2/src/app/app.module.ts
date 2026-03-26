@@ -36,8 +36,8 @@ const origin = window.location.origin
     AuthModule.forRoot({
       config: {
         authority: environment.issuerUrl,
-        redirectUrl: window.location.origin,
-        postLogoutRedirectUri: window.location.origin,
+        redirectUrl: environment.redirectUri,
+        postLogoutRedirectUri: environment.postLogoutRedirectUri,
         clientId: 'mp-ui-client',
         scope: 'openid MP',
         responseType: 'code',
