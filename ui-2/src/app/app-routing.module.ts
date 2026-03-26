@@ -7,6 +7,10 @@ import { LoginComponent } from './account'
 
 const routes: Routes = [
   {
+    path: 'auth/callback',
+    children: [],
+  },
+  {
     path: '',
     loadChildren: () => import('./account/account.module').then((m) => m.AccountModule),
   },

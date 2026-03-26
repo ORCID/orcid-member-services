@@ -6,6 +6,7 @@ import { map, switchMap, take, filter } from 'rxjs/operators' // <--- Import fil
 
 import { StateStorageService } from './service/state-storage.service'
 import { AccountService } from './service/account.service'
+import { log } from 'console'
 
 export const AuthGuard = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean => {
   const authorities = route.data['authorities']
@@ -23,6 +24,7 @@ export const AuthGuard = (route: ActivatedRouteSnapshot, state: RouterStateSnaps
         if (state.url === '/login') {
           return of(true)
         }
+        console.log('storing state url for redirect after login:', state.url)
         stateStorageService.storeUrl(state.url)
         router.navigate(['/login'])
         return of(false)

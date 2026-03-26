@@ -32,8 +32,10 @@ export class AppComponent implements OnInit {
           const redirect = this.stateStorageService.getUrl()
           if (redirect) {
             this.stateStorageService.storeUrl(null)
+            console.log('Redirecting to stored url after login:', redirect)
             this.router.navigateByUrl(redirect)
-          } else if (this.router.url.includes('login/callback')) {
+          } else if (this.router.url.includes('auth/callback')) {
+            console.log('Oauth callback, navigating to home page after login')
             this.router.navigate(['/'])
           }
         })
