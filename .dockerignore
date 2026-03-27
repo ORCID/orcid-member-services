@@ -1,0 +1,90 @@
+# Node.js
+**/node_modules
+**/npm-debug.log
+**/package-lock.json
+
+# Angular build outputs and cache
+**/.angular
+**/dist
+**/tmp
+
+# Java/Maven
+**/target
+**/.mvn
+
+# IDE - IntelliJ IDEA
+.idea
+*.iml
+*.iws
+*.ipr
+
+# IDE - VSCode
+.vscode
+
+# IDE - Eclipse
+.project
+.classpath
+.settings
+.factorypath
+eclipse_formatter.xml
+eclipse_javascript_formatter.xml
+intellij_codestyle.xml
+
+# Git
+.git
+.gitignore
+
+# GitHub
+.github
+
+# Logs
+logs
+*.log
+**/hs_err_pid*.log
+**/replay_pid*.log
+
+# Environment files
+.env
+.env.example
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# CI/CD and deployment
+release.sh
+deploy-dev-only.sh
+docker-build.sh
+
+# Testing
+**/cypress
+**/*.spec.ts
+**/*.test.ts
+**/karma.conf.js
+**/cypress.config.ts
+
+# Documentation
+README.md
+**/README.md
+
+# Keystores (should be mounted as volumes)
+keystores
+
+# Samples
+samples
+
+# Policy
+policy
+
+# Transifex
+.tx
+
+# Misc
+.trello
+.dclintrc
+.yo-rc.json
+.mise.toml
+.pre-commit-config.yaml
+.editorconfig
+.angulardoc.json
