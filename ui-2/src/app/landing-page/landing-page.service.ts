@@ -8,7 +8,7 @@ import { OrcidRecord } from '../shared/model/orcid-record.model'
 export class LandingPageService {
   private headers: HttpHeaders
 
-  idTokenUri = '/assertionservice/api/id-token'
+  idTokenUri = '/assertionservice/id-token'
   recordConnectionUri = '/assertionservice/api/assertion/record/'
   memberInfoUri = '/memberservice/api/members/authorized/'
   userInfoUri = ORCID_BASE_URL + '/oauth/userinfo'
