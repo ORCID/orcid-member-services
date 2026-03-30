@@ -110,8 +110,8 @@ public class SalesforceClient {
 
     private <T> T get(String path, ParameterizedTypeReference<T> typeReference) {
         String url = salesforceClientEndpoint + path;
-        LOG.debug("Sending salesforce GET request to {}", path);
-        ResponseEntity<T> response = restClient.get().uri(path).headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken.get())).retrieve().toEntity(typeReference);
+        LOG.debug("Sending salesforce GET request to {}", url);
+        ResponseEntity<T> response = restClient.get().uri(url).headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken.get())).retrieve().toEntity(typeReference);
         return processResponse(response, path);
     }
 
