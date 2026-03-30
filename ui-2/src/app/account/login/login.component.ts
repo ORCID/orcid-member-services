@@ -105,6 +105,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
             this.showMfa = true
           }
           if (err.error?.error === 'mfa_invalid') {
+            this.showMfa = true
             this.mfaError  = true
           }
         } else {
