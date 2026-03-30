@@ -29,7 +29,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/id-token", "/assertion/record/**").permitAll()
+                        .requestMatchers("/id-token", "/record/**").permitAll()
                         .requestMatchers("/internal/**").hasAuthority("SCOPE_internal")
                         .anyRequest().authenticated()
                 )
