@@ -1,15 +1,14 @@
 import { AfterViewInit, Component, NgZone, OnDestroy, Renderer2 } from '@angular/core'
 import { FormBuilder } from '@angular/forms'
 import { Router } from '@angular/router'
-import { AccountService } from '../service/account.service'
-import { LoginService } from '../service/login.service'
-import { StateStorageService } from '../service/state-storage.service'
-import { Subscription, filter, take } from 'rxjs'
-import { EventService } from 'src/app/shared/service/event.service'
+import { OidcSecurityService } from 'angular-auth-oidc-client'
+import { Subscription } from 'rxjs'
 import { EventType } from 'src/app/app.constants'
 import { Event } from 'src/app/shared/model/event.model'
+import { EventService } from 'src/app/shared/service/event.service'
+import { StateStorageService } from '../service/state-storage.service'
+import { LoginService } from '../service/login.service'
 import { ILoginCredentials } from '../model/login.model'
-import { OidcSecurityService } from 'angular-auth-oidc-client'
 
 @Component({
   selector: 'app-login',
@@ -19,7 +18,6 @@ import { OidcSecurityService } from 'angular-auth-oidc-client'
 export class LoginComponent implements AfterViewInit, OnDestroy {
   authenticationError = false
   showMfa = false
-  mfaSent = false
   mfaError = false
   sub: Subscription | undefined
 
@@ -29,20 +27,29 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     mfaCode: [''],
   })
 
+  get username() {
+    return this.loginForm.get('username')
+  }
+
+  get password() {
+    return this.loginForm.get('password')
+  }
+
+  get mfaCode() {
+    return this.loginForm.get('mfaCode')
+  }
+
   constructor(
     private loginService: LoginService,
     private stateStorageService: StateStorageService,
     private renderer: Renderer2,
     private router: Router,
-    private accountService: AccountService,
     private oidcSecurityService: OidcSecurityService,
     private fb: FormBuilder,
     private eventService: EventService,
     private ngZone: NgZone
   ) {
-    this.sub = this.eventService.on(EventType.LOG_IN_SUCCESS).subscribe((e) => {
-      console.log('login success')
-    })
+    this.sub = this.eventService.on(EventType.LOG_IN_SUCCESS).subscribe()
   }
 
   ngOnDestroy(): void {
@@ -67,9 +74,14 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     this.mfaError = false
 
     const credentials: ILoginCredentials = {
-      username: this.loginForm.get('username')!.value!,
-      password: this.loginForm.get('password')!.value!,
-      mfaCode: this.loginForm.get('mfaCode')?.value,
+      username: this.username?.value || '',
+      password: this.password?.value || '',
+      mfaCode: this.mfaCode?.value
+    }
+
+    if (!credentials.username && !credentials.password) {
+      this.authenticationError = true
+      return
     }
 
     // If we are showing MFA but no code is entered, stop here
@@ -86,15 +98,19 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
         }
       },
       error: (err) => {
-        if (err.status === 401 && err.error?.error === 'mfa_required') {
-          console.log('MFA is required, showing MFA input')
-          this.showMfa = true
-          this.mfaError = true
-        } else {
+        if (err.status === 401) {
           this.authenticationError = true
-          this.loginService.logout()
-        }
-        this.mfaSent = false
+          console.log('MFA is required, showing MFA input', err.error)
+          if (err.error?.error === 'mfa_required') {
+            this.showMfa = true
+          }
+          if (err.error?.error === 'mfa_invalid') {
+            this.mfaError  = true
+          }
+        } else {
+            this.authenticationError = true
+            this.loginService.logout()
+          }
       },
     })
   }

@@ -150,7 +150,6 @@ public class SecurityConfig {
                         .failureHandler(new MfaAuthenticationFailureHandler())
                         .permitAll()
                 )
-                .authenticationProvider(new MfaAuthenticationProvider(userService, passwordEncoder(), userDetailsService))
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 )

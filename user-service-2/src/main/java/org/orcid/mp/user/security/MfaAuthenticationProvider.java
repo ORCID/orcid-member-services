@@ -37,8 +37,11 @@ public class MfaAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Invalid credentials");
         }
         if (userService.isMfaEnabled(username)) {
-            if (mfaCode == null || !userService.validMfaCode(username, mfaCode)) {
+            if (mfaCode == null || mfaCode.isBlank()) {
                 throw new MfaRequiredException("MFA_REQUIRED");
+            }
+            if (!userService.validMfaCode(username, mfaCode)) {
+                throw new MfaInvalidCodeException("MFA_INVALID_CODE");
             }
         }
 
