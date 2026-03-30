@@ -49,7 +49,7 @@ export class SettingsComponent implements OnInit {
     this.showMfaSetup = false
     this.showMfaTextCode = false
     this.showMfaBackupCodes = false
-    this.accountService.getAccountData().subscribe((account) => {
+    this.accountService.getAccountData(true).subscribe((account) => {
       if (account) {
         this.account = account
         this.updateForm(account)
