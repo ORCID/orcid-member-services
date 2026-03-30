@@ -1,4 +1,7 @@
 spring:
+  messages:
+    basename: i18n/messages
+    encoding: utf-8
   application:
     name: assertion-service
   security:
