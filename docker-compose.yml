@@ -100,6 +100,9 @@ services:
       - "9010:9010"
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
+
+      # bridge so dynamic logging level can be passed in via docker compose (environment variable passed in my be declared in this file)
+      - LOGGING_LEVEL_ORG_ORCID_MP=${APP_LOG_LEVEL:-INFO}
       - SPRING_DATA_MONGODB_URI=${MONGO_DB}
       - SPRING_DATA_MONGODB_DATABASE=memberservice
       - APPLICATION_HTTPCLIENT_MAX_CONN_TOTAL=${HTTP_MAX_CONN_TOTAL}

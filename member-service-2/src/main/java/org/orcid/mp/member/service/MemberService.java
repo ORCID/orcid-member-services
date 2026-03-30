@@ -224,6 +224,7 @@ public class MemberService {
     }
 
     public MemberDetails getMemberDetails(String salesforceId) throws UnauthorizedMemberAccessException {
+        LOG.debug("Fetching salesforce data for {}...", salesforceId);
         validateUserAccess(salesforceId);
         Member member = memberRepository.findBySalesforceId(salesforceId).orElseThrow();
         try {
