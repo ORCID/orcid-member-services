@@ -9,7 +9,7 @@ export class LandingPageService {
   private headers: HttpHeaders
 
   idTokenUri = '/assertionservice/id-token'
-  recordConnectionUri = '/assertionservice/api/assertion/record/'
+  recordConnectionUri = '/assertionservice/assertion/record/'
   memberInfoUri = '/memberservice/api/members/authorized/'
   userInfoUri = ORCID_BASE_URL + '/oauth/userinfo'
   publicKeyUri = ORCID_BASE_URL + '/oauth/jwks'
