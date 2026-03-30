@@ -138,6 +138,7 @@ public class SalesforceClient {
         try {
             return function.get();
         } catch (Exception e) {
+            LOG.debug("Exception after salesforce request", e);
             LOG.info("Refreshing access token");
             synchronized(this) {
                 createAccessToken();
