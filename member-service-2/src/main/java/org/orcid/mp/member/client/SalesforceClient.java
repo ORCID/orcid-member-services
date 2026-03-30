@@ -50,6 +50,7 @@ public class SalesforceClient {
     private RestClient restClient;
 
     public MemberDetails getMemberDetails(String salesforceId) throws IOException {
+        LOG.debug("Fetching member details from salesforce...");
         return request(() -> getSFMemberDetails(salesforceId));
     }
 
@@ -66,6 +67,7 @@ public class SalesforceClient {
     }
 
     public ConsortiumLeadDetails getConsortiumLeadDetails(String salesforceId) throws IOException {
+        LOG.debug("Fetching consortium lead member details from salesforce...");
         return request(() -> getSFConsortiumLeadDetails(salesforceId));
     }
 
@@ -85,7 +87,9 @@ public class SalesforceClient {
     }
 
     private MemberDetails getSFMemberDetails(String salesforceId) {
-        return get("/member/" + salesforceId + "/details", new ParameterizedTypeReference<MemberDetails>() {
+        String path = "/member/" + salesforceId + "/details";
+        LOG.debug("Fetching member details for path {}", path);
+        return get(path, new ParameterizedTypeReference<MemberDetails>() {
         });
     }
 
@@ -105,7 +109,9 @@ public class SalesforceClient {
     }
 
     private <T> T get(String path, ParameterizedTypeReference<T> typeReference) {
-        ResponseEntity<T> response = restClient.get().uri(salesforceClientEndpoint + path).headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken.get())).retrieve().toEntity(typeReference);
+        String url = salesforceClientEndpoint + path;
+        LOG.debug("Sending salesforce GET request to {}", path);
+        ResponseEntity<T> response = restClient.get().uri(path).headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken.get())).retrieve().toEntity(typeReference);
         return processResponse(response, path);
     }
 
@@ -121,6 +127,9 @@ public class SalesforceClient {
             LOG.info("Response code is {}", statusCode.toString());
             LOG.info("Response body is {}", response.getBody() != null ? response.getBody().toString() : "<empty>");
             return null;
+        } else if (LOG.isDebugEnabled()) {
+            LOG.debug("Received 200 response for {}", path);
+            LOG.debug("Response body is ", response.getBody().toString());
         }
         return response.getBody();
     }
