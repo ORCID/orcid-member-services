@@ -129,7 +129,6 @@ public class SalesforceClient {
             return null;
         } else if (LOG.isDebugEnabled()) {
             LOG.debug("Received 200 response for {}", path);
-            LOG.debug("Response body is ", response.getBody().toString());
         }
         return response.getBody();
     }
