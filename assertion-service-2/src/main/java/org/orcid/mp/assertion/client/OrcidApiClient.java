@@ -74,9 +74,11 @@ public class OrcidApiClient {
                 clientSecret, "grant_type", grantType, "subject_token_type",
                 subjectTokenType, "requested_token_type", requestedTokenType, "subject_token", idToken);
 
+        LOG.debug("Exchanging ID token for ORCID ID {}. Token: {}", orcidId, idToken);
         ResponseEntity<String> response = restClient.post().uri(tokenExchangeUrl).body(params).retrieve().toEntity(String.class);
         String responseString = response.getBody();
         HttpStatusCode statusCode = response.getStatusCode();
+        LOG.debug("Token exchange response: {} - {}", statusCode.value(), responseString);
 
         if (!statusCode.is2xxSuccessful()) {
             if (statusCode.isSameCodeAs(HttpStatus.UNAUTHORIZED) && responseString.contains("invalid_scope") && recordIsDeactivated(orcidId)) {
@@ -101,6 +103,7 @@ public class OrcidApiClient {
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
 
         LOG.info("Creating {} for {} with role title {}", affType, orcid, orcidAffiliation.getRoleTitle());
+        LOG.debug("Post affiliation payload: {}", orcidAffiliation);
         ResponseEntity<String> response = restClient.post()
                 .uri(apiUrl + orcid + '/' + affType)
                 .header("Authorization", "Bearer " + accessToken)
@@ -108,6 +111,7 @@ public class OrcidApiClient {
 
         String responseString = response.getBody();
         HttpStatusCode statusCode = response.getStatusCode();
+        LOG.debug("Post affiliation response: {} - {}", statusCode.value(), responseString);
 
         if (statusCode.isSameCodeAs(HttpStatus.CONFLICT)) {
             LOG.info("Detected deprecated profile {}", orcid);
@@ -126,6 +130,7 @@ public class OrcidApiClient {
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
 
         LOG.info("Updating affiliation with put code {} for {}", assertion.getPutCode(), orcid);
+        LOG.debug("Put affiliation payload: {}", orcidAffiliation);
         ResponseEntity<String> response = restClient.put()
                 .uri(apiUrl + orcid + '/' + affType + '/' + assertion.getPutCode())
                 .header("Authorization", "Bearer " + accessToken)
@@ -133,6 +138,7 @@ public class OrcidApiClient {
 
         String responseString = response.getBody();
         HttpStatusCode statusCode = response.getStatusCode();
+        LOG.debug("Put affiliation response: {} - {}", statusCode.value(), responseString);
 
         if (statusCode.isSameCodeAs(HttpStatus.CONFLICT)) {
             LOG.info("Detected deprecated profile {}", orcid);
@@ -154,6 +160,7 @@ public class OrcidApiClient {
 
         String responseString = response.getBody();
         HttpStatusCode statusCode = response.getStatusCode();
+        LOG.debug("Delete affiliation response: {} - {}", statusCode.value(), responseString);
 
         if (statusCode.isSameCodeAs(HttpStatus.CONFLICT)) {
             LOG.info("Detected deprecated profile {}", orcid);
@@ -247,7 +254,9 @@ public class OrcidApiClient {
     }
 
     private String postNotificationPermission(NotificationPermission notificationPermission, String orcidId) {
+        LOG.debug("Posting notification permission for {}. Payload: {}", orcidId, notificationPermission);
         ResponseEntity<String> response = restClient.post().uri(apiUrl + orcidId + "/notification-permission").header("Authorization", "Bearer " + internalAccessToken).body(notificationPermission).retrieve().toEntity(String.class);
+        LOG.debug("Post notification permission response: {} - {}", response.getStatusCode().value(), response.getBody());
         if (!response.getStatusCode().isSameCodeAs(HttpStatus.CREATED)) {
             String responseString = response.getBody();
             LOG.error("Unable to create notification for {}. Status code: {}, error {}", orcidId, response.getStatusCode().value(), responseString);
@@ -259,11 +268,13 @@ public class OrcidApiClient {
     }
 
     private String getOrcidIdFromRegistry(String email) {
+        LOG.debug("Looking up ORCID ID for email: {}", email);
         ResponseEntity<String> response = restClient.get().uri(internalApiUrl + "orcid/" + Base64.encode(email) + "/email")
                 .header("Authorization", "Bearer " + internalAccessToken.get())
                 .retrieve().toEntity(String.class);
 
         String responseBody = response.getBody();
+        LOG.debug("Get ORCID ID from registry response: {} - {}", response.getStatusCode().value(), responseBody);
         if (!response.getStatusCode().isSameCodeAs(HttpStatus.OK) && !response.getStatusCode().isSameCodeAs(HttpStatus.NOT_FOUND)) {
             LOG.warn("Received non-200 / non-404 response trying to find orcid id for email {}", email);
             LOG.warn("Response received:");
