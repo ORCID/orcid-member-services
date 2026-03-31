@@ -1,25 +1,31 @@
-import { ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { RouterModule } from '@angular/router'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import * as moment from 'moment';
 import { EMPTY, of } from 'rxjs'
 import { AccountService } from 'src/app/account'
 import { HasAnyAuthorityDirective } from 'src/app/shared/directive/has-any-authority.directive'
+import { LocalizePipe } from '../shared/pipe/localize'
 import { AlertService } from '../shared/service/alert.service'
 import { EventService } from '../shared/service/event.service'
-import { LocalizePipe } from '../shared/pipe/localize'
-import { RouterModule } from '@angular/router'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { AffiliationsComponent } from './affiliations.component'
-import { AffiliationService } from './service/affiliation.service'
 import { Affiliation } from './model/affiliation.model'
+import { AffiliationService } from './service/affiliation.service'
+
 describe('AffiliationsComponent', () => {
   let component: AffiliationsComponent
   let fixture: ComponentFixture<AffiliationsComponent>
   let affiliationService: jasmine.SpyObj<AffiliationService>
   let accountService: jasmine.SpyObj<AccountService>
-  let alertService: jasmine.SpyObj<AlertService>
   let eventService: jasmine.SpyObj<EventService>
+  const baseTime = new Date('2026-03-31T10:00:00Z');
 
   beforeEach(() => {
+    jasmine.clock().install();
+    jasmine.clock().mockDate(baseTime);
+
     const accountServiceSpy = jasmine.createSpyObj('AccountService', [
       'getAccountData',
       'isAuthenticated',
@@ -42,6 +48,7 @@ describe('AffiliationsComponent', () => {
         ReactiveFormsModule,
         RouterModule.forRoot([{ path: 'affiliations', component: AffiliationsComponent }]),
         FormsModule,
+        FontAwesomeModule,
       ],
       providers: [
         { provide: AffiliationService, useValue: affiliationServiceSpy },
@@ -57,7 +64,6 @@ describe('AffiliationsComponent', () => {
     affiliationService = TestBed.inject(AffiliationService) as jasmine.SpyObj<AffiliationService>
     accountService = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
     eventService = TestBed.inject(EventService) as jasmine.SpyObj<EventService>
-    alertService = TestBed.inject(AlertService) as jasmine.SpyObj<AlertService>
 
     affiliationService.query.and.returnValue(
       of({
@@ -92,6 +98,10 @@ describe('AffiliationsComponent', () => {
     accountService.hasAnyAuthority.and.returnValue(true)
     eventService.on.and.returnValue(EMPTY)
   })
+
+  afterEach(() => {
+    jasmine.clock().uninstall();
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy()
@@ -157,4 +167,50 @@ describe('AffiliationsComponent', () => {
     expect(component.searchTerm).toEqual('')
     expect(component.submittedSearchTerm).toEqual('')
   })
+
+  it('should render affiliations list with email, org name, role title, and created date', fakeAsync(() => {
+    // The service's convertDateFromServer wraps raw API strings in moment() before
+    // handing data to the component. The mock must reflect that post-deserialization
+    // state, otherwise the template's .toDate() call will throw at render time.
+    const created = moment('2026-03-31T10:00:00Z');
+    affiliationService.query.and.returnValue(
+      of({
+        content: [
+          new Affiliation(
+            '456',       // id
+            null,        // addedToORCID
+            undefined,   // affiliationSection
+            created,     // created — Moment object, as returned by convertDateFromServer
+            undefined,   // deletedFromORCID
+            undefined,   // departmentName
+            undefined,   // disambiguatedOrgId
+            undefined,   // disambiguationSource
+            'user@example.com', // email
+            undefined, undefined, undefined, undefined, undefined, undefined,
+            undefined,   // modified
+            undefined, undefined,
+            'Springfield', // orgCity
+            undefined,
+            'Acme Corp', // orgName
+            undefined, undefined, undefined,
+            'Software Engineer', // roleTitle
+          ),
+        ],
+        page: { totalElements: 1, number: 0, size: 20, totalPages: 1 },
+      })
+    )
+
+    component.ngOnInit()
+    expect(() => fixture.detectChanges()).not.toThrow()
+
+    const rows = fixture.nativeElement.querySelectorAll('tbody tr')
+    expect(rows.length).toBe(1)
+
+    const rowText = rows[0].textContent as string
+    expect(rowText).toContain('user@example.com')
+    expect(rowText).toContain('Acme Corp')
+    expect(rowText).toContain('Springfield')
+    expect(rowText).toContain('Software Engineer')
+    expect(rowText).toContain('Mar')
+  }))
 })
