@@ -106,7 +106,28 @@ describe('LoginComponent', () => {
     component.loginForm.patchValue({
       username: 'testuser',
       password: 'testpassword',
-      mfaCode: 'invalidCode',
+      mfaCode: '',
+    })
+
+    component.login()
+
+    tick() // Wait for Observable to emit
+
+    expect(component.showMfa).toBe(true)
+    expect(component.mfaError).toBe(false)
+  }))
+
+  it('should handle MFA invalid code error', fakeAsync(() => {
+    const mockError = {
+      status: 401,
+      error: { error: 'mfa_invalid' },
+    }
+    loginService.login.and.returnValue(throwError(() => mockError))
+
+    component.loginForm.patchValue({
+      username: 'testuser',
+      password: 'testpassword',
+      mfaCode: 'invalidcode',
     })
 
     component.login()

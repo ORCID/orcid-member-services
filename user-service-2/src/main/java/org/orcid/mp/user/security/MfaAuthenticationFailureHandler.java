@@ -22,6 +22,8 @@ public class MfaAuthenticationFailureHandler implements AuthenticationFailureHan
 
         if (exception instanceof MfaRequiredException) {
             response.getWriter().write("{\"error\": \"mfa_required\", \"message\": \"Please provide MFA code\"}");
+        } else if (exception instanceof MfaInvalidCodeException) {
+            response.getWriter().write("{\"error\": \"mfa_invalid\", \"message\": \"Invalid MFA code\"}");
         } else {
             response.getWriter().write("{\"error\": \"invalid_credentials\", \"message\": \"Invalid Credentials\"}");
         }
