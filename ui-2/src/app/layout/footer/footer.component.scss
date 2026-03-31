@@ -38,6 +38,13 @@ p {
   padding-bottom: 16px;
   padding-top: 14px;
   line-height: normal;
+
+  .release-version {
+    text-align: right;
+    padding-right: 15px;
+    font-size: 0.7rem;
+    color: #888;
+  }
 }
 
 .list-group-item {

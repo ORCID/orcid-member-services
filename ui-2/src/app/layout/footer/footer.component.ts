@@ -13,7 +13,7 @@ export class FooterComponent {
     return this.accountService.isAuthenticated()
   }
 
-  getReleaseVersion() {
+  get releaseVersion(): string | null {
     return this.accountService.getReleaseVersion()
   }
 }

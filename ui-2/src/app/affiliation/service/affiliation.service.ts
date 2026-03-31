@@ -42,7 +42,12 @@ export class AffiliationService {
 
   query(req?: any): Observable<Page<IAffiliation>> {
     const options = createRequestOption(req)
-    return this.http.get<Page<IAffiliation>>(this.resourceUrl, { params: options })
+    return this.http.get<Page<IAffiliation>>(this.resourceUrl, { params: options }).pipe(
+      map((page) => ({
+        ...page,
+        content: page.content.map((a) => this.convertDateFromServer(a)),
+      }))
+    )
   }
 
   delete(id: string): Observable<boolean> {
