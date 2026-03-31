@@ -8,6 +8,8 @@ import { IMember } from '../member/model/member.model'
 import { BASE_URL, ORCID_BASE_URL } from '../app.constants'
 import { WindowLocationService } from '../shared/service/window-location.service'
 import { OrcidRecord } from '../shared/model/orcid-record.model'
+import { log } from 'console'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'app-landing-page',
@@ -44,86 +46,106 @@ export class LandingPageComponent implements OnInit {
   constructor(
     private landingPageService: LandingPageService,
     private windowLocationService: WindowLocationService,
-    protected memberService: MemberService
+    protected memberService: MemberService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
     const id_token_fragment = this.getFragmentParameterByName('id_token')
     const access_token_fragment = this.getFragmentParameterByName('access_token')
-    const state_param = this.getQueryParameterByName('state')
+    const state_param = this.route.snapshot.queryParamMap.get('state')
 
+    console.log(
+      'landing page initialised, found three parameters in URL - state:',
+      state_param,
+      'id_token:',
+      id_token_fragment,
+      'access_token:',
+      access_token_fragment
+    )
     if (state_param) {
       this.processRequest(state_param, id_token_fragment, access_token_fragment)
     }
   }
 
   processRequest(state_param: string, id_token_fragment: string, access_token_fragment: string) {
+    console.log('LANDING PAGE: Processing landing page request with state param:', state_param)
+    console.log('LANDING PAGE: fetching orcid connection record for state param:', state_param)
     this.landingPageService.getOrcidConnectionRecord(state_param).subscribe({
       next: (result) => {
-        this.orcidRecord = result
-        this.landingPageService.getMemberInfo(state_param).subscribe({
-          next: (res: IMember) => {
-            this.clientName = res.clientName
-            this.clientId = res.clientId
-            this.salesforceId = res.salesforceId
-            this.oauthUrl =
-              this.oauthBaseUrl +
-              '?response_type=token&redirect_uri=' +
-              this.redirectUri +
-              '&client_id=' +
-              this.clientId +
-              '&scope=/read-limited /activities/update /person/update openid&prompt=login&state=' +
-              state_param
+        console.log('LANDING PAGE: Received orcid connection record:', result)
+        console.log('LANDING PAGE: fetching member salesforce id for state param:', state_param)
 
-            this.incorrectDataMessage = $localize`:@@landingPage.success.ifYouFind.string:If you find that data added to your ORCID record is incorrect, please contact ${this.clientName}`
-            this.linkAlreadyUsedMessage = $localize`:@@landingPage.connectionExists.differentUser.string:This authorization link has already been used. Please contact ${this.clientName} for a new authorization link.`
-            this.allowToUpdateRecordMessage = $localize`:@@landingPage.denied.grantAccess.string:Allow ${this.clientName} to update my ORCID record.`
-            this.successfullyGrantedMessage = $localize`:@@landingPage.success.youHaveSuccessfully.string:You have successfully granted ${this.clientName} permission to update your ORCID record, and your record has been updated with affiliation information.`
+        this.landingPageService.getSalesforceId(state_param).subscribe({
+          next: (salesforceId) => {
+            console.log("LANDING PAGE: Found salesforce id for state param's connection record:", salesforceId)
+            console.log('LANDING PAGE: Fetching member info for salesforce id:', salesforceId)
+            this.orcidRecord = result
+            this.landingPageService.getMemberInfo(salesforceId).subscribe({
+              next: (res: IMember) => {
+                console.log('LANDING PAGE: Received member info for salesforce id:', salesforceId, 'Member info:', res)
+                this.clientName = res.clientName
+                this.clientId = res.clientId
+                this.salesforceId = res.salesforceId
+                this.oauthUrl =
+                  this.oauthBaseUrl +
+                  '?response_type=token&redirect_uri=' +
+                  this.redirectUri +
+                  '&client_id=' +
+                  this.clientId +
+                  '&scope=/read-limited /activities/update /person/update openid&prompt=login&state=' +
+                  state_param
 
-            // Check if id token exists in URL (user just granted permission)
-            if (id_token_fragment != null && id_token_fragment !== '') {
-              this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment)
-            } else {
-              const error = this.getFragmentParameterByName('error')
-              // Check if user denied permission
-              if (error != null && error !== '') {
-                if (error === 'access_denied') {
-                  this.submitUserDenied(state_param)
+                this.incorrectDataMessage = $localize`:@@landingPage.success.ifYouFind.string:If you find that data added to your ORCID record is incorrect, please contact ${this.clientName}`
+                this.linkAlreadyUsedMessage = $localize`:@@landingPage.connectionExists.differentUser.string:This authorization link has already been used. Please contact ${this.clientName} for a new authorization link.`
+                this.allowToUpdateRecordMessage = $localize`:@@landingPage.denied.grantAccess.string:Allow ${this.clientName} to update my ORCID record.`
+                this.successfullyGrantedMessage = $localize`:@@landingPage.success.youHaveSuccessfully.string:You have successfully granted ${this.clientName} permission to update your ORCID record, and your record has been updated with affiliation information.`
+
+                // Check if id token exists in URL (user just granted permission)
+                if (id_token_fragment != null && id_token_fragment !== '') {
+                  this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment)
                 } else {
-                  this.showErrorElement(error)
+                  const error = this.getFragmentParameterByName('error')
+                  // Check if user denied permission
+                  if (error != null && error !== '') {
+                    if (error === 'access_denied') {
+                      this.submitUserDenied(state_param)
+                    } else {
+                      this.showErrorElement(error)
+                    }
+                  } else {
+                    this.windowLocationService.updateWindowLocation(this.oauthUrl)
+                  }
                 }
-              } else {
-                this.windowLocationService.updateWindowLocation(this.oauthUrl)
-              }
-            }
 
-            this.startTimer(600)
+                this.startTimer(600)
+              },
+              error: (err: HttpErrorResponse) => {
+                console.error('Error fetching member info for salesforce id:', salesforceId, err)
+                this.showErrorElement(err)
+              },
+            })
+          },
+          error: (err: HttpErrorResponse) => {
+            console.error('Error fetching salesforce id for state param:', state_param, err)
+            this.showErrorElement(err)
           },
         })
+      },
+      error: (err: HttpErrorResponse) => {
+        console.error('Error fetching orcid connection record for state param:', state_param, 'Error:', err)
+        this.showErrorElement(err)
       },
     })
   }
 
   getFragmentParameterByName(name: string): string {
-    // eslint-disable-next-line
-    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]')
-    const regex = new RegExp('[\\#&]' + name + '=([^&#]*)'),
-      results = regex.exec(this.windowLocationService.getWindowLocationHash())
-    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '))
-  }
+    // Grab the hash (e.g., "#id_token=123&access_token=456") and drop the '#'
+    const hashString = this.windowLocationService.getWindowLocationHash().substring(1)
 
-  getQueryParameterByName(name: string): string | null {
-    // eslint-disable-next-line
-    name = name.replace(/[\[\]]/g, '\\$&')
-    const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-      results = regex.exec(window.location.href)
-    if (!results) {
-      return null
-    }
-    if (!results[2]) {
-      return ''
-    }
-    return decodeURIComponent(results[2].replace(/\+/g, ' '))
+    // Let the browser's native URL parser do the heavy lifting
+    const params = new URLSearchParams(hashString)
+    return params.get(name) || ''
   }
 
   checkSubmitToken(id_token: string, state: string, access_token: string) {

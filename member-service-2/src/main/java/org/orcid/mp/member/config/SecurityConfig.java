@@ -32,6 +32,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/members/authorized/**").permitAll()
                         .requestMatchers("/internal/**").hasAuthority("SCOPE_internal")
                         .anyRequest().authenticated()
                 )

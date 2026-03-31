@@ -8,9 +8,10 @@ import { OrcidRecord } from '../shared/model/orcid-record.model'
 export class LandingPageService {
   private headers: HttpHeaders
 
-  idTokenUri = '/assertionservice/id-token'
-  recordConnectionUri = '/assertionservice/record/'
-  memberInfoUri = '/memberservice/api/members/authorized/'
+  idTokenUri = '/assertionservice/assertions/id-token'
+  recordConnectionUri = '/assertionservice/assertions/record/'
+  salesforceIdUrl = '/assertionservice/assertions/salesforce/'
+  memberInfoUri = '/memberservice/members/authorized/'
   userInfoUri = ORCID_BASE_URL + '/oauth/userinfo'
   publicKeyUri = ORCID_BASE_URL + '/oauth/jwks'
 
@@ -30,8 +31,13 @@ export class LandingPageService {
     return this.http.get<OrcidRecord>(requestUrl)
   }
 
-  getMemberInfo(state: string): Observable<any> {
-    const requestUrl = this.memberInfoUri + state
+  getSalesforceId(state: string): Observable<string> {
+    const requestUrl = this.salesforceIdUrl + state
+    return this.http.get(requestUrl, { responseType: 'text' })
+  }
+
+  getMemberInfo(salesforceId: string): Observable<any> {
+    const requestUrl = this.memberInfoUri + salesforceId
     return this.http.get(requestUrl)
   }
 

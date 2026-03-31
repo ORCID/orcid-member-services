@@ -21,7 +21,6 @@ import org.orcid.mp.member.validation.MemberValidation;
 import org.orcid.mp.member.validation.MemberValidator;
 import org.orcid.mp.member.salesforce.*;
 import org.orcid.mp.member.security.AuthoritiesConstants;
-import org.orcid.mp.member.security.EncryptUtil;
 import org.orcid.mp.member.security.SecurityUtils;
 import org.orcid.mp.member.upload.MemberCsvReader;
 import org.orcid.mp.member.upload.MemberUpload;
@@ -51,9 +50,6 @@ public class MemberService {
 
     @Autowired
     private MemberValidator memberValidator;
-
-    @Autowired
-    private EncryptUtil encryptUtil;
 
     @Autowired
     private SalesforceClient salesforceClient;
@@ -214,13 +210,6 @@ public class MemberService {
                 userService.updateUser(user);
             }
         }
-    }
-
-    public Optional<Member> getAuthorizedMemberForUser(String state) {
-        String decryptState = encryptUtil.decrypt(state);
-        String[] stateTokens = decryptState.split("&&");
-        return getMember(stateTokens[0]);
-
     }
 
     public MemberDetails getMemberDetails(String salesforceId) throws UnauthorizedMemberAccessException {

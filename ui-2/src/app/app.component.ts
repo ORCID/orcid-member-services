@@ -21,29 +21,31 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, accessToken, errorMessage }) => {
-      console.log('App component - checkAuth result:', isAuthenticated)
-      if (isAuthenticated) {
-        console.log('app component fetching account data...')
+    if (!window.location.pathname.includes('/landing-page')) {
+      this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, accessToken, errorMessage }) => {
+        console.log('App component - checkAuth result:', isAuthenticated)
+        if (isAuthenticated) {
+          console.log('app component fetching account data...')
 
-        this.accountService.getAccountData(true).subscribe(() => {
-          this.eventService.broadcast(new Event(EventType.LOG_IN_SUCCESS))
+          this.accountService.getAccountData(true).subscribe(() => {
+            this.eventService.broadcast(new Event(EventType.LOG_IN_SUCCESS))
 
-          const redirect = this.stateStorageService.getUrl()
-          if (redirect) {
-            this.stateStorageService.storeUrl(null)
-            console.log('Redirecting to stored url after login:', redirect)
-            this.router.navigateByUrl(redirect)
-          } else if (this.router.url.includes('auth/callback')) {
-            console.log('Oauth callback, navigating to home page after login')
-            this.router.navigate(['/'])
-          }
-        })
-      } else {
-        console.error('OIDC Authentication FAILED or NOT LOGGED IN')
-        console.error('Error Message:', errorMessage)
-        console.log('Current Token:', accessToken)
-      }
-    })
+            const redirect = this.stateStorageService.getUrl()
+            if (redirect) {
+              this.stateStorageService.storeUrl(null)
+              console.log('Redirecting to stored url after login:', redirect)
+              this.router.navigateByUrl(redirect)
+            } else if (this.router.url.includes('auth/callback')) {
+              console.log('Oauth callback, navigating to home page after login')
+              this.router.navigate(['/'])
+            }
+          })
+        } else {
+          console.error('OIDC Authentication FAILED or NOT LOGGED IN')
+          console.error('Error Message:', errorMessage)
+          console.log('Current Token:', accessToken)
+        }
+      })
+    }
   }
 }
