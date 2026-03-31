@@ -7,6 +7,7 @@ import { of } from 'rxjs'
 import { Member } from '../member/model/member.model'
 import { WindowLocationService } from '../shared/service/window-location.service'
 import * as KEYUTIL from 'jsrsasign'
+import { ActivatedRoute } from '@angular/router'
 
 describe('LandingPageComponent', () => {
   let component: LandingPageComponent
@@ -28,11 +29,27 @@ describe('LandingPageComponent', () => {
             'submitUserResponse',
             'getUserInfo',
             'submitUserResponse',
+            'getSalesforceId',
           ]),
         },
         {
           provide: WindowLocationService,
           useValue: jasmine.createSpyObj('WindowLocationService', ['updateWindowLocation', 'getWindowLocationHash']),
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              queryParamMap: {
+                get: (key: string) => {
+                  if (key === 'state') {
+                    return null
+                  }
+                  return null
+                },
+              },
+            },
+          },
         },
       ],
     })
@@ -40,6 +57,7 @@ describe('LandingPageComponent', () => {
     component = fixture.componentInstance
     landingPageService = TestBed.inject(LandingPageService) as jasmine.SpyObj<LandingPageService>
     windowLocationService = TestBed.inject(WindowLocationService) as jasmine.SpyObj<WindowLocationService>
+    windowLocationService.getWindowLocationHash.and.returnValue('')
   })
 
   it('should create', () => {
@@ -49,6 +67,7 @@ describe('LandingPageComponent', () => {
   it('New record connection should redirect to the registry', () => {
     windowLocationService.updateWindowLocation.and.returnValue()
     landingPageService.getOrcidConnectionRecord.and.returnValue(of(new OrcidRecord('email', 'orcid')))
+    landingPageService.getSalesforceId.and.returnValue(of('salesforceId'))
     landingPageService.getMemberInfo.and.returnValue(
       of(new Member('id', 'name', 'email', 'orcid', 'salesforceId', 'clientId'))
     )
@@ -65,6 +84,7 @@ describe('LandingPageComponent', () => {
     windowLocationService.updateWindowLocation.and.returnValue()
     windowLocationService.getWindowLocationHash.and.returnValue('#error=access_denied')
     landingPageService.getOrcidConnectionRecord.and.returnValue(of(new OrcidRecord('email', 'orcid')))
+    landingPageService.getSalesforceId.and.returnValue(of('salesforceId'))
     landingPageService.getMemberInfo.and.returnValue(
       of(new Member('id', 'name', 'email', 'orcid', 'salesforceId', 'clientId'))
     )
@@ -83,6 +103,7 @@ describe('LandingPageComponent', () => {
 
   it('New record connection should fail (generic error)', () => {
     windowLocationService.updateWindowLocation.and.returnValue()
+    landingPageService.getSalesforceId.and.returnValue(of('salesforceId'))
     windowLocationService.getWindowLocationHash.and.returnValue('#error=123')
     landingPageService.getOrcidConnectionRecord.and.returnValue(of(new OrcidRecord('email', 'orcid')))
     landingPageService.getMemberInfo.and.returnValue(
@@ -103,6 +124,7 @@ describe('LandingPageComponent', () => {
 
   it('Existing record connection should be identified', () => {
     windowLocationService.updateWindowLocation.and.returnValue()
+    landingPageService.getSalesforceId.and.returnValue(of('salesforceId'))
     landingPageService.getOrcidConnectionRecord.and.returnValue(of(new OrcidRecord('email', 'orcid')))
     landingPageService.getMemberInfo.and.returnValue(
       of(new Member('id', 'name', 'email', 'orcid', 'salesforceId', 'clientId'))
@@ -121,6 +143,7 @@ describe('LandingPageComponent', () => {
   })
 
   it('Check for wrong user', () => {
+    windowLocationService.updateWindowLocation.and.returnValue()
     landingPageService.submitUserResponse.and.returnValue(of({ isDifferentUser: true }))
     landingPageService.getPublicKey.and.returnValue(of(['publicKey']))
     landingPageService.getUserInfo.and.returnValue(of({ givenName: 'givenName', familyName: 'familyName' }))
@@ -133,6 +156,7 @@ describe('LandingPageComponent', () => {
   })
 
   it('Check for existing connection', () => {
+    windowLocationService.updateWindowLocation.and.returnValue()
     landingPageService.submitUserResponse.and.returnValue(of({ isSameUserThatAlreadyGranted: true }))
     landingPageService.getPublicKey.and.returnValue(of(['publicKey']))
     landingPageService.getUserInfo.and.returnValue(of({ givenName: 'givenName', familyName: 'familyName' }))

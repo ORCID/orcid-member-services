@@ -227,6 +227,13 @@ public class AssertionResource {
         }
     }
 
+    @GetMapping("/salesforce/{state}")
+    public ResponseEntity<String> getSalesforceIdFromState(@PathVariable String state) throws IOException, JSONException {
+        String decryptState = encryptUtil.decrypt(state);
+        String[] stateTokens = decryptState.split("&&");
+        return ResponseEntity.ok().body(stateTokens[0]);
+    }
+
     @PostMapping("/id-token")
     public ResponseEntity<String> storeIdToken(@RequestBody ObjectNode json) throws ParseException, JAXBException, JSONException {
         String state = json.get("state").asText();

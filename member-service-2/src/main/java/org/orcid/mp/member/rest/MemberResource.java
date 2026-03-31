@@ -286,20 +286,17 @@ public class MemberResource {
     }
 
     /**
-     * {@code GET  /members/authorized/:encryptedEmail} : get the authorized
-     * member details for the specified encrypted email.
+     * {@code GET  /members/authorized/:id} : get the authorized
+     * member details for the specified id
      *
-     * @param encryptedEmail - the encrypted email of the user that has authorized
-     *                       the
-     *                       member
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      *         the member details in the body, or status
      *         {@code 404 (Not Found)}.
      */
-    @GetMapping("/authorized/{encryptedEmail}")
-    public ResponseEntity<Member> getAuthorizedMember(@PathVariable String encryptedEmail) {
-        LOG.debug("REST request to get authorized Member details for encrypted email : {}", encryptedEmail);
-        Optional<Member> member = memberService.getAuthorizedMemberForUser(encryptedEmail);
+    @GetMapping("/authorized/{memberId}")
+    public ResponseEntity<Member> getAuthorizedMember(@PathVariable String memberId) {
+        LOG.debug("REST request to get authorized Member details for id {}", memberId);
+        Optional<Member> member = memberService.getMember(memberId);
         if (!member.isPresent()) {
             LOG.warn("Can't find member for encrypted email");
             return ResponseEntity.notFound().build();

@@ -16,7 +16,6 @@ import org.orcid.mp.member.pojo.MemberContactUpdate;
 import org.orcid.mp.member.pojo.RemoveConsortiumMember;
 import org.orcid.mp.member.repository.MemberRepository;
 import org.orcid.mp.member.salesforce.*;
-import org.orcid.mp.member.security.EncryptUtil;
 import org.orcid.mp.member.security.MockSecurityContext;
 import org.orcid.mp.member.upload.MemberCsvReader;
 import org.orcid.mp.member.upload.MemberUpload;
@@ -55,9 +54,6 @@ class MemberServiceTest {
 
     @InjectMocks
     private MemberService memberService;
-
-    @Mock
-    private EncryptUtil encryptUtil;
 
     @Mock
     private MailService mailService;
@@ -289,36 +285,6 @@ class MemberServiceTest {
         Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("three"))).thenReturn(Optional.empty());
         memberService.uploadMemberCSV(null);
         Mockito.verify(memberRepository, Mockito.times(3)).save(Mockito.any(Member.class));
-    }
-
-    @Test
-    void testGetAuthorizedMemberForUser() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(User.class))).thenReturn(getValidValidation());
-        String email = "email@email.com";
-        String encrypted = encryptUtil.encrypt("salesforceid" + "&&" + email);
-        Mockito.when(userService.getSalesforceIdForUser(Mockito.eq("ownerId"))).thenReturn("salesforceId");
-        Mockito.when(memberRepository.findById(Mockito.eq("salesforceid"))).thenReturn(Optional.empty());
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceid"))).thenReturn(Optional.of(getMember()));
-        Mockito.when(encryptUtil.decrypt(Mockito.eq(encrypted))).thenReturn("salesforceid" + "&&" + email);
-
-        Optional<Member> optional = memberService.getAuthorizedMemberForUser(encrypted);
-
-        assertTrue(optional.isPresent());
-
-        Member member = optional.get();
-        assertNotNull(member);
-        assertEquals(getMember().getClientId(), member.getClientId());
-        assertEquals(getMember().getClientName(), member.getClientName());
-    }
-
-    @Test
-    void testGetAuthorizedMemberForUserBadEmail() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(User.class))).thenReturn(getValidValidation());
-        String email = "email@email.com";
-        String encrypted = encryptUtil.encrypt("salesforceid" + "&&" + email);
-        Mockito.when(encryptUtil.decrypt(Mockito.eq(encrypted))).thenReturn("salesforceid" + "&&" + email);
-        Optional<Member> optional = memberService.getAuthorizedMemberForUser(encrypted);
-        assertTrue(!optional.isPresent());
     }
 
     @Test

@@ -39,9 +39,6 @@ logging:
       console: logstash
 
 application:
-  encrypt:
-    salt: ${APPLICATION_ENCRYPT_SALT}
-    key: ${APPLICATION_ENCRYPT_KEY}
   httpclient:
     maxConnTotal: ${APPLICATION_HTTPCLIENT_MAX_CONN_TOTAL:100}
     maxConnPerRoute: ${APPLICATION_HTTPCLIENT_MAX_CONN_PER_ROUTE:20}
