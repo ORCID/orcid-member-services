@@ -14,8 +14,6 @@ services:
 
       # bridge so dynamic logging level can be passed in via docker compose (environment variable passed in my be declared in this file)
       - LOGGING_LEVEL_ORG_ORCID_MP=${APP_LOG_LEVEL:-INFO}
-      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_CLIENT_RESTCLIENT=${APP_LOG_LEVEL:-INFO}
-      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_HTTP_CLIENT=${APP_LOG_LEVEL:-INFO}
       - SPRING_DATA_MONGODB_URI=${MONGO_DB}
       - SPRING_DATA_MONGODB_DATABASE=userservice
       - APPLICATION_MAIL_DOMAIN=${MAIL_DOMAIN}
@@ -61,8 +59,6 @@ services:
 
       # bridge so dynamic logging level can be passed in via docker compose (environment variable passed in my be declared in this file)
       - LOGGING_LEVEL_ORG_ORCID_MP=${APP_LOG_LEVEL:-INFO}
-      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_CLIENT_RESTCLIENT=${APP_LOG_LEVEL:-INFO}
-      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_HTTP_CLIENT=${APP_LOG_LEVEL:-INFO}
       - SPRING_DATA_MONGODB_URI=${MONGO_DB}
       - SPRING_DATA_MONGODB_DATABASE=assertionservice
       - APPLICATION_USER_SERVICE_URL=${USER_SERVICE_URL}
@@ -113,8 +109,6 @@ services:
 
       # bridge so dynamic logging level can be passed in via docker compose (environment variable passed in my be declared in this file)
       - LOGGING_LEVEL_ORG_ORCID_MP=${APP_LOG_LEVEL:-INFO}
-      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB_CLIENT_RESTCLIENT=${APP_LOG_LEVEL:-INFO}
-      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_HTTP_CLIENT=${APP_LOG_LEVEL:-INFO}
       - SPRING_DATA_MONGODB_URI=${MONGO_DB}
       - SPRING_DATA_MONGODB_DATABASE=memberservice
       - APPLICATION_HTTPCLIENT_MAX_CONN_TOTAL=${HTTP_MAX_CONN_TOTAL}
