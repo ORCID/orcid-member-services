@@ -21,9 +21,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -70,17 +74,33 @@ public class OrcidApiClient {
     private String requestedTokenType;
 
     public String exchangeToken(String idToken, String orcidId) throws IOException, DeactivatedException {
-        Map<String, String> params = Map.of("client_id", clientId, "client_secret",
-                clientSecret, "grant_type", grantType, "subject_token_type",
-                subjectTokenType, "requested_token_type", requestedTokenType, "subject_token", idToken);
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+        formData.add("client_id", clientId);
+        formData.add("client_secret", clientSecret);
+        formData.add("grant_type", grantType);
+        formData.add("subject_token_type", subjectTokenType);
+        formData.add("requested_token_type", requestedTokenType);
+        formData.add("subject_token", idToken);
 
         LOG.debug("Exchanging ID token for ORCID ID {}. Token: {}", orcidId, idToken);
-        ResponseEntity<String> response = restClient.post().uri(tokenExchangeUrl).body(params).retrieve().toEntity(String.class);
-        String responseString = response.getBody();
-        HttpStatusCode statusCode = response.getStatusCode();
-        LOG.debug("Token exchange response: {} - {}", statusCode.value(), responseString);
 
-        if (!statusCode.is2xxSuccessful()) {
+        try {
+            ResponseEntity<String> response = restClient.post()
+                    .uri(tokenExchangeUrl)
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .body(formData)
+                    .retrieve()
+                    .toEntity(String.class);
+
+            String responseString = response.getBody();
+            LOG.debug("Token exchange response: {} - {}", response.getStatusCode().value(), responseString);
+
+            JSONObject json = new JSONObject(responseString);
+            return json.get("access_token").toString();
+
+        } catch (RestClientResponseException e) {
+            String responseString = e.getResponseBodyAsString();
+            HttpStatusCode statusCode = e.getStatusCode();
             if (statusCode.isSameCodeAs(HttpStatus.UNAUTHORIZED) && responseString.contains("invalid_scope") && recordIsDeactivated(orcidId)) {
                 LOG.info("Deactivated profile detected");
                 throw new DeactivatedException();
@@ -88,11 +108,6 @@ public class OrcidApiClient {
                 LOG.error("Unable to exchange id_token for orcid ID {} : {}", orcidId, responseString);
                 throw new OrcidAPIException(statusCode.value(), responseString);
             }
-        }
-
-        try {
-            JSONObject json = new JSONObject(responseString);
-            return json.get("access_token").toString();
         } catch (JSONException e) {
             throw new RuntimeException("Unable to parse response from token exchange", e);
         }
@@ -236,21 +251,29 @@ public class OrcidApiClient {
     }
 
     private String getInternalAccessToken() throws JSONException, IOException {
-        Map<String, String> params = Map.of("client_id", clientId, "client_secret",
-                clientSecret, "scope", "/premium-notification /orcid-internal",
-                "grant_type", "client_credentials");
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+        formData.add("client_id", clientId);
+        formData.add("client_secret", clientSecret);
+        formData.add("scope", "/premium-notification /orcid-internal");
+        formData.add("grant_type", "client_credentials");
 
-        ResponseEntity<String> response = restClient.post().uri(internalApiUrl + "/oauth/token").body(params).retrieve().toEntity(String.class);
-        String responseString = response.getBody();
-        HttpStatusCode statusCode = response.getStatusCode();
+        try {
+            ResponseEntity<String> response = restClient.post()
+                    .uri(internalApiUrl + "/oauth/token")
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .body(formData)
+                    .retrieve()
+                    .toEntity(String.class);
 
-        if (!statusCode.is2xxSuccessful()) {
-            LOG.error("Failed to obtain internal access token: {}", responseString);
-            throw new OrcidAPIException(response.getStatusCode().value(), responseString);
+            String responseString = response.getBody();
+            JSONObject json = new JSONObject(responseString);
+            return json.get("access_token").toString();
+
+        } catch (RestClientResponseException e) {
+            String responseString = e.getResponseBodyAsString();
+            LOG.error("Failed to obtain internal access token. Status: {}, Response: {}", e.getStatusCode().value(), responseString);
+            throw new OrcidAPIException(e.getStatusCode().value(), responseString);
         }
-
-        JSONObject json = new JSONObject(responseString);
-        return json.get("access_token").toString();
     }
 
     private String postNotificationPermission(NotificationPermission notificationPermission, String orcidId) {
