@@ -14,6 +14,7 @@ describe('LandingPageComponent', () => {
   let fixture: ComponentFixture<LandingPageComponent>
   let landingPageService: jasmine.SpyObj<LandingPageService>
   let windowLocationService: jasmine.SpyObj<WindowLocationService>
+  let route: ActivatedRoute
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -40,13 +41,9 @@ describe('LandingPageComponent', () => {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
+              fragment: '',
               queryParamMap: {
-                get: (key: string) => {
-                  if (key === 'state') {
-                    return null
-                  }
-                  return null
-                },
+                get: (key: string) => null,
               },
             },
           },
@@ -57,7 +54,7 @@ describe('LandingPageComponent', () => {
     component = fixture.componentInstance
     landingPageService = TestBed.inject(LandingPageService) as jasmine.SpyObj<LandingPageService>
     windowLocationService = TestBed.inject(WindowLocationService) as jasmine.SpyObj<WindowLocationService>
-    windowLocationService.getWindowLocationHash.and.returnValue('')
+    route = TestBed.inject(ActivatedRoute) as ActivatedRoute
   })
 
   it('should create', () => {
@@ -74,15 +71,15 @@ describe('LandingPageComponent', () => {
     component.processRequest('someState', '', '')
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
     expect(component.oauthUrl).toBe(
-      'https://orcid.org/oauth/authorize?response_type=token&redirect_uri=http://localhost:9876/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
+      'https://qa.orcid.org/oauth/authorize?response_type=token&redirect_uri=http://localhost:9876/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
     )
     expect(landingPageService.getPublicKey).toHaveBeenCalledTimes(0)
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalled()
   })
 
-  it('New record connection should fail (user denied permission)', () => {
+  fit('New record connection should fail (user denied permission)', () => {
     windowLocationService.updateWindowLocation.and.returnValue()
-    windowLocationService.getWindowLocationHash.and.returnValue('#error=access_denied')
+    route.snapshot.fragment = 'error=access_denied'
     landingPageService.getOrcidConnectionRecord.and.returnValue(of(new OrcidRecord('email', 'orcid')))
     landingPageService.getSalesforceId.and.returnValue(of('salesforceId'))
     landingPageService.getMemberInfo.and.returnValue(
@@ -92,7 +89,7 @@ describe('LandingPageComponent', () => {
     component.processRequest('someState', '', '')
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
     expect(component.oauthUrl).toBe(
-      'https://orcid.org/oauth/authorize?response_type=token&redirect_uri=http://localhost:9876/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
+      'https://qa.orcid.org/oauth/authorize?response_type=token&redirect_uri=http://localhost:9876/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
     )
     expect(landingPageService.getPublicKey).toHaveBeenCalledTimes(0)
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalledTimes(0)
@@ -101,10 +98,10 @@ describe('LandingPageComponent', () => {
     expect(component.showDenied).toBeTruthy()
   })
 
-  it('New record connection should fail (generic error)', () => {
+  fit('New record connection should fail (generic error)', () => {
     windowLocationService.updateWindowLocation.and.returnValue()
     landingPageService.getSalesforceId.and.returnValue(of('salesforceId'))
-    windowLocationService.getWindowLocationHash.and.returnValue('#error=123')
+    route.snapshot.fragment = 'error=123'
     landingPageService.getOrcidConnectionRecord.and.returnValue(of(new OrcidRecord('email', 'orcid')))
     landingPageService.getMemberInfo.and.returnValue(
       of(new Member('id', 'name', 'email', 'orcid', 'salesforceId', 'clientId'))
@@ -113,7 +110,7 @@ describe('LandingPageComponent', () => {
     component.processRequest('someState', '', '')
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
     expect(component.oauthUrl).toBe(
-      'https://orcid.org/oauth/authorize?response_type=token&redirect_uri=http://localhost:9876/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
+      'https://qa.orcid.org/oauth/authorize?response_type=token&redirect_uri=http://localhost:9876/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
     )
     expect(landingPageService.getPublicKey).toHaveBeenCalledTimes(0)
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalledTimes(0)
