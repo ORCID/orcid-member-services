@@ -51,9 +51,13 @@ export class LandingPageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const id_token_fragment = this.getFragmentParameterByName('id_token')
-    const access_token_fragment = this.getFragmentParameterByName('access_token')
-    const state_param = this.route.snapshot.queryParamMap.get('state')
+    const fragmentString = this.route.snapshot.fragment
+    const fragmentParams = new URLSearchParams(fragmentString || '')
+
+    // 2. Extract variables: check the fragment first, then fallback to query params (for URLs with '?')
+    const state_param = fragmentParams.get('state') || this.route.snapshot.queryParamMap.get('state')
+    const id_token_fragment = fragmentParams.get('id_token')
+    const access_token_fragment = fragmentParams.get('access_token')
 
     console.log(
       'landing page initialised, found three parameters in URL - state:',
@@ -68,7 +72,7 @@ export class LandingPageComponent implements OnInit {
     }
   }
 
-  processRequest(state_param: string, id_token_fragment: string, access_token_fragment: string) {
+  processRequest(state_param: string, id_token_fragment: string | null, access_token_fragment: string | null) {
     console.log('LANDING PAGE: Processing landing page request with state param:', state_param)
     console.log('LANDING PAGE: fetching orcid connection record for state param:', state_param)
     this.landingPageService.getOrcidConnectionRecord(state_param).subscribe({
@@ -96,16 +100,21 @@ export class LandingPageComponent implements OnInit {
                   '&scope=/read-limited /activities/update /person/update openid&prompt=login&state=' +
                   state_param
 
+                console.log('LANDING PAGE: Constructed oauth url:', this.oauthUrl)
+
                 this.incorrectDataMessage = $localize`:@@landingPage.success.ifYouFind.string:If you find that data added to your ORCID record is incorrect, please contact ${this.clientName}`
                 this.linkAlreadyUsedMessage = $localize`:@@landingPage.connectionExists.differentUser.string:This authorization link has already been used. Please contact ${this.clientName} for a new authorization link.`
                 this.allowToUpdateRecordMessage = $localize`:@@landingPage.denied.grantAccess.string:Allow ${this.clientName} to update my ORCID record.`
                 this.successfullyGrantedMessage = $localize`:@@landingPage.success.youHaveSuccessfully.string:You have successfully granted ${this.clientName} permission to update your ORCID record, and your record has been updated with affiliation information.`
 
                 // Check if id token exists in URL (user just granted permission)
-                if (id_token_fragment != null && id_token_fragment !== '') {
-                  this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment)
+                if (id_token_fragment && id_token_fragment) {
+                  this.checkSubmitToken(id_token_fragment, state_param, access_token_fragment!)
                 } else {
-                  const error = this.getFragmentParameterByName('error')
+                  const fragmentString = this.route.snapshot.fragment
+                  const fragmentParams = new URLSearchParams(fragmentString || '')
+                  const error = fragmentParams.get('error')
+
                   // Check if user denied permission
                   if (error != null && error !== '') {
                     if (error === 'access_denied') {
@@ -137,15 +146,6 @@ export class LandingPageComponent implements OnInit {
         this.showErrorElement(err)
       },
     })
-  }
-
-  getFragmentParameterByName(name: string): string {
-    // Grab the hash (e.g., "#id_token=123&access_token=456") and drop the '#'
-    const hashString = this.windowLocationService.getWindowLocationHash().substring(1)
-
-    // Let the browser's native URL parser do the heavy lifting
-    const params = new URLSearchParams(hashString)
-    return params.get(name) || ''
   }
 
   checkSubmitToken(id_token: string, state: string, access_token: string) {
