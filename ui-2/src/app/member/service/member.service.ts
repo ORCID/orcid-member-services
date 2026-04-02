@@ -200,7 +200,7 @@ export class MemberService {
   }
 
   fetchCountries(): Observable<ISFCountry[]> {
-    return this.http.get<ISFCountry[]>(`${this.resourceUrl}/countries`).pipe(
+    return this.http.get<ISFCountry[]>(`${this.resourceUrl}/members/countries`).pipe(
       catchError((error) => {
         return of('An error occurred:', error)
       }),
