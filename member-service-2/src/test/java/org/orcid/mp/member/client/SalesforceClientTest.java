@@ -90,6 +90,8 @@ class SalesforceClientTest {
 
         when(restClient.get()).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.uri(contains("/member/123/details"))).thenReturn(requestHeadersUriSpec);
+        when(requestHeadersUriSpec.accept(any())).thenReturn(requestHeadersUriSpec);
+        when(requestHeadersUriSpec.accept(any())).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.headers(any())).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.retrieve()).thenReturn(responseSpec);
 
@@ -143,6 +145,7 @@ class SalesforceClientTest {
 
         when(restClient.get()).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersUriSpec);
+        when(requestHeadersUriSpec.accept(any())).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.headers(any())).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.retrieve()).thenReturn(responseSpec);
 
@@ -162,6 +165,7 @@ class SalesforceClientTest {
     private void mockAccessTokenCall(String tokenValue) {
         lenient().when(restClient.post()).thenReturn(requestBodyUriSpec);
         lenient().when(requestBodyUriSpec.uri(TOKEN_ENDPOINT)).thenReturn(requestBodyUriSpec);
+        lenient().when(requestBodyUriSpec.accept(any())).thenReturn(requestBodyUriSpec);
         lenient().when(requestBodyUriSpec.contentType(MediaType.APPLICATION_FORM_URLENCODED)).thenReturn(requestBodyUriSpec);
         lenient().when(requestBodyUriSpec.body(any(MultiValueMap.class))).thenReturn(requestBodyUriSpec);
         lenient().when(requestBodyUriSpec.retrieve()).thenReturn(responseSpec);
@@ -173,6 +177,7 @@ class SalesforceClientTest {
     private <T> void mockGetRequest(String pathSuffix, T responseBody) {
         when(restClient.get()).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.uri(CLIENT_ENDPOINT + pathSuffix)).thenReturn(requestHeadersUriSpec);
+        when(requestHeadersUriSpec.accept(any())).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.headers(any())).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.retrieve()).thenReturn(responseSpec);
 
@@ -183,6 +188,8 @@ class SalesforceClientTest {
     private <T> void mockPutRequest(String pathSuffix, Object requestBody, T responseBody) {
         when(restClient.put()).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.uri(CLIENT_ENDPOINT + pathSuffix)).thenReturn(requestBodyUriSpec);
+        when(requestBodyUriSpec.accept(any())).thenReturn(requestBodyUriSpec);
+        when(requestBodyUriSpec.contentType(any())).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.body(requestBody)).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.headers(any())).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.retrieve()).thenReturn(responseSpec);
