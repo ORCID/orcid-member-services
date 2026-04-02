@@ -1,15 +1,7 @@
 package org.orcid.mp.member.client;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Supplier;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-
 import org.orcid.mp.member.salesforce.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +10,17 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 @Component
 public class SalesforceClient {
@@ -111,12 +109,20 @@ public class SalesforceClient {
     private <T> T get(String path, ParameterizedTypeReference<T> typeReference) {
         String url = salesforceClientEndpoint + path;
         LOG.debug("Sending salesforce GET request to {}", url);
-        ResponseEntity<T> response = restClient.get().uri(url).headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken.get())).retrieve().toEntity(typeReference);
+        ResponseEntity<T> response = restClient.get().uri(url)
+                .accept(MediaType.APPLICATION_JSON)
+                .headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken.get()))
+                .retrieve().toEntity(typeReference);
         return processResponse(response, path);
     }
 
     private <T> T put(String path, MemberUpdateData updateData, ParameterizedTypeReference<T> typeReference) {
-        ResponseEntity<T> response = restClient.put().uri(salesforceClientEndpoint + path).body(updateData).headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken.get())).retrieve().toEntity(typeReference);
+        ResponseEntity<T> response = restClient.put().uri(salesforceClientEndpoint + path)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(updateData)
+                .headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken.get()))
+                .retrieve().toEntity(typeReference);
         return processResponse(response, path);
     }
 
@@ -140,7 +146,7 @@ public class SalesforceClient {
         } catch (Exception e) {
             LOG.debug("Exception after salesforce request", e);
             LOG.info("Refreshing access token");
-            synchronized(this) {
+            synchronized (this) {
                 createAccessToken();
             }
             return function.get();
@@ -149,7 +155,7 @@ public class SalesforceClient {
 
     private void initAccessToken() {
         if (accessToken.get() == null) {
-            synchronized(this) {
+            synchronized (this) {
                 if (accessToken.get() == null) {
                     createAccessToken();
                 }
@@ -175,7 +181,7 @@ public class SalesforceClient {
         formData.add("grant_type", "client_credentials");
 
         try {
-            String responseString = restClient.post().uri(salesforceTokenEndpoint).contentType(MediaType.APPLICATION_FORM_URLENCODED) // Set Content-Type header
+            String responseString = restClient.post().uri(salesforceTokenEndpoint).contentType(MediaType.APPLICATION_FORM_URLENCODED)
                     .body(formData)
                     .retrieve().body(String.class);
 
