@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.orcid.mp.member.domain.Member;
 import org.orcid.mp.member.salesforce.*;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-@Disabled("Disabling the entire class while debugging the Salesforce response mappings")
 @ExtendWith(MockitoExtension.class)
 class SalesforceClientTest {
 
@@ -58,16 +58,26 @@ class SalesforceClientTest {
 
     @Test
     void testGetMemberDetails_Success() throws IOException {
+        MemberDetailsWrapper response = new MemberDetailsWrapper();
+        MemberDetails details = new MemberDetails();
+        details.setId("details 1");
+        details.setName("details 1");
+        response.setMember(details);
+
         mockAccessTokenCall("fake-access-token");
 
-        MemberDetails mockDetails = new MemberDetails();
+        MemberDetailsWrapper responseWrapper = new MemberDetailsWrapper();
+        MemberDetails responseMember = new MemberDetails();
+        responseMember.setId("details 1");
+        responseMember.setName("details 1");
+        responseWrapper.setMember(details);
 
-        mockGetRequest("/member/123/details", mockDetails);
+        mockGetRequest("/member/123/details", responseWrapper);
 
         MemberDetails result = salesforceClient.getMemberDetails("123");
 
         assertNotNull(result);
-        assertEquals(mockDetails, result);
+        assertEquals(responseWrapper.getMember(), result);
 
         verify(restClient).post();
     }
@@ -88,6 +98,12 @@ class SalesforceClientTest {
 
     @Test
     void testGetMemberDetails_RetryLogic() throws IOException {
+        MemberDetailsWrapper response = new MemberDetailsWrapper();
+        MemberDetails details = new MemberDetails();
+        details.setId("details 1");
+        details.setName("details 1");
+        response.setMember(details);
+
         mockAccessTokenCall("initial-token");
 
         when(restClient.get()).thenReturn(requestHeadersUriSpec);
@@ -99,7 +115,7 @@ class SalesforceClientTest {
 
         when(responseSpec.toEntity(any(ParameterizedTypeReference.class)))
                 .thenThrow(new RuntimeException("Token expired")) // First call fails
-                .thenReturn(ResponseEntity.ok(new MemberDetails())); // Second call succeeds
+                .thenReturn(ResponseEntity.ok(response)); // Second call succeeds
 
         MemberDetails result = salesforceClient.getMemberDetails("123");
         assertNotNull(result);

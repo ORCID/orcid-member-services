@@ -87,8 +87,10 @@ public class SalesforceClient {
     private MemberDetails getSFMemberDetails(String salesforceId) {
         String path = "/member/" + salesforceId + "/details";
         LOG.debug("Fetching member details for path {}", path);
-        return get(path, new ParameterizedTypeReference<MemberDetails>() {
+
+        MemberDetailsWrapper wrapper = get(path, new ParameterizedTypeReference<MemberDetailsWrapper>() {
         });
+        return wrapper.getMember();
     }
 
     private MemberContacts getSFMemberContacts(String salesforceId) {
@@ -108,45 +110,13 @@ public class SalesforceClient {
 
     private <T> T get(String path, ParameterizedTypeReference<T> typeReference) {
         String url = salesforceClientEndpoint + path;
+
         LOG.debug("Sending salesforce GET request to {}", url);
-
-        // 1. Force Spring to give you the raw String, NOT 'T'
-        ResponseEntity<String> rawResponse = restClient.get().uri(url)
+        ResponseEntity<T> response = restClient.get().uri(url)
                 .accept(MediaType.APPLICATION_JSON)
-                .headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken.get()))
-                .retrieve()
-                .toEntity(String.class);
-
-        String rawJson = rawResponse.getBody();
-
-        // 2. THIS IS THE TRUE RAW PAYLOAD OFF THE WIRE
-        LOG.info("🚨 TRUE RAW JSON FROM SALESFORCE 🚨: \n{}", rawJson);
-
-        // 3. Manually map it so your app doesn't crash while debugging
-        try {
-            T mappedObject = objectMapper.readValue(
-                    rawJson,
-                    objectMapper.getTypeFactory().constructType(typeReference.getType())
-            );
-
-            // Rebuild the response so your processResponse method works
-            return processResponse(new ResponseEntity<>(mappedObject, rawResponse.getHeaders(), rawResponse.getStatusCode()), path);
-
-        } catch (Exception e) {
-            LOG.error("Mapping failed! The JSON keys don't match your Java class.", e);
-            return null;
-        }
+                .headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken.get())).retrieve().toEntity(typeReference);
+        return processResponse(response, path);
     }
-
-   // private <T> T get(String path, ParameterizedTypeReference<T> typeReference) {
-     //   String url = salesforceClientEndpoint + path;
-      //  LOG.debug("Sending salesforce GET request to {}", url);
-       // ResponseEntity<T> response = restClient.get().uri(url)
-        //        .accept(MediaType.APPLICATION_JSON)
-         //       .headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken.get()))
-          //      .retrieve().toEntity(typeReference);
-       // return processResponse(response, path);
-  //  }
 
     private <T> T put(String path, MemberUpdateData updateData, ParameterizedTypeReference<T> typeReference) {
         ResponseEntity<T> response = restClient.put().uri(salesforceClientEndpoint + path)
