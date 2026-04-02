@@ -19,9 +19,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -100,10 +102,17 @@ class OrcidApiClientTest {
     void testExchangeTokenDeactivated() {
         String errorResponse = "{\"error\": \"invalid_scope\"}";
 
+        HttpClientErrorException unauthorizedException = HttpClientErrorException.create(
+                HttpStatus.UNAUTHORIZED,
+                "Unauthorized",
+                HttpHeaders.EMPTY,
+                errorResponse.getBytes(StandardCharsets.UTF_8),
+                StandardCharsets.UTF_8);
+
         when(responseSpec.toEntity(String.class))
-                .thenReturn(new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED))
-                .thenReturn(new ResponseEntity<>("{\"access_token\":\"internal\"}", HttpStatus.OK))
-                .thenReturn(new ResponseEntity<>("Deactivated", HttpStatus.CONFLICT));
+                .thenThrow(unauthorizedException) // Call 1: exchangeToken throws 401
+                .thenReturn(new ResponseEntity<>("{\"access_token\":\"internal\"}", HttpStatus.OK)) // Call 2: internal token success
+                .thenReturn(new ResponseEntity<>("Deactivated", HttpStatus.CONFLICT)); // Call 3: registry check 409
 
         assertThatThrownBy(() -> orcidApiClient.exchangeToken("id-token", "orcid-id"))
                 .isInstanceOf(DeactivatedException.class);
