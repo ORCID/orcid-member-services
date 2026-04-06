@@ -4,13 +4,14 @@ import { ContactUpdateComponent } from './contact-update.component'
 import { AppModule } from '../../app.module'
 import { MemberService } from 'src/app/member/service/member.service'
 import { AccountService } from 'src/app/account'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { ActivatedRoute, Router } from '@angular/router'
 import { RouterTestingModule } from '@angular/router/testing'
 import { of } from 'rxjs'
 import { SFMemberData } from 'src/app/member/model/salesforce-member-data.model'
 import { AlertService } from 'src/app/shared/service/alert.service'
 import { AlertType } from 'src/app/app.constants'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ContactUpdateComponent', () => {
   let component: ContactUpdateComponent
@@ -27,14 +28,16 @@ describe('ContactUpdateComponent', () => {
     alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
-      declarations: [ContactUpdateComponent],
-      providers: [
+    declarations: [ContactUpdateComponent],
+    imports: [RouterTestingModule],
+    providers: [
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },
-      ],
-    })
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+})
     accountServiceSpy = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
     memberServiceSpy = TestBed.inject(MemberService) as jasmine.SpyObj<MemberService>
     alertServiceSpy = TestBed.inject(AlertService) as jasmine.SpyObj<AlertService>

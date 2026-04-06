@@ -4,10 +4,11 @@ import { AffiliationImportDialogComponent } from './affiliation-import-dialog.co
 import { AffiliationService } from './service/affiliation.service'
 import { EventService } from '../shared/service/event.service'
 import { FileUploadService } from '../shared/service/file-upload.service'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { FormBuilder } from '@angular/forms'
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { EMPTY, of } from 'rxjs'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AffiliationImportDialogComponent', () => {
   let component: AffiliationImportDialogComponent
@@ -20,16 +21,18 @@ describe('AffiliationImportDialogComponent', () => {
     const uploadServiceSpy = jasmine.createSpyObj('FileUploadService', ['uploadFile'])
 
     TestBed.configureTestingModule({
-      declarations: [AffiliationImportDialogComponent],
-      imports: [HttpClientTestingModule],
-      providers: [
+    declarations: [AffiliationImportDialogComponent],
+    imports: [],
+    providers: [
         FormBuilder,
         NgbModal,
         NgbActiveModal,
         { provide: EventService, useValue: eventServiceSpy },
         { provide: FileUploadService, useValue: uploadServiceSpy },
-      ],
-    }).compileComponents()
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}).compileComponents()
 
     fixture = TestBed.createComponent(AffiliationImportDialogComponent)
     component = fixture.componentInstance

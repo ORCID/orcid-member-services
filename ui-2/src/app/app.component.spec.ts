@@ -1,12 +1,13 @@
 import { TestBed } from '@angular/core/testing'
 import { RouterTestingModule } from '@angular/router/testing'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { AppComponent } from './app.component'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { OidcSecurityServiceMock } from './shared/service/oidc-security-service-mock'
 import { of } from 'rxjs'
 import { AccountService, StateStorageService } from './account'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -17,15 +18,17 @@ describe('AppComponent', () => {
     }
 
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule],
-      providers: [
+    declarations: [AppComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule],
+    providers: [
         { provide: AccountService, useValue: accountServiceMock },
         { provide: StateStorageService, useValue: stateStorageServiceSpy },
         { provide: OidcSecurityService, useClass: OidcSecurityServiceMock },
-      ],
-      declarations: [AppComponent],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents()
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}).compileComponents()
   })
 
   it('should create the app', () => {

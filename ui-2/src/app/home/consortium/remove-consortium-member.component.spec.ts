@@ -6,9 +6,10 @@ import { AccountService } from 'src/app/account'
 import { MemberService } from 'src/app/member/service/member.service'
 import { AlertService } from 'src/app/shared/service/alert.service'
 import { RouterTestingModule } from '@angular/router/testing'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { of } from 'rxjs'
 import { AlertType } from 'src/app/app.constants'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('RemoveConsortiumMemberComponent', () => {
   let component: RemoveConsortiumMemberComponent
@@ -26,14 +27,16 @@ describe('RemoveConsortiumMemberComponent', () => {
     alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
-      declarations: [RemoveConsortiumMemberComponent],
-      providers: [
+    declarations: [RemoveConsortiumMemberComponent],
+    imports: [RouterTestingModule],
+    providers: [
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },
-      ],
-    })
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+})
 
     accountServiceSpy = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
     memberServiceSpy = TestBed.inject(MemberService) as jasmine.SpyObj<MemberService>

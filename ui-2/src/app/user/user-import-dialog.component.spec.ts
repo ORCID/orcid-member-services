@@ -8,8 +8,9 @@ import { ErrorService } from '../error/service/error.service'
 import { EventService } from '../shared/service/event.service'
 import { FileUploadService } from '../shared/service/file-upload.service'
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { EMPTY, of } from 'rxjs'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('UserImportDialogComponent', () => {
   let component: UserImportDialogComponent
@@ -32,9 +33,9 @@ describe('UserImportDialogComponent', () => {
     const uploadServiceSpy = jasmine.createSpyObj('FileUploadService', ['uploadFile'])
 
     TestBed.configureTestingModule({
-      declarations: [UserImportDialogComponent],
-      imports: [HttpClientTestingModule],
-      providers: [
+    declarations: [UserImportDialogComponent],
+    imports: [],
+    providers: [
         FormBuilder,
         NgbModal,
         NgbActiveModal,
@@ -42,8 +43,10 @@ describe('UserImportDialogComponent', () => {
         { provide: EventService, useValue: eventServiceSpy },
         { provide: FileUploadService, useValue: uploadServiceSpy },
         { provide: ErrorService, useValue: {} },
-      ],
-    }).compileComponents()
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}).compileComponents()
 
     fixture = TestBed.createComponent(UserImportDialogComponent)
     component = fixture.componentInstance
