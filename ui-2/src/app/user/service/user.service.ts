@@ -1,13 +1,13 @@
+import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { HttpClient, HttpResponse, HttpHeaders, HttpParams } from '@angular/common/http'
+import moment from 'moment'
 import { Observable } from 'rxjs'
-import * as moment from 'moment'
-import { filter, map } from 'rxjs/operators'
+import { map } from 'rxjs/operators'
 
-import { User, UserAuthorities } from '../model/user.model'
+import { Page } from 'src/app/shared/model/page.model'
 import { createRequestOption } from '../../shared/request-util'
 import { UserValidation } from '../model/user-validation.model'
-import { Page } from 'src/app/shared/model/page.model'
+import { User, UserAuthorities } from '../model/user.model'
 
 @Injectable({ providedIn: 'root' })
 export class UserService {

@@ -35,13 +35,13 @@
               aria-hidden="true"
               *ngIf="member.isConsortiumLead"
               [icon]="faCheckCircle"
-              [styles]="{ color: '#28a745' }"
+              [style.color]="{ color: '#28a745' }"
             ></fa-icon>
             <fa-icon
               aria-hidden="true"
               *ngIf="!member.isConsortiumLead"
               [icon]="faTimesCircle"
-              [styles]="{ color: '#f22112' }"
+              [style.color]="'#f22112'"
             ></fa-icon>
           </dd>
           <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.assertionServiceEnabled.string">
@@ -53,13 +53,13 @@
               aria-hidden="true"
               *ngIf="member.assertionServiceEnabled"
               [icon]="faCheckCircle"
-              [styles]="{ color: '#28a745' }"
+              [style.color]="'#28a745'"
             ></fa-icon>
             <fa-icon
               aria-hidden="true"
               *ngIf="!member.assertionServiceEnabled"
               [icon]="faTimesCircle"
-              [styles]="{ color: '#f22112' }"
+              [style.color]="'#f22112'"
             ></fa-icon>
           </dd>
           <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.status.string">Status</dt>

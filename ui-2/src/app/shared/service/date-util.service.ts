@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import * as moment from 'moment'
+import moment from 'moment'
 import { DEFAULT_EARLIEST_YEAR } from '../constants/orcid-api.constants'
 
 @Injectable({ providedIn: 'root' })
