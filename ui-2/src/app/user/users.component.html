@@ -6,7 +6,7 @@
         id="jh-create-entity"
         class="btn btn-primary float-right jh-create-entity ml-1"
         [routerLink]="['/users/new']"
-      >
+        >
         <fa-icon [icon]="faPlus"></fa-icon>
         <span i18n="@@gatewayApp.msUserServiceMSUser.home.createLabel.string">Add user </span>
       </button>
@@ -15,7 +15,7 @@
         id="jh-upload-entities"
         class="btn btn-primary float-right jh-create-entity create-ms-user ml-1"
         [routerLink]="['/' + 'users', { outlets: { popup: 'import' } }]"
-      >
+        >
         <fa-icon [icon]="faPlus"></fa-icon>
         <span i18n="@@gatewayApp.msUserServiceMSUser.home.uploadLabel.string">Import users from CSV </span>
       </button>
@@ -33,179 +33,204 @@
             i18n-placeholder="@@global.form.search.string"
             ng-model="selected"
             class="form-control"
-          />
-          <button *ngIf="submittedSearchTerm" class="reset" (click)="resetSearch()">
-            <fa-icon aria-hidden="true" [icon]="faTimes" [style.color]="'#2e7f9f'"></fa-icon>
+            />
+            @if (submittedSearchTerm) {
+              <button class="reset" (click)="resetSearch()">
+                <fa-icon aria-hidden="true" [icon]="faTimes" [style.color]="'#2e7f9f'"></fa-icon>
+              </button>
+            }
+          </div>
+          <button class="search" (click)="submitSearch()">
+            <fa-icon aria-hidden="true" [icon]="faSearch" [style.color]="'#2e7f9f'"></fa-icon>
           </button>
         </div>
-        <button class="search" (click)="submitSearch()">
-          <fa-icon aria-hidden="true" [icon]="faSearch" [style.color]="'#2e7f9f'"></fa-icon>
-        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <app-alert-error></app-alert-error>
+        <app-alert-toast></app-alert-toast>
+        @if (users && users?.length === 0) {
+          <div class="alert alert-warning">
+            <span i18n="@@gatewayApp.msUserServiceMSUser.home.notFound.string">No users to show</span>
+          </div>
+        }
+      </div>
+    </div>
+    @if (users && users.length && users.length > 0) {
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th (click)="updateSort('email')">
+                <span i18n="@@gatewayApp.msUserServiceMSUser.email.string">Email</span>
+                @if (sortColumn === 'email') {
+                  <fa-icon class="ml-2" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+                }
+              </th>
+              <th (click)="updateSort('firstName')">
+                <span i18n="@@gatewayApp.msUserServiceMSUser.firstName.string">First Name</span>
+                @if (sortColumn === 'firstName') {
+                  <fa-icon
+                    class="ml-2"
+                    [icon]="ascending ? faSortDown : faSortUp"
+                  ></fa-icon>
+                }
+              </th>
+              <th (click)="updateSort('lastName')">
+                <span i18n="@@gatewayApp.msUserServiceMSUser.lastName.string">Last Name</span>
+                @if (sortColumn === 'lastName') {
+                  <fa-icon
+                    class="ml-2"
+                    [icon]="ascending ? faSortDown : faSortUp"
+                  ></fa-icon>
+                }
+              </th>
+              <th (click)="updateSort('mainContact')">
+                <span i18n="@@gatewayApp.msUserServiceMSUser.mainContact.string">Organization Owner</span>
+                @if (sortColumn === 'mainContact') {
+                  <fa-icon
+                    class="ml-2"
+                    [icon]="ascending ? faSortDown : faSortUp"
+                  ></fa-icon>
+                }
+              </th>
+              <th (click)="updateSort('salesforceId')">
+                <span i18n="@@gatewayApp.msUserServiceMSUser.salesforceId.string">Organization</span>
+                @if (sortColumn === 'salesforceId') {
+                  <fa-icon
+                    class="ml-2"
+                    [icon]="ascending ? faSortDown : faSortUp"
+                  ></fa-icon>
+                }
+              </th>
+              <th (click)="updateSort('activated')">
+                <span i18n="@@gatewayApp.msUserServiceMSUser.activated.string">Activated</span>
+                @if (sortColumn === 'activated') {
+                  <fa-icon
+                    class="ml-2"
+                    [icon]="ascending ? faSortDown : faSortUp"
+                  ></fa-icon>
+                }
+              </th>
+              <th (click)="updateSort('lastModifiedDate')">
+                <span i18n="@@gatewayApp.msUserServiceMSUser.lastModifiedDate.string">Last Modified</span>
+                @if (sortColumn === 'lastModifiedDate') {
+                  <fa-icon
+                    class="ml-2"
+                    [icon]="ascending ? faSortDown : faSortUp"
+                  ></fa-icon>
+                }
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (user of users; track user) {
+              <tr>
+                <td>
+                  <a [routerLink]="['/users', user.id, 'view']">{{ user.email }}</a>
+                </td>
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.lastName }}</td>
+                <td class="text-center">
+                  <span class="sr-only">{{ user.mainContact }}</span>
+                  @if (user.mainContact) {
+                    <fa-icon
+                      aria-hidden="true"
+                      [icon]="faCheckCircle"
+                      [style.color]="'#28a745'"
+                    ></fa-icon>
+                  }
+                  @if (!user.mainContact) {
+                    <fa-icon
+                      aria-hidden="true"
+                      [icon]="faTimesCircle"
+                      [style.color]="'#f22112'"
+                    ></fa-icon>
+                  }
+                </td>
+                @if (hasRoleAdmin()) {
+                  <td>
+                    <a [routerLink]="['/members', user.salesforceId, 'view']">{{ user.memberName }}</a>
+                  </td>
+                }
+                @if (!hasRoleAdmin()) {
+                  <td>{{ user.memberName }}</td>
+                }
+                <td class="text-center">
+                  <span class="sr-only">{{ user.activated }}</span>
+                  @if (user.activated) {
+                    <fa-icon
+                      aria-hidden="true"
+                      [icon]="faCheckCircle"
+                      [style.color]="'#28a745'"
+                    ></fa-icon>
+                  }
+                  @if (!user.activated) {
+                    <fa-icon
+                      aria-hidden="true"
+                      [icon]="faTimesCircle"
+                      [style.color]="'#f22112'"
+                    ></fa-icon>
+                  }
+                </td>
+                <td>{{ user.lastModifiedDate?.toString() | date: 'medium' }}</td>
+                <td class="text-right">
+                  <div class="btn-group">
+                    @if (!user.activated) {
+                      <button
+                        type="button"
+                        (click)="sendActivate(user)"
+                        class="btn btn-primary btn-sm ml-1"
+                        >
+                        <fa-icon [icon]="faCheckCircle"></fa-icon>
+                        <span class="d-none d-md-inline" i18n="@@entity.action.activate.string">Resend activation email</span>
+                      </button>
+                    }
+                    <button
+                      type="submit"
+                      [routerLink]="['/users', user.id, 'edit']"
+                      class="btn btn-primary btn-sm ml-1"
+                      [disabled]="isDefaultAdmin(user)"
+                      >
+                      <fa-icon [icon]="faPencilAlt"></fa-icon>
+                      <span class="d-none d-md-inline" i18n="@@entity.action.edit.string">Edit</span>
+                    </button>
+                    <button
+                      type="submit"
+                      [routerLink]="['/', 'users', { outlets: { popup: user.id + '/delete' } }]"
+                      replaceUrl="true"
+                      queryParamsHandling="merge"
+                      class="btn btn-danger btn-sm ml-1"
+                      [disabled]="isDefaultAdmin(user) || isUserLoggedIn(user)"
+                      >
+                      <fa-icon [icon]="faTimes"></fa-icon>
+                      <span class="d-none d-md-inline" i18n="@@entity.action.delete.string">Delete</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+    <div [hidden]="users?.length === 0">
+      <div class="row justify-content-center">
+        <p>{{ itemCount }}</p>
+      </div>
+      <div class="row justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [(page)]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="loadPage()"
+        ></ngb-pagination>
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-12">
-      <app-alert-error></app-alert-error>
-      <app-alert-toast></app-alert-toast>
-      <div class="alert alert-warning" *ngIf="users && users?.length === 0">
-        <span i18n="@@gatewayApp.msUserServiceMSUser.home.notFound.string">No users to show</span>
-      </div>
-    </div>
-  </div>
-  <div class="table-responsive" *ngIf="users && users.length && users.length > 0">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th (click)="updateSort('email')">
-            <span i18n="@@gatewayApp.msUserServiceMSUser.email.string">Email</span>
-            <fa-icon class="ml-2" *ngIf="sortColumn === 'email'" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
-          </th>
-          <th (click)="updateSort('firstName')">
-            <span i18n="@@gatewayApp.msUserServiceMSUser.firstName.string">First Name</span>
-            <fa-icon
-              class="ml-2"
-              *ngIf="sortColumn === 'firstName'"
-              [icon]="ascending ? faSortDown : faSortUp"
-            ></fa-icon>
-          </th>
-          <th (click)="updateSort('lastName')">
-            <span i18n="@@gatewayApp.msUserServiceMSUser.lastName.string">Last Name</span>
-            <fa-icon
-              class="ml-2"
-              *ngIf="sortColumn === 'lastName'"
-              [icon]="ascending ? faSortDown : faSortUp"
-            ></fa-icon>
-          </th>
-          <th (click)="updateSort('mainContact')">
-            <span i18n="@@gatewayApp.msUserServiceMSUser.mainContact.string">Organization Owner</span>
-            <fa-icon
-              class="ml-2"
-              *ngIf="sortColumn === 'mainContact'"
-              [icon]="ascending ? faSortDown : faSortUp"
-            ></fa-icon>
-          </th>
-          <th (click)="updateSort('salesforceId')">
-            <span i18n="@@gatewayApp.msUserServiceMSUser.salesforceId.string">Organization</span>
-            <fa-icon
-              class="ml-2"
-              *ngIf="sortColumn === 'salesforceId'"
-              [icon]="ascending ? faSortDown : faSortUp"
-            ></fa-icon>
-          </th>
-          <th (click)="updateSort('activated')">
-            <span i18n="@@gatewayApp.msUserServiceMSUser.activated.string">Activated</span>
-            <fa-icon
-              class="ml-2"
-              *ngIf="sortColumn === 'activated'"
-              [icon]="ascending ? faSortDown : faSortUp"
-            ></fa-icon>
-          </th>
-          <th (click)="updateSort('lastModifiedDate')">
-            <span i18n="@@gatewayApp.msUserServiceMSUser.lastModifiedDate.string">Last Modified</span>
-            <fa-icon
-              class="ml-2"
-              *ngIf="sortColumn === 'lastModifiedDate'"
-              [icon]="ascending ? faSortDown : faSortUp"
-            ></fa-icon>
-          </th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of users">
-          <td>
-            <a [routerLink]="['/users', user.id, 'view']">{{ user.email }}</a>
-          </td>
-          <td>{{ user.firstName }}</td>
-          <td>{{ user.lastName }}</td>
-          <td class="text-center">
-            <span class="sr-only">{{ user.mainContact }}</span>
-            <fa-icon
-              aria-hidden="true"
-              *ngIf="user.mainContact"
-              [icon]="faCheckCircle"
-              [style.color]="'#28a745'"
-            ></fa-icon>
-            <fa-icon
-              aria-hidden="true"
-              *ngIf="!user.mainContact"
-              [icon]="faTimesCircle"
-              [style.color]="'#f22112'"
-            ></fa-icon>
-          </td>
-          <td *ngIf="hasRoleAdmin()">
-            <a [routerLink]="['/members', user.salesforceId, 'view']">{{ user.memberName }}</a>
-          </td>
-          <td *ngIf="!hasRoleAdmin()">{{ user.memberName }}</td>
-          <td class="text-center">
-            <span class="sr-only">{{ user.activated }}</span>
-            <fa-icon
-              aria-hidden="true"
-              *ngIf="user.activated"
-              [icon]="faCheckCircle"
-              [style.color]="'#28a745'"
-            ></fa-icon>
-            <fa-icon
-              aria-hidden="true"
-              *ngIf="!user.activated"
-              [icon]="faTimesCircle"
-              [style.color]="'#f22112'"
-            ></fa-icon>
-          </td>
-          <td>{{ user.lastModifiedDate?.toString() | date: 'medium' }}</td>
-          <td class="text-right">
-            <div class="btn-group">
-              <button
-                *ngIf="!user.activated"
-                type="button"
-                (click)="sendActivate(user)"
-                class="btn btn-primary btn-sm ml-1"
-              >
-                <fa-icon [icon]="faCheckCircle"></fa-icon>
-                <span class="d-none d-md-inline" i18n="@@entity.action.activate.string">Resend activation email</span>
-              </button>
-              <button
-                type="submit"
-                [routerLink]="['/users', user.id, 'edit']"
-                class="btn btn-primary btn-sm ml-1"
-                [disabled]="isDefaultAdmin(user)"
-              >
-                <fa-icon [icon]="faPencilAlt"></fa-icon>
-                <span class="d-none d-md-inline" i18n="@@entity.action.edit.string">Edit</span>
-              </button>
-              <button
-                type="submit"
-                [routerLink]="['/', 'users', { outlets: { popup: user.id + '/delete' } }]"
-                replaceUrl="true"
-                queryParamsHandling="merge"
-                class="btn btn-danger btn-sm ml-1"
-                [disabled]="isDefaultAdmin(user) || isUserLoggedIn(user)"
-              >
-                <fa-icon [icon]="faTimes"></fa-icon>
-                <span class="d-none d-md-inline" i18n="@@entity.action.delete.string">Delete</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div [hidden]="users?.length === 0">
-    <div class="row justify-content-center">
-      <p>{{ itemCount }}</p>
-    </div>
-    <div class="row justify-content-center">
-      <ngb-pagination
-        [collectionSize]="totalItems"
-        [(page)]="page"
-        [pageSize]="itemsPerPage"
-        [maxSize]="5"
-        [rotate]="true"
-        [boundaryLinks]="true"
-        (pageChange)="loadPage()"
-      ></ngb-pagination>
-    </div>
-  </div>
-</div>
-<router-outlet name="popup"></router-outlet>
+  <router-outlet name="popup"></router-outlet>

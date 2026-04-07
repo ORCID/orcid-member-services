@@ -6,13 +6,14 @@
     <button type="button" class="close" (click)="close()" aria-hidden="true">&times;</button>
   </div>
   <div class="modal-body">
-    <div
-      class="alert alert-danger"
-      *ngIf="requestAlreadyInProgress"
-      i18n="@@gatewayApp.assertionServiceAssertion.notifications.alreadyInProgress.string"
-    >
+    @if (requestAlreadyInProgress) {
+      <div
+        class="alert alert-danger"
+        i18n="@@gatewayApp.assertionServiceAssertion.notifications.alreadyInProgress.string"
+        >
       A request to send notifications to your users is already in progress. Please try again later.
     </div>
+    }
     <p i18n="@@gatewayApp.assertionServiceAssertion.notifications.description.string">
       Are you sure that you would like ORCID to send permission links to your researchers for the affiliations that are
       pending?
@@ -24,7 +25,9 @@
       What language should the notification be sent in?
     </p>
     <select class="form-control w-66" id="langKey" name="langKey" [(ngModel)]="language">
-      <option *ngFor="let lang of languages | keyvalue" [ngValue]="lang.key">{{ lang.value.name }}</option>
+      @for (lang of languages | keyvalue; track lang) {
+        <option [ngValue]="lang.key">{{ lang.value.name }}</option>
+      }
     </select>
   </div>
 
@@ -34,8 +37,8 @@
     </button>
     <button data-cy="confirmCsvUpload" type="submit" class="btn btn-primary">
       <fa-icon [icon]="faPaperPlane"></fa-icon>&nbsp;<span
-        i18n="@@gatewayApp.assertionServiceAssertion.notifications.sendNotifications.string"
-        >Send notifications</span
+      i18n="@@gatewayApp.assertionServiceAssertion.notifications.sendNotifications.string"
+      >Send notifications</span
       >
     </button>
   </div>
