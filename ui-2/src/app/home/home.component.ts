@@ -6,9 +6,10 @@ import { IAccount } from '../account/model/account.model'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    standalone: false
 })
 export class HomeComponent implements OnInit, OnDestroy {
   account: IAccount | undefined | null

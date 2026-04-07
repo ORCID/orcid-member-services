@@ -10,8 +10,9 @@ import { AlertMessage, AlertType, EventType } from '../app.constants'
 import { faBan, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
-  selector: 'app-user-delete-dialog',
-  templateUrl: './user-delete.component.html',
+    selector: 'app-user-delete-dialog',
+    templateUrl: './user-delete.component.html',
+    standalone: false
 })
 export class UserDeleteDialogComponent implements OnInit {
   user: IUser | undefined
@@ -46,8 +47,9 @@ export class UserDeleteDialogComponent implements OnInit {
 }
 
 @Component({
-  selector: 'app-user-delete-popup',
-  template: '',
+    selector: 'app-user-delete-popup',
+    template: '',
+    standalone: false
 })
 export class UserDeletePopupComponent implements OnInit, OnDestroy {
   protected ngbModalRef: NgbModalRef | undefined

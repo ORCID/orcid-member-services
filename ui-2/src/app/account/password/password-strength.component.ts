@@ -1,9 +1,10 @@
 import { Component, ElementRef, Input, Renderer2 } from '@angular/core'
 
 @Component({
-  selector: 'app-password-strength',
-  templateUrl: './password-strength.component.html',
-  styleUrls: ['./password-strength.component.scss'],
+    selector: 'app-password-strength',
+    templateUrl: './password-strength.component.html',
+    styleUrls: ['./password-strength.component.scss'],
+    standalone: false
 })
 export class PasswordStrengthComponent {
   colors = ['#F00', '#F90', '#FF0', '#9F0', '#0F0']

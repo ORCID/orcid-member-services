@@ -3,8 +3,9 @@ import { ActivatedRoute } from '@angular/router'
 import { AccountService } from '../account'
 
 @Component({
-  selector: 'app-error',
-  templateUrl: './error.component.html',
+    selector: 'app-error',
+    templateUrl: './error.component.html',
+    standalone: false
 })
 export class ErrorComponent implements OnInit {
   errorMessage: string | undefined

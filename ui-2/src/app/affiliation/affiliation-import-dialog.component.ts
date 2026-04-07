@@ -11,9 +11,10 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { faBan, faPlus } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
-  selector: 'app-affiliation-import-dialog',
-  templateUrl: './affiliation-import-dialog.component.html',
-  styleUrls: ['./affiliation-import-dialog.component.scss'],
+    selector: 'app-affiliation-import-dialog',
+    templateUrl: './affiliation-import-dialog.component.html',
+    styleUrls: ['./affiliation-import-dialog.component.scss'],
+    standalone: false
 })
 export class AffiliationImportDialogComponent {
   public resourceUrl
@@ -69,8 +70,9 @@ export class AffiliationImportDialogComponent {
 }
 
 @Component({
-  selector: 'app-affiliations-import-popup',
-  template: '',
+    selector: 'app-affiliations-import-popup',
+    template: '',
+    standalone: false
 })
 export class AffiliationImportPopupComponent implements OnInit, OnDestroy {
   protected ngbModalRef: NgbModalRef | undefined | null

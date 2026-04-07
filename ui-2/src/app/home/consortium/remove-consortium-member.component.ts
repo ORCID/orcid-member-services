@@ -14,9 +14,10 @@ import { AlertService } from 'src/app/shared/service/alert.service'
 import { DateUtilService } from 'src/app/shared/service/date-util.service'
 
 @Component({
-  selector: 'app-remove-consortium-member',
-  templateUrl: './remove-consortium-member.component.html',
-  styleUrls: ['./remove-consortium-member.component.scss'],
+    selector: 'app-remove-consortium-member',
+    templateUrl: './remove-consortium-member.component.html',
+    styleUrls: ['./remove-consortium-member.component.scss'],
+    standalone: false
 })
 export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
   memberDataSubscription: Subscription | undefined

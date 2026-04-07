@@ -17,9 +17,10 @@ import { AlertService } from '../../shared/service/alert.service'
 import { DateUtilService } from '../../shared/service/date-util.service'
 
 @Component({
-  selector: 'app-add-consortium-member',
-  templateUrl: './add-consortium-member.component.html',
-  styleUrls: ['./add-consortium-member.component.scss'],
+    selector: 'app-add-consortium-member',
+    templateUrl: './add-consortium-member.component.html',
+    styleUrls: ['./add-consortium-member.component.scss'],
+    standalone: false
 })
 export class AddConsortiumMemberComponent implements OnInit {
   countries: ISFCountry[] | undefined

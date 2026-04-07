@@ -25,9 +25,10 @@ import { IAccount } from '../../account/model/account.model'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
-  selector: 'app-contact-update',
-  templateUrl: './contact-update.component.html',
-  styleUrls: ['./contact-update.component.scss'],
+    selector: 'app-contact-update',
+    templateUrl: './contact-update.component.html',
+    styleUrls: ['./contact-update.component.scss'],
+    standalone: false
 })
 export class ContactUpdateComponent implements OnInit, OnDestroy {
   account: IAccount | undefined | null

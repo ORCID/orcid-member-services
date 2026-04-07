@@ -3,9 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { ActivationService } from './activation.service'
 
 @Component({
-  selector: 'app-activation',
-  templateUrl: './activation.component.html',
-  styleUrls: ['./activation.component.scss'],
+    selector: 'app-activation',
+    templateUrl: './activation.component.html',
+    styleUrls: ['./activation.component.scss'],
+    standalone: false
 })
 export class ActivationComponent implements OnInit {
   error: string | null = null

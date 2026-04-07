@@ -11,9 +11,10 @@ import { LoginService } from '../service/login.service'
 import { ILoginCredentials } from '../model/login.model'
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    standalone: false
 })
 export class LoginComponent implements AfterViewInit, OnDestroy {
   authenticationError = false

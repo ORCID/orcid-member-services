@@ -19,9 +19,10 @@ import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { filter, switchMap } from 'rxjs/operators'
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.scss'],
+    selector: 'app-navbar',
+    templateUrl: './navbar.component.html',
+    styleUrls: ['./navbar.scss'],
+    standalone: false
 })
 export class NavbarComponent implements OnInit {
   isNavbarCollapsed: boolean

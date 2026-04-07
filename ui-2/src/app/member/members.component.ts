@@ -19,8 +19,9 @@ import { EventService } from '../shared/service/event.service'
 import { Page } from '../shared/model/page.model'
 
 @Component({
-  selector: 'app-members',
-  templateUrl: './members.component.html',
+    selector: 'app-members',
+    templateUrl: './members.component.html',
+    standalone: false
 })
 export class MembersComponent implements OnInit {
   currentAccount: any

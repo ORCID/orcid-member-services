@@ -16,9 +16,10 @@ import { ErrorService } from '../error/service/error.service'
 import { AlertMessage, AlertType, DATE_TIME_FORMAT, emailValidator } from '../app.constants'
 
 @Component({
-  selector: 'app-user-update',
-  templateUrl: './user-update.component.html',
-  styleUrls: ['./user-update.component.scss'],
+    selector: 'app-user-update',
+    templateUrl: './user-update.component.html',
+    styleUrls: ['./user-update.component.scss'],
+    standalone: false
 })
 export class UserUpdateComponent {
   isSaving = false

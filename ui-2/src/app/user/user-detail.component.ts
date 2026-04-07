@@ -9,8 +9,9 @@ import { MemberService } from '../member/service/member.service'
 import { AlertMessage, AlertType } from '../app.constants'
 
 @Component({
-  selector: 'app-user-detail',
-  templateUrl: './user-detail.component.html',
+    selector: 'app-user-detail',
+    templateUrl: './user-detail.component.html',
+    standalone: false
 })
 export class UserDetailComponent {
   user: IUser | null = null

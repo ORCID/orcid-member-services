@@ -4,8 +4,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 
 @Component({
-  selector: 'app-password-reset-finish',
-  templateUrl: './password-reset-finish.component.html',
+    selector: 'app-password-reset-finish',
+    templateUrl: './password-reset-finish.component.html',
+    standalone: false
 })
 export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
   doNotMatch: string | undefined

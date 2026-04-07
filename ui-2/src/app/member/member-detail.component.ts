@@ -4,9 +4,10 @@ import { faArrowLeft, faCheckCircle, faPencilAlt, faTimesCircle } from '@fortawe
 import { ActivatedRoute } from '@angular/router'
 
 @Component({
-  selector: 'app-member-detail',
-  templateUrl: './member-detail.component.html',
-  styleUrls: ['./member-detail.component.scss'],
+    selector: 'app-member-detail',
+    templateUrl: './member-detail.component.html',
+    styleUrls: ['./member-detail.component.scss'],
+    standalone: false
 })
 export class MemberDetailComponent implements OnInit {
   member: IMember | undefined

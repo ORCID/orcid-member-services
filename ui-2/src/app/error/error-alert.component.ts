@@ -4,8 +4,9 @@ import { Subscription } from 'rxjs'
 import { AppError, ErrorAlert } from './model/error.model'
 
 @Component({
-  selector: 'app-alert-error',
-  templateUrl: './error-alert.component.html',
+    selector: 'app-alert-error',
+    templateUrl: './error-alert.component.html',
+    standalone: false
 })
 export class ErrorAlertComponent implements OnInit {
   alerts: any[] = []

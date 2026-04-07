@@ -10,9 +10,10 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { faSave, faBan } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
-  selector: 'app-user-import-dialog',
-  templateUrl: './user-import-dialog.component.html',
-  styleUrls: ['./user-import-dialog.component.scss'],
+    selector: 'app-user-import-dialog',
+    templateUrl: './user-import-dialog.component.html',
+    styleUrls: ['./user-import-dialog.component.scss'],
+    standalone: false
 })
 export class UserImportDialogComponent {
   resourceUrl: string
@@ -66,8 +67,9 @@ export class UserImportDialogComponent {
 }
 
 @Component({
-  selector: 'app-user-import-popup',
-  template: '',
+    selector: 'app-user-import-popup',
+    template: '',
+    standalone: false
 })
 export class UserImportPopupComponent implements OnInit, OnDestroy {
   protected ngbModalRef: NgbModalRef | undefined | null

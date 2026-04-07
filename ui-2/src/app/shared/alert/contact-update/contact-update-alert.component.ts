@@ -5,9 +5,10 @@ import { AlertType } from 'src/app/app.constants'
 import { AppAlert } from '../model/alert.model'
 
 @Component({
-  selector: 'app-contact-update-alert',
-  templateUrl: './contact-update-alert.component.html',
-  styleUrls: ['../overlay-modal.scss'],
+    selector: 'app-contact-update-alert',
+    templateUrl: './contact-update-alert.component.html',
+    styleUrls: ['../overlay-modal.scss'],
+    standalone: false
 })
 export class ContactUpdateAlertComponent {
   alerts: AppAlert[] | undefined

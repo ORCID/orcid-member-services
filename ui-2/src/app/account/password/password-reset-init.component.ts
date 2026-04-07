@@ -6,8 +6,9 @@ import { EMAIL_NOT_FOUND_TYPE } from 'src/app/app.constants'
 import { PasswordResetInitResult } from '../model/password-reset-init-result.model'
 
 @Component({
-  selector: 'app-password-reset-init',
-  templateUrl: './password-reset-init.component.html',
+    selector: 'app-password-reset-init',
+    templateUrl: './password-reset-init.component.html',
+    standalone: false
 })
 export class PasswordResetInitComponent implements AfterViewInit {
   error: string | undefined
