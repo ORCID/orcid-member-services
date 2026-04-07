@@ -59,35 +59,19 @@ export class LandingPageComponent implements OnInit {
     const id_token_fragment = fragmentParams.get('id_token')
     const access_token_fragment = fragmentParams.get('access_token')
 
-    console.log(
-      'landing page initialised, found three parameters in URL - state:',
-      state_param,
-      'id_token:',
-      id_token_fragment,
-      'access_token:',
-      access_token_fragment
-    )
     if (state_param) {
       this.processRequest(state_param, id_token_fragment, access_token_fragment)
     }
   }
 
   processRequest(state_param: string, id_token_fragment: string | null, access_token_fragment: string | null) {
-    console.log('LANDING PAGE: Processing landing page request with state param:', state_param)
-    console.log('LANDING PAGE: fetching orcid connection record for state param:', state_param)
     this.landingPageService.getOrcidConnectionRecord(state_param).subscribe({
       next: (result) => {
-        console.log('LANDING PAGE: Received orcid connection record:', result)
-        console.log('LANDING PAGE: fetching member salesforce id for state param:', state_param)
-
         this.landingPageService.getSalesforceId(state_param).subscribe({
           next: (salesforceId) => {
-            console.log("LANDING PAGE: Found salesforce id for state param's connection record:", salesforceId)
-            console.log('LANDING PAGE: Fetching member info for salesforce id:', salesforceId)
             this.orcidRecord = result
             this.landingPageService.getMemberInfo(salesforceId).subscribe({
               next: (res: IMember) => {
-                console.log('LANDING PAGE: Received member info for salesforce id:', salesforceId, 'Member info:', res)
                 this.clientName = res.clientName
                 this.clientId = res.clientId
                 this.salesforceId = res.salesforceId
@@ -99,8 +83,6 @@ export class LandingPageComponent implements OnInit {
                   this.clientId +
                   '&scope=/read-limited /activities/update /person/update openid&prompt=login&state=' +
                   state_param
-
-                console.log('LANDING PAGE: Constructed oauth url:', this.oauthUrl)
 
                 this.incorrectDataMessage = $localize`:@@landingPage.success.ifYouFind.string:If you find that data added to your ORCID record is incorrect, please contact ${this.clientName}`
                 this.linkAlreadyUsedMessage = $localize`:@@landingPage.connectionExists.differentUser.string:This authorization link has already been used. Please contact ${this.clientName} for a new authorization link.`
