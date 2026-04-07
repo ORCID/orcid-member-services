@@ -37,8 +37,8 @@ export class AddConsortiumMemberAlertComponent {
     this.sub?.unsubscribe()
   }
 
-  @HostListener('document:keyup.escape', ['$event'])
-  @HostListener('document:keyup.enter', ['$event'])
+  @HostListener('document:keyup.escape')
+  @HostListener('document:keyup.enter')
   closeOldestAlert() {
     this.close()
   }
