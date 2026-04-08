@@ -142,15 +142,27 @@ public class StoredFileService {
     private void removeStoredFile(StoredFile f) {
         LOG.info("Removing file {} which is marked for deletion", f.getFileLocation());
         File file = new File(f.getFileLocation());
-        boolean deleted = file.delete();
-        if (!deleted) {
+        boolean deleted = false;
+        try {
+            deleted = java.nio.file.Files.deleteIfExists(file.toPath());
+        } catch (IOException e) {
+            LOG.error("Failed to delete file {}", file.getAbsolutePath(), e);
+        }
+
+        if (!deleted && file.exists()) {
             LOG.error("Failed to delete file {}", file.getAbsolutePath());
+            return;
+        }
+
+        if (!deleted) {
+            LOG.warn("File {} was already missing; removing StoredFile record anyway", file.getAbsolutePath());
         } else {
             LOG.info("File {} deleted", file.getAbsolutePath());
-            LOG.info("Removing corresponding StoredFile record");
-            storedFileRepository.delete(f);
-            LOG.info("Record deleted");
         }
+
+        LOG.info("Removing corresponding StoredFile record");
+        storedFileRepository.delete(f);
+        LOG.info("Record deleted");
     }
 
 }
