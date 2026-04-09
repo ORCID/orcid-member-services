@@ -104,8 +104,13 @@ public class SalesforceClient {
     }
 
     private ConsortiumLeadDetails getSFConsortiumLeadDetails(String salesforceId) {
-        return get("/member/" + salesforceId + "/details", new ParameterizedTypeReference<ConsortiumLeadDetails>() {
+        String rawJson = get("/member/" + salesforceId + "/details", new ParameterizedTypeReference<String>() {
         });
+        LOG.info("========================================");
+        LOG.info("RAW CONSORTIUM LEAD JSON FROM UPSTREAM:");
+        LOG.info(rawJson);
+        LOG.info("========================================");
+        return null;
     }
 
     private <T> T get(String path, ParameterizedTypeReference<T> typeReference) {
