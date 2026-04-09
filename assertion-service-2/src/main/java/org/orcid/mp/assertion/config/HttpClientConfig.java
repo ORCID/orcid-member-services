@@ -1,5 +1,6 @@
 package org.orcid.mp.assertion.config;
 
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
@@ -62,6 +63,15 @@ public class HttpClientConfig {
                 .defaultHeader("Accept", "application/json")
                 .defaultHeader("Content-Type", "application/json")
                 .requestFactory(requestFactory).build();
+    }
+
+    /**
+     * necessary to support orcid-model, which still uses jaxb
+     * @return
+     */
+    @Bean
+    public JaxbAnnotationModule jaxbAnnotationModule() {
+        return new JaxbAnnotationModule();
     }
 
     @Bean
