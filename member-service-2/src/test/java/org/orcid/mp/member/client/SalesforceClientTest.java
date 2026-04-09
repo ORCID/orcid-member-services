@@ -19,6 +19,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,7 +27,6 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@Disabled("Skipping all tests in this class temporarily while I fix the ORCID API client")
 class SalesforceClientTest {
 
     @InjectMocks
@@ -137,13 +137,25 @@ class SalesforceClientTest {
     @Test
     void testGetConsortiumLeadDetails_Success() throws IOException {
         mockAccessTokenCall("token");
-        ConsortiumLeadDetails mockConsortiumDetails = new ConsortiumLeadDetails();
-        mockGetRequest("/member/123/details", mockConsortiumDetails);
 
-        ConsortiumLeadDetails result = salesforceClient.getConsortiumLeadDetails("123");
+        ConsortiumLeadDetailsWrapper wrapper = new ConsortiumLeadDetailsWrapper();
 
-        assertNotNull(result);
-        assertEquals(mockConsortiumDetails, result);
+        ConsortiumLeadDetails consortiumLead = new ConsortiumLeadDetails();
+        consortiumLead.setName("consortium lead");
+        ConsortiumMember consortiumMember = new ConsortiumMember();
+        consortiumMember.setSalesforceId("sfid1");
+        wrapper.setConsortiumMembers(Arrays.asList(consortiumMember));
+        wrapper.setConsortiumLead(consortiumLead);
+
+        mockGetRequest("/member/123/details", wrapper);
+
+        ConsortiumLeadDetails cl = salesforceClient.getConsortiumLeadDetails("123");
+
+        assertNotNull(cl);
+        assertEquals("consortium lead", cl.getName());
+        assertNotNull(cl.getConsortiumMembers());
+        assertEquals(1, cl.getConsortiumMembers().size());
+        assertEquals("sfid1", cl.getConsortiumMembers().getFirst().getSalesforceId());
     }
 
     @Test
