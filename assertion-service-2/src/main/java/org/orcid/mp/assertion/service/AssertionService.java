@@ -523,14 +523,14 @@ public class AssertionService {
         }
     }
 
-    private String postToOrcidRegistry(String orcid, Assertion assertion, String idToken) throws IOException, DeprecatedException, DeactivatedException, JSONException {
+    private String postToOrcidRegistry(String orcid, Assertion assertion, String idToken) throws IOException, DeprecatedException, DeactivatedException, JAXBException {
         LOG.info("Exchanging id token for access token for assertion {}, orcid {}", assertion.getId(), orcid);
         String accessToken = orcidApiClient.exchangeToken(idToken, orcid);
         LOG.info("POST affiliation for {} and assertion id {}", orcid, assertion.getId());
         return orcidApiClient.postAffiliation(orcid, accessToken, assertion);
     }
 
-    private void putInOrcidRegistry(String orcid, Assertion assertion, String idToken) throws JSONException, IOException, DeprecatedException, DeactivatedException {
+    private void putInOrcidRegistry(String orcid, Assertion assertion, String idToken) throws JSONException, IOException, DeprecatedException, DeactivatedException, JAXBException {
         LOG.info("Exchanging id token for access token for assertion {}, orcid {}", assertion.getId(), orcid);
         String accessToken = orcidApiClient.exchangeToken(idToken, orcid);
         LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid, assertion.getId());
