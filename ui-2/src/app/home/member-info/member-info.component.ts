@@ -61,7 +61,6 @@ export class MemberInfoComponent implements OnInit, OnDestroy {
               this.memberService.setManagedMember(params['id'])
               return this.memberService.getMemberData(this.managedMember)
             } else {
-              // This was the line firing too early!
               return this.memberService.getMemberData(account?.salesforceId)
             }
           } else {
