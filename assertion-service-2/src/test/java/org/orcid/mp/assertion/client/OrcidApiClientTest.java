@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.orcid.jaxb.model.v3.release.record.Affiliation;
 import org.orcid.mp.assertion.domain.AffiliationSection;
 import org.orcid.mp.assertion.domain.Assertion;
 import org.orcid.mp.assertion.error.DeactivatedException;
@@ -56,7 +55,7 @@ class OrcidApiClientTest {
     private RestClient.ResponseSpec responseSpec;
 
     @Captor
-    private ArgumentCaptor<Affiliation> affiliationCaptor;
+    private ArgumentCaptor<String> xmlPayloadCaptor;
 
     private final String API_URL = "https://api.orcid.org/";
     private final String INTERNAL_API_URL = "https://internal.orcid.org/";
@@ -109,10 +108,18 @@ class OrcidApiClientTest {
                 errorResponse.getBytes(StandardCharsets.UTF_8),
                 StandardCharsets.UTF_8);
 
+        HttpClientErrorException conflictException = HttpClientErrorException.create(
+                HttpStatus.CONFLICT,
+                "Conflict",
+                HttpHeaders.EMPTY,
+                null,
+                null);
+
+        // Chain all three calls onto the exact same mock signature!
         when(responseSpec.toEntity(String.class))
                 .thenThrow(unauthorizedException) // Call 1: exchangeToken throws 401
                 .thenReturn(new ResponseEntity<>("{\"access_token\":\"internal\"}", HttpStatus.OK)) // Call 2: internal token success
-                .thenReturn(new ResponseEntity<>("Deactivated", HttpStatus.CONFLICT)); // Call 3: registry check 409
+                .thenThrow(conflictException); // Call 3: registry check throws 409
 
         assertThatThrownBy(() -> orcidApiClient.exchangeToken("id-token", "orcid-id"))
                 .isInstanceOf(DeactivatedException.class);
@@ -134,8 +141,8 @@ class OrcidApiClientTest {
 
         assertThat(putCode).isEqualTo("12345");
 
-        verify(requestBodySpec).body(affiliationCaptor.capture());
-        assertThat(affiliationCaptor.getValue().getRoleTitle()).isEqualTo("Researcher");
+        verify(requestBodySpec).body(xmlPayloadCaptor.capture());
+        assertThat(xmlPayloadCaptor.getValue()).contains("Researcher");
     }
 
     @Test
@@ -145,8 +152,8 @@ class OrcidApiClientTest {
         Assertion assertion = createMockAssertion();
         assertion.setPutCode("12345");
 
-        when(responseSpec.toEntity(String.class))
-                .thenReturn(new ResponseEntity<>("", HttpStatus.OK));
+        when(responseSpec.toBodilessEntity())
+                .thenReturn(new ResponseEntity<>(HttpStatus.OK));
 
         orcidApiClient.putAffiliation(orcid, accessToken, assertion);
 
@@ -160,8 +167,8 @@ class OrcidApiClientTest {
         Assertion assertion = createMockAssertion();
         assertion.setPutCode("12345");
 
-        when(responseSpec.toEntity(String.class))
-                .thenReturn(new ResponseEntity<>("", HttpStatus.NO_CONTENT));
+        when(responseSpec.toBodilessEntity())
+                .thenReturn(new ResponseEntity<>(HttpStatus.NO_CONTENT));
 
         orcidApiClient.deleteAffiliation(orcid, accessToken, assertion);
 

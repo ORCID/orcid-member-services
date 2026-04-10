@@ -29,8 +29,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -42,8 +45,6 @@ public class OrcidApiClient {
     private static final Logger LOG = LoggerFactory.getLogger(OrcidApiClient.class);
 
     private final AtomicReference<String> internalAccessToken = new AtomicReference<>();
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     @Qualifier("orcidRestClient")
@@ -73,7 +74,7 @@ public class OrcidApiClient {
     @Value("${application.orcid.requestedTokenType}")
     private String requestedTokenType;
 
-    public String exchangeToken(String idToken, String orcidId) throws IOException, DeactivatedException {
+    public String exchangeToken(String idToken, String orcidId) throws DeactivatedException {
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("client_id", clientId);
         formData.add("client_secret", clientSecret);
@@ -113,56 +114,66 @@ public class OrcidApiClient {
         }
     }
 
-    public String postAffiliation(String orcid, String accessToken, Assertion assertion) throws DeprecatedException, IOException {
-        Affiliation orcidAffiliation = AffiliationAdapter.toOrcidAffiliation(assertion);
+    public String postAffiliation(String orcid, String accessToken, Assertion assertion) throws DeprecatedException, JAXBException {
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
 
-        LOG.info("Creating {} for {} with role title {}", affType, orcid, orcidAffiliation.getRoleTitle());
-        LOG.debug("Post affiliation payload: {}", orcidAffiliation);
-        ResponseEntity<String> response = restClient.post()
-                .uri(apiUrl + orcid + '/' + affType)
-                .header("Authorization", "Bearer " + accessToken)
-                .contentType(MediaType.APPLICATION_XML)
-                .body(orcidAffiliation).retrieve().toEntity(String.class);
+        LOG.info("Creating {} for {} with role title {}", affType, orcid, assertion.getRoleTitle());
+        String xmlPayload = marshalAssertion(assertion);
 
-        String responseString = response.getBody();
-        HttpStatusCode statusCode = response.getStatusCode();
-        LOG.debug("Post affiliation response: {} - {}", statusCode.value(), responseString);
+        LOG.debug("Post affiliation payload: {}", xmlPayload);
+        try {
+            ResponseEntity<String> response = restClient.post()
+                    .uri(apiUrl + orcid + '/' + affType)
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_XML)
+                    .body(xmlPayload).retrieve().toEntity(String.class);
 
-        if (statusCode.isSameCodeAs(HttpStatus.CONFLICT)) {
-            LOG.info("Detected deprecated profile {}", orcid);
-            throw new DeprecatedException();
-        } else if (!statusCode.isSameCodeAs(HttpStatus.CREATED)) {
-            LOG.error("Unable to create {} for {}. Status code: {}, error {}", affType, orcid, statusCode.value(), responseString);
-            throw new OrcidAPIException(statusCode.value(), responseString);
+            LOG.debug("Post affiliation successful");
+            String location = response.getHeaders().getFirst("Location");
+            LOG.debug("Location header in response is {}", location);
+
+            String putCode = location.substring(location.lastIndexOf('/') + 1);
+
+            LOG.debug("Put code is {}", putCode);
+            return putCode;
+        } catch (RestClientResponseException e) {
+            String responseString = e.getResponseBodyAsString();
+            HttpStatusCode statusCode = e.getStatusCode();
+            if (statusCode.isSameCodeAs(HttpStatus.CONFLICT)) {
+                LOG.info("Detected deprecated profile {}", orcid);
+                throw new DeprecatedException();
+            } else {
+                LOG.error("Unable to create {} for {}. Status code: {}, error {}", affType, orcid, statusCode.value(), responseString);
+                throw new OrcidAPIException(statusCode.value(), responseString);
+            }
         }
-
-        String location = response.getHeaders().getFirst("Location");
-        return location.substring(location.lastIndexOf('/') + 1);
     }
 
-    public void putAffiliation(String orcid, String accessToken, Assertion assertion) throws DeprecatedException, IOException {
-        Affiliation orcidAffiliation = AffiliationAdapter.toOrcidAffiliation(assertion);
+    public void putAffiliation(String orcid, String accessToken, Assertion assertion) throws DeprecatedException, IOException, JAXBException {
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
 
         LOG.info("Updating affiliation with put code {} for {}", assertion.getPutCode(), orcid);
-        LOG.debug("Put affiliation payload: {}", orcidAffiliation);
-        ResponseEntity<String> response = restClient.put()
-                .uri(apiUrl + orcid + '/' + affType + '/' + assertion.getPutCode())
-                .header("Authorization", "Bearer " + accessToken)
-                .contentType(MediaType.APPLICATION_XML)
-                .body(orcidAffiliation).retrieve().toEntity(String.class);
+        String xmlPayload = marshalAssertion(assertion);
 
-        String responseString = response.getBody();
-        HttpStatusCode statusCode = response.getStatusCode();
-        LOG.debug("Put affiliation response: {} - {}", statusCode.value(), responseString);
+        LOG.debug("Put affiliation payload: {}", xmlPayload);
+        try {
+            ResponseEntity<String> response = restClient.put()
+                    .uri(apiUrl + orcid + '/' + affType + '/' + assertion.getPutCode())
+                    .header("Authorization", "Bearer " + accessToken)
+                    .contentType(MediaType.APPLICATION_XML)
+                    .body(xmlPayload).retrieve().toEntity(String.class);
 
-        if (statusCode.isSameCodeAs(HttpStatus.CONFLICT)) {
-            LOG.info("Detected deprecated profile {}", orcid);
-            throw new DeprecatedException();
-        } else if (!statusCode.isSameCodeAs(HttpStatus.OK)) {
-            LOG.error("Unable to update {} for {}. Status code: {}, error {}", affType, orcid, statusCode.value(), responseString);
-            throw new OrcidAPIException(statusCode.value(), responseString);
+            LOG.debug("Put affiliation successful");
+        } catch (RestClientResponseException e) {
+            String responseString = e.getResponseBodyAsString();
+            HttpStatusCode statusCode = e.getStatusCode();
+            if (statusCode.isSameCodeAs(HttpStatus.CONFLICT)) {
+                LOG.info("Detected deprecated profile {}", orcid);
+                throw new DeprecatedException();
+            } else if (!statusCode.isSameCodeAs(HttpStatus.OK)) {
+                LOG.error("Unable to update {} for {}. Status code: {}, error {}", affType, orcid, statusCode.value(), responseString);
+                throw new OrcidAPIException(statusCode.value(), responseString);
+            }
         }
     }
 
@@ -170,31 +181,41 @@ public class OrcidApiClient {
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
 
         LOG.info("Deleting affiliation with putcode {} for {}", assertion.getPutCode(), orcid);
-        ResponseEntity<String> response = restClient.delete()
-                .uri(apiUrl + orcid + '/' + affType + '/' + assertion.getPutCode())
-                .header("Authorization", "Bearer " + accessToken)
-                .retrieve().toEntity(String.class);
-
-        String responseString = response.getBody();
-        HttpStatusCode statusCode = response.getStatusCode();
-        LOG.debug("Delete affiliation response: {} - {}", statusCode.value(), responseString);
-
-        if (statusCode.isSameCodeAs(HttpStatus.CONFLICT)) {
-            LOG.info("Detected deprecated profile {}", orcid);
-            throw new DeprecatedException();
-        } else if (!statusCode.isSameCodeAs(HttpStatus.NO_CONTENT)) {
-            LOG.error("Unable to delete {} for {}. Status code: {}, error {}", affType, orcid, statusCode.value(), responseString);
-            throw new OrcidAPIException(statusCode.value(), responseString);
+        try {
+            ResponseEntity<String> response = restClient.delete()
+                    .uri(apiUrl + orcid + '/' + affType + '/' + assertion.getPutCode())
+                    .header("Authorization", "Bearer " + accessToken)
+                    .retrieve().toEntity(String.class);
+            LOG.debug("Delete affiliation successful");
+        } catch (RestClientResponseException e) {
+            String responseString = e.getResponseBodyAsString();
+            HttpStatusCode statusCode = e.getStatusCode();
+            if (statusCode.isSameCodeAs(HttpStatus.CONFLICT)) {
+                LOG.info("Detected deprecated profile {}", orcid);
+                throw new DeprecatedException();
+            } else {
+                LOG.error("Unable to delete {} for {}. Status code: {}, error {}", affType, orcid, statusCode.value(), responseString);
+                throw new OrcidAPIException(statusCode.value(), responseString);
+            }
         }
     }
 
-    public String postNotification(NotificationPermission notificationPermission, String orcidId) throws JAXBException, IOException {
+    private String marshalAssertion(Assertion assertion) throws JAXBException {
+        Affiliation orcidAffiliation = AffiliationAdapter.toOrcidAffiliation(assertion);
+        JAXBContext context = JAXBContext.newInstance(orcidAffiliation.getClass());
+        Marshaller marshaller = context.createMarshaller();
+        StringWriter writer = new StringWriter();
+        marshaller.marshal(orcidAffiliation, writer);
+        return writer.toString();
+    }
+
+    public String postNotification(NotificationPermission notificationPermission, String orcidId) throws JAXBException {
         return useInternalAccessToken(() -> {
             return postNotificationPermission(notificationPermission, orcidId);
         });
     }
 
-    public String getOrcidIdForEmail(String email) throws IOException {
+    public String getOrcidIdForEmail(String email) {
         return useInternalAccessToken(() -> {
             return getOrcidIdFromRegistry(email);
         });
@@ -209,14 +230,24 @@ public class OrcidApiClient {
 
     private boolean checkRegistryForDeactivated(String orcidId) {
         LOG.info("Calling {}/person endpoint to check deactivated status", orcidId);
-        ResponseEntity<String> response = restClient.get().uri(apiUrl + "/" + orcidId + "/person").header("Authorization", "Bearer " + internalAccessToken.get()).retrieve().toEntity(String.class);
-        String responseString = response.getBody();
+        try {
+            ResponseEntity<String> response = restClient.get().uri(apiUrl + "/" + orcidId + "/person")
+                    .header("Authorization", "Bearer " + internalAccessToken.get())
+                    .retrieve().toEntity(String.class);
 
-        LOG.info("Received status {} from the registry", response.getStatusCode().value());
-        if (response.getStatusCode().isSameCodeAs(HttpStatus.UNAUTHORIZED)) {
-            throw new OrcidAPIException(response.getStatusCode().value(), responseString);
-        } else {
-            return response.getStatusCode().isSameCodeAs(HttpStatus.CONFLICT);
+            // no exception thrown: 2xx reply, so profile isn't deactivated
+            LOG.debug("{} is not deactivated", orcidId);
+            return false;
+        } catch (RestClientResponseException e) {
+            HttpStatusCode statusCode = e.getStatusCode();
+            String responseString = e.getResponseBodyAsString();
+
+            LOG.info("Received status {} from the registry", statusCode.value());
+            if (statusCode.isSameCodeAs(HttpStatus.UNAUTHORIZED)) {
+                throw new OrcidAPIException(statusCode.value(), responseString);
+            } else {
+                return statusCode.isSameCodeAs(HttpStatus.CONFLICT);
+            }
         }
     }
 
@@ -280,49 +311,66 @@ public class OrcidApiClient {
 
     private String postNotificationPermission(NotificationPermission notificationPermission, String orcidId) {
         LOG.debug("Posting notification permission for {}. Payload: {}", orcidId, notificationPermission);
-        ResponseEntity<String> response = restClient.post().uri(apiUrl + orcidId + "/notification-permission")
-                .header("Authorization", "Bearer " + internalAccessToken)
-                .contentType(MediaType.APPLICATION_XML)
-                .body(notificationPermission).retrieve().toEntity(String.class);
-        LOG.debug("Post notification permission response: {} - {}", response.getStatusCode().value(), response.getBody());
-        if (!response.getStatusCode().isSameCodeAs(HttpStatus.CREATED)) {
-            String responseString = response.getBody();
-            LOG.error("Unable to create notification for {}. Status code: {}, error {}", orcidId, response.getStatusCode().value(), responseString);
-            throw new OrcidAPIException(response.getStatusCode().value(), responseString);
-        }
 
-        String location = response.getHeaders().getFirst("location");
-        return location.substring(location.lastIndexOf('/') + 1);
+        try {
+            JAXBContext context = JAXBContext.newInstance(NotificationPermission.class);
+            Marshaller marshaller = context.createMarshaller();
+            StringWriter writer = new StringWriter();
+            marshaller.marshal(notificationPermission, writer);
+            String xmlPayload = writer.toString();
+
+            try {
+                ResponseEntity<String> response = restClient.post().uri(apiUrl + orcidId + "/notification-permission")
+                        .header("Authorization", "Bearer " + internalAccessToken.get())
+                        .contentType(MediaType.APPLICATION_XML)
+                        .body(xmlPayload).retrieve().toEntity(String.class);
+
+                LOG.debug("Post notification permission successful");
+                String location = response.getHeaders().getFirst("location");
+                return location.substring(location.lastIndexOf('/') + 1);
+            } catch (RestClientResponseException e) {
+                HttpStatusCode statusCode = e.getStatusCode();
+                String responseString = e.getResponseBodyAsString();
+                LOG.error("Unable to create notification for {}. Status code: {}, error {}", orcidId, statusCode.value(), responseString);
+                throw new OrcidAPIException(statusCode.value(), responseString);
+            }
+        } catch (JAXBException e) {
+            LOG.error("Failed to marshal NotificationPermission for ORCID ID: {}", orcidId, e);
+            throw new RuntimeException("Failed to marshal NotificationPermission to XML", e);
+        }
     }
 
     private String getOrcidIdFromRegistry(String email) {
         LOG.debug("Looking up ORCID ID for email: {}", email);
-        ResponseEntity<String> response = restClient.get().uri(internalApiUrl + "orcid/" + Base64.encode(email) + "/email")
-                .header("Authorization", "Bearer " + internalAccessToken.get())
-                .retrieve().toEntity(String.class);
-
-        String responseBody = response.getBody();
-        LOG.debug("Get ORCID ID from registry response: {} - {}", response.getStatusCode().value(), responseBody);
-        if (!response.getStatusCode().isSameCodeAs(HttpStatus.OK) && !response.getStatusCode().isSameCodeAs(HttpStatus.NOT_FOUND)) {
-            LOG.warn("Received non-200 / non-404 response trying to find orcid id for email {}", email);
-            LOG.warn("Response received:");
-            LOG.warn(responseBody);
-            throw new RuntimeException("Received non-200 / non-404 response trying to find orcid id for email");
-        } else if (!response.getStatusCode().isSameCodeAs(HttpStatus.NOT_FOUND)) {
+        try {
+            ResponseEntity<String> response = restClient.get().uri(internalApiUrl + "orcid/" + Base64.encode(email) + "/email")
+                    .header("Authorization", "Bearer " + internalAccessToken.get())
+                    .retrieve().toEntity(String.class);
             try {
-                Map<String, String> responseMap = new ObjectMapper().readValue(responseBody, new TypeReference<HashMap<String, String>>() {
+                Map<String, String> responseMap = new ObjectMapper().readValue(response.getBody(), new TypeReference<HashMap<String, String>>() {
                 });
                 String orcidId = responseMap.get("orcid");
                 if (!StringUtils.isBlank(orcidId)) {
+                    LOG.debug("Found ORCID ID {} for email {}", orcidId, email);
                     return orcidId;
                 }
             } catch (JsonProcessingException e) {
-                LOG.error("Error extracting orcid id from response: {}", responseBody, e);
+                LOG.error("Error extracting orcid id from response: {}", response, e);
                 throw new RuntimeException(e);
             }
-        }
+        } catch (RestClientResponseException e) {
+            HttpStatusCode statusCode = e.getStatusCode();
+            String responseString = e.getResponseBodyAsString();
 
+            LOG.debug("Get ORCID ID from registry response: {} - {}", statusCode.value(), responseString);
+            if (!statusCode.isSameCodeAs(HttpStatus.NOT_FOUND)) {
+                LOG.warn("Received non-200 / non-404 response trying to find orcid id for email {}", email);
+                LOG.warn("Response received:");
+                LOG.warn(responseString);
+                throw new RuntimeException("Received non-200 / non-404 response trying to find orcid id for email");
+            }
+        }
+        LOG.debug("No ORCID ID found for email {}", email);
         return null;
     }
-
 }
