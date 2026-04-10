@@ -122,6 +122,7 @@ public class OrcidApiClient {
         ResponseEntity<String> response = restClient.post()
                 .uri(apiUrl + orcid + '/' + affType)
                 .header("Authorization", "Bearer " + accessToken)
+                .contentType(MediaType.APPLICATION_XML)
                 .body(orcidAffiliation).retrieve().toEntity(String.class);
 
         String responseString = response.getBody();
@@ -149,6 +150,7 @@ public class OrcidApiClient {
         ResponseEntity<String> response = restClient.put()
                 .uri(apiUrl + orcid + '/' + affType + '/' + assertion.getPutCode())
                 .header("Authorization", "Bearer " + accessToken)
+                .contentType(MediaType.APPLICATION_XML)
                 .body(orcidAffiliation).retrieve().toEntity(String.class);
 
         String responseString = response.getBody();
@@ -278,7 +280,10 @@ public class OrcidApiClient {
 
     private String postNotificationPermission(NotificationPermission notificationPermission, String orcidId) {
         LOG.debug("Posting notification permission for {}. Payload: {}", orcidId, notificationPermission);
-        ResponseEntity<String> response = restClient.post().uri(apiUrl + orcidId + "/notification-permission").header("Authorization", "Bearer " + internalAccessToken).body(notificationPermission).retrieve().toEntity(String.class);
+        ResponseEntity<String> response = restClient.post().uri(apiUrl + orcidId + "/notification-permission")
+                .header("Authorization", "Bearer " + internalAccessToken)
+                .contentType(MediaType.APPLICATION_XML)
+                .body(notificationPermission).retrieve().toEntity(String.class);
         LOG.debug("Post notification permission response: {} - {}", response.getStatusCode().value(), response.getBody());
         if (!response.getStatusCode().isSameCodeAs(HttpStatus.CREATED)) {
             String responseString = response.getBody();
