@@ -7,7 +7,8 @@
     "start_ssl": "ng serve --host 0.0.0.0 --ssl",
     "build": "ng build --base-href='/'",
     "watch": "ng build --base-href='/' --watch --configuration development",
-    "test": "ng test",
+    "test": "ng test --watch=false",
+    "test:watch": "ng test",
     "lint": "ng lint",
     "format:cli": "ng lint && npx prettier .",
     "format": "ng lint --fix && npx prettier --write ."
