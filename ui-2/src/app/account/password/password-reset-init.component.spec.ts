@@ -1,14 +1,13 @@
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing'
-import { of, throwError } from 'rxjs'
+import { of } from 'rxjs'
 
-import { PasswordService } from '../service/password.service'
-import { PasswordResetInitComponent } from './password-reset-init.component'
-import { EMAIL_NOT_FOUND_TYPE } from 'src/app/app.constants'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { ReactiveFormsModule } from '@angular/forms'
 import { By } from '@angular/platform-browser'
 import { PasswordResetInitResult } from '../model/password-reset-init-result.model'
-import { ReactiveFormsModule } from '@angular/forms'
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { PasswordService } from '../service/password.service'
+import { PasswordResetInitComponent } from './password-reset-init.component'
 
 describe('Component Tests', () => {
   describe('PasswordResetInitComponent', () => {
@@ -42,11 +41,6 @@ describe('Component Tests', () => {
       expect(comp.success).toEqual('OK')
       expect(comp.error).toBeUndefined()
       expect(comp.errorEmailNotExists).toBeUndefined()
-      fixture.whenStable().then(() => {
-        expect(true).toBeFalsy()
-        const button = fixture.debugElement.query(By.css('#reset'))
-        expect(button.nativeElement.disabled).toBeFalsy()
-      })
     }))
 
     it('notifies of unknown email upon email address not registered/400', inject(

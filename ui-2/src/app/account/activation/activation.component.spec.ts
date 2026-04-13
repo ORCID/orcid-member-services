@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing'
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
+import { ActivatedRoute } from '@angular/router'
+import { RouterTestingModule } from '@angular/router/testing'
+import { of, throwError } from 'rxjs'
 import { ActivationComponent } from './activation.component'
 import { ActivationService } from './activation.service'
-import { ActivatedRoute } from '@angular/router'
-import { async, of, throwError } from 'rxjs'
-import { RouterTestingModule } from '@angular/router/testing'
 
 describe('ActivationComponent', () => {
   let component: ActivationComponent
@@ -13,18 +13,20 @@ describe('ActivationComponent', () => {
 
   beforeEach(() => {
     activationServiceSpy = jasmine.createSpyObj('ActivationService', ['get'])
+    activationServiceSpy.get.and.returnValue(of({}))
 
     TestBed.configureTestingModule({
       declarations: [ActivationComponent],
       imports: [RouterTestingModule],
-      providers: [{ provide: ActivationService, useValue: activationServiceSpy }],
+      providers: [
+        { provide: ActivationService, useValue: activationServiceSpy },
+        { provide: ActivatedRoute, useClass: MockActivatedRoute },
+      ],
     }).compileComponents()
 
     fixture = TestBed.createComponent(ActivationComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
-
-    activationServiceSpy = TestBed.inject(ActivationService) as jasmine.SpyObj<ActivationService>
   })
 
   it('should create', () => {

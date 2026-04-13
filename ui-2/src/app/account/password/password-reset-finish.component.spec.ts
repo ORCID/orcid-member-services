@@ -1,22 +1,31 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { PasswordResetFinishComponent } from './password-reset-finish.component'
-import { AppModule } from 'src/app/app.module'
-import { PasswordService } from '../service/password.service'
+import { ReactiveFormsModule } from '@angular/forms'
+import { ActivatedRoute } from '@angular/router'
+import { RouterTestingModule } from '@angular/router/testing'
 import { of, throwError } from 'rxjs'
+import { PasswordService } from '../service/password.service'
+import { PasswordResetFinishComponent } from './password-reset-finish.component'
 
 describe('PasswordResetFinishComponent', () => {
   let component: PasswordResetFinishComponent
   let fixture: ComponentFixture<PasswordResetFinishComponent>
-  let service: PasswordService
+  let service: jasmine.SpyObj<PasswordService>
 
   beforeEach(() => {
+    const passwordServiceSpy = jasmine.createSpyObj('PasswordService', ['validateKey', 'savePassword', 'resendActivationEmail'])
+    passwordServiceSpy.validateKey.and.returnValue(of({ invalidKey: false, expiredKey: false }))
+
     TestBed.configureTestingModule({
-      imports: [AppModule],
       declarations: [PasswordResetFinishComponent],
+      imports: [ReactiveFormsModule, RouterTestingModule],
+      providers: [
+        { provide: PasswordService, useValue: passwordServiceSpy },
+        { provide: ActivatedRoute, useValue: { queryParams: of({}) } },
+      ],
     })
     fixture = TestBed.createComponent(PasswordResetFinishComponent)
-    service = fixture.debugElement.injector.get(PasswordService)
+    service = TestBed.inject(PasswordService) as jasmine.SpyObj<PasswordService>
     component = fixture.componentInstance
     fixture.detectChanges()
   })
@@ -26,13 +35,13 @@ describe('PasswordResetFinishComponent', () => {
   })
 
   it('password should save successfully', () => {
-    spyOn(service, 'savePassword').and.returnValue(of(true))
+    service.savePassword.and.returnValue(of(true))
     component.finishReset()
     expect(component.success).toEqual('OK')
   })
 
   it('password save should fail', () => {
-    spyOn(service, 'savePassword').and.returnValue(throwError(() => new Error('error')))
+    service.savePassword.and.returnValue(throwError(() => new Error('error')))
     component.finishReset()
     expect(component.error).toEqual('ERROR')
     expect(component.success).toBeFalsy()

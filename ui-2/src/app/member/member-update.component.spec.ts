@@ -1,14 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { MemberUpdateComponent } from './member-update.component'
-import { MemberService } from './service/member.service'
-import { RouterTestingModule } from '@angular/router/testing'
-import { IMember } from './model/member.model'
-import { ActivatedRoute, Router } from '@angular/router'
-import { of } from 'rxjs'
-import { AlertService } from '../shared/service/alert.service'
-import { AlertMessage, AlertType } from '../app.constants'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { ReactiveFormsModule } from '@angular/forms'
+import { ActivatedRoute, Router } from '@angular/router'
+import { RouterTestingModule } from '@angular/router/testing'
+import { of } from 'rxjs'
+import { AlertMessage, AlertType } from '../app.constants'
+import { AlertService } from '../shared/service/alert.service'
+import { MemberUpdateComponent } from './member-update.component'
+import { IMember } from './model/member.model'
+import { MemberService } from './service/member.service'
 
 describe('MemberUpdateComponent', () => {
   let component: MemberUpdateComponent
@@ -24,7 +25,7 @@ describe('MemberUpdateComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [MemberUpdateComponent],
-      imports: [RouterTestingModule.withRoutes([])],
+      imports: [RouterTestingModule.withRoutes([]), ReactiveFormsModule],
       providers: [
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },

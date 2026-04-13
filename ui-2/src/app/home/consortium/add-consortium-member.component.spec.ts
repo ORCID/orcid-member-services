@@ -1,15 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { AddConsortiumMemberComponent } from './add-consortium-member.component'
-import { MemberService } from 'src/app/member/service/member.service'
-import { AccountService } from 'src/app/account'
-import { AlertService } from 'src/app/shared/service/alert.service'
-import { ActivatedRoute, Router } from '@angular/router'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { ActivatedRoute, Router } from '@angular/router'
 import { RouterTestingModule } from '@angular/router/testing'
 import { of } from 'rxjs'
+import { AccountService } from 'src/app/account'
 import { AlertType } from 'src/app/app.constants'
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { MemberService } from 'src/app/member/service/member.service'
+import { AlertService } from 'src/app/shared/service/alert.service'
+import { AddConsortiumMemberComponent } from './add-consortium-member.component'
 
 describe('AddConsortiumMemberComponent', () => {
   let component: AddConsortiumMemberComponent
@@ -22,7 +22,7 @@ describe('AddConsortiumMemberComponent', () => {
   let router: jasmine.SpyObj<Router>
 
   beforeEach(() => {
-    memberServiceSpy = jasmine.createSpyObj('MemberService', ['addConsortiumMember'])
+    memberServiceSpy = jasmine.createSpyObj('MemberService', ['addConsortiumMember', 'getMemberData', 'getCountries'])
     accountServiceSpy = jasmine.createSpyObj('AccountService', ['getAccountData'])
     alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
 
@@ -48,6 +48,9 @@ describe('AddConsortiumMemberComponent', () => {
     component = fixture.componentInstance
 
     spyOn(router, 'navigate').and.returnValue(Promise.resolve(true))
+
+    memberServiceSpy.getMemberData.and.returnValue(of(null))
+    memberServiceSpy.getCountries.and.returnValue(of([]))
 
     accountServiceSpy.getAccountData.and.returnValue(
       of({
