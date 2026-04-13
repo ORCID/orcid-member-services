@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { AccountService } from '../account'
 import { Subscription } from 'rxjs/internal/Subscription'
 import { ISFMemberData } from '../member/model/salesforce-member-data.model'
@@ -9,18 +9,17 @@ import { OidcSecurityService } from 'angular-auth-oidc-client'
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  standalone: false,
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  private accountService = inject(AccountService)
+  private oidcSecurityService = inject(OidcSecurityService)
+
   account: IAccount | undefined | null
   memberData: ISFMemberData | undefined | null
   salesforceId: string | undefined
   loggedInMessage: string | undefined
   accountServiceSubscription: Subscription | undefined
-
-  constructor(
-    private accountService: AccountService,
-    private oidcSecurityService: OidcSecurityService
-  ) {}
 
   ngOnInit() {
     this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated }) => {

@@ -10,6 +10,14 @@
 /node_modules
 npm-debug.log
 yarn-error.log
+.npm/
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
 # IDEs and editors
 .idea/
@@ -19,6 +27,9 @@ yarn-error.log
 *.launch
 .settings/
 *.sublime-workspace
+*.swp
+*.swo
+*~
 
 # Visual Studio Code
 .vscode/*
@@ -28,18 +39,62 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
+# AI agents and coding assistants
+# Claude Code (Anthropic)
+.claude/
+.claude/projects/
+.claude/todos/
+# Cursor
+.cursor/
+# GitHub Copilot
+.github/copilot-instructions.md
+# Windsurf / Codeium
+.codeium/
+.windsurf/
+# Aider
+.aider*
+.aider.tags.cache.v*/
+# Devin
+.devin/
+# Continue
+.continue/
+# Supermaven
+.supermaven/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+*.cert
+*.p12
+secrets/
+credentials/
+
 # Miscellaneous
 /.angular/cache
+.angulardoc.json
 .sass-cache/
 /connect.lock
 /coverage
 /libpeerconnection.log
 testem.log
 /typings
+*.log
+*.pid
+*.seed
 
 # System files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
 
 # Cypress
 /cypress/plugins/credentials_qa.json

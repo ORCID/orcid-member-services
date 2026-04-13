@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { SessionStorageService } from 'ngx-webstorage'
 
 @Injectable({ providedIn: 'root' })
 export class StateStorageService {
-  constructor(private $sessionStorage: SessionStorageService) {}
+  private $sessionStorage = inject(SessionStorageService)
 
   getPreviousState() {
     return this.$sessionStorage.retrieve('previousState')

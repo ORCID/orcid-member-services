@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { FooterComponent } from './footer.component'
 import { By } from '@angular/platform-browser'
 import { AccountService } from 'src/app/account/service/account.service'
+import { FooterComponent } from './footer.component'
 
 describe('FooterComponent', () => {
   let component: FooterComponent
@@ -19,7 +19,8 @@ describe('FooterComponent', () => {
 
     fixture = TestBed.createComponent(FooterComponent)
     accountService = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
-    fixture.detectChanges()
+    accountService.isAuthenticated.and.returnValue(false)
+    accountService.getReleaseVersion.and.returnValue(null)
     component = fixture.componentInstance
   })
 
@@ -28,6 +29,7 @@ describe('FooterComponent', () => {
   })
 
   it('should contain copyright notice', () => {
+    fixture.detectChanges()
     const copyright = fixture.debugElement.query(By.css('.copyright'))
     expect(copyright).toBeTruthy()
   })

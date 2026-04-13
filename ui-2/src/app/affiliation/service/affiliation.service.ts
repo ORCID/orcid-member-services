@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core'
 import { HttpClient, HttpResponse } from '@angular/common/http'
+import { Injectable, inject } from '@angular/core'
+import moment from 'moment'
 import { Observable } from 'rxjs'
-import * as moment from 'moment'
 import { map } from 'rxjs/operators'
-import { IAffiliation } from '../model/affiliation.model'
-import { createRequestOption } from 'src/app/shared/request-util'
 import { Page } from 'src/app/shared/model/page.model'
+import { createRequestOption } from 'src/app/shared/request-util'
+import { IAffiliation } from '../model/affiliation.model'
 
 @Injectable({ providedIn: 'root' })
 export class AffiliationService {
-  public resourceUrl = '/assertionservice/assertions'
+  protected http = inject(HttpClient)
 
-  constructor(protected http: HttpClient) {}
+  public resourceUrl = '/assertionservice/assertions'
 
   create(affiliation: IAffiliation): Observable<IAffiliation> {
     const copy = this.convertDateFromClient(affiliation)

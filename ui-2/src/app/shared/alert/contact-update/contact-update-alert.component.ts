@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener } from '@angular/core'
+import { ChangeDetectorRef, Component, HostListener, inject } from '@angular/core'
 import { Subscription, map } from 'rxjs'
 import { AlertService } from '../../service/alert.service'
 import { AlertType } from 'src/app/app.constants'
@@ -8,16 +8,15 @@ import { AppAlert } from '../model/alert.model'
   selector: 'app-contact-update-alert',
   templateUrl: './contact-update-alert.component.html',
   styleUrls: ['../overlay-modal.scss'],
+  standalone: false,
 })
 export class ContactUpdateAlertComponent {
+  private alertService = inject(AlertService)
+  private cdr = inject(ChangeDetectorRef)
+
   alerts: AppAlert[] | undefined
   sub: Subscription | undefined
   message: any
-
-  constructor(
-    private alertService: AlertService,
-    private cdr: ChangeDetectorRef
-  ) {}
 
   ngOnInit(): void {
     this.sub = this.alertService
@@ -33,8 +32,8 @@ export class ContactUpdateAlertComponent {
     this.sub?.unsubscribe()
   }
 
-  @HostListener('document:keyup.escape', ['$event'])
-  @HostListener('document:keyup.enter', ['$event'])
+  @HostListener('document:keyup.escape')
+  @HostListener('document:keyup.enter')
   closeOldestAlert() {
     this.close()
   }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnInit, OnDestroy, inject } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
@@ -15,8 +15,14 @@ import { faBan, faTimes } from '@fortawesome/free-solid-svg-icons'
 @Component({
   selector: 'app-affiliation-delete-dialog',
   templateUrl: './affiliation-delete.component.html',
+  standalone: false,
 })
 export class AffiliationDeleteDialogComponent implements OnInit {
+  protected affiliationService = inject(AffiliationService)
+  activeModal = inject(NgbActiveModal)
+  protected eventService = inject(EventService)
+  private alertService = inject(AlertService)
+
   inOrcid: string = AFFILIATION_STATUS.IN_ORCID
   userRevokedAccess: string = AFFILIATION_STATUS.USER_REVOKED_ACCESS
   affiliation: IAffiliation | undefined
@@ -24,13 +30,6 @@ export class AffiliationDeleteDialogComponent implements OnInit {
   faTimes = faTimes
   faBan = faBan
   message = ''
-
-  constructor(
-    protected affiliationService: AffiliationService,
-    public activeModal: NgbActiveModal,
-    protected eventService: EventService,
-    private alertService: AlertService
-  ) {}
 
   clear() {
     this.activeModal.dismiss(true)
@@ -60,15 +59,14 @@ export class AffiliationDeleteDialogComponent implements OnInit {
 @Component({
   selector: 'app-affiliation-delete-popup',
   template: '',
+  standalone: false,
 })
 export class AffiliationDeletePopupComponent implements OnInit, OnDestroy {
-  protected ngbModalRef: NgbModalRef | undefined
+  protected activatedRoute = inject(ActivatedRoute)
+  protected router = inject(Router)
+  protected modalService = inject(NgbModal)
 
-  constructor(
-    protected activatedRoute: ActivatedRoute,
-    protected router: Router,
-    protected modalService: NgbModal
-  ) {}
+  protected ngbModalRef: NgbModalRef | undefined
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ affiliation }) => {

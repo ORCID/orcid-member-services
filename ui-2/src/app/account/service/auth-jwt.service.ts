@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable, take } from 'rxjs'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
@@ -6,10 +6,8 @@ import { ILoginCredentials } from '../model/login.model'
 
 @Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
-  constructor(
-    private http: HttpClient,
-    private oidcSecurityService: OidcSecurityService
-  ) {}
+  private http = inject(HttpClient)
+  private oidcSecurityService = inject(OidcSecurityService)
 
   // 1. Return the token from the library instead of null
   getToken(): Observable<string> {

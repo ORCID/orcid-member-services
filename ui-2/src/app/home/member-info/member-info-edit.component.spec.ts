@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { MemberInfoEditComponent } from './member-info-edit.component'
-import { AccountService } from 'src/app/account'
-import { MemberService } from 'src/app/member/service/member.service'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { RouterTestingModule } from '@angular/router/testing'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { of } from 'rxjs'
+import { AccountService } from 'src/app/account'
 import { IAccount } from 'src/app/account/model/account.model'
 import { SFAddress } from 'src/app/member/model/salesforce-address.model'
+import { SFCountry } from 'src/app/member/model/salesforce-country.model'
 import { SFMemberContact } from 'src/app/member/model/salesforce-member-contact.model'
 import { SFConsortiumMemberData } from 'src/app/member/model/salesforce-member-data.model'
-import { SFCountry } from 'src/app/member/model/salesforce-country.model'
+import { MemberService } from 'src/app/member/service/member.service'
+import { MemberInfoEditComponent } from './member-info-edit.component'
 
 describe('MemberInfoEditComponent', () => {
   let component: MemberInfoEditComponent
@@ -42,6 +42,7 @@ describe('MemberInfoEditComponent', () => {
     accountService = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
     memberService = TestBed.inject(MemberService) as jasmine.SpyObj<MemberService>
     memberService.getCountries.and.returnValue(of([new SFCountry('United Kingdom', 'GBR')]))
+    memberService.getMemberData.and.returnValue(of(null))
     fixture = TestBed.createComponent(MemberInfoEditComponent)
     component = fixture.componentInstance
   })

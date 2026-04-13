@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, inject } from '@angular/core'
 import { IUser } from './model/user.model'
 import { faCheckCircle, faTimesCircle, faPencilAlt, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { ActivatedRoute } from '@angular/router'
@@ -11,8 +11,14 @@ import { AlertMessage, AlertType } from '../app.constants'
 @Component({
   selector: 'app-user-detail',
   templateUrl: './user-detail.component.html',
+  standalone: false,
 })
 export class UserDetailComponent {
+  protected activatedRoute = inject(ActivatedRoute)
+  protected userService = inject(UserService)
+  protected alertService = inject(AlertService)
+  protected memberService = inject(MemberService)
+
   user: IUser | null = null
   faTimesCircle = faTimesCircle
   faCheckCircle = faCheckCircle
@@ -21,13 +27,6 @@ export class UserDetailComponent {
 
   DEFAULT_ADMIN = 'admin'
   superAdmin: boolean | undefined = false
-
-  constructor(
-    protected activatedRoute: ActivatedRoute,
-    protected userService: UserService,
-    protected alertService: AlertService,
-    protected memberService: MemberService
-  ) {}
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ user }) => {

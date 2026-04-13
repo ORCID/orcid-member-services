@@ -1,23 +1,31 @@
-import { Injectable } from '@angular/core'
+import { HttpClient, HttpResponse } from '@angular/common/http'
+import { Injectable, inject } from '@angular/core'
+import moment from 'moment'
 import {
   BehaviorSubject,
-  Observable,
-  of,
-  map,
   catchError,
-  Subject,
-  switchMap,
-  throwError,
-  takeUntil,
-  tap,
   combineLatest,
   EMPTY,
   filter,
+  map,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+  throwError,
 } from 'rxjs'
-import { HttpClient, HttpResponse } from '@angular/common/http'
-import { IMember } from '../model/member.model'
-import * as moment from 'moment'
+import { Page } from 'src/app/shared/model/page.model'
 import { createRequestOption } from 'src/app/shared/request-util'
+import { IMember } from '../model/member.model'
+import { ISFCountry } from '../model/salesforce-country.model'
+import {
+  ISFMemberContactUpdate,
+  ISFRawMemberContact,
+  ISFRawMemberContacts,
+  SFMemberContact,
+} from '../model/salesforce-member-contact.model'
 import {
   ISFConsortiumMemberData,
   ISFMemberData,
@@ -26,21 +34,13 @@ import {
   SFConsortiumMemberData,
   SFMemberData,
 } from '../model/salesforce-member-data.model'
-import { ISFCountry } from '../model/salesforce-country.model'
-import {
-  ISFMemberContactUpdate,
-  ISFRawMemberContact,
-  ISFRawMemberContacts,
-  SFMemberContact,
-} from '../model/salesforce-member-contact.model'
 import { ISFRawMemberOrgIds, SFMemberOrgIds } from '../model/salesforce-member-org-id.model'
 import { ISFMemberUpdate } from '../model/salesforce-member-update.model'
 import { ISFNewConsortiumMember } from '../model/salesforce-new-consortium-member.model'
-import { Page } from 'src/app/shared/model/page.model'
 
 @Injectable({ providedIn: 'root' })
 export class MemberService {
-  constructor(protected http: HttpClient) {}
+  protected http = inject(HttpClient)
 
   public resourceUrl = '/memberservice'
   public managedMember = new BehaviorSubject<string | null>(null)

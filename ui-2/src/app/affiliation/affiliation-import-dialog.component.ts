@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { IAffiliation } from './model/affiliation.model'
 import { AffiliationService } from './service/affiliation.service'
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
@@ -14,8 +14,14 @@ import { faBan, faPlus } from '@fortawesome/free-solid-svg-icons'
   selector: 'app-affiliation-import-dialog',
   templateUrl: './affiliation-import-dialog.component.html',
   styleUrls: ['./affiliation-import-dialog.component.scss'],
+  standalone: false,
 })
 export class AffiliationImportDialogComponent {
+  protected affiliationService = inject(AffiliationService)
+  activeModal = inject(NgbActiveModal)
+  protected eventService = inject(EventService)
+  private uploadService = inject(FileUploadService)
+
   public resourceUrl
   affiliation: IAffiliation | undefined
   isSaving: boolean
@@ -26,12 +32,7 @@ export class AffiliationImportDialogComponent {
   faBan = faBan
   faPlus = faPlus
 
-  constructor(
-    protected affiliationService: AffiliationService,
-    public activeModal: NgbActiveModal,
-    protected eventService: EventService,
-    private uploadService: FileUploadService
-  ) {
+  constructor() {
     this.isSaving = false
     this.resourceUrl = this.affiliationService.resourceUrl + '/upload'
     this.success = false
@@ -71,15 +72,14 @@ export class AffiliationImportDialogComponent {
 @Component({
   selector: 'app-affiliations-import-popup',
   template: '',
+  standalone: false,
 })
 export class AffiliationImportPopupComponent implements OnInit, OnDestroy {
-  protected ngbModalRef: NgbModalRef | undefined | null
+  protected activatedRoute = inject(ActivatedRoute)
+  protected router = inject(Router)
+  protected modalService = inject(NgbModal)
 
-  constructor(
-    protected activatedRoute: ActivatedRoute,
-    protected router: Router,
-    protected modalService: NgbModal
-  ) {}
+  protected ngbModalRef: NgbModalRef | undefined | null
 
   ngOnInit() {
     setTimeout(() => {

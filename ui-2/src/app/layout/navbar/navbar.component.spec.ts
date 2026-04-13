@@ -7,11 +7,11 @@ import { MemberService } from 'src/app/member/service/member.service'
 import { AccountService, LoginService } from 'src/app/account'
 import { By } from '@angular/platform-browser'
 import { HasAnyAuthorityDirective } from 'src/app/shared/directive/has-any-authority.directive'
-import { HttpResponse } from '@angular/common/http'
+import { HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { Member } from 'src/app/member/model/member.model'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
 
 describe('NavbarComponent', () => {
@@ -41,16 +41,18 @@ describe('NavbarComponent', () => {
     }
 
     TestBed.configureTestingModule({
-      declarations: [NavbarComponent, HasAnyAuthorityDirective],
-      imports: [ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule],
-      providers: [
+    declarations: [NavbarComponent, HasAnyAuthorityDirective],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [ReactiveFormsModule, RouterTestingModule],
+    providers: [
         { provide: LoginService, useValue: loginServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: OidcSecurityService, useValue: mockOidcSecurityService },
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents()
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}).compileComponents()
 
     fixture = TestBed.createComponent(NavbarComponent)
     component = fixture.componentInstance

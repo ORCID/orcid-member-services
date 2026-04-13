@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing'
-import { HttpClientModule, HttpResponse } from '@angular/common/http'
+import { HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormBuilder } from '@angular/forms'
-import { Observable, of, throwError } from 'rxjs'
-import { PasswordComponent } from './password.component'
-import { PasswordService } from '../service/password.service'
+import { of, throwError } from 'rxjs'
 import { AccountService } from '../service/account.service'
+import { PasswordService } from '../service/password.service'
+import { PasswordComponent } from './password.component'
 
 describe('PasswordComponent', () => {
   let comp: PasswordComponent
@@ -22,10 +22,10 @@ describe('PasswordComponent', () => {
       'disableMfa',
     ])
     TestBed.configureTestingModule({
-      imports: [HttpClientModule],
-      declarations: [PasswordComponent],
-      providers: [FormBuilder, { provide: AccountService, useValue: accountServiceSpy }],
-    })
+    declarations: [PasswordComponent],
+    imports: [],
+    providers: [FormBuilder, { provide: AccountService, useValue: accountServiceSpy }, provideHttpClient(withInterceptorsFromDi())]
+})
       .overrideTemplate(PasswordComponent, '')
       .compileComponents()
 

@@ -1,13 +1,13 @@
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { HttpClientModule } from '@angular/common/http'
-import { LandingPageComponent } from './landing-page.component'
-import { LandingPageService } from './landing-page.service'
-import { OrcidRecord } from '../shared/model/orcid-record.model'
+import { ActivatedRoute } from '@angular/router'
+import * as KEYUTIL from 'jsrsasign'
 import { of } from 'rxjs'
 import { Member } from '../member/model/member.model'
+import { OrcidRecord } from '../shared/model/orcid-record.model'
 import { WindowLocationService } from '../shared/service/window-location.service'
-import * as KEYUTIL from 'jsrsasign'
-import { ActivatedRoute } from '@angular/router'
+import { LandingPageComponent } from './landing-page.component'
+import { LandingPageService } from './landing-page.service'
 
 describe('LandingPageComponent', () => {
   let component: LandingPageComponent
@@ -18,24 +18,24 @@ describe('LandingPageComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [LandingPageComponent],
-      imports: [HttpClientModule],
-      providers: [
+    declarations: [LandingPageComponent],
+    imports: [],
+    providers: [
         {
-          provide: LandingPageService,
-          useValue: jasmine.createSpyObj('LandingPageService', [
-            'getOrcidConnectionRecord',
-            'getMemberInfo',
-            'getPublicKey',
-            'submitUserResponse',
-            'getUserInfo',
-            'submitUserResponse',
-            'getSalesforceId',
-          ]),
+            provide: LandingPageService,
+            useValue: jasmine.createSpyObj('LandingPageService', [
+                'getOrcidConnectionRecord',
+                'getMemberInfo',
+                'getPublicKey',
+                'submitUserResponse',
+                'getUserInfo',
+                'submitUserResponse',
+                'getSalesforceId',
+            ]),
         },
         {
-          provide: WindowLocationService,
-          useValue: jasmine.createSpyObj('WindowLocationService', ['updateWindowLocation', 'getWindowLocationHash']),
+            provide: WindowLocationService,
+            useValue: jasmine.createSpyObj('WindowLocationService', ['updateWindowLocation', 'getWindowLocationHash']),
         },
         {
           provide: ActivatedRoute,
@@ -48,8 +48,9 @@ describe('LandingPageComponent', () => {
             },
           },
         },
-      ],
-    })
+        provideHttpClient(withInterceptorsFromDi()),
+    ]
+})
     fixture = TestBed.createComponent(LandingPageComponent)
     component = fixture.componentInstance
     landingPageService = TestBed.inject(LandingPageService) as jasmine.SpyObj<LandingPageService>
@@ -77,7 +78,7 @@ describe('LandingPageComponent', () => {
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalled()
   })
 
-  fit('New record connection should fail (user denied permission)', () => {
+  it('New record connection should fail (user denied permission)', () => {
     windowLocationService.updateWindowLocation.and.returnValue()
     route.snapshot.fragment = 'error=access_denied'
     landingPageService.getOrcidConnectionRecord.and.returnValue(of(new OrcidRecord('email', 'orcid')))
@@ -98,7 +99,7 @@ describe('LandingPageComponent', () => {
     expect(component.showDenied).toBeTruthy()
   })
 
-  fit('New record connection should fail (generic error)', () => {
+  it('New record connection should fail (generic error)', () => {
     windowLocationService.updateWindowLocation.and.returnValue()
     landingPageService.getSalesforceId.and.returnValue(of('salesforceId'))
     route.snapshot.fragment = 'error=123'

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { AbstractControl, FormBuilder, FormControl, ValidatorFn, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Observable } from 'rxjs'
-import * as moment from 'moment'
+import moment from 'moment'
 import { MemberService } from './service/member.service'
 import { AlertService } from '../shared/service/alert.service'
 import { AlertMessage, AlertType, BASE_URL, DATE_TIME_FORMAT, ORCID_BASE_URL } from '../app.constants'
@@ -66,8 +66,15 @@ function clientIdValidator(): ValidatorFn {
 @Component({
   selector: 'app-member-update',
   templateUrl: './member-update.component.html',
+  standalone: false,
 })
 export class MemberUpdateComponent implements OnInit {
+  protected activatedRoute = inject(ActivatedRoute)
+  protected router = inject(Router)
+  protected memberService = inject(MemberService)
+  private fb = inject(FormBuilder)
+  private alertService = inject(AlertService)
+
   orcidBaseUrl: string = ORCID_BASE_URL
   baseUrl: string = BASE_URL
   isSaving = false
@@ -89,13 +96,7 @@ export class MemberUpdateComponent implements OnInit {
     lastModifiedDate: new FormControl<string | null>(null),
   })
 
-  constructor(
-    protected activatedRoute: ActivatedRoute,
-    protected router: Router,
-    protected memberService: MemberService,
-    private fb: FormBuilder,
-    private alertService: AlertService
-  ) {
+  constructor() {
     this.validation = {}
   }
 

@@ -3,9 +3,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { HomeComponent } from './home.component'
 import { AccountService } from '../account'
 import { of } from 'rxjs'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { IAccount } from '../account/model/account.model'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('HomeComponent', () => {
   let component: HomeComponent
@@ -41,13 +42,15 @@ describe('HomeComponent', () => {
     }
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [HomeComponent],
-      providers: [
+    declarations: [HomeComponent],
+    imports: [],
+    providers: [
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: OidcSecurityService, useValue: mockOidcSecurityService },
-      ],
-    })
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+})
     fixture = TestBed.createComponent(HomeComponent)
     component = fixture.componentInstance
 

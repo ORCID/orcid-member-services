@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { ISFMemberData } from '../../member/model/salesforce-member-data.model'
 import {
   ISFMemberContact,
@@ -28,8 +28,16 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
   selector: 'app-contact-update',
   templateUrl: './contact-update.component.html',
   styleUrls: ['./contact-update.component.scss'],
+  standalone: false,
 })
 export class ContactUpdateComponent implements OnInit, OnDestroy {
+  private memberService = inject(MemberService)
+  private accountService = inject(AccountService)
+  private fb = inject(FormBuilder)
+  private alertService = inject(AlertService)
+  private router = inject(Router)
+  protected activatedRoute = inject(ActivatedRoute)
+
   account: IAccount | undefined | null
   memberData: ISFMemberData | undefined | null
   contact: ISFMemberContact | undefined
@@ -73,15 +81,6 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
       [this.validateContactRoles]
     ),
   })
-
-  constructor(
-    private memberService: MemberService,
-    private accountService: AccountService,
-    private fb: FormBuilder,
-    private alertService: AlertService,
-    private router: Router,
-    protected activatedRoute: ActivatedRoute
-  ) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe((params) => {

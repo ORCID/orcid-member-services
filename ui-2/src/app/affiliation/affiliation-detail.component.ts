@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { Affiliation, IAffiliation } from './model/affiliation.model'
 import { ORCID_BASE_URL } from '../app.constants'
 import { ActivatedRoute } from '@angular/router'
@@ -9,8 +9,13 @@ import { DateUtilService } from '../shared/service/date-util.service'
 @Component({
   selector: 'app-affiliation-detail',
   templateUrl: './affiliation-detail.component.html',
+  standalone: false,
 })
 export class AffiliationDetailComponent implements OnInit {
+  protected activatedRoute = inject(ActivatedRoute)
+  protected userService = inject(UserService)
+  protected dateUtilService = inject(DateUtilService)
+
   affiliation: IAffiliation = new Affiliation()
   orcidBaseUrl: string = ORCID_BASE_URL
   ownerId: string | undefined
@@ -18,12 +23,6 @@ export class AffiliationDetailComponent implements OnInit {
   faArrowLeft = faArrowLeft
   startDate: string | undefined
   endDate: string | undefined
-
-  constructor(
-    protected activatedRoute: ActivatedRoute,
-    protected userService: UserService,
-    protected dateUtilService: DateUtilService
-  ) {}
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ affiliation }) => {

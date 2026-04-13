@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core'
+import { Injectable, OnInit, inject } from '@angular/core'
 import { SessionStorageService } from 'ngx-webstorage'
 import { HttpClient, HttpResponse } from '@angular/common/http'
 import { BehaviorSubject, EMPTY, Observable, Subject, catchError, map, of, takeUntil } from 'rxjs'
@@ -11,20 +11,20 @@ import { OidcSecurityService } from 'angular-auth-oidc-client'
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
+  private languageService = inject(LanguageService)
+  private sessionStorage = inject(SessionStorageService)
+  private router = inject(Router)
+  private http = inject(HttpClient)
+  private memberService = inject(MemberService)
+  private oidcSecurityService = inject(OidcSecurityService)
+
   private accountData = new BehaviorSubject<IAccount | null | undefined>(undefined)
   private isFetchingAccountData = false
   private stopFetchingAccountData = new Subject()
   private authenticated = false
   private releaseVersion: string | null = null
 
-  constructor(
-    private languageService: LanguageService,
-    private sessionStorage: SessionStorageService,
-    private router: Router,
-    private http: HttpClient,
-    private memberService: MemberService,
-    private oidcSecurityService: OidcSecurityService
-  ) {
+  constructor() {
     this.http.get('/userservice/account/releaseVersion', { responseType: 'text' }).subscribe((version) => {
       console.log('setting release to ', version)
       this.releaseVersion = version

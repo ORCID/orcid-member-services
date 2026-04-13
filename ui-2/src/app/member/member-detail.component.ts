@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { IMember } from './model/member.model'
 import { faArrowLeft, faCheckCircle, faPencilAlt, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { ActivatedRoute } from '@angular/router'
@@ -7,15 +7,16 @@ import { ActivatedRoute } from '@angular/router'
   selector: 'app-member-detail',
   templateUrl: './member-detail.component.html',
   styleUrls: ['./member-detail.component.scss'],
+  standalone: false,
 })
 export class MemberDetailComponent implements OnInit {
+  protected activatedRoute = inject(ActivatedRoute)
+
   member: IMember | undefined
   faTimesCircle = faTimesCircle
   faCheckCircle = faCheckCircle
   faArrowLeft = faArrowLeft
   faPencilAlt = faPencilAlt
-
-  constructor(protected activatedRoute: ActivatedRoute) {}
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ member }) => {
