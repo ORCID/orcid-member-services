@@ -321,7 +321,7 @@ public class UserService {
         user.setMemberName(member.getClientName());
         user.setLangKey(userDTO.getLangKey() != null ? userDTO.getLangKey() : user.getLangKey());
         user.setAdmin(userDTO.getIsAdmin());
-
+        user.setManageApiCredsEnabled(userDTO.isManageApiCredsEnabled());
 
         if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
             user.setSalesforceId(userDTO.getSalesforceId());
