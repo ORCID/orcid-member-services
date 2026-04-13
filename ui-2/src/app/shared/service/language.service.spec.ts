@@ -4,7 +4,6 @@ import { WindowLocationService } from './window-location.service'
 
 describe('LanguageService', () => {
   let service: LanguageService
-  let languageService: LanguageService
   let windowLocationService: jasmine.SpyObj<WindowLocationService>
 
   beforeEach(() => {
@@ -14,12 +13,8 @@ describe('LanguageService', () => {
       'getWindowLocationHref',
       'updateWindowLocation',
     ])
-    languageService = new LanguageService(windowLocationServiceSpy)
     TestBed.configureTestingModule({
-      providers: [
-        { provide: WindowLocationService, useValue: windowLocationServiceSpy },
-        { provide: languageService, useValue: WindowLocationService },
-      ],
+      providers: [{ provide: WindowLocationService, useValue: windowLocationServiceSpy }],
     })
     windowLocationService = TestBed.inject(WindowLocationService) as jasmine.SpyObj<WindowLocationService>
     service = TestBed.inject(LanguageService)
@@ -34,7 +29,7 @@ describe('LanguageService', () => {
     windowLocationService.getWindowLocationOrigin.and.returnValue('http://example.com')
     windowLocationService.getWindowLocationPathname.and.returnValue('/test-path')
 
-    languageService.updateLanguageCodeInUrl('en')
+    service.updateLanguageCodeInUrl('en')
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalledWith('http://example.com/en/test-path')
   })
 
@@ -43,7 +38,7 @@ describe('LanguageService', () => {
     windowLocationService.getWindowLocationOrigin.and.returnValue('http://example.com')
     windowLocationService.getWindowLocationPathname.and.returnValue('/es/test-path')
 
-    languageService.updateLanguageCodeInUrl('en')
+    service.updateLanguageCodeInUrl('en')
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalledWith('http://example.com/en/test-path')
   })
 
@@ -52,7 +47,7 @@ describe('LanguageService', () => {
     windowLocationService.getWindowLocationOrigin.and.returnValue('http://example.com')
     windowLocationService.getWindowLocationPathname.and.returnValue('/fr/test-path')
 
-    languageService.updateLanguageCodeInUrl('fr')
+    service.updateLanguageCodeInUrl('fr')
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalledTimes(0)
   })
 
@@ -61,7 +56,7 @@ describe('LanguageService', () => {
     windowLocationService.getWindowLocationOrigin.and.returnValue('http://localhost:4200')
     windowLocationService.getWindowLocationPathname.and.returnValue('/test-path')
 
-    languageService.updateLanguageCodeInUrl('fr')
+    service.updateLanguageCodeInUrl('fr')
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalledTimes(0)
   })
 })

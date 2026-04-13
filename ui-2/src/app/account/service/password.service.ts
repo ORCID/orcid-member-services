@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { HttpClient, HttpResponse } from '@angular/common/http'
 import { Observable, map, catchError, of } from 'rxjs'
 import { PasswordResetInitResult } from '../model/password-reset-init-result.model'
@@ -8,7 +8,7 @@ import { ResendActivationEmailResult } from '../model/resend-activation-email-re
 
 @Injectable({ providedIn: 'root' })
 export class PasswordService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient)
 
   initPasswordReset(mail: string): Observable<PasswordResetInitResult | null> {
     return this.http.post('/userservice/account/reset-password/init', mail, { observe: 'response' }).pipe(

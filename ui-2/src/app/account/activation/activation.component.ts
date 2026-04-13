@@ -1,22 +1,20 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ActivationService } from './activation.service'
 
 @Component({
-    selector: 'app-activation',
-    templateUrl: './activation.component.html',
-    styleUrls: ['./activation.component.scss'],
-    standalone: false
+  selector: 'app-activation',
+  templateUrl: './activation.component.html',
+  styleUrls: ['./activation.component.scss'],
+  standalone: false,
 })
 export class ActivationComponent implements OnInit {
+  private activationService = inject(ActivationService)
+  private route = inject(ActivatedRoute)
+  private router = inject(Router)
+
   error: string | null = null
   success: string | null = null
-
-  constructor(
-    private activationService: ActivationService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {

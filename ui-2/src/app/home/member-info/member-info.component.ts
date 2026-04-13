@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
@@ -10,12 +10,18 @@ import { ISFMemberData } from 'src/app/member/model/salesforce-member-data.model
 import { MemberService } from 'src/app/member/service/member.service'
 
 @Component({
-    selector: 'app-member-info',
-    templateUrl: './member-info.component.html',
-    styleUrls: ['member-info.component.scss'],
-    standalone: false
+  selector: 'app-member-info',
+  templateUrl: './member-info.component.html',
+  styleUrls: ['member-info.component.scss'],
+  standalone: false,
 })
 export class MemberInfoComponent implements OnInit, OnDestroy {
+  private memberService = inject(MemberService)
+  private accountService = inject(AccountService)
+  protected activatedRoute = inject(ActivatedRoute)
+  protected router = inject(Router)
+  private oidcSecurityService = inject(OidcSecurityService)
+
   account: IAccount | undefined
   memberData: ISFMemberData | undefined | null
   alertSubscription: Subscription | undefined
@@ -23,13 +29,6 @@ export class MemberInfoComponent implements OnInit, OnDestroy {
   destroy$ = new Subject()
   faTrashAlt = faTrashAlt
   faPencilAlt = faPencilAlt
-  constructor(
-    private memberService: MemberService,
-    private accountService: AccountService,
-    protected activatedRoute: ActivatedRoute,
-    protected router: Router,
-    private oidcSecurityService: OidcSecurityService
-  ) {}
 
   isActive() {
     return this.memberData?.membershipEndDateString && new Date(this.memberData.membershipEndDateString) > new Date()

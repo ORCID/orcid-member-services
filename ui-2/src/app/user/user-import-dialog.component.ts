@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FileUploadService } from '../shared/service/file-upload.service'
 import { IUser } from './model/user.model'
 import { UserService } from './service/user.service'
@@ -10,12 +10,17 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { faSave, faBan } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
-    selector: 'app-user-import-dialog',
-    templateUrl: './user-import-dialog.component.html',
-    styleUrls: ['./user-import-dialog.component.scss'],
-    standalone: false
+  selector: 'app-user-import-dialog',
+  templateUrl: './user-import-dialog.component.html',
+  styleUrls: ['./user-import-dialog.component.scss'],
+  standalone: false,
 })
 export class UserImportDialogComponent {
+  protected userService = inject(UserService)
+  activeModal = inject(NgbActiveModal)
+  protected eventService = inject(EventService)
+  private fileUploadService = inject(FileUploadService)
+
   resourceUrl: string
   isSaving: boolean
   currentFile: FileList | null
@@ -24,12 +29,7 @@ export class UserImportDialogComponent {
   faBan = faBan
   faSave = faSave
 
-  constructor(
-    protected userService: UserService,
-    public activeModal: NgbActiveModal,
-    protected eventService: EventService,
-    private fileUploadService: FileUploadService
-  ) {
+  constructor() {
     this.isSaving = false
     this.currentFile = null
     this.resourceUrl = this.userService.resourceUrl + '/upload'
@@ -67,18 +67,16 @@ export class UserImportDialogComponent {
 }
 
 @Component({
-    selector: 'app-user-import-popup',
-    template: '',
-    standalone: false
+  selector: 'app-user-import-popup',
+  template: '',
+  standalone: false,
 })
 export class UserImportPopupComponent implements OnInit, OnDestroy {
-  protected ngbModalRef: NgbModalRef | undefined | null
+  protected activatedRoute = inject(ActivatedRoute)
+  protected router = inject(Router)
+  protected modalService = inject(NgbModal)
 
-  constructor(
-    protected activatedRoute: ActivatedRoute,
-    protected router: Router,
-    protected modalService: NgbModal
-  ) {}
+  protected ngbModalRef: NgbModalRef | undefined | null
 
   ngOnInit() {
     setTimeout(() => {

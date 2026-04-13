@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core'
+import { Injectable, Injector, inject } from '@angular/core'
 import { AccountService } from './account.service'
 import { AuthServerProvider } from './auth-jwt.service'
 import { map, Observable } from 'rxjs'
@@ -7,11 +7,9 @@ import { AuthenticatedResult, OidcSecurityService } from 'angular-auth-oidc-clie
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
-  constructor(
-    private injector: Injector,
-    private authServerProvider: AuthServerProvider,
-    private oidcSecurityService: OidcSecurityService
-  ) {}
+  private injector = inject(Injector)
+  private authServerProvider = inject(AuthServerProvider)
+  private oidcSecurityService = inject(OidcSecurityService)
 
   login(credentials: ILoginCredentials): Observable<any> {
     return this.authServerProvider.login(credentials)

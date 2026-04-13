@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { HttpClient, HttpResponse } from '@angular/common/http'
 import { Observable } from 'rxjs'
 
 @Injectable({ providedIn: 'root' })
 export class ReportService {
-  public resourceUrl = '/memberservice/api/reports'
+  protected http = inject(HttpClient)
 
-  constructor(protected http: HttpClient) {}
+  public resourceUrl = '/memberservice/api/reports'
 
   getDashboardInfo(reportType: string): Observable<{ url: any; jwt: any }> {
     return this.http.get<{ url: any; jwt: any }>(`${this.resourceUrl}/` + reportType)

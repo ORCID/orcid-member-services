@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, NgZone, OnDestroy, Renderer2 } from '@angular/core'
+import { AfterViewInit, Component, NgZone, OnDestroy, Renderer2, inject } from '@angular/core'
 import { FormBuilder } from '@angular/forms'
 import { Router } from '@angular/router'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
@@ -11,12 +11,21 @@ import { LoginService } from '../service/login.service'
 import { ILoginCredentials } from '../model/login.model'
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
-    standalone: false
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
+  standalone: false,
 })
 export class LoginComponent implements AfterViewInit, OnDestroy {
+  private loginService = inject(LoginService)
+  private stateStorageService = inject(StateStorageService)
+  private renderer = inject(Renderer2)
+  private router = inject(Router)
+  private oidcSecurityService = inject(OidcSecurityService)
+  private fb = inject(FormBuilder)
+  private eventService = inject(EventService)
+  private ngZone = inject(NgZone)
+
   authenticationError = false
   showMfa = false
   mfaError = false
@@ -40,16 +49,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     return this.loginForm.get('mfaCode')
   }
 
-  constructor(
-    private loginService: LoginService,
-    private stateStorageService: StateStorageService,
-    private renderer: Renderer2,
-    private router: Router,
-    private oidcSecurityService: OidcSecurityService,
-    private fb: FormBuilder,
-    private eventService: EventService,
-    private ngZone: NgZone
-  ) {
+  constructor() {
     this.sub = this.eventService.on(EventType.LOG_IN_SUCCESS).subscribe()
   }
 
@@ -77,7 +77,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     const credentials: ILoginCredentials = {
       username: this.username?.value || '',
       password: this.password?.value || '',
-      mfaCode: this.mfaCode?.value
+      mfaCode: this.mfaCode?.value,
     }
 
     if (!credentials.username && !credentials.password) {
@@ -107,12 +107,12 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
           }
           if (err.error?.error === 'mfa_invalid') {
             this.showMfa = true
-            this.mfaError  = true
+            this.mfaError = true
           }
         } else {
-            this.authenticationError = true
-            this.loginService.logout()
-          }
+          this.authenticationError = true
+          this.loginService.logout()
+        }
       },
     })
   }

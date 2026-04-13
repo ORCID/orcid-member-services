@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core'
+import { Component, NgZone, OnDestroy, OnInit, inject } from '@angular/core'
 import { IUser, User } from './model/user.model'
 import { Subscription } from 'rxjs'
 import { UserService } from './service/user.service'
@@ -22,12 +22,20 @@ import { AlertService } from '../shared/service/alert.service'
 import { Page } from '../shared/model/page.model'
 
 @Component({
-    selector: 'app-users',
-    templateUrl: './users.component.html',
-    styleUrls: ['./users.component.scss'],
-    standalone: false
+  selector: 'app-users',
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.scss'],
+  standalone: false,
 })
 export class UsersComponent implements OnInit, OnDestroy {
+  protected userService = inject(UserService)
+  protected alertService = inject(AlertService)
+  protected accountService = inject(AccountService)
+  protected activatedRoute = inject(ActivatedRoute)
+  protected router = inject(Router)
+  protected eventService = inject(EventService)
+  private ngZone = inject(NgZone)
+
   currentAccount: IAccount | undefined
   users: IUser[] | null | undefined
   eventSubscriber: Subscription | null = null
@@ -54,15 +62,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   faSortUp = faSortUp
   DEFAULT_ADMIN = 'admin@orcid.org'
 
-  constructor(
-    protected userService: UserService,
-    protected alertService: AlertService,
-    protected accountService: AccountService,
-    protected activatedRoute: ActivatedRoute,
-    protected router: Router,
-    protected eventService: EventService,
-    private ngZone: NgZone
-  ) {
+  constructor() {
     this.itemsPerPage = ITEMS_PER_PAGE
     this.routeData = this.activatedRoute.data.subscribe((data) => {
       this.page = data['queryParams'] ? data['queryParams'].page : 1

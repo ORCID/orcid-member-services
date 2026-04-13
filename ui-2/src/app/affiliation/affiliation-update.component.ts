@@ -1,4 +1,4 @@
-import { Component, ErrorHandler, Inject, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import moment from 'moment'
@@ -114,11 +114,18 @@ function isValidDate(y: string, m: string, d: string) {
 }
 
 @Component({
-    selector: 'app-affiliation-update',
-    templateUrl: './affiliation-update.component.html',
-    standalone: false
+  selector: 'app-affiliation-update',
+  templateUrl: './affiliation-update.component.html',
+  standalone: false,
 })
 export class AffiliationUpdateComponent implements OnInit {
+  protected affiliationService = inject(AffiliationService)
+  protected dateUtilService = inject(DateUtilService)
+  protected activatedRoute = inject(ActivatedRoute)
+  private alertService = inject(AlertService)
+  private fb = inject(FormBuilder)
+  private errorService = inject(ErrorService)
+
   AFFILIATION_TYPES = AFFILIATION_TYPES
   COUNTRIES = COUNTRIES
   ORG_ID_TYPES = ORG_ID_TYPES
@@ -167,15 +174,6 @@ export class AffiliationUpdateComponent implements OnInit {
     },
     { validators: dateValidator() }
   )
-
-  constructor(
-    protected affiliationService: AffiliationService,
-    protected dateUtilService: DateUtilService,
-    protected activatedRoute: ActivatedRoute,
-    private alertService: AlertService,
-    private fb: FormBuilder,
-    @Inject(ErrorHandler) private errorService: ErrorService
-  ) {}
 
   ngOnInit() {
     this.localizeString()

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormBuilder, Validators } from '@angular/forms'
 import { AccountService } from '../service/account.service'
 import { DomSanitizer } from '@angular/platform-browser'
@@ -6,12 +6,17 @@ import { LanguageService } from 'src/app/shared/service/language.service'
 import { IAccount } from '../model/account.model'
 
 @Component({
-    selector: 'app-settings',
-    templateUrl: './settings.component.html',
-    styleUrls: ['./settings.component.scss'],
-    standalone: false
+  selector: 'app-settings',
+  templateUrl: './settings.component.html',
+  styleUrls: ['./settings.component.scss'],
+  standalone: false,
 })
 export class SettingsComponent implements OnInit {
+  private accountService = inject(AccountService)
+  private fb = inject(FormBuilder)
+  private languageService = inject(LanguageService)
+  private sanitizer = inject(DomSanitizer)
+
   account: IAccount | undefined
   error: string | undefined
   success: string | undefined
@@ -38,13 +43,6 @@ export class SettingsComponent implements OnInit {
     verificationCode: [''],
     securitySave: [],
   })
-
-  constructor(
-    private accountService: AccountService,
-    private fb: FormBuilder,
-    private languageService: LanguageService,
-    private sanitizer: DomSanitizer
-  ) {}
 
   ngOnInit() {
     this.showMfaSetup = false

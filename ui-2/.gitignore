@@ -41,6 +41,7 @@ yarn-error.log
 
 # AI agents and coding assistants
 # Claude Code (Anthropic)
+.claude/
 .claude/projects/
 .claude/todos/
 # Cursor

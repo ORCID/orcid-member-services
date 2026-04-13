@@ -1,24 +1,22 @@
-import { ChangeDetectorRef, Component, HostListener, Inject } from '@angular/core'
+import { ChangeDetectorRef, Component, HostListener, inject } from '@angular/core'
 import { AppAlert } from '../model/alert.model'
 import { Subscription, map } from 'rxjs'
 import { AlertService } from '../../service/alert.service'
 import { AlertType } from 'src/app/app.constants'
 
 @Component({
-    selector: 'app-remove-consortium-member-alert',
-    templateUrl: './remove-consortium-member-alert.component.html',
-    styleUrls: ['../overlay-modal.scss'],
-    standalone: false
+  selector: 'app-remove-consortium-member-alert',
+  templateUrl: './remove-consortium-member-alert.component.html',
+  styleUrls: ['../overlay-modal.scss'],
+  standalone: false,
 })
 export class RemoveConsortiumMemberAlertComponent {
+  private alertService = inject(AlertService)
+  private cdr = inject(ChangeDetectorRef)
+
   alerts: AppAlert[] | undefined
   sub: Subscription | undefined
   orgName = ''
-
-  constructor(
-    private alertService: AlertService,
-    private cdr: ChangeDetectorRef
-  ) {}
 
   ngOnInit(): void {
     this.sub = this.alertService

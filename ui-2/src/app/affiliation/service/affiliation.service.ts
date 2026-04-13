@@ -1,5 +1,5 @@
 import { HttpClient, HttpResponse } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import moment from 'moment'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -9,9 +9,9 @@ import { IAffiliation } from '../model/affiliation.model'
 
 @Injectable({ providedIn: 'root' })
 export class AffiliationService {
-  public resourceUrl = '/assertionservice/assertions'
+  protected http = inject(HttpClient)
 
-  constructor(protected http: HttpClient) {}
+  public resourceUrl = '/assertionservice/assertions'
 
   create(affiliation: IAffiliation): Observable<IAffiliation> {
     const copy = this.convertDateFromClient(affiliation)

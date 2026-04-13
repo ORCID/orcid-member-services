@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { IMember } from './model/member.model'
 import { Subscription } from 'rxjs'
 import {
@@ -19,11 +19,17 @@ import { EventService } from '../shared/service/event.service'
 import { Page } from '../shared/model/page.model'
 
 @Component({
-    selector: 'app-members',
-    templateUrl: './members.component.html',
-    standalone: false
+  selector: 'app-members',
+  templateUrl: './members.component.html',
+  standalone: false,
 })
 export class MembersComponent implements OnInit {
+  protected memberService = inject(MemberService)
+  protected accountService = inject(AccountService)
+  protected activatedRoute = inject(ActivatedRoute)
+  protected router = inject(Router)
+  protected eventService = inject(EventService)
+
   currentAccount: any
   members: IMember[] | undefined | null
   eventSubscriber: Subscription | undefined
@@ -49,13 +55,7 @@ export class MembersComponent implements OnInit {
   sortColumn = 'salesforceId'
   ascending: any
 
-  constructor(
-    protected memberService: MemberService,
-    protected accountService: AccountService,
-    protected activatedRoute: ActivatedRoute,
-    protected router: Router,
-    protected eventService: EventService
-  ) {
+  constructor() {
     this.itemsPerPage = ITEMS_PER_PAGE
     this.routeData = this.activatedRoute.data.subscribe((data: any) => {
       this.page = data['queryParams'] ? data['queryParams'].page : 1

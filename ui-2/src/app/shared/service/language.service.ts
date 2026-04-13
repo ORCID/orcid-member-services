@@ -1,10 +1,10 @@
-import { Inject, Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { Observable, of } from 'rxjs'
 import { WindowLocationService } from './window-location.service'
 
 @Injectable({ providedIn: 'root' })
 export class LanguageService {
-  constructor(private windowLocationService: WindowLocationService) {}
+  private windowLocationService = inject(WindowLocationService)
 
   private languages: { [langCode: string]: { name: string } } = {
     en: { name: 'English' },

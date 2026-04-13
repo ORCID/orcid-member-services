@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { EMPTY, Subject, combineLatest } from 'rxjs'
@@ -14,12 +14,18 @@ import { ISFMemberUpdate, SFMemberUpdate } from 'src/app/member/model/salesforce
 import { MemberService } from 'src/app/member/service/member.service'
 
 @Component({
-    selector: 'app-member-info-edit',
-    templateUrl: './member-info-edit.component.html',
-    styleUrls: ['./member-info-edit.component.scss'],
-    standalone: false
+  selector: 'app-member-info-edit',
+  templateUrl: './member-info-edit.component.html',
+  styleUrls: ['./member-info-edit.component.scss'],
+  standalone: false,
 })
 export class MemberInfoEditComponent implements OnInit, OnDestroy {
+  private memberService = inject(MemberService)
+  private accountService = inject(AccountService)
+  private fb = inject(FormBuilder)
+  protected activatedRoute = inject(ActivatedRoute)
+  private router = inject(Router)
+
   countries: ISFCountry[] | undefined
   country: ISFCountry | undefined
   states: ISFState[] | undefined
@@ -56,14 +62,6 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
     website: new FormControl<null | string>(null, [Validators.pattern(URL_REGEXP), Validators.maxLength(255)]),
     email: new FormControl<null | string>(null, [Validators.pattern(EMAIL_REGEXP), Validators.maxLength(80)]),
   })
-
-  constructor(
-    private memberService: MemberService,
-    private accountService: AccountService,
-    private fb: FormBuilder,
-    protected activatedRoute: ActivatedRoute,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     combineLatest([this.activatedRoute.params, this.accountService.getAccountData(), this.memberService.getCountries()])
