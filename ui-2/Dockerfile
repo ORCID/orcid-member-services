@@ -1,4 +1,4 @@
-FROM node:20.7.0-bullseye-slim AS ui-build-stage
+FROM node:22-bullseye-slim AS ui-build-stage
 
 # Create app directory
 WORKDIR /app
