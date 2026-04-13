@@ -64,6 +64,8 @@ public class UserDTO {
 
     private boolean mfaEnabled;
 
+    private boolean manageApiCredsEnabled;
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -236,6 +238,14 @@ public class UserDTO {
         this.mfaEnabled = mfaEnabled;
     }
 
+    public boolean isManageApiCredsEnabled() {
+        return manageApiCredsEnabled;
+    }
+
+    public void setManageApiCredsEnabled(boolean manageApiCredsEnabled) {
+        this.manageApiCredsEnabled = manageApiCredsEnabled;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -336,4 +346,5 @@ public class UserDTO {
                 + ", activated=" + activated + ", langKey='" + langKey + '\'' + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy='"
                 + lastModifiedBy + '\'' + ", lastModifiedDate=" + lastModifiedDate + ", authorities=" + authorities + ", mainContact='" + mainContact + '\'' + "}";
     }
+
 }
