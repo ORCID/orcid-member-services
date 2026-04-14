@@ -1,23 +1,18 @@
-import { ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing'
-import { UsersComponent } from './users.component'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { RouterTestingModule } from '@angular/router/testing'
-import { EMPTY, of, throwError } from 'rxjs'
-import { MemberService } from 'src/app/member/service/member.service'
-import { AccountService, LoginService } from 'src/app/account'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing'
 import { By } from '@angular/platform-browser'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { RouterModule } from '@angular/router'
+import { RouterTestingModule } from '@angular/router/testing'
+import { EMPTY, of } from 'rxjs'
+import { AccountService } from 'src/app/account'
 import { HasAnyAuthorityDirective } from 'src/app/shared/directive/has-any-authority.directive'
-import { HttpHeaders, HttpResponse } from '@angular/common/http'
-import { Member } from 'src/app/member/model/member.model'
-import { UserService } from './service/user.service'
-import { User } from './model/user.model'
+import { LocalizePipe } from '../shared/pipe/localize'
 import { AlertService } from '../shared/service/alert.service'
 import { EventService } from '../shared/service/event.service'
-import { LocalizePipe } from '../shared/pipe/localize'
-import { EventType } from 'src/app/app.constants'
-import { Event } from '../shared/model/event.model'
-import { RouterModule } from '@angular/router'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { User } from './model/user.model'
+import { UserService } from './service/user.service'
+import { UsersComponent } from './users.component'
 describe('UsersComponent', () => {
   let component: UsersComponent
   let fixture: ComponentFixture<UsersComponent>
@@ -90,6 +85,7 @@ describe('UsersComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: false,
+        manageApiCredsEnabled: false,
       })
     )
 
@@ -159,5 +155,27 @@ describe('UsersComponent', () => {
     component.resetSearch()
     expect(component.searchTerm).toEqual('')
     expect(component.submittedSearchTerm).toEqual('')
+  })
+
+  it('2FA column should be visible for admin users', () => {
+    accountService.hasAnyAuthority.and.returnValue(true)
+    component.ngOnInit()
+    fixture.detectChanges()
+
+    const twoFaHeaders = fixture.debugElement
+      .queryAll(By.css('th'))
+      .filter((el) => el.nativeElement.textContent.includes('2FA'))
+    expect(twoFaHeaders.length).toEqual(1)
+  })
+
+  it('2FA column should not be visible for non-admin users', () => {
+    accountService.hasAnyAuthority.and.returnValue(false)
+    component.ngOnInit()
+    fixture.detectChanges()
+
+    const twoFaHeaders = fixture.debugElement
+      .queryAll(By.css('th'))
+      .filter((el) => el.nativeElement.textContent.includes('2FA'))
+    expect(twoFaHeaders.length).toEqual(0)
   })
 })
