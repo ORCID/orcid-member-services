@@ -85,6 +85,14 @@
               [icon]="ascending ? faSortDown : faSortUp"
             ></fa-icon>
           </th>
+          <th (click)="updateSort('manageApiCredsEnabled')">
+              <span i18n="@@gatewayApp.msUserServiceMSUser.manageApiCredentials.string">Manage API credentials</span>
+              <fa-icon
+                class="ml-2"
+                *ngIf="sortColumn === 'manageApiCredsEnabled'"
+                [icon]="ascending ? faSortDown : faSortUp"
+              ></fa-icon>
+          </th>
           <th (click)="updateSort('salesforceId')">
             <span i18n="@@gatewayApp.msUserServiceMSUser.salesforceId.string">Organization</span>
             <fa-icon
@@ -98,6 +106,17 @@
             <fa-icon
               class="ml-2"
               *ngIf="sortColumn === 'activated'"
+              [icon]="ascending ? faSortDown : faSortUp"
+            ></fa-icon>
+          </th>
+          <th
+            *ngIf="hasRoleAdmin()"
+            (click)="updateSort('mfaEnabled')"
+          >
+            <span i18n="@@gatewayApp.msUserServiceMSUser.twoFactorEnabled.string">2FA enabled?</span>
+            <fa-icon
+              class="ml-2"
+              *ngIf="sortColumn === 'mfaEnabled'"
               [icon]="ascending ? faSortDown : faSortUp"
             ></fa-icon>
           </th>
@@ -134,6 +153,21 @@
               [styles]="{ color: '#f22112' }"
             ></fa-icon>
           </td>
+          <td class="text-center">
+            <span class="sr-only">{{ user.manageApiCredsEnabled }}</span>
+              <fa-icon
+                aria-hidden="true"
+                *ngIf="user.manageApiCredsEnabled"
+                [icon]="faCheckCircle"
+                [style.color]="'#28a745'"
+              ></fa-icon>
+              <fa-icon
+                aria-hidden="true"
+                *ngIf="!user.manageApiCredsEnabled"
+                [icon]="faTimesCircle"
+                  [styles]="{ color: '#f22112' }"
+              ></fa-icon>
+          </td>
           <td *ngIf="hasRoleAdmin()">
             <a [routerLink]="['/members', user.salesforceId, 'view']">{{ user.memberName }}</a>
           </td>
@@ -149,6 +183,24 @@
             <fa-icon
               aria-hidden="true"
               *ngIf="!user.activated"
+              [icon]="faTimesCircle"
+              [styles]="{ color: '#f22112' }"
+            ></fa-icon>
+          </td>
+          <td
+            class="text-center"
+            *ngIf="hasRoleAdmin()"
+          >
+            <span class="sr-only">{{ user.mfaEnabled }}</span>
+            <fa-icon
+              aria-hidden="true"
+              *ngIf="user.mfaEnabled"
+              [icon]="faCheckCircle"
+              [styles]="{ color: '#28a745' }"
+            ></fa-icon>
+            <fa-icon
+              aria-hidden="true"
+              *ngIf="!user.mfaEnabled"
               [icon]="faTimesCircle"
               [styles]="{ color: '#f22112' }"
             ></fa-icon>

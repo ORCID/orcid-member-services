@@ -24,6 +24,7 @@ export interface IUser {
   lastModifiedBy?: string
   lastModifiedDate?: Moment | undefined | null
   mfaEnabled?: boolean
+  manageApiCredsEnabled?: boolean
 }
 
 export class User implements IUser {
