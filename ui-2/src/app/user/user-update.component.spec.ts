@@ -326,6 +326,34 @@ describe('UserUpdateComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/users'])
   })
 
+  it('should check and disable manage api credentials when org owner is checked', () => {
+    fixture.detectChanges()
+
+    const control = component.editForm.get('manageApiCredentialsEnabled')!
+    spyOn(control, 'patchValue')
+    spyOn(control, 'disable')
+
+    const event = { target: { checked: true } } as unknown as Event
+    component.validateOrgOwners(event)
+
+    expect(control.patchValue).toHaveBeenCalledWith(true)
+    expect(control.disable).toHaveBeenCalled()
+  })
+
+  it('should enable manage api credentials when org owner is unchecked', () => {
+    fixture.detectChanges()
+
+    const control = component.editForm.get('manageApiCredentialsEnabled')!
+    const patchValueSpy = spyOn(control, 'patchValue')
+    const enableSpy = spyOn(control, 'enable')
+
+    const event = { target: { checked: false } } as unknown as Event
+    component.validateOrgOwners(event)
+
+    expect(patchValueSpy).not.toHaveBeenCalled()
+    expect(enableSpy).toHaveBeenCalled()
+  })
+
   it('should send activation email for existing user', () => {
     activatedRoute.data = of({ user: { salesforceId: 'test', id: 'id' } as IUser })
     userService.sendActivate.and.returnValue(of(new User()))
