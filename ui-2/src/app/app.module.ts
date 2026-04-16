@@ -17,12 +17,13 @@ import { ErrorComponent } from './error/error.component'
 import { FormsModule } from '@angular/forms'
 import { AuthExpiredInterceptor } from './shared/interceptor/auth-expired.interceptor'
 import { AuthInterceptor, AuthModule } from 'angular-auth-oidc-client'
-import { environment } from '../environments/environment'
+import { environment } from '../environments/environment';
+import { ApiCredentialsMfaEnabledDialogComponent } from './layout/navbar/api-credentials-mfa-enabled-dialog/api-credentials-mfa-enabled-dialog.component'
 
 const origin = window.location.origin
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent],
+  declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent, ApiCredentialsMfaEnabledDialogComponent],
   imports: [
     BrowserModule,
     HomeModule,

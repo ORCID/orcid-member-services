@@ -59,13 +59,28 @@
             name="mainContact"
             id="field_mainContact"
             formControlName="mainContact"
-            (change)="validateOrgOwners()"
+            (change)="validateOrgOwners($event)"
           />
           <label
             class="form-control-label"
             i18n="@@gatewayApp.msUserServiceMSUser.mainContact.string"
             for="field_mainContact"
             >Organization Owner</label
+          >
+        </div>
+         <div class="form-group">
+          <input
+            type="checkbox"
+            class="form-control"
+            name="manageApiCredentialsEnabled"
+            id="field_manageApiCredentialsEnabled"
+            formControlName="manageApiCredentialsEnabled"
+          />
+          <label
+            class="form-control-label"
+            i18n="@@gatewayApp.msUserServiceMSUser.manageApiCredentialsEnabled.string"
+            for="field_manageApiCredentialsEnabled"
+            >Manage API credentials</label
           >
         </div>
         <div class="form-group mb-0">
