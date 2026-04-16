@@ -92,6 +92,7 @@ describe('AffiliationsComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: false,
+        manageApiCredsEnabled: false,
       })
     )
 

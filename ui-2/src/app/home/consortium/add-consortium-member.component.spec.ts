@@ -61,6 +61,7 @@ describe('AddConsortiumMemberComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: true,
+        manageApiCredsEnabled: false,
       })
     )
 

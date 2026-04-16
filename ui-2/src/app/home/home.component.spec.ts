@@ -29,6 +29,7 @@ describe('HomeComponent', () => {
       loginAs: '',
       mainContact: false,
       mfaEnabled: false,
+      manageApiCredsEnabled: false,
     }
 
     accountServiceSpy.getAccountData.and.returnValue(of(mockAccount))
@@ -81,6 +82,7 @@ describe('HomeComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: false,
+        manageApiCredsEnabled: false
       })
     )
 

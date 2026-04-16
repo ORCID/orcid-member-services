@@ -76,6 +76,7 @@ describe('SettingsComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: true,
+        manageApiCredsEnabled: false,
       })
     )
 
@@ -98,6 +99,7 @@ describe('SettingsComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: false,
+        manageApiCredsEnabled: false,
       })
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: 'test' }))
@@ -130,6 +132,7 @@ describe('SettingsComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: true,
+        manageApiCredsEnabled: false,
       })
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: 'test' }))
@@ -157,6 +160,7 @@ describe('SettingsComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: false,
+        manageApiCredsEnabled: false,
       })
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: ['test'] }))
@@ -186,6 +190,7 @@ describe('SettingsComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: true,
+        manageApiCredsEnabled: false,
       })
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: ['test'] }))
@@ -216,6 +221,7 @@ describe('SettingsComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: true,
+        manageApiCredsEnabled: false,
       })
     )
     fixture.detectChanges()
@@ -242,6 +248,7 @@ describe('SettingsComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: true,
+        manageApiCredsEnabled: false,
       })
     )
     fixture.detectChanges()
