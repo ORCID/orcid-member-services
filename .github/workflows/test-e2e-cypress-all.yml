@@ -53,11 +53,11 @@ jobs:
           egress-policy: audit
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: "Create creds json"
         id: create-creds-json
-        uses: jsdaniell/create-json@v1.2.3
+        uses: jsdaniell/create-json@b8e77fa01397ca39cc4a6198cc29a3be5481afef # v1.2.3
         with:
           name: "credentials.json"
           json: '{"adminEmail": "${{secrets.CY_ADMIN_EMAIL}}", "adminPassword": "${{secrets.CY_ADMIN_PASSWORD}}", "password": "${{secrets.CY_PASSWORD}}", "shortPassword": "${{secrets.CY_SHORT_PASSWORD}}", "shortConfirmationPassword": "${{secrets.CY_SHORT_CONFIRMATION_PASSWORD}}", "wrongConfirmationPasssword": "${{secrets.CY_WRONG_CONFIRMATION_PASSWORD}}", "publicToken": "${{secrets.CY_PUBLIC_TOKEN}}"}'
@@ -65,7 +65,7 @@ jobs:
 
       - name: "Create Gmail creds json"
         id: create-gmail-creds-file
-        uses: jsdaniell/create-json@v1.2.3
+        uses: jsdaniell/create-json@b8e77fa01397ca39cc4a6198cc29a3be5481afef # v1.2.3
         with:
           name: "credentials_qa.json"
           json: '{"installed":{"client_id":"${{secrets.CY_CREDS_CLIENT_ID}}","project_id":"${{secrets.CY_CREDS_PROJECT_ID}}","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"${{secrets.CY_CREDS_CLIENT_SECRET}}","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}}'
@@ -73,7 +73,7 @@ jobs:
 
       - name: "Create Gmail token json"
         id: create-gmail-token-file
-        uses: jsdaniell/create-json@v1.2.3
+        uses: jsdaniell/create-json@b8e77fa01397ca39cc4a6198cc29a3be5481afef # v1.2.3
         with:
           name: "token_qa.json"
           json: '{"access_token":"${{secrets.CY_TOKEN_ACCESS}}","refresh_token":"${{secrets.CY_TOKEN_REFRESH}}","scope":"https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send","token_type":"Bearer","expiry_date":${{secrets.CY_TOKEN_EXPIRY_DATE}}}'
@@ -82,7 +82,7 @@ jobs:
       ##########################################################################################################
 
       - name: Cypress run
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@f790eee7a50d9505912f50c2095510be7de06aa7 # v6.10.9
         with:
           install-command: npm install cypress --legacy-peer-deps
           working-directory: ui
@@ -90,14 +90,14 @@ jobs:
 
       # upload our cypress output results but only if the cypress tests failed
       # NOTE: artifacts must have unique names
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: failure()
         with:
           name: "cypress-screenshots-${{ matrix.name }}"
           path: ui/cypress/screenshots
           if-no-files-found: ignore
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: failure()
         with:
           name: "cypress-videos-${{ matrix.name }}"
