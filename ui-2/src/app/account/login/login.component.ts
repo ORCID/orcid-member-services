@@ -99,19 +99,21 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
       },
       error: (err) => {
         if (err.status === 401) {
-          this.authenticationError = true
-          console.log('MFA is required, showing MFA input', err.error)
-          if (err.error?.error === 'mfa_required') {
-            this.showMfa = true
-          }
-          if (err.error?.error === 'mfa_invalid') {
-            this.showMfa = true
-            this.mfaError  = true
+          if (err.error?.error === 'mfa_required' || err.error?.error === 'mfa_invalid') {
+            if (err.error?.error === 'mfa_required') {
+              this.showMfa = true
+            }
+            if (err.error?.error === 'mfa_invalid') {
+              this.showMfa = true
+              this.mfaError = true
+            }
+          } else {
+            this.authenticationError = true
           }
         } else {
-            this.authenticationError = true
-            this.loginService.logout()
-          }
+          this.authenticationError = true
+          this.loginService.logout()
+        }
       },
     })
   }

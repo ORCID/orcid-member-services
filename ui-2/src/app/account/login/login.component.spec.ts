@@ -91,9 +91,31 @@ describe('LoginComponent', () => {
 
     component.login()
 
-    tick() // Wait for Observable to emit
+    tick()
 
     expect(component.showMfa).toBe(true)
+    expect(component.authenticationError).toBe(false)
+  }))
+
+  it('should set authenticationError when 401 is returned without mfa error', fakeAsync(() => {
+    const mockError = {
+      status: 401,
+      error: { error: 'bad_credentials' },
+    }
+    loginService.login.and.returnValue(throwError(() => mockError))
+
+    component.loginForm.patchValue({
+      username: 'testuser',
+      password: 'testpassword',
+      mfaCode: '',
+    })
+
+    component.login()
+
+    tick()
+
+    expect(component.showMfa).toBe(false)
+    expect(component.authenticationError).toBe(true)
   }))
 
   it('should handle MFA code error', fakeAsync(() => {
