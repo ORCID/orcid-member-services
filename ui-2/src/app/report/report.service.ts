@@ -4,7 +4,7 @@ import { Observable } from 'rxjs'
 
 @Injectable({ providedIn: 'root' })
 export class ReportService {
-  public resourceUrl = '/memberservice/api/reports'
+  public resourceUrl = '/memberservice/reports'
 
   constructor(protected http: HttpClient) {}
 
