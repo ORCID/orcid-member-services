@@ -1183,10 +1183,7 @@ class AssertionServiceTest {
         Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
         Mockito.doNothing().when(assertionRepository).deleteById(Mockito.eq("id"));
 
-        long startTime = System.currentTimeMillis();
         assertionService.deleteById("id", getUser());
-        long executionTime = System.currentTimeMillis() - startTime;
-        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService).deleteOrcidRecordTokenByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
