@@ -9,6 +9,7 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.orcid.jaxb.model.v3.release.notification.permission.NotificationPermission;
 import org.orcid.jaxb.model.v3.release.record.Affiliation;
+import org.orcid.mp.assertion.config.CacheConfig;
 import org.orcid.mp.assertion.domain.Assertion;
 import org.orcid.mp.assertion.domain.adapter.AffiliationAdapter;
 import org.orcid.mp.assertion.error.DeactivatedException;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -74,6 +76,7 @@ public class OrcidApiClient {
     @Value("${application.orcid.requestedTokenType}")
     private String requestedTokenType;
 
+    @Cacheable(value = CacheConfig.TOKEN_CACHE, key = "#idToken")
     public String exchangeToken(String idToken, String orcidId) throws DeactivatedException {
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("client_id", clientId);
