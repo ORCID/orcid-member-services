@@ -37,6 +37,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class AssertionService {
@@ -44,6 +45,8 @@ public class AssertionService {
     private static final Logger LOG = LoggerFactory.getLogger(AssertionService.class);
 
     public static final int REGISTRY_SYNC_BATCH_SIZE = 500;
+
+    public static final int TOKEN_PROPAGATION_PAUSE = 500;
 
     private final Sort SORT = Sort.by(Sort.Direction.ASC, "email", "status", "created", "modified", "deletedFromORCID");
 
@@ -526,6 +529,7 @@ public class AssertionService {
     private String postToOrcidRegistry(String orcid, Assertion assertion, String idToken) throws IOException, DeprecatedException, DeactivatedException, JAXBException {
         LOG.info("Exchanging id token for access token for assertion {}, orcid {}", assertion.getId(), orcid);
         String accessToken = orcidApiClient.exchangeToken(idToken, orcid);
+        pauseForTokenPropagation();
         LOG.info("POST affiliation for {} and assertion id {}", orcid, assertion.getId());
         return orcidApiClient.postAffiliation(orcid, accessToken, assertion);
     }
@@ -533,8 +537,21 @@ public class AssertionService {
     private void putInOrcidRegistry(String orcid, Assertion assertion, String idToken) throws JSONException, IOException, DeprecatedException, DeactivatedException, JAXBException {
         LOG.info("Exchanging id token for access token for assertion {}, orcid {}", assertion.getId(), orcid);
         String accessToken = orcidApiClient.exchangeToken(idToken, orcid);
+        pauseForTokenPropagation();
         LOG.info("PUT affiliation with put-code {} for {} and assertion id {}", assertion.getPutCode(), orcid, assertion.getId());
         orcidApiClient.putAffiliation(orcid, accessToken, assertion);
+    }
+
+    private void pauseForTokenPropagation() {
+        LOG.debug("Pausing for 500ms to allow access token to propagate...");
+        try {
+            TimeUnit.MILLISECONDS.sleep(TOKEN_PROPAGATION_PAUSE);
+        } catch (InterruptedException e) {
+            // Restore the interrupt flag
+            Thread.currentThread().interrupt();
+            // Abort the operation since the thread was told to stop
+            throw new IllegalStateException("Thread interrupted while waiting for token propagation", e);
+        }
     }
 
     private void storeError(Assertion assertion, int statusCode, String error, AssertionStatus defaultErrorStatus) {
@@ -668,6 +685,7 @@ public class AssertionService {
         try {
             LOG.info("Exchanging id token for {}", orcidId);
             String accessToken = orcidApiClient.exchangeToken(record.get().getToken(assertion.getSalesforceId(), true), orcidId);
+            pauseForTokenPropagation();
             orcidApiClient.deleteAffiliation(orcidId, accessToken, assertion);
         } catch (DeactivatedException | DeprecatedException e) {
             handleDeactivatedOrDeprecated(orcidId, assertion);

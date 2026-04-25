@@ -568,7 +568,10 @@ class AssertionServiceTest {
         Mockito.when(orcidApiClient.exchangeToken(Mockito.eq("idToken1234"), anyString())).thenReturn("accessToken1234");
         Mockito.when(orcidApiClient.postAffiliation(Mockito.eq("orcid1234"), Mockito.eq("accessToken1234"), Mockito.any(Assertion.class))).thenReturn("putCode1234");
 
+        long startTime = System.currentTimeMillis();
         assertionService.postAssertionToOrcid(assertion);
+        long executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
@@ -586,7 +589,10 @@ class AssertionServiceTest {
         Mockito.doThrow(new OrcidAPIException(401, "some message")).when(orcidApiClient).postAffiliation(Mockito.eq("orcid1234"), Mockito.eq("accessToken1234"),
                 Mockito.any(Assertion.class));
 
+        long startTime = System.currentTimeMillis();
         assertionService.postAssertionToOrcid(assertion);
+        long executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
@@ -597,7 +603,10 @@ class AssertionServiceTest {
         Mockito.doThrow(new OrcidAPIException(400, "invalid_scope")).when(orcidApiClient).postAffiliation(Mockito.eq("orcid1234"), Mockito.eq("accessToken1234"),
                 Mockito.any(Assertion.class));
 
+        startTime = System.currentTimeMillis();
         assertionService.postAssertionToOrcid(assertion);
+        executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(2)).save(assertionCaptor.capture());
         saved = assertionCaptor.getAllValues().get(1);
@@ -633,7 +642,10 @@ class AssertionServiceTest {
         Mockito.doThrow(new OrcidAPIException(400, "invalid data")).when(orcidApiClient).postAffiliation(Mockito.eq("orcid1234"), Mockito.eq("accessToken1234"),
                 Mockito.any(Assertion.class));
 
+        long startTime = System.currentTimeMillis();
         assertionService.postAssertionToOrcid(assertion);
+        long executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
@@ -655,7 +667,10 @@ class AssertionServiceTest {
         Mockito.when(orcidApiClient.exchangeToken(Mockito.eq("idToken1234"), anyString())).thenReturn("accessToken1234");
         Mockito.when(orcidApiClient.postAffiliation(Mockito.eq("orcid1234"), Mockito.eq("accessToken1234"), Mockito.any(Assertion.class))).thenReturn("putCode1234");
 
+        long startTime = System.currentTimeMillis();
         assertionService.postAssertionToOrcid(assertion);
+        long executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
@@ -764,7 +779,10 @@ class AssertionServiceTest {
         Mockito.when(orcidRecordService.findByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
         Mockito.when(orcidApiClient.exchangeToken(Mockito.eq("idToken1234"), anyString())).thenReturn("accessToken1234");
 
+        long startTime = System.currentTimeMillis();
         assertionService.putAssertionInOrcid(assertion);
+        long executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
@@ -786,7 +804,10 @@ class AssertionServiceTest {
         Mockito.when(orcidRecordService.findByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
         Mockito.when(orcidApiClient.exchangeToken(Mockito.eq("idToken1234"), anyString())).thenReturn("accessToken1234");
 
+        long startTime = System.currentTimeMillis();
         assertionService.putAssertionInOrcid(assertion);
+        long executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
@@ -809,7 +830,10 @@ class AssertionServiceTest {
         Mockito.doThrow(new OrcidAPIException(401, "some message")).when(orcidApiClient).putAffiliation(Mockito.eq("orcid1234"), Mockito.eq("accessToken1234"),
                 Mockito.any(Assertion.class));
 
+        long startTime = System.currentTimeMillis();
         assertionService.putAssertionInOrcid(assertion);
+        long executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
@@ -820,7 +844,10 @@ class AssertionServiceTest {
         Mockito.doThrow(new OrcidAPIException(400, "invalid_scope")).when(orcidApiClient).putAffiliation(Mockito.eq("orcid1234"), Mockito.eq("accessToken1234"),
                 Mockito.any(Assertion.class));
 
+        startTime = System.currentTimeMillis();
         assertionService.putAssertionInOrcid(assertion);
+        executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(2)).save(assertionCaptor.capture());
         saved = assertionCaptor.getAllValues().get(1);
@@ -862,7 +889,10 @@ class AssertionServiceTest {
         Mockito.doThrow(new OrcidAPIException(400, "invalid data")).when(orcidApiClient).putAffiliation(Mockito.eq("orcid1234"), Mockito.eq("accessToken1234"),
                 Mockito.any(Assertion.class));
 
+        long startTime = System.currentTimeMillis();
         assertionService.putAssertionInOrcid(assertion);
+        long executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
@@ -935,7 +965,10 @@ class AssertionServiceTest {
         Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
         Mockito.doNothing().when(assertionRepository).deleteById(Mockito.eq("id"));
 
+        long startTime = System.currentTimeMillis();
         assertionService.deleteById("id", getUser());
+        long executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService, Mockito.never()).deleteOrcidRecord(Mockito.any());
@@ -963,7 +996,10 @@ class AssertionServiceTest {
         Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
         Mockito.doNothing().when(assertionRepository).deleteById(Mockito.eq("id"));
 
+        long startTime = System.currentTimeMillis();
         assertionService.deleteById("id", getUser());
+        long executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService, Mockito.never()).deleteOrcidRecord(Mockito.any());
@@ -987,7 +1023,10 @@ class AssertionServiceTest {
         Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
         Mockito.doNothing().when(assertionRepository).deleteById(Mockito.eq("id"));
 
+        long startTime = System.currentTimeMillis();
         assertionService.deleteById("id", getUser());
+        long executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService, Mockito.never()).deleteOrcidRecord(Mockito.any());
@@ -1036,7 +1075,10 @@ class AssertionServiceTest {
         Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
         Mockito.doNothing().when(assertionRepository).deleteById(Mockito.eq("id"));
 
+        long startTime = System.currentTimeMillis();
         assertionService.deleteById("id", getUser());
+        long executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService).deleteOrcidRecordTokenByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
@@ -1062,7 +1104,10 @@ class AssertionServiceTest {
         Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
         Mockito.doNothing().when(assertionRepository).deleteById(Mockito.eq("id"));
 
+        long startTime = System.currentTimeMillis();
         assertionService.deleteById("id", getUser());
+        long executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService).deleteOrcidRecordTokenByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
@@ -1089,7 +1134,10 @@ class AssertionServiceTest {
 
         Mockito.doNothing().when(assertionRepository).deleteById(Mockito.eq("id"));
 
+        long startTime = System.currentTimeMillis();
         assertionService.deleteById("id", getUser());
+        long executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService).deleteOrcidRecordTokenByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
@@ -1138,7 +1186,10 @@ class AssertionServiceTest {
         Mockito.when(orcidRecordService.generateLinkForEmail("test@orcid.org")).thenReturn("don't care");
         Mockito.doNothing().when(assertionRepository).deleteById(Mockito.eq("id"));
 
+        long startTime = System.currentTimeMillis();
         assertionService.deleteById("id", getUser());
+        long executionTime = System.currentTimeMillis() - startTime;
+        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService).deleteOrcidRecordTokenByEmailAndSalesforceId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
