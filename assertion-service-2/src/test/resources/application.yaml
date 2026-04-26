@@ -19,6 +19,10 @@ spring:
           user-service-provider:
             token-uri: http://localhost:9000/oauth2/token
             authorization-uri: http://localhost:9000/oauth2/authorize
+
+mongock:
+  enabled: false
+
 application:
   landingPageUrl: some-landing-page
   httpclient:
