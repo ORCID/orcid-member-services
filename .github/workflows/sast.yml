@@ -8,6 +8,7 @@ on:
       - main
   schedule:
     - cron: '45 6 * * *'
+  workflow_dispatch:
 jobs:
   buildmavenDepTree:
     runs-on: ubuntu-latest
