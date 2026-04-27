@@ -36,8 +36,7 @@ export class UserService {
   }
 
   sendActivate(user: User): Observable<User> {
-    const copy = this.convertDateFromClient(user)
-    return this.http.post<User>(`${this.resourceUrl}/${user.id}/sendActivate`, copy)
+    return this.http.post<User>(`${this.resourceUrl}/${user.id}/sendActivate`, null)
   }
 
   find(email: string): Observable<User> {
