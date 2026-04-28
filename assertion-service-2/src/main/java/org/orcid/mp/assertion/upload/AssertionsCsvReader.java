@@ -108,9 +108,13 @@ public class AssertionsCsvReader {
     }
 
     private boolean duplicateUploadAssertion(Assertion existing, Assertion candidate) {
-        if (existing.getId() != null && existing.getId().equals(candidate.getId())) {
-            return true;
+        boolean existingHasId = !StringUtils.isBlank(existing.getId());
+        boolean candidateHasId = !StringUtils.isBlank(candidate.getId());
+
+        if (existingHasId || candidateHasId) {
+            return existingHasId && candidateHasId && existing.getId().equals(candidate.getId());
         }
+
         return AssertionUtils.duplicates(existing, candidate);
     }
 
