@@ -84,10 +84,8 @@ public class AssertionsCsvReader {
             for (CSVRecord record : parser) {
                 try {
                     Assertion assertion = parseLine(record, upload, user);
-                    if (assertion.getEmail() != null && !upload.getUsers().contains(assertion.getEmail())) {
-                        upload.addUser(assertion.getEmail());
-                    }
-                    upload.addAssertion(assertion);
+                    addUserIfPresent(upload, assertion);
+                    addAssertionIfNotDuplicate(upload, assertion);
                 } catch (Exception e) {
                     LOG.info("CSV upload error found for record number {}", record.getRecordNumber(), e);
                     upload.addError(record.getRecordNumber(), getError("unexpected", e.getMessage(), user));
@@ -95,6 +93,25 @@ public class AssertionsCsvReader {
             }
         }
         return upload;
+    }
+
+    private void addUserIfPresent(AssertionsUpload upload, Assertion assertion) {
+        if (assertion.getEmail() != null) {
+            upload.addUser(assertion.getEmail());
+        }
+    }
+
+    private void addAssertionIfNotDuplicate(AssertionsUpload upload, Assertion assertion) {
+        if (upload.getAssertions().stream().noneMatch(existing -> duplicateUploadAssertion(existing, assertion))) {
+            upload.addAssertion(assertion);
+        }
+    }
+
+    private boolean duplicateUploadAssertion(Assertion existing, Assertion candidate) {
+        if (existing.getId() != null && existing.getId().equals(candidate.getId())) {
+            return true;
+        }
+        return AssertionUtils.duplicates(existing, candidate);
     }
 
     private Assertion parseLine(CSVRecord line, AssertionsUpload upload, User user) {
