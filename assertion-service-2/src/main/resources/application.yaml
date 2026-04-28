@@ -52,6 +52,9 @@ logging:
     format:
       console: logstash
 
+mongock:
+  migration-scan-package: org.orcid.mp.assertion.data.migration
+
 application:
   landingPageUrl: ${APPLICATION_LANDING_PAGE_URL}
   userService:
