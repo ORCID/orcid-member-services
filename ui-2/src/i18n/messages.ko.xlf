@@ -966,7 +966,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">188</context>
+          <context context-type="linenumber">219</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
@@ -1042,7 +1042,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">191</context>
+          <context context-type="linenumber">222</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
@@ -4210,11 +4210,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">137</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">142</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.day.string" datatype="html">
@@ -4494,7 +4494,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">171</context>
+          <context context-type="linenumber">202</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
@@ -4506,7 +4506,7 @@
         <target>다음에 리디렉션 URI로 추가됨:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">125</context>
+          <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.clientId.label.string" datatype="html">
@@ -4518,7 +4518,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.clientId.note.string" datatype="html">
@@ -4526,7 +4526,7 @@
         <target>참고: 클라이언트 ID에는 회원 OBO가 활성화되어 있어야 하며</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">121</context>
+          <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.clientName.string" datatype="html">
@@ -4538,7 +4538,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">117</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
@@ -4610,7 +4610,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">156</context>
+          <context context-type="linenumber">187</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
@@ -4638,7 +4638,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">79</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
@@ -4682,7 +4682,7 @@
         <target>이 승인 링크는 이미 사용되었습니다. 새 승인 링크를 위해 <x id="PH" equiv-text="this.clientName"/> 님에게 문의해 주세요.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.connectionExists.permissionToUpdate.string" datatype="html">
@@ -4706,7 +4706,7 @@
         <target><x id="PH" equiv-text="this.clientName"/> 님이 내 ORCID 기록을 업데이트하도록 허용</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
-          <context context-type="linenumber">80</context>
+          <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.denied.ifThisWas.string" datatype="html">
@@ -4746,7 +4746,7 @@
         <target>ORCID 기록에 추가된 데이터가 잘못되었다면 <x id="PH" equiv-text="this.clientName"/>에 문의해 주세요</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
-          <context context-type="linenumber">78</context>
+          <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.success.thanks.string" datatype="html">
@@ -4754,7 +4754,7 @@
         <target>감사합니다, <x id="PH" equiv-text="this.givenName"/> <x id="PH_1" equiv-text="this.familyName"/> 님</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
-          <context context-type="linenumber">166</context>
+          <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.success.youHaveSuccessfully.string" datatype="html">
@@ -4762,7 +4762,7 @@
         <target><x id="PH" equiv-text="this.clientName"/> 님에게 ORCID 기록을 업데이트할 수 있는 권한을 성공적으로 부여했으며, 기록이 제휴 정보로 업데이트됩니다.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
       <trans-unit id="memberServiceApp.member.created.string" datatype="html">
@@ -4875,6 +4875,30 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.ts</context>
           <context context-type="linenumber">229</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSMember.salesforceId.validation.pattern.string" datatype="html">
+        <source> This field is invalid. </source>
+        <target state="new"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/member/member-update.component.html</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSMember.parentSalesforceId.validation.pattern.string" datatype="html">
+        <source> Must be exactly 18 alphanumeric characters. </source>
+        <target state="new"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/member/member-update.component.html</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSMember.parentSalesforceId.validation.consortiumLead.string" datatype="html">
+        <source> Must match the organization&apos;s Salesforce ID for consortium leads. </source>
+        <target state="new"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/member/member-update.component.html</context>
+          <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
     </body>
