@@ -84,8 +84,10 @@ public class AssertionsCsvReader {
             for (CSVRecord record : parser) {
                 try {
                     Assertion assertion = parseLine(record, upload, user);
-                    addUserIfPresent(upload, assertion);
-                    addAssertionIfNotDuplicate(upload, assertion);
+                    if (assertion.getEmail() != null && !upload.getUsers().contains(assertion.getEmail())) {
+                        upload.addUser(assertion.getEmail());
+                    }
+                    upload.addAssertion(assertion);
                 } catch (Exception e) {
                     LOG.info("CSV upload error found for record number {}", record.getRecordNumber(), e);
                     upload.addError(record.getRecordNumber(), getError("unexpected", e.getMessage(), user));
@@ -93,29 +95,6 @@ public class AssertionsCsvReader {
             }
         }
         return upload;
-    }
-
-    private void addUserIfPresent(AssertionsUpload upload, Assertion assertion) {
-        if (assertion.getEmail() != null) {
-            upload.addUser(assertion.getEmail());
-        }
-    }
-
-    private void addAssertionIfNotDuplicate(AssertionsUpload upload, Assertion assertion) {
-        if (upload.getAssertions().stream().noneMatch(existing -> duplicateUploadAssertion(existing, assertion))) {
-            upload.addAssertion(assertion);
-        }
-    }
-
-    private boolean duplicateUploadAssertion(Assertion existing, Assertion candidate) {
-        boolean existingHasId = !StringUtils.isBlank(existing.getId());
-        boolean candidateHasId = !StringUtils.isBlank(candidate.getId());
-
-        if (existingHasId || candidateHasId) {
-            return existingHasId && candidateHasId && existing.getId().equals(candidate.getId());
-        }
-
-        return AssertionUtils.duplicates(existing, candidate);
     }
 
     private Assertion parseLine(CSVRecord line, AssertionsUpload upload, User user) {

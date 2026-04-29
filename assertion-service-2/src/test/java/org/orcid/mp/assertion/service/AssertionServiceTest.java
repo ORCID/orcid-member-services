@@ -26,6 +26,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.xml.bind.JAXBException;
@@ -1522,6 +1523,37 @@ class AssertionServiceTest {
         assertNotNull(storedFiles.get(0).getError());
         assertEquals("class java.io.IOException: testing error message", storedFiles.get(0).getError());
         assertNull(storedFiles.get(1).getError());
+    }
+
+    @Test
+    void testProcessUploadCountsDuplicateAssertionsInUpload() {
+        User user = getUser();
+
+        Assertion first = getAssertionWithoutIdForEmail("duplicate@email.com");
+
+        Assertion duplicate = getAssertionWithoutIdForEmail("duplicate@email.com");
+
+        Assertion unique = getAssertionWithoutIdForEmail("duplicate@email.com");
+        unique.setRoleTitle("different role");
+
+        AssertionsUpload upload = new AssertionsUpload();
+        upload.addAssertion(first);
+        upload.addAssertion(duplicate);
+        upload.addAssertion(unique);
+
+        Mockito.when(assertionRepository.findByEmailAndSalesforceId(Mockito.eq("duplicate@email.com"), Mockito.eq(DEFAULT_SALESFORCE_ID)))
+                .thenReturn(List.of());
+        Mockito.when(orcidRecordService.findByEmail(Mockito.eq("duplicate@email.com"))).thenReturn(Optional.empty());
+
+        AssertionsUploadSummary summary = ReflectionTestUtils.invokeMethod(assertionService, "processUpload", upload, user);
+
+        assertNotNull(summary);
+        assertEquals(2, summary.getNumAdded());
+        assertEquals(1, summary.getNumDuplicates());
+        assertEquals(0, summary.getNumUpdated());
+        assertEquals(0, summary.getNumDeleted());
+
+        Mockito.verify(assertionRepository, Mockito.times(2)).insert(Mockito.any(Assertion.class));
     }
 
     private List<StoredFile> getDummyStoredFiles() {
