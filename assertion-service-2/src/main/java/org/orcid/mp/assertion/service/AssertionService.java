@@ -337,7 +337,7 @@ public class AssertionService {
     private AssertionsUploadSummary processUpload(AssertionsUpload upload, User user) {
         AssertionsUploadSummary summary = new AssertionsUploadSummary();
 
-        if (upload.getErrors().size() > 0) {
+        if (!upload.getErrors().isEmpty()) {
             summary.setErrors(upload.getErrors());
             return summary;
         }
@@ -347,6 +347,7 @@ public class AssertionService {
         int updated = 0;
         int deleted = 0;
 
+        List<Assertion> processedAssertions = new ArrayList<>();
         List<String> registryDeleteFailures = new ArrayList<>();
 
         for (Assertion a : upload.getAssertions()) {
@@ -358,7 +359,9 @@ public class AssertionService {
                     registryDeleteFailures.add(a.getId());
                 }
             } else {
-                if (!isDuplicate(a)) {
+                if (processedAssertions.stream().noneMatch(existing -> duplicateUploadAssertion(existing, a)) && !isDuplicate(a)) {
+                    Assertion duplicateCheckSnapshot = copyAssertionForDuplicateCheck(a);
+
                     if (a.getId() == null || a.getId().isEmpty()) {
                         createAssertion(a, user);
                         created++;
@@ -370,6 +373,8 @@ public class AssertionService {
                         updateAssertion(a, user);
                         updated++;
                     }
+
+                    processedAssertions.add(duplicateCheckSnapshot);
                 } else {
                     duplicates++;
                 }
@@ -388,6 +393,43 @@ public class AssertionService {
     private AssertionsUpload readUpload(File file, User user) throws IOException {
         InputStream inputStream = new FileInputStream(file);
         return assertionsCsvReader.readAssertionsUpload(inputStream, user);
+    }
+
+    private boolean duplicateUploadAssertion(Assertion existing, Assertion candidate) {
+        boolean existingHasId = !StringUtils.isBlank(existing.getId());
+        boolean candidateHasId = !StringUtils.isBlank(candidate.getId());
+
+        if (existingHasId || candidateHasId) {
+            return existingHasId && candidateHasId && existing.getId().equals(candidate.getId());
+        }
+
+        return AssertionUtils.duplicates(existing, candidate);
+    }
+
+    private Assertion copyAssertionForDuplicateCheck(Assertion source) {
+        Assertion copy = new Assertion();
+        copy.setEmail(source.getEmail());
+        copy.setAffiliationSection(source.getAffiliationSection());
+        copy.setDepartmentName(source.getDepartmentName());
+        copy.setRoleTitle(source.getRoleTitle());
+        copy.setStartDay(source.getStartDay());
+        copy.setStartMonth(source.getStartMonth());
+        copy.setStartYear(source.getStartYear());
+        copy.setEndDay(source.getEndDay());
+        copy.setEndMonth(source.getEndMonth());
+        copy.setEndYear(source.getEndYear());
+        copy.setOrgName(source.getOrgName());
+        copy.setOrgCountry(source.getOrgCountry());
+        copy.setOrgCity(source.getOrgCity());
+        copy.setOrgRegion(source.getOrgRegion());
+        copy.setDisambiguationSource(source.getDisambiguationSource());
+        copy.setDisambiguatedOrgId(source.getDisambiguatedOrgId());
+        copy.setExternalId(source.getExternalId());
+        copy.setExternalIdType(source.getExternalIdType());
+        copy.setExternalIdUrl(source.getExternalIdUrl());
+        copy.setUrl(source.getUrl());
+        copy.setSalesforceId(source.getSalesforceId());
+        return copy;
     }
 
     public boolean isDuplicate(Assertion assertion) {
