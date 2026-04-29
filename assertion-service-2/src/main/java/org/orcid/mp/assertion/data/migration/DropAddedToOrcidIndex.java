@@ -6,9 +6,7 @@ import io.mongock.api.annotations.RollbackExecution;
 import org.orcid.mp.assertion.domain.Assertion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.IndexOperations;
 
 @ChangeUnit(id = "drop-added-to-orcid-index", order = "002", author = "George Nash")
@@ -16,7 +14,7 @@ public class DropAddedToOrcidIndex {
 
     private static final String INDEX_NAME = "added_to_orcid";
 
-    private static final Logger LOG = LoggerFactory.getLogger(RevokedDateCorrection.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DropAddedToOrcidIndex.class);
 
     @Execution
     public void execution(MongoTemplate mongoTemplate) {
