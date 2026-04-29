@@ -3,6 +3,8 @@ package org.orcid.mp.assertion.domain;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -14,6 +16,9 @@ import java.time.Instant;
 import java.util.Locale;
 
 @Document(collection = "assertion")
+@CompoundIndexes({
+        @CompoundIndex(name = "added_created_status_idx", def = "{'added_to_orcid': 1, 'created': 1, 'status': 1}")
+})
 public class Assertion implements Serializable {
     private static final long serialVersionUID = 1845971448687999429L;
 
@@ -109,7 +114,6 @@ public class Assertion implements Serializable {
     @Field("salesforce_id")
     private String salesforceId;
 
-    @Indexed
     @Field("added_to_orcid")
     private Instant addedToORCID;
 

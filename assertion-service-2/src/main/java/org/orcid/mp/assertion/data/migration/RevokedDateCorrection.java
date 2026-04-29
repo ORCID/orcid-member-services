@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.query.Update;
 @ChangeUnit(id = "remove-all-revoked-dates", order = "001", author = "George Nash")
 public class RevokedDateCorrection {
 
-    Logger LOG = LoggerFactory.getLogger(RevokedDateCorrection.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RevokedDateCorrection.class);
 
     @Execution
     public void execution(MongoTemplate mongoTemplate) {
