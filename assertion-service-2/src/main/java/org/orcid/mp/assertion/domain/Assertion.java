@@ -109,7 +109,6 @@ public class Assertion implements Serializable {
     @Field("salesforce_id")
     private String salesforceId;
 
-    @Indexed
     @Field("added_to_orcid")
     private Instant addedToORCID;
 
