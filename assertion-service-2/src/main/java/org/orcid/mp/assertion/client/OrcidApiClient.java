@@ -34,6 +34,7 @@ import org.springframework.web.client.RestClientResponseException;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -121,7 +122,7 @@ public class OrcidApiClient {
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
 
         LOG.info("Creating {} for {} with role title {}", affType, orcid, assertion.getRoleTitle());
-        String xmlPayload = marshalAssertion(assertion);
+        byte[] xmlPayload = marshalAssertion(assertion);
 
         LOG.debug("Post affiliation payload: {}", xmlPayload);
         try {
@@ -156,7 +157,7 @@ public class OrcidApiClient {
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
 
         LOG.info("Updating affiliation with put code {} for {}", assertion.getPutCode(), orcid);
-        String xmlPayload = marshalAssertion(assertion);
+        byte[] xmlPayload = marshalAssertion(assertion);
 
         LOG.debug("Put affiliation payload: {}", xmlPayload);
         try {
@@ -203,13 +204,15 @@ public class OrcidApiClient {
         }
     }
 
-    private String marshalAssertion(Assertion assertion) throws JAXBException {
+    private byte[] marshalAssertion(Assertion assertion) throws JAXBException {
         Affiliation orcidAffiliation = AffiliationAdapter.toOrcidAffiliation(assertion);
         JAXBContext context = JAXBContext.newInstance(orcidAffiliation.getClass());
         Marshaller marshaller = context.createMarshaller();
-        StringWriter writer = new StringWriter();
-        marshaller.marshal(orcidAffiliation, writer);
-        return writer.toString();
+        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+
+        ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+        marshaller.marshal(orcidAffiliation, baos);
+        return baos.toByteArray();
     }
 
     public String postNotification(NotificationPermission notificationPermission, String orcidId) throws JAXBException {
