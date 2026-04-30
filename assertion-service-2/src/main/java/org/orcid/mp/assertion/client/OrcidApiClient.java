@@ -37,6 +37,7 @@ import javax.xml.bind.Marshaller;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -122,14 +123,14 @@ public class OrcidApiClient {
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
 
         LOG.info("Creating {} for {} with role title {}", affType, orcid, assertion.getRoleTitle());
-        byte[] xmlPayload = marshalAssertion(assertion);
+        String xmlPayload = marshalAssertion(assertion);
 
         LOG.debug("Post affiliation payload: {}", xmlPayload);
         try {
             ResponseEntity<String> response = restClient.post()
                     .uri(apiUrl + orcid + '/' + affType)
                     .header("Authorization", "Bearer " + accessToken)
-                    .contentType(MediaType.APPLICATION_XML)
+                    .contentType(new MediaType("application", "xml", StandardCharsets.UTF_8))
                     .body(xmlPayload).retrieve().toEntity(String.class);
 
             LOG.debug("Post affiliation successful");
@@ -157,14 +158,14 @@ public class OrcidApiClient {
         String affType = assertion.getAffiliationSection().getOrcidEndpoint();
 
         LOG.info("Updating affiliation with put code {} for {}", assertion.getPutCode(), orcid);
-        byte[] xmlPayload = marshalAssertion(assertion);
+        String xmlPayload = marshalAssertion(assertion);
 
         LOG.debug("Put affiliation payload: {}", xmlPayload);
         try {
             ResponseEntity<String> response = restClient.put()
                     .uri(apiUrl + orcid + '/' + affType + '/' + assertion.getPutCode())
                     .header("Authorization", "Bearer " + accessToken)
-                    .contentType(MediaType.APPLICATION_XML)
+                    .contentType(new MediaType("application", "xml", StandardCharsets.UTF_8))
                     .body(xmlPayload).retrieve().toEntity(String.class);
 
             LOG.debug("Put affiliation successful");
@@ -204,15 +205,15 @@ public class OrcidApiClient {
         }
     }
 
-    private byte[] marshalAssertion(Assertion assertion) throws JAXBException {
+    private String marshalAssertion(Assertion assertion) throws JAXBException {
         Affiliation orcidAffiliation = AffiliationAdapter.toOrcidAffiliation(assertion);
         JAXBContext context = JAXBContext.newInstance(orcidAffiliation.getClass());
         Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+        marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
 
-        ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
-        marshaller.marshal(orcidAffiliation, baos);
-        return baos.toByteArray();
+        StringWriter writer = new StringWriter();
+        marshaller.marshal(orcidAffiliation, writer);
+        return writer.toString();
     }
 
     public String postNotification(NotificationPermission notificationPermission, String orcidId) throws JAXBException {

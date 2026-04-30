@@ -55,7 +55,7 @@ class OrcidApiClientTest {
     private RestClient.ResponseSpec responseSpec;
 
     @Captor
-    private ArgumentCaptor<byte[]> xmlPayloadCaptor;
+    private ArgumentCaptor<String> xmlPayloadCaptor;
 
     private final String API_URL = "https://api.orcid.org/";
     private final String INTERNAL_API_URL = "https://internal.orcid.org/";
@@ -142,7 +142,7 @@ class OrcidApiClientTest {
         assertThat(putCode).isEqualTo("12345");
 
         verify(requestBodySpec).body(xmlPayloadCaptor.capture());
-        assertThat(new String(xmlPayloadCaptor.getValue(), StandardCharsets.UTF_8)).contains("Researcher");
+        assertThat(xmlPayloadCaptor.getValue()).contains("Researcher");
     }
 
     @Test
