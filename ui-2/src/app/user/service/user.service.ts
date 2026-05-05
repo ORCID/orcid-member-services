@@ -1,19 +1,19 @@
-import { Injectable } from '@angular/core'
-import { HttpClient, HttpResponse, HttpHeaders, HttpParams } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
+import { Injectable, inject } from '@angular/core'
+import moment from 'moment'
 import { Observable } from 'rxjs'
-import * as moment from 'moment'
-import { filter, map } from 'rxjs/operators'
+import { map } from 'rxjs/operators'
 
-import { User, UserAuthorities } from '../model/user.model'
+import { Page } from 'src/app/shared/model/page.model'
 import { createRequestOption } from '../../shared/request-util'
 import { UserValidation } from '../model/user-validation.model'
-import { Page } from 'src/app/shared/model/page.model'
+import { User, UserAuthorities } from '../model/user.model'
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  public resourceUrl = '/userservice/users'
+  protected http = inject(HttpClient)
 
-  constructor(protected http: HttpClient) {}
+  public resourceUrl = '/userservice/users'
 
   create(user: User): Observable<User> {
     const copy = this.convertDateFromClient(user)

@@ -1,15 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { UserImportDialogComponent } from './user-import-dialog.component'
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
-import { RouterTestingModule } from '@angular/router/testing'
-import { UserService } from './service/user.service'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { FormBuilder } from '@angular/forms'
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { EMPTY, of } from 'rxjs'
 import { ErrorService } from '../error/service/error.service'
 import { EventService } from '../shared/service/event.service'
 import { FileUploadService } from '../shared/service/file-upload.service'
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
-import { EMPTY, of } from 'rxjs'
+import { UserService } from './service/user.service'
+import { UserImportDialogComponent } from './user-import-dialog.component'
 
 describe('UserImportDialogComponent', () => {
   let component: UserImportDialogComponent
@@ -32,9 +32,9 @@ describe('UserImportDialogComponent', () => {
     const uploadServiceSpy = jasmine.createSpyObj('FileUploadService', ['uploadFile'])
 
     TestBed.configureTestingModule({
-      declarations: [UserImportDialogComponent],
-      imports: [HttpClientTestingModule],
-      providers: [
+    declarations: [UserImportDialogComponent],
+    imports: [],
+    providers: [
         FormBuilder,
         NgbModal,
         NgbActiveModal,
@@ -42,8 +42,10 @@ describe('UserImportDialogComponent', () => {
         { provide: EventService, useValue: eventServiceSpy },
         { provide: FileUploadService, useValue: uploadServiceSpy },
         { provide: ErrorService, useValue: {} },
-      ],
-    }).compileComponents()
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}).compileComponents()
 
     fixture = TestBed.createComponent(UserImportDialogComponent)
     component = fixture.componentInstance
@@ -77,12 +79,12 @@ describe('UserImportDialogComponent', () => {
   const getFileList = () => {
     const blob = new Blob([''], { type: 'text/html' })
     const file = <File>blob
-    const fileList: FileList = {
+    const fileList = {
       0: file,
       1: file,
       length: 2,
       item: (index: number) => file,
-    }
+    } as unknown as FileList
     return fileList
   }
 })

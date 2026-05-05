@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { UserDetailComponent } from './user-detail.component'
 import { RouterTestingModule } from '@angular/router/testing'
-import { HttpClientModule } from '@angular/common/http'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { AlertService } from '../shared/service/alert.service'
 import { UserService } from './service/user.service'
 import { MemberService } from '../member/service/member.service'
@@ -22,14 +22,15 @@ describe('UserDetailComponent', () => {
     alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
 
     TestBed.configureTestingModule({
-      declarations: [UserDetailComponent],
-      imports: [RouterTestingModule, HttpClientModule],
-      providers: [
+    declarations: [UserDetailComponent],
+    imports: [RouterTestingModule],
+    providers: [
         { provide: UserService, useValue: userServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },
-      ],
-    }).compileComponents()
+        provideHttpClient(withInterceptorsFromDi()),
+    ]
+}).compileComponents()
 
     fixture = TestBed.createComponent(UserDetailComponent)
     component = fixture.componentInstance

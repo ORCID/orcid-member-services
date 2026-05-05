@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ErrorHandler, HostListener, Inject, OnInit } from '@angular/core'
+import { ChangeDetectorRef, Component, ErrorHandler, HostListener, OnInit, inject } from '@angular/core'
 import { Subscription, filter, map } from 'rxjs'
 import { AlertService } from '../service/alert.service'
 import { AppAlert } from './model/alert.model'
@@ -7,16 +7,15 @@ import { AlertType } from 'src/app/app.constants'
 @Component({
   selector: 'app-alert-toast',
   templateUrl: './alert-toast.component.html',
+  standalone: false,
 })
 export class AlertComponent implements OnInit {
+  private alertService = inject(AlertService)
+  private cdr = inject(ChangeDetectorRef)
+
   alerts: any[] = []
   sub: Subscription | undefined
   message: any
-
-  constructor(
-    private alertService: AlertService,
-    private cdr: ChangeDetectorRef
-  ) {}
 
   ngOnInit(): void {
     this.sub = this.alertService
@@ -32,8 +31,8 @@ export class AlertComponent implements OnInit {
     this.sub?.unsubscribe()
   }
 
-  @HostListener('document:keyup.escape', ['$event'])
-  @HostListener('document:keyup.enter', ['$event'])
+  @HostListener('document:keyup.escape')
+  @HostListener('document:keyup.enter')
   closeOldestAlert() {
     this.alertService.clear(this.alerts[0])
     this.cdr.detectChanges()
