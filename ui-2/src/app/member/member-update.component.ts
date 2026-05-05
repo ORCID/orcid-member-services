@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { AbstractControl, FormBuilder, FormControl, ValidatorFn, Validators } from '@angular/forms'
+import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Observable } from 'rxjs'
 import * as moment from 'moment'
@@ -8,60 +8,7 @@ import { AlertService } from '../shared/service/alert.service'
 import { AlertMessage, AlertType, BASE_URL, DATE_TIME_FORMAT, ORCID_BASE_URL } from '../app.constants'
 import { IMember, Member } from './model/member.model'
 import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
-
-function parentSalesforceIdValidator(): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: boolean } | null => {
-    if (control.parent && control.value && isNaN(control.value)) {
-      const parentSalesforceId = control.value
-      const isConsortiumLead = control.parent?.get('isConsortiumLead')?.value
-      const salesforceId = control.parent?.get('salesforceId')?.value
-
-      if (isConsortiumLead && parentSalesforceId !== salesforceId) {
-        return { validParentSalesforceIdValue: false }
-      }
-    }
-    return null
-  }
-}
-
-function clientIdValidator(): ValidatorFn {
-  return (control: AbstractControl): { [key: string]: boolean } | null => {
-    if (control.parent && control.value && isNaN(control.value)) {
-      const clientIdValue = control.value
-      const isConsortiumLead = control.parent?.get('isConsortiumLead')?.value
-      const assertionServiceEnabled = control.parent?.get('assertionServiceEnabled')?.value
-      if (!isConsortiumLead && clientIdValue === '') {
-        const clientIdControl = control.parent?.get('clientId')
-        if (clientIdControl) {
-          return Validators.required(clientIdControl)
-        }
-      }
-      if (isConsortiumLead && (!clientIdValue || clientIdValue === '')) {
-        return null
-      }
-      if (!assertionServiceEnabled && (!clientIdValue || clientIdValue === '')) {
-        return null
-      }
-      if (clientIdValue.startsWith('APP-') && clientIdValue.match(/APP-[A-Z0-9]{16}$/)) {
-        return null
-      } else if (clientIdValue.match(/[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/)) {
-        return null
-      }
-      return { validClientId: false }
-    }
-    if (control.parent) {
-      if (control.parent?.get('isConsortiumLead')?.value) {
-        return null
-      }
-    }
-    if (control.parent) {
-      if (!control.parent?.get('assertionServiceEnabled')?.value) {
-        return null
-      }
-    }
-    return { validClientId: false }
-  }
-}
+import { clientIdValidator, parentSalesforceIdValidator, salesforceIdFormatValidator } from './validators/member.validators'
 
 @Component({
   selector: 'app-member-update',
@@ -79,8 +26,8 @@ export class MemberUpdateComponent implements OnInit {
     id: new FormControl<string | null>(null),
     clientId: new FormControl<string | null>(null, [clientIdValidator()]),
     clientName: new FormControl<string | null>(null, [Validators.required]),
-    salesforceId: new FormControl<string | null>(null, [Validators.required]),
-    parentSalesforceId: new FormControl<string | null>(null, [parentSalesforceIdValidator()]),
+    salesforceId: new FormControl<string | null>(null, [Validators.required, salesforceIdFormatValidator()]),
+    parentSalesforceId: new FormControl<string | null>(null, [salesforceIdFormatValidator(), parentSalesforceIdValidator()]),
     isConsortiumLead: new FormControl<boolean | null>(null, [Validators.required]),
     assertionServiceEnabled: new FormControl<boolean | null>(false),
     createdBy: new FormControl<string | null>(null),
