@@ -61,6 +61,14 @@
             >
               This field is required.
             </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="(editForm.get('salesforceId')?.errors)!['pattern']"
+              i18n="@@gatewayApp.msUserServiceMSMember.salesforceId.validation.pattern.string"
+              data-cy="fieldPatternInvalid"
+            >
+              Must be exactly 18 alphanumeric characters.
+            </small>
           </div>
         </div>
         <div class="form-group">
@@ -77,6 +85,29 @@
             id="field_parentSalesforceId"
             formControlName="parentSalesforceId"
           />
+          <div
+            *ngIf="
+              editForm.get('parentSalesforceId')?.invalid &&
+              (editForm.get('parentSalesforceId')?.dirty || editForm.get('parentSalesforceId')?.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('parentSalesforceId')?.hasError('pattern')"
+              i18n="@@gatewayApp.msUserServiceMSMember.parentSalesforceId.validation.pattern.string"
+              data-cy="parentSalesforceIdPatternInvalid"
+            >
+              Must be exactly 18 alphanumeric characters.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('parentSalesforceId')?.hasError('validParentSalesforceIdValue')"
+              i18n="@@gatewayApp.msUserServiceMSMember.parentSalesforceId.validation.consortiumLead.string"
+              data-cy="parentSalesforceIdConsortiumLeadInvalid"
+            >
+              Must match the organization's Salesforce ID for consortium leads.
+            </small>
+          </div>
         </div>
         <div class="form-group">
           <label

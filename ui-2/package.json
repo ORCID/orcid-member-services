@@ -10,7 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "format:cli": "ng lint && npx prettier .",
-    "format": "ng lint --fix && npx prettier --write ."
+    "format": "ng lint --fix && npx prettier --write .",
+    "extract": "ng extract-i18n"
   },
   "private": true,
   "dependencies": {
