@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { Router } from '@angular/router'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { AccountService, StateStorageService } from './account'
@@ -7,19 +7,17 @@ import { EventType } from './app.constants'
 import { Event } from './shared/model/event.model'
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  standalone: false,
 })
 export class AppComponent implements OnInit {
-  constructor(
-    private oidcSecurityService: OidcSecurityService,
-    private accountService: AccountService,
-    private eventService: EventService,
-    private stateStorageService: StateStorageService,
-    private router: Router
-  ) {}
+  private oidcSecurityService = inject(OidcSecurityService)
+  private accountService = inject(AccountService)
+  private eventService = inject(EventService)
+  private stateStorageService = inject(StateStorageService)
+  private router = inject(Router)
 
   ngOnInit() {
     if (!window.location.pathname.includes('/landing-page')) {

@@ -1,24 +1,22 @@
-import { ChangeDetectorRef, Component, HostListener, Inject } from '@angular/core'
+import { ChangeDetectorRef, Component, HostListener, inject } from '@angular/core'
 import { AppAlert } from '../model/alert.model'
 import { Subscription, map } from 'rxjs'
 import { AlertService } from '../../service/alert.service'
 import { AlertType } from 'src/app/app.constants'
 
 @Component({
-    selector: 'app-add-consortium-member-alert',
-    templateUrl: './add-consortium-member-alert.component.html',
-    styleUrls: ['../overlay-modal.scss'],
-    standalone: false
+  selector: 'app-add-consortium-member-alert',
+  templateUrl: './add-consortium-member-alert.component.html',
+  styleUrls: ['../overlay-modal.scss'],
+  standalone: false,
 })
 export class AddConsortiumMemberAlertComponent {
+  private alertService = inject(AlertService)
+  private cdr = inject(ChangeDetectorRef)
+
   alerts: AppAlert[] | undefined
   sub: Subscription | undefined
   orgName = ''
-
-  constructor(
-    private alertService: AlertService,
-    private cdr: ChangeDetectorRef
-  ) {}
 
   ngOnInit(): void {
     this.sub = this.alertService

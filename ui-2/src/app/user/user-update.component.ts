@@ -1,19 +1,19 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core'
+import { ChangeDetectorRef, Component, inject } from '@angular/core'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Observable } from 'rxjs'
-import moment from 'moment'
 import { faBan, faCheckCircle, faSave } from '@fortawesome/free-solid-svg-icons'
+import moment from 'moment'
+import { Observable } from 'rxjs'
 
 import { map } from 'rxjs/operators'
-import { AlertService } from '../shared/service/alert.service'
-import { UserService } from './service/user.service'
-import { MemberService } from '../member/service/member.service'
 import { AccountService } from '../account'
-import { IUser, User } from './model/user.model'
-import { IMember } from '../member/model/member.model'
-import { ErrorService } from '../error/service/error.service'
 import { AlertMessage, AlertType, DATE_TIME_FORMAT, emailValidator } from '../app.constants'
+import { ErrorService } from '../error/service/error.service'
+import { IMember } from '../member/model/member.model'
+import { MemberService } from '../member/service/member.service'
+import { AlertService } from '../shared/service/alert.service'
+import { IUser, User } from './model/user.model'
+import { UserService } from './service/user.service'
 
 @Component({
     selector: 'app-user-update',
@@ -22,6 +22,16 @@ import { AlertMessage, AlertType, DATE_TIME_FORMAT, emailValidator } from '../ap
     standalone: false
 })
 export class UserUpdateComponent {
+  protected alertService = inject(AlertService)
+  protected userService = inject(UserService)
+  protected memberService = inject(MemberService)
+  protected activatedRoute = inject(ActivatedRoute)
+  protected router = inject(Router)
+  protected accountService = inject(AccountService)
+  protected errorService = inject(ErrorService)
+  private fb = inject(FormBuilder)
+  private cdref = inject(ChangeDetectorRef)
+
   isSaving = false
   isExistentMember = false
   existentUser: IUser | null = null
@@ -30,7 +40,7 @@ export class UserUpdateComponent {
   faSave = faSave
   showIsAdminCheckbox = false
   currentAccount: any
-  validation: any
+  validation: any = {}
   disableMfa = false
 
   editForm = this.fb.group({
@@ -61,20 +71,6 @@ export class UserUpdateComponent {
 
   memberList = [] as IMember[]
   hasOwner = false
-
-  constructor(
-    protected alertService: AlertService,
-    protected userService: UserService,
-    protected memberService: MemberService,
-    protected activatedRoute: ActivatedRoute,
-    protected router: Router,
-    protected accountService: AccountService,
-    protected errorService: ErrorService,
-    private fb: FormBuilder,
-    private cdref: ChangeDetectorRef
-  ) {
-    this.validation = {}
-  }
 
   ngOnInit() {
     this.isSaving = false

@@ -1,5 +1,5 @@
 import { HttpClient, HttpResponse } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import moment from 'moment'
 import {
   BehaviorSubject,
@@ -40,7 +40,7 @@ import { ISFNewConsortiumMember } from '../model/salesforce-new-consortium-membe
 
 @Injectable({ providedIn: 'root' })
 export class MemberService {
-  constructor(protected http: HttpClient) {}
+  protected http = inject(HttpClient)
 
   public resourceUrl = '/memberservice'
   public managedMember = new BehaviorSubject<string | null>(null)

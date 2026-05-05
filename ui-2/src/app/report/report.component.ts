@@ -1,23 +1,21 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { ReportService } from './report.service'
 import { DomSanitizer } from '@angular/platform-browser'
 import { ActivatedRoute } from '@angular/router'
 
 @Component({
-    selector: 'app-report',
-    templateUrl: './report.component.html',
-    styleUrls: ['report.scss'],
-    standalone: false
+  selector: 'app-report',
+  templateUrl: './report.component.html',
+  styleUrls: ['report.scss'],
+  standalone: false,
 })
 export class ReportComponent implements OnInit {
+  private reportService = inject(ReportService)
+  private sanitizer = inject(DomSanitizer)
+  private activatedRoute = inject(ActivatedRoute)
+
   reportSrc: any
   reportType: string | undefined
-
-  constructor(
-    private reportService: ReportService,
-    private sanitizer: DomSanitizer,
-    private activatedRoute: ActivatedRoute
-  ) {}
 
   ngOnInit() {
     this.activatedRoute.data.subscribe((data) => {

@@ -1,14 +1,18 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { PasswordService } from '../service/password.service'
 import { AccountService } from '../service/account.service'
 
 @Component({
-    selector: 'app-password',
-    templateUrl: './password.component.html',
-    standalone: false
+  selector: 'app-password',
+  templateUrl: './password.component.html',
+  standalone: false,
 })
 export class PasswordComponent implements OnInit {
+  private passwordService = inject(PasswordService)
+  private accountService = inject(AccountService)
+  private fb = inject(FormBuilder)
+
   doNotMatch: string | undefined
   error: string | undefined
   success: string | undefined
@@ -20,12 +24,6 @@ export class PasswordComponent implements OnInit {
     newPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
     confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
   })
-
-  constructor(
-    private passwordService: PasswordService,
-    private accountService: AccountService,
-    private fb: FormBuilder
-  ) {}
 
   ngOnInit() {
     this.accountService.getAccountData().subscribe((account) => {

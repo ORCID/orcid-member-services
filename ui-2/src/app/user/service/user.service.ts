@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import moment from 'moment'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
@@ -11,9 +11,9 @@ import { User, UserAuthorities } from '../model/user.model'
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  public resourceUrl = '/userservice/users'
+  protected http = inject(HttpClient)
 
-  constructor(protected http: HttpClient) {}
+  public resourceUrl = '/userservice/users'
 
   create(user: User): Observable<User> {
     const copy = this.convertDateFromClient(user)

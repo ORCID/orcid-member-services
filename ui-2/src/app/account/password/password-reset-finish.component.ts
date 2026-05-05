@@ -1,14 +1,21 @@
 import { PasswordService } from '../service/password.service'
-import { Component, OnInit, AfterViewInit, Renderer2, ElementRef } from '@angular/core'
+import { Component, OnInit, AfterViewInit, Renderer2, ElementRef, inject } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 
 @Component({
-    selector: 'app-password-reset-finish',
-    templateUrl: './password-reset-finish.component.html',
-    standalone: false
+  selector: 'app-password-reset-finish',
+  templateUrl: './password-reset-finish.component.html',
+  standalone: false,
 })
 export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
+  private passwordService = inject(PasswordService)
+  private route = inject(ActivatedRoute)
+  private elementRef = inject(ElementRef)
+  private renderer = inject(Renderer2)
+  private fb = inject(FormBuilder)
+  private router = inject(Router)
+
   doNotMatch: string | undefined
   error: string | undefined
   success: string | undefined
@@ -23,15 +30,6 @@ export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
     newPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
     confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
   })
-
-  constructor(
-    private passwordService: PasswordService,
-    private route: ActivatedRoute,
-    private elementRef: ElementRef,
-    private renderer: Renderer2,
-    private fb: FormBuilder,
-    private router: Router
-  ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
