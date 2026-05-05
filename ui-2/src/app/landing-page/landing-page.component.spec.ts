@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { HttpClientModule } from '@angular/common/http'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { LandingPageComponent } from './landing-page.component'
 import { LandingPageService } from './landing-page.service'
 import { OrcidRecord } from '../shared/model/orcid-record.model'
@@ -18,24 +18,24 @@ describe('LandingPageComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [LandingPageComponent],
-      imports: [HttpClientModule],
-      providers: [
+    declarations: [LandingPageComponent],
+    imports: [],
+    providers: [
         {
-          provide: LandingPageService,
-          useValue: jasmine.createSpyObj('LandingPageService', [
-            'getOrcidConnectionRecord',
-            'getMemberInfo',
-            'getPublicKey',
-            'submitUserResponse',
-            'getUserInfo',
-            'submitUserResponse',
-            'getSalesforceId',
-          ]),
+            provide: LandingPageService,
+            useValue: jasmine.createSpyObj('LandingPageService', [
+                'getOrcidConnectionRecord',
+                'getMemberInfo',
+                'getPublicKey',
+                'submitUserResponse',
+                'getUserInfo',
+                'submitUserResponse',
+                'getSalesforceId',
+            ]),
         },
         {
-          provide: WindowLocationService,
-          useValue: jasmine.createSpyObj('WindowLocationService', ['updateWindowLocation', 'getWindowLocationHash']),
+            provide: WindowLocationService,
+            useValue: jasmine.createSpyObj('WindowLocationService', ['updateWindowLocation', 'getWindowLocationHash']),
         },
         {
           provide: ActivatedRoute,
@@ -48,8 +48,9 @@ describe('LandingPageComponent', () => {
             },
           },
         },
-      ],
-    })
+        provideHttpClient(withInterceptorsFromDi()),
+    ]
+})
     fixture = TestBed.createComponent(LandingPageComponent)
     component = fixture.componentInstance
     landingPageService = TestBed.inject(LandingPageService) as jasmine.SpyObj<LandingPageService>

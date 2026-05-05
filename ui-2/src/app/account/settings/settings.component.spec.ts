@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { SettingsComponent } from './settings.component'
 import { ReactiveFormsModule } from '@angular/forms'
-import { HttpClientModule, HttpResponse } from '@angular/common/http'
+import { HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { LanguageService } from 'src/app/shared/service/language.service'
 import { AccountService } from '../service/account.service'
 import { of } from 'rxjs'
@@ -31,14 +31,15 @@ describe('SettingsComponent', () => {
     ])
 
     TestBed.configureTestingModule({
-      declarations: [SettingsComponent, FindLanguageFromKeyPipe],
-      imports: [ReactiveFormsModule, HttpClientModule],
-      providers: [
+    declarations: [SettingsComponent, FindLanguageFromKeyPipe],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [ReactiveFormsModule],
+    providers: [
         { provide: LanguageService, useValue: languageServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents()
+        provideHttpClient(withInterceptorsFromDi()),
+    ]
+}).compileComponents()
 
     fixture = TestBed.createComponent(SettingsComponent)
     component = fixture.componentInstance

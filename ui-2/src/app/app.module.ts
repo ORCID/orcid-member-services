@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http'
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { AccountModule } from './account/account.module'
 import { NgxWebstorageModule } from 'ngx-webstorage'
 import { NavbarComponent } from './layout/navbar/navbar.component'
@@ -21,55 +21,49 @@ import { environment } from '../environments/environment'
 
 const origin = window.location.origin
 
-@NgModule({
-  declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent],
-  imports: [
-    BrowserModule,
-    HomeModule,
-    AccountModule,
-    HttpClientModule,
-    AppRoutingModule,
-    NgxWebstorageModule.forRoot(),
-    CommonModule,
-    FormsModule,
-    SharedModule.forRoot(),
-    AuthModule.forRoot({
-      config: {
-        authority: environment.issuerUrl,
-        redirectUrl: environment.redirectUri,
-        postLogoutRedirectUri: environment.postLogoutRedirectUri,
-        clientId: 'mp-ui-client',
-        scope: 'openid MP',
-        responseType: 'code',
-        silentRenew: true,
-        useRefreshToken: true,
-        logLevel: 1,
-        secureRoutes: ['/userservice', '/memberservice', '/assertionservice'],
-        autoUserInfo: false,
-      },
-    }),
-  ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HeaderInterceptor,
-      multi: true,
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthExpiredInterceptor,
-      multi: true,
-    },
-    {
-      provide: ErrorHandler,
-      useClass: ErrorService,
-    },
-  ],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        HomeModule,
+        AccountModule,
+        AppRoutingModule,
+        NgxWebstorageModule.forRoot(),
+        CommonModule,
+        FormsModule,
+        SharedModule.forRoot(),
+        AuthModule.forRoot({
+            config: {
+                authority: environment.issuerUrl,
+                redirectUrl: environment.redirectUri,
+                postLogoutRedirectUri: environment.postLogoutRedirectUri,
+                clientId: 'mp-ui-client',
+                scope: 'openid MP',
+                responseType: 'code',
+                silentRenew: true,
+                useRefreshToken: true,
+                logLevel: 1,
+                secureRoutes: ['/userservice', '/memberservice', '/assertionservice'],
+                autoUserInfo: false,
+            },
+        })], providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true,
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: HeaderInterceptor,
+            multi: true,
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthExpiredInterceptor,
+            multi: true,
+        },
+        {
+            provide: ErrorHandler,
+            useClass: ErrorService,
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule {}
