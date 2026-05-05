@@ -150,7 +150,7 @@ public class StoredFileService {
         }
 
         if (!deleted && file.exists()) {
-            LOG.error("Failed to delete file {}", file.getAbsolutePath());
+            LOG.error("Failed to delete EXISTING file {}", file.getAbsolutePath());
             return;
         }
 
