@@ -5,8 +5,9 @@ import { AppAlert } from './model/alert.model'
 import { AlertType } from 'src/app/app.constants'
 
 @Component({
-  selector: 'app-alert-toast',
-  templateUrl: './alert-toast.component.html',
+    selector: 'app-alert-toast',
+    templateUrl: './alert-toast.component.html',
+    standalone: false
 })
 export class AlertComponent implements OnInit {
   alerts: any[] = []

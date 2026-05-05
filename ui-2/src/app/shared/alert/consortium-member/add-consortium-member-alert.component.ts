@@ -5,9 +5,10 @@ import { AlertService } from '../../service/alert.service'
 import { AlertType } from 'src/app/app.constants'
 
 @Component({
-  selector: 'app-add-consortium-member-alert',
-  templateUrl: './add-consortium-member-alert.component.html',
-  styleUrls: ['../overlay-modal.scss'],
+    selector: 'app-add-consortium-member-alert',
+    templateUrl: './add-consortium-member-alert.component.html',
+    styleUrls: ['../overlay-modal.scss'],
+    standalone: false
 })
 export class AddConsortiumMemberAlertComponent {
   alerts: AppAlert[] | undefined

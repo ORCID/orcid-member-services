@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core'
 import { AlertMessage } from 'src/app/app.constants'
 
 @Pipe({
-  name: 'localize',
+    name: 'localize',
+    standalone: false
 })
 export class LocalizePipe implements PipeTransform {
   transform(value: string, ...args: any[]): any {

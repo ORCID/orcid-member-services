@@ -13,8 +13,9 @@ import { Event } from 'src/app/shared/model/event.model'
 import { faBan, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
-  selector: 'app-affiliation-delete-dialog',
-  templateUrl: './affiliation-delete.component.html',
+    selector: 'app-affiliation-delete-dialog',
+    templateUrl: './affiliation-delete.component.html',
+    standalone: false
 })
 export class AffiliationDeleteDialogComponent implements OnInit {
   inOrcid: string = AFFILIATION_STATUS.IN_ORCID
@@ -58,8 +59,9 @@ export class AffiliationDeleteDialogComponent implements OnInit {
 }
 
 @Component({
-  selector: 'app-affiliation-delete-popup',
-  template: '',
+    selector: 'app-affiliation-delete-popup',
+    template: '',
+    standalone: false
 })
 export class AffiliationDeletePopupComponent implements OnInit, OnDestroy {
   protected ngbModalRef: NgbModalRef | undefined

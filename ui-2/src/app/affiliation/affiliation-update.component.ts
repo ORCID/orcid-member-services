@@ -114,8 +114,9 @@ function isValidDate(y: string, m: string, d: string) {
 }
 
 @Component({
-  selector: 'app-affiliation-update',
-  templateUrl: './affiliation-update.component.html',
+    selector: 'app-affiliation-update',
+    templateUrl: './affiliation-update.component.html',
+    standalone: false
 })
 export class AffiliationUpdateComponent implements OnInit {
   AFFILIATION_TYPES = AFFILIATION_TYPES

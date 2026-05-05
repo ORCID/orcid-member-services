@@ -4,8 +4,9 @@ import { PasswordService } from '../service/password.service'
 import { AccountService } from '../service/account.service'
 
 @Component({
-  selector: 'app-password',
-  templateUrl: './password.component.html',
+    selector: 'app-password',
+    templateUrl: './password.component.html',
+    standalone: false
 })
 export class PasswordComponent implements OnInit {
   doNotMatch: string | undefined
