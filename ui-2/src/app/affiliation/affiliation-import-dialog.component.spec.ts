@@ -1,14 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { AffiliationImportDialogComponent } from './affiliation-import-dialog.component'
-import { AffiliationService } from './service/affiliation.service'
-import { EventService } from '../shared/service/event.service'
-import { FileUploadService } from '../shared/service/file-upload.service'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { FormBuilder } from '@angular/forms'
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { EMPTY, of } from 'rxjs'
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { EMPTY } from 'rxjs'
+import { EventService } from '../shared/service/event.service'
+import { FileUploadService } from '../shared/service/file-upload.service'
+import { AffiliationImportDialogComponent } from './affiliation-import-dialog.component'
 
 describe('AffiliationImportDialogComponent', () => {
   let component: AffiliationImportDialogComponent
@@ -60,7 +59,7 @@ describe('AffiliationImportDialogComponent', () => {
       1: file,
       length: 2,
       item: (index: number) => file,
-    }
+    } as unknown as FileList
     return fileList
   }
 })

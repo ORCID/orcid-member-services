@@ -3,7 +3,7 @@ import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
-import * as moment from 'moment';
+import moment from 'moment'
 import { EMPTY, of } from 'rxjs'
 import { AccountService } from 'src/app/account'
 import { HasAnyAuthorityDirective } from 'src/app/shared/directive/has-any-authority.directive'

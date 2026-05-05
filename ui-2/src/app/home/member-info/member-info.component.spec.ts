@@ -45,6 +45,7 @@ describe('MemberInfoComponent', () => {
     }
 
     accountServiceSpy.getAccountData.and.returnValue(of(mockAccount))
+    memberServiceSpy.getMemberData.and.returnValue(of(null))
 
     TestBed.configureTestingModule({
     declarations: [MemberInfoComponent],
