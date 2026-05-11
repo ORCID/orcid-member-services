@@ -29,6 +29,8 @@ application:
     maxConnTotal: 100
     maxConnPerRoute: 20
     connectionTimeToLive: 5
+    connectTimeout: 5
+    responseTimeout: 30
   mail:
     apiKey: some-key
     apiUrl: http://mail.com/api
