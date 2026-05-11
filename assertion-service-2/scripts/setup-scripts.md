@@ -29,6 +29,7 @@ ls /home/<username>/scripts
 ## 3. Copy Scripts Folder into Docker Container
 
 ``` bash
+docker exec -it <assertion-docker> mkdir -p /app
 docker cp /home/<username>/scripts <assertion-docker>:/app/scripts
 ```
 

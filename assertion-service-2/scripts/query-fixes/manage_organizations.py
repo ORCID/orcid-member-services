@@ -143,6 +143,8 @@ class UpdateOrganizationMember:
                 )
             logger.info("\n" + "="*80)
 
+            if self.force_update:
+                return source
             return target
 
         except OperationFailure as e:
@@ -525,7 +527,7 @@ class UpdateOrganizationsUser:
             logger.info(f"Found {len(users_source)} users to fix")
             owner_target = False
 
-            if self.merge or self.force_update:
+            if self.merge:
                 if users_source:
                     for user in users_source:
                         if user.get("main_contact"):
