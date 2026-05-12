@@ -15,7 +15,7 @@ public interface AssertionRepositoryCustom {
 
     List<MemberAssertionStatusCount> getMemberAssertionStatusCounts();
 
-    void updateStatusPendingToNotificationRequested(String salesforceId);
+    void updateStatusPendingOrNotificationFailedToNotificationRequested(String salesforceId);
 
     Iterator<String> findDistinctEmailsWithNotificationRequested(String salesforceId);
 }

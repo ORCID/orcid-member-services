@@ -216,6 +216,16 @@ public class OrcidApiClient {
         return writer.toString();
     }
 
+    private String marshalNotificationPermission(NotificationPermission notificationPermission) throws JAXBException {
+        JAXBContext context = JAXBContext.newInstance(NotificationPermission.class);
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
+
+        StringWriter writer = new StringWriter();
+        marshaller.marshal(notificationPermission, writer);
+        return writer.toString();
+    }
+
     public String postNotification(NotificationPermission notificationPermission, String orcidId) throws JAXBException {
         return useInternalAccessToken(() -> {
             return postNotificationPermission(notificationPermission, orcidId);
@@ -320,16 +330,12 @@ public class OrcidApiClient {
         LOG.debug("Posting notification permission for {}. Payload: {}", orcidId, notificationPermission);
 
         try {
-            JAXBContext context = JAXBContext.newInstance(NotificationPermission.class);
-            Marshaller marshaller = context.createMarshaller();
-            StringWriter writer = new StringWriter();
-            marshaller.marshal(notificationPermission, writer);
-            String xmlPayload = writer.toString();
+            String xmlPayload = marshalNotificationPermission(notificationPermission);
 
             try {
                 ResponseEntity<String> response = restClient.post().uri(apiUrl + orcidId + "/notification-permission")
                         .header("Authorization", "Bearer " + internalAccessToken.get())
-                        .contentType(MediaType.APPLICATION_XML)
+                        .contentType(new MediaType("application", "xml", StandardCharsets.UTF_8))
                         .body(xmlPayload).retrieve().toEntity(String.class);
 
                 LOG.debug("Post notification permission successful");

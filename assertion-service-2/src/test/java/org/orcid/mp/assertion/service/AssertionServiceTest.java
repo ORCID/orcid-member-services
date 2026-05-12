@@ -152,9 +152,9 @@ class AssertionServiceTest {
 
     @Test
     void testMarkPendingAssertionsAsNotificationRequested() {
-        Mockito.doNothing().when(assertionRepository).updateStatusPendingToNotificationRequested(Mockito.eq("salesforce"));
+        Mockito.doNothing().when(assertionRepository).updateStatusPendingOrNotificationFailedToNotificationRequested(Mockito.eq("salesforce"));
         assertionService.markPendingAssertionsAsNotificationRequested("salesforce");
-        Mockito.verify(assertionRepository).updateStatusPendingToNotificationRequested(Mockito.eq("salesforce"));
+        Mockito.verify(assertionRepository).updateStatusPendingOrNotificationFailedToNotificationRequested(Mockito.eq("salesforce"));
     }
 
     @Test

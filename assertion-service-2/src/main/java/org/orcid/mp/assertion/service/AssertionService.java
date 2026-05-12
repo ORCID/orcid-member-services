@@ -491,7 +491,7 @@ public class AssertionService {
     }
 
     public void markPendingAssertionsAsNotificationRequested(String salesforceId) {
-        assertionRepository.updateStatusPendingToNotificationRequested(salesforceId);
+        assertionRepository.updateStatusPendingOrNotificationFailedToNotificationRequested(salesforceId);
     }
 
     public void uploadAssertions(MultipartFile file) throws IOException {
