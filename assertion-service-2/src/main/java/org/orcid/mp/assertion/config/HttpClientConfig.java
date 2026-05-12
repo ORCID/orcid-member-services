@@ -1,10 +1,13 @@
 package org.orcid.mp.assertion.config;
 
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
+import org.apache.hc.client5.http.config.ConnectionConfig;
+import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.core5.util.TimeValue;
+import org.apache.hc.core5.util.Timeout;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +28,12 @@ public class HttpClientConfig {
 
     @Value("${application.httpclient.connectionTimeToLive}")
     private int connectionTimeToLive;
+
+    @Value("${application.httpclient.connectTimeout}")
+    private int connectTimeout;
+
+    @Value("${application.httpclient.responseTimeout}")
+    private int responseTimeout;
 
     @Value("${application.mail.apiKey}")
     private String mailApiKey;
@@ -80,12 +89,22 @@ public class HttpClientConfig {
         poolingConnManager.setMaxTotal(maxConnTotal);
         poolingConnManager.setDefaultMaxPerRoute(maxConnPerRoute);
         poolingConnManager.setValidateAfterInactivity(TimeValue.ofMilliseconds(1000));
+
+        ConnectionConfig connectionConfig = ConnectionConfig.custom()
+                .setConnectTimeout(Timeout.ofSeconds(connectTimeout))
+                .build();
+        poolingConnManager.setDefaultConnectionConfig(connectionConfig);
+
         return poolingConnManager;
     }
 
     @Bean
     public CloseableHttpClient getCloseableHttpClient(PoolingHttpClientConnectionManager poolingConnManager) {
-        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(poolingConnManager).evictExpiredConnections().evictIdleConnections(TimeValue.ofSeconds(connectionTimeToLive)).build();
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setResponseTimeout(Timeout.ofSeconds(responseTimeout))
+                .build();
+
+        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(poolingConnManager).setDefaultRequestConfig(requestConfig).evictExpiredConnections().evictIdleConnections(TimeValue.ofSeconds(connectionTimeToLive)).build();
         return httpClient;
     }
 
