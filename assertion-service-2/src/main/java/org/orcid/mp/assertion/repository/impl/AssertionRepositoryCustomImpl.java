@@ -1,8 +1,7 @@
 package org.orcid.mp.assertion.repository.impl;
 
-import java.util.Iterator;
-import java.util.List;
-
+import com.mongodb.client.DistinctIterable;
+import com.mongodb.client.model.Filters;
 import org.orcid.mp.assertion.domain.Assertion;
 import org.orcid.mp.assertion.domain.AssertionStatus;
 import org.orcid.mp.assertion.domain.MemberAssertionStatusCount;
@@ -10,22 +9,14 @@ import org.orcid.mp.assertion.repository.AssertionRepositoryCustom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.GroupOperation;
-import org.springframework.data.mongodb.core.aggregation.LimitOperation;
-import org.springframework.data.mongodb.core.aggregation.MatchOperation;
-import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
-import org.springframework.data.mongodb.core.aggregation.SkipOperation;
-import org.springframework.data.mongodb.core.aggregation.SortOperation;
+import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.mongodb.client.DistinctIterable;
-import com.mongodb.client.model.Filters;
-import org.springframework.util.Assert;
+import java.util.Iterator;
+import java.util.List;
 
 @Repository
 public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom {
@@ -39,9 +30,7 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
     @Override
     public List<Assertion> findAllToUpdateInOrcidRegistry(Pageable pageable) {
-        ProjectionOperation timeModifiedAfterSync = Aggregation.project("added_to_orcid", "updated_in_orcid", "modified", "created")
-                .andExpression("modified - added_to_orcid").as("timeModifiedAfterAddingToOrcid").andExpression("modified - updated_in_orcid")
-                .as("timeModifiedAfterUpdatingInOrcid");
+        ProjectionOperation timeModifiedAfterSync = Aggregation.project("added_to_orcid", "updated_in_orcid", "modified", "created").andExpression("modified - added_to_orcid").as("timeModifiedAfterAddingToOrcid").andExpression("modified - updated_in_orcid").as("timeModifiedAfterUpdatingInOrcid");
 
         Criteria addedToOrcidSet = new Criteria();
         addedToOrcidSet.andOperator(Criteria.where("added_to_orcid").exists(true), Criteria.where("added_to_orcid").ne(null));
@@ -83,8 +72,7 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
     @Override
     public List<MemberAssertionStatusCount> getMemberAssertionStatusCounts() {
         GroupOperation countByStatus = Aggregation.group("salesforce_id", "status").count().as("statusCount");
-        ProjectionOperation projection = Aggregation.project().andExpression("_id.salesforce_id").as("salesforceId").andExpression("status").as("status")
-                .andExpression("statusCount").as("statusCount");
+        ProjectionOperation projection = Aggregation.project().andExpression("_id.salesforce_id").as("salesforceId").andExpression("status").as("status").andExpression("statusCount").as("statusCount");
         Aggregation aggregation = Aggregation.newAggregation(countByStatus, projection);
         AggregationResults<MemberAssertionStatusCount> results = mongoTemplate.aggregate(aggregation, "assertion", MemberAssertionStatusCount.class);
         return results.getMappedResults();
@@ -107,9 +95,9 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
     }
 
     @Override
-    public void updateStatusPendingToNotificationRequested(String salesforceId) {
+    public void updateStatusPendingOrNotificationFailedToNotificationRequested(String salesforceId) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("salesforceId").is(salesforceId).and("status").is(AssertionStatus.PENDING.name()));
+        query.addCriteria(Criteria.where("salesforceId").is(salesforceId).and("status").in(AssertionStatus.PENDING.name(), AssertionStatus.NOTIFICATION_FAILED.name()));
         Update update = new Update();
         update.set("status", AssertionStatus.NOTIFICATION_REQUESTED.name());
         mongoTemplate.updateMulti(query, update, Assertion.class, "assertion");
@@ -117,8 +105,7 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
     @Override
     public Iterator<String> findDistinctEmailsWithNotificationRequested(String salesforceId) {
-        DistinctIterable<String> distinctIterable = mongoTemplate.getCollection("assertion").distinct("email",
-                Filters.and(Filters.eq("status", AssertionStatus.NOTIFICATION_REQUESTED.name()), Filters.eq("salesforce_id", salesforceId)), String.class);
+        DistinctIterable<String> distinctIterable = mongoTemplate.getCollection("assertion").distinct("email", Filters.and(Filters.eq("status", AssertionStatus.NOTIFICATION_REQUESTED.name()), Filters.eq("salesforce_id", salesforceId)), String.class);
         return distinctIterable.iterator();
     }
 
