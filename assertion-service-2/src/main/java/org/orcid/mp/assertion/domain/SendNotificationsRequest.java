@@ -21,6 +21,9 @@ public class SendNotificationsRequest implements Serializable {
     @Field("salesforce_id")
     private String salesforceId;
 
+    @Field("member_id")
+    private String memberId;
+
     @Field("date_requested")
     private Instant dateRequested;
 
@@ -71,6 +74,14 @@ public class SendNotificationsRequest implements Serializable {
 
     public void setSalesforceId(String salesforceId) {
         this.salesforceId = salesforceId;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public int getNotificationsSent() {

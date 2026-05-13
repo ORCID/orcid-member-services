@@ -72,9 +72,9 @@ class MemberServiceClientTest {
         String expectedResponse = "Success";
         when(responseSpec.toEntity(String.class)).thenReturn(new ResponseEntity<>(expectedResponse, HttpStatus.OK));
 
-        String result = memberServiceClient.updateMemberDefaultLanguage("salesforceId", "en");
+        String result = memberServiceClient.updateMemberDefaultLanguage("memberId", "en");
 
         assertThat(result).isEqualTo(expectedResponse);
-        verify(requestBodyUriSpec).uri("/members/salesforceId/language/en");
+        verify(requestBodyUriSpec).uri("/members/memberId/language/en");
     }
 }

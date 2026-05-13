@@ -12,7 +12,7 @@ public abstract class CsvDownloadWriter extends CsvWriter {
     @Autowired
     protected AssertionRepository assertionsRepository;
 
-    public abstract String writeCsv(String salesforceId) throws IOException;
+    public abstract String writeCsv(String memberId) throws IOException;
 
     protected String getDateString(String year, String month, String day) {
         if (!StringUtils.isBlank(year)) {

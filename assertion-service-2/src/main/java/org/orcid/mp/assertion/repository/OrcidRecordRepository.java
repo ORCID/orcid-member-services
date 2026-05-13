@@ -11,14 +11,14 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OrcidRecordRepository extends MongoRepository<OrcidRecord, String>, OrcidRecordRepositoryCustom {
+public interface OrcidRecordRepository extends MongoRepository<OrcidRecord, String> {
 
     Optional<OrcidRecord> findOneByEmail(String email);
 
-    @Query(value = "{tokens: {salesforce_id: ?0}}")
-    List<OrcidRecord> findAllToInvite(String salesforceId);
+    @Query(value = "{tokens: {member_id: ?0}}")
+    List<OrcidRecord> findAllToInvite(String memberId);
 
-    @Query("{tokens: {salesforce_id: ?0}}")
-    Page<OrcidRecord> findBySalesforceId(String salesforceId, Pageable pageable);
+    @Query("{tokens: {member_id: ?0}}")
+    Page<OrcidRecord> findByMemberId(String memberId, Pageable pageable);
 
 }

@@ -301,7 +301,7 @@ class AssertionsCsvReaderTest {
         user.setId("some-id");
         user.setLangKey(langKey);
         user.setEmail("something@orcid.org");
-        user.setSalesforceId("something");
+        user.setMemberId("something");
         return user;
     }
 }

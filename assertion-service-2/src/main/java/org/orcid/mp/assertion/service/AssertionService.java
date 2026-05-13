@@ -108,27 +108,27 @@ public class AssertionService {
         assertion.setCreated(now);
         assertion.setModified(now);
         assertion.setLastModifiedBy(owner.getEmail());
-        assertion.setSalesforceId(owner.getSalesforceId());
+        assertion.setMemberId(owner.getMemberId());
         assertion.setStatus(getAssertionStatus(assertion));
 
         String email = assertion.getEmail();
 
         Optional<OrcidRecord> optionalRecord = orcidRecordService.findByEmail(email);
         if (!optionalRecord.isPresent()) {
-            orcidRecordService.createOrcidRecord(email, now, assertion.getSalesforceId());
+            orcidRecordService.createOrcidRecord(email, now, assertion.getMemberId());
         } else {
             OrcidRecord record = optionalRecord.get();
-            if (record.getTokens() == null || record.getTokens().isEmpty() || !record.tokenExists(assertion.getSalesforceId())) {
+            if (record.getTokens() == null || record.getTokens().isEmpty() || !record.tokenExists(assertion.getMemberId())) {
                 if (record.getTokens() == null) {
                     record.setTokens(new ArrayList<>());
                 }
-                record.getTokens().add(new OrcidToken(assertion.getSalesforceId(), null));
+                record.getTokens().add(new OrcidToken(assertion.getMemberId(), null));
                 record.setModified(Instant.now());
                 orcidRecordService.updateOrcidRecord(record);
             } else {
                 AssertionStatus tokenDeniedStatus = checkForTokenDeniedStatus(optionalRecord, assertion);
                 if (tokenDeniedStatus == null) {
-                    String activeToken = record.getToken(assertion.getSalesforceId(), false);
+                    String activeToken = record.getToken(assertion.getMemberId(), false);
                     if (activeToken != null && !activeToken.isBlank()) {
                         if (StringUtils.isBlank(record.getOrcid())) {
                             LOG.warn("Setting empty orcid id '{}' in affiliation {} for email {} when creating assertion", record.getOrcid(), assertion.getId(), email);
@@ -149,7 +149,7 @@ public class AssertionService {
 
         Optional<Assertion> optional = assertionRepository.findById(assertion.getId());
         Assertion existingAssertion = optional.get();
-        if (!user.getSalesforceId().equals(existingAssertion.getSalesforceId())) {
+        if (!user.getMemberId().equals(existingAssertion.getMemberId())) {
             throw new BadRequestAlertException("Illegal assertion access");
         }
 
@@ -187,7 +187,7 @@ public class AssertionService {
 
         if (tokenAndOrcidIdAvailable(record, assertion) && deniedStatus == null) {
             OrcidRecord orcidRecord = record.get();
-            String idToken = orcidRecord.getToken(assertion.getSalesforceId(), false);
+            String idToken = orcidRecord.getToken(assertion.getMemberId(), false);
             String orcid = orcidRecord.getOrcid();
             Instant now = Instant.now();
             assertion.setLastSyncAttempt(now);
@@ -243,7 +243,7 @@ public class AssertionService {
         if (tokenAndOrcidIdAvailable(record, assertion) && !StringUtils.isBlank(assertion.getPutCode()) && deniedStatus == null) {
             OrcidRecord orcidRecord = record.get();
             String orcid = orcidRecord.getOrcid();
-            String idToken = orcidRecord.getToken(assertion.getSalesforceId(), false);
+            String idToken = orcidRecord.getToken(assertion.getMemberId(), false);
             Instant now = Instant.now();
             assertion.setLastSyncAttempt(now);
 
@@ -367,7 +367,7 @@ public class AssertionService {
                         created++;
                     } else {
                         Assertion existingAssertion = findById(a.getId());
-                        if (!user.getSalesforceId().equals(existingAssertion.getSalesforceId())) {
+                        if (!user.getMemberId().equals(existingAssertion.getMemberId())) {
                             throw new BadRequestAlertException("This affiliation doesn't belong to your organization");
                         }
                         updateAssertion(a, user);
@@ -428,13 +428,13 @@ public class AssertionService {
         copy.setExternalIdType(source.getExternalIdType());
         copy.setExternalIdUrl(source.getExternalIdUrl());
         copy.setUrl(source.getUrl());
-        copy.setSalesforceId(source.getSalesforceId());
+        copy.setMemberId(source.getMemberId());
         return copy;
     }
 
     public boolean isDuplicate(Assertion assertion) {
         Assertion normalized = assertionNormalizer.normalize(assertion);
-        List<Assertion> assertions = assertionRepository.findByEmailAndSalesforceId(assertion.getEmail(), assertion.getSalesforceId());
+        List<Assertion> assertions = assertionRepository.findByEmailAndMemberId(assertion.getEmail(), assertion.getMemberId());
         for (Assertion a : assertions) {
             if (AssertionUtils.duplicates(normalized, a)) {
                 return true;
@@ -445,8 +445,8 @@ public class AssertionService {
 
     public void deleteById(String id, User user) throws RegistryDeleteFailureException {
         Assertion assertion = findById(id);
-        String salesforceId = user.getSalesforceId();
-        checkAssertionAccess(assertion, salesforceId);
+        String memberId = user.getMemberId();
+        checkAssertionAccess(assertion, memberId);
 
         // don't bother trying to delete affiliations for deactivated / deprecated profiles in the registry
         if (!StringUtils.isEmpty(assertion.getPutCode()) && !AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name().equals(assertion.getStatus())) {
@@ -456,21 +456,21 @@ public class AssertionService {
 
         String email = assertion.getEmail();
         assertionRepository.deleteById(id);
-        if (assertionRepository.countByEmailAndSalesforceId(email, salesforceId) == 0) {
-            orcidRecordService.deleteOrcidRecordTokenByEmailAndSalesforceId(email, salesforceId);
+        if (assertionRepository.countByEmailAndMemberId(email, memberId) == 0) {
+            orcidRecordService.deleteOrcidRecordTokenByEmailAndMemberId(email, memberId);
         }
     }
 
-    public Page<Assertion> findByCurrentSalesforceId(Pageable pageable) {
-        return findBySalesforceId(getLoggedInUser().getSalesforceId(), pageable);
+    public Page<Assertion> findByCurrentMemberId(Pageable pageable) {
+        return findByMemberId(getLoggedInUser().getMemberId(), pageable);
     }
 
-    public Page<Assertion> findBySalesforceId(Pageable pageable, String filter) {
-        String salesforceId = getLoggedInUser().getSalesforceId();
+    public Page<Assertion> findByMemberId(Pageable pageable, String filter) {
+        String memberId = getLoggedInUser().getMemberId();
         Page<Assertion> assertions = assertionRepository
-                .findBySalesforceIdAndAffiliationSectionContainingIgnoreCaseOrSalesforceIdAndDepartmentNameContainingIgnoreCaseOrSalesforceIdAndOrgNameContainingIgnoreCaseOrSalesforceIdAndDisambiguatedOrgIdContainingIgnoreCaseOrSalesforceIdAndEmailContainingIgnoreCaseOrSalesforceIdAndOrcidIdContainingIgnoreCaseOrSalesforceIdAndRoleTitleContainingIgnoreCase(
-                        pageable, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter,
-                        salesforceId, filter);
+                .findByMemberIdAndAffiliationSectionContainingIgnoreCaseOrMemberIdAndDepartmentNameContainingIgnoreCaseOrMemberIdAndOrgNameContainingIgnoreCaseOrMemberIdAndDisambiguatedOrgIdContainingIgnoreCaseOrMemberIdAndEmailContainingIgnoreCaseOrMemberIdAndOrcidIdContainingIgnoreCaseOrMemberIdAndRoleTitleContainingIgnoreCase(
+                        pageable, memberId, filter, memberId, filter, memberId, filter, memberId, filter, memberId, filter, memberId, filter,
+                        memberId, filter);
         setPrettyStatus(assertions);
         return assertions;
     }
@@ -490,8 +490,8 @@ public class AssertionService {
         csvReportService.storeCsvReportRequest(getLoggedInUser().getId(), filename, CsvReport.PERMISSION_LINKS_TYPE);
     }
 
-    public void markPendingAssertionsAsNotificationRequested(String salesforceId) {
-        assertionRepository.updateStatusPendingOrNotificationFailedToNotificationRequested(salesforceId);
+    public void markPendingAssertionsAsNotificationRequested(String memberId) {
+        assertionRepository.updateStatusPendingOrNotificationFailedToNotificationRequested(memberId);
     }
 
     public void uploadAssertions(MultipartFile file) throws IOException {
@@ -499,14 +499,14 @@ public class AssertionService {
         storedFileService.storeAssertionsCsvFile(file.getInputStream(), file.getOriginalFilename(), user);
     }
 
-    public void updateOrcidIdsForEmailAndSalesforceId(String email, String salesforceId) {
+    public void updateOrcidIdsForEmailAndMemberId(String email, String memberId) {
         Optional<OrcidRecord> record = orcidRecordService.findByEmail(email);
         if (record.isEmpty()) {
             throw new IllegalArgumentException("Can't find orcid record for email " + email);
         }
         final String orcid = record.get().getOrcid();
         List<Assertion> assertions = assertionRepository.findAllByEmail(email);
-        assertions.stream().filter(a -> a.getOrcidId() == null && salesforceId.equals(a.getSalesforceId())).forEach(a -> {
+        assertions.stream().filter(a -> a.getOrcidId() == null && memberId.equals(a.getMemberId())).forEach(a -> {
             if (StringUtils.isBlank(orcid)) {
                 LOG.warn("Setting empty orcid id '{}' in affiliation {} for email {} after granting permission", orcid, a.getId(), email);
             }
@@ -528,7 +528,7 @@ public class AssertionService {
                 && assertion.getLastModifiedBy() == null && assertion.getModified() == null && assertion.getOrcidError() == null && assertion.getOrcidId() == null
                 && assertion.getOrgCity() == null && assertion.getOrgCity() == null && assertion.getOrgCountry() == null && assertion.getOrgName() == null
                 && assertion.getOrgRegion() == null && assertion.getOwnerId() == null && assertion.getPutCode() == null && assertion.getRoleTitle() == null
-                && assertion.getSalesforceId() == null && assertion.getStartDay() == null && assertion.getStartMonth() == null && assertion.getStartYear() == null;
+                && assertion.getMemberId() == null && assertion.getStartDay() == null && assertion.getStartMonth() == null && assertion.getStartYear() == null;
     }
 
     private Pageable getPageableForRegistrySync() {
@@ -537,10 +537,10 @@ public class AssertionService {
 
     private AssertionStatus checkForTokenDeniedStatus(Optional<OrcidRecord> orcidRecord, Assertion assertion) {
         if (orcidRecord.isPresent()) {
-            if (orcidRecord.get().getRevokedDate(assertion.getSalesforceId()) != null) {
+            if (orcidRecord.get().getRevokedDate(assertion.getMemberId()) != null) {
                 return AssertionStatus.USER_REVOKED_ACCESS;
             }
-            if (orcidRecord.get().getDeniedDate(assertion.getSalesforceId()) != null) {
+            if (orcidRecord.get().getDeniedDate(assertion.getMemberId()) != null) {
                 return AssertionStatus.USER_DENIED_ACCESS;
             }
         }
@@ -552,7 +552,7 @@ public class AssertionService {
             return false;
         }
 
-        String idToken = record.get().getToken(assertion.getSalesforceId(), false);
+        String idToken = record.get().getToken(assertion.getMemberId(), false);
         String orcid = record.get().getOrcid();
 
         if (StringUtils.isBlank(orcid)) {
@@ -562,8 +562,8 @@ public class AssertionService {
         return !StringUtils.isBlank(idToken);
     }
 
-    private void checkAssertionAccess(Assertion assertion, String salesforceId) {
-        if (!salesforceId.equals(assertion.getSalesforceId())) {
+    private void checkAssertionAccess(Assertion assertion, String memberId) {
+        if (!memberId.equals(assertion.getMemberId())) {
             throw new BadRequestAlertException("This affiliations doesnt belong to your organization");
         }
     }
@@ -611,7 +611,7 @@ public class AssertionService {
 
         if (StringUtils.equals(assertion.getStatus(), AssertionStatus.USER_REVOKED_ACCESS.name())) {
             LOG.info("Assertion status set to USER_REVOKED_ACCESS, updating id token accordingly");
-            orcidRecordService.revokeIdToken(assertion.getEmail(), assertion.getSalesforceId());
+            orcidRecordService.revokeIdToken(assertion.getEmail(), assertion.getMemberId());
         }
         assertionRepository.save(assertion);
     }
@@ -663,22 +663,22 @@ public class AssertionService {
     private Map<String, MemberAssertionStats> getMemberAssertionStats(List<MemberAssertionStatusCount> counts) {
         Map<String, MemberAssertionStats> stats = new HashMap<>();
         for (MemberAssertionStatusCount count : counts) {
-            if (!stats.containsKey(count.getSalesforceId())) {
+            if (!stats.containsKey(count.getMemberId())) {
                 MemberAssertionStats memberStats = new MemberAssertionStats();
-                memberStats.setMemberName(getMemberNameWithInternalScope(count.getSalesforceId()));
-                stats.put(count.getSalesforceId(), memberStats);
+                memberStats.setMemberName(getMemberNameWithInternalScope(count.getMemberId()));
+                stats.put(count.getMemberId(), memberStats);
             }
-            stats.get(count.getSalesforceId()).setStatusCount(count.getStatus(), count.getStatusCount());
+            stats.get(count.getMemberId()).setStatusCount(count.getStatus(), count.getStatusCount());
         }
         return stats;
     }
 
-    private String getMemberNameWithInternalScope(String salesforceId) {
-        Member member = internalMemberServiceClient.getMember(salesforceId);
+    private String getMemberNameWithInternalScope(String memberId) {
+        Member member = internalMemberServiceClient.getMember(memberId);
         if (member != null) {
             return member.getClientName();
         }
-        throw new RuntimeException("Member with salesforce id " + salesforceId + " not found");
+        throw new RuntimeException("Member with member id " + memberId + " not found");
     }
 
     private void setPrettyStatus(Assertion assertion) {
@@ -726,7 +726,7 @@ public class AssertionService {
 
         try {
             LOG.info("Exchanging id token for {}", orcidId);
-            String accessToken = orcidApiClient.exchangeToken(record.get().getToken(assertion.getSalesforceId(), true), orcidId);
+            String accessToken = orcidApiClient.exchangeToken(record.get().getToken(assertion.getMemberId(), true), orcidId);
             pauseForTokenPropagation();
             orcidApiClient.deleteAffiliation(orcidId, accessToken, assertion);
         } catch (DeactivatedException | DeprecatedException e) {
@@ -752,7 +752,7 @@ public class AssertionService {
         } else if (StringUtils.isBlank(record.get().getOrcid())) {
             LOG.info("Orcid ID not available for {}", assertion.getEmail());
             error = "ORCID iD not available";
-        } else if (record.get().getTokens() == null || record.get().getToken(assertion.getSalesforceId(), true) == null) {
+        } else if (record.get().getTokens() == null || record.get().getToken(assertion.getMemberId(), true) == null) {
             LOG.info("Token not available for {}", assertion.getEmail());
             error = "Token not available";
         }
@@ -770,8 +770,8 @@ public class AssertionService {
         return userServiceClient.getUser(userLogin);
     }
 
-    private Page<Assertion> findBySalesforceId(String salesforceId, Pageable pageable) {
-        Page<Assertion> assertions = assertionRepository.findBySalesforceId(salesforceId, pageable);
+    private Page<Assertion> findByMemberId(String memberId, Pageable pageable) {
+        Page<Assertion> assertions = assertionRepository.findByMemberId(memberId, pageable);
         setPrettyStatus(assertions);
         return assertions;
     }

@@ -20,8 +20,8 @@ public class AssertionsForEditCsvWriter extends CsvDownloadWriter {
             "external-id-url", "url", "id"};
 
     @Override
-    public String writeCsv(String salesforceId) throws IOException {
-        List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesforceId, this.SORT);
+    public String writeCsv(String memberId) throws IOException {
+        List<Assertion> assertions = assertionsRepository.findByMemberId(memberId, this.SORT);
         return super.writeCsv(HEADERS, getRows(assertions));
     }
 

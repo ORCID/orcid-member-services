@@ -27,19 +27,19 @@ public class PermissionLinksCsvWriter extends CsvDownloadWriter {
     private String landingPageUrl;
 
     @Override
-    public String writeCsv(String salesforceId) throws IOException {
-        return super.writeCsv(HEADERS, getRows(salesforceId));
+    public String writeCsv(String memberId) throws IOException {
+        return super.writeCsv(HEADERS, getRows(memberId));
     }
 
-    private List<List<String>> getRows(String salesforceId) {
+    private List<List<String>> getRows(String memberId) {
         List<List<String>> rows = new ArrayList<>();
-        List<OrcidRecord> records = orcidRecordService.getRecordsWithoutTokens(salesforceId);
+        List<OrcidRecord> records = orcidRecordService.getRecordsWithoutTokens(memberId);
 
         for (OrcidRecord record : records) {
             String email = record.getEmail();
-            long count = assertionsRepository.countByEmailAndSalesforceId(email, salesforceId);
+            long count = assertionsRepository.countByEmailAndMemberId(email, memberId);
             if (count > 0) {
-                String encrypted = encryptUtil.encrypt(salesforceId + "&&" + email);
+                String encrypted = encryptUtil.encrypt(memberId + "&&" + email);
                 String link = landingPageUrl + "?state=" + encrypted;
 
                 List<String> row = new ArrayList<>();
