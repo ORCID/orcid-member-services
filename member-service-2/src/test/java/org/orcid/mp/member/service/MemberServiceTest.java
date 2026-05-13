@@ -69,6 +69,10 @@ class MemberServiceTest {
         MockitoAnnotations.initMocks(this);
         SecurityContextHolder.setContext(new MockSecurityContext("me"));
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(memberRepository.findById(Mockito.eq("memberId"))).thenReturn(Optional.of(getMember()));
+        Mockito.when(memberRepository.findById(Mockito.eq("parentMemberId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
+        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("parentSalesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
     }
 
     @Test
@@ -164,12 +168,11 @@ class MemberServiceTest {
             }
         });
         Member member = getMember();
-        member.setId("id");
         member.setClientName("a new member name");
         memberService.updateMember(member);
 
         // check assertion and user changes rolled back
-        Mockito.verify(userService, Mockito.times(1)).updateUsersMemberNames(Mockito.eq("two"), Mockito.eq("a new member name"));
+        Mockito.verify(userService, Mockito.times(1)).updateUsersMemberNames(Mockito.eq("memberId"), Mockito.eq("a new member name"));
         Mockito.verify(memberRepository, Mockito.times(1)).save(memberCaptor.capture());
 
         Member saved = memberCaptor.getValue();
@@ -261,16 +264,6 @@ class MemberServiceTest {
         Assertions.assertThrows(BadRequestAlertException.class, () -> {
             memberService.updateMember(member);
         });
-    }
-
-    @Test
-    void testMemberExists() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(User.class))).thenReturn(getValidValidation());
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.of(getMember()));
-        assertTrue(memberService.memberExists("anything"));
-
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.empty());
-        assertFalse(memberService.memberExists("anything"));
     }
 
     @Test
@@ -527,7 +520,6 @@ class MemberServiceTest {
     void testUpdatePublicMemberDetails_forConsortiumMemberByConsortiumLead() throws IOException, UnauthorizedMemberAccessException {
         Mockito.when(userService.getLoggedInUser()).thenReturn(getCLUser());
         Mockito.when(salesforceClient.updatePublicMemberDetails(Mockito.any(MemberUpdateData.class))).thenReturn(Boolean.TRUE);
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
 
         MemberUpdateData memberUpdateData = getPublicMemberDetails();
         memberService.updateMemberData(memberUpdateData, "salesforceId");
@@ -559,8 +551,7 @@ class MemberServiceTest {
     @Test
     void testUpdateMemberDefaultLanguage() throws UnauthorizedMemberAccessException {
         Member member = getMember();
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(member));
-        memberService.updateMemberDefaultLanguage("salesforceId", "en");
+        memberService.updateMemberDefaultLanguage("memberId", "en");
         Mockito.verify(memberRepository).save(memberCaptor.capture());
         Member captured = memberCaptor.getValue();
         assertThat(captured.getAssertionServiceEnabled()).isEqualTo(member.getAssertionServiceEnabled());
@@ -738,8 +729,7 @@ class MemberServiceTest {
     @Test
     void testAddConsortiumMember() {
         Mockito.doNothing().when(mailService).sendAddConsortiumMemberEmail(Mockito.any(AddConsortiumMember.class));
-        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getCLUser());
 
         AddConsortiumMember addConsortiumMember = new AddConsortiumMember();
         addConsortiumMember.setOrgName("new org name");
@@ -748,7 +738,7 @@ class MemberServiceTest {
 
         Mockito.verify(mailService).sendAddConsortiumMemberEmail(Mockito.any(AddConsortiumMember.class));
         Mockito.verify(userService).getLoggedInUser();
-        Mockito.verify(memberRepository).findBySalesforceId(Mockito.eq("salesforceId"));
+        Mockito.verify(memberRepository).findById(Mockito.eq("parentMemberId"));
     }
 
     @Test
@@ -768,8 +758,7 @@ class MemberServiceTest {
     @Test
     void testRemoveConsortiumMember() {
         Mockito.doNothing().when(mailService).sendRemoveConsortiumMemberEmail(Mockito.any(RemoveConsortiumMember.class));
-        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        Mockito.when(userService.getLoggedInUser()).thenReturn(getCLUser());
 
         RemoveConsortiumMember removeConsortiumMember = new RemoveConsortiumMember();
         removeConsortiumMember.setOrgName("old org name");
@@ -778,7 +767,7 @@ class MemberServiceTest {
 
         Mockito.verify(mailService).sendRemoveConsortiumMemberEmail(Mockito.any(RemoveConsortiumMember.class));
         Mockito.verify(userService).getLoggedInUser();
-        Mockito.verify(memberRepository).findBySalesforceId(Mockito.eq("salesforceId"));
+        Mockito.verify(memberRepository).findById(Mockito.eq("parentMemberId"));
     }
 
     @Test
@@ -951,7 +940,7 @@ class MemberServiceTest {
         User user = new User();
         user.setEmail("logged-in-user@orcid.org");
         user.setLangKey("en");
-        user.setSalesforceId("salesforceId");
+        user.setMemberId("memberId");
         user.setMemberName("member");
         return user;
     }
@@ -960,7 +949,7 @@ class MemberServiceTest {
         User user = new User();
         user.setEmail("logged-in-user@orcid.org");
         user.setLangKey("en");
-        user.setSalesforceId("parentSalesforceId");
+        user.setMemberId("parentMemberId");
         user.setMemberName("member");
         return user;
     }
@@ -971,8 +960,9 @@ class MemberServiceTest {
         member.setClientId("XXXX-XXXX-XXXX-XXXX");
         member.setClientName("clientname");
         member.setIsConsortiumLead(false);
-        member.setSalesforceId("two");
+        member.setSalesforceId("salesforceId");
         member.setParentSalesforceId("parentSalesforceId");
+        member.setId("memberId");
         return member;
     }
 
@@ -982,7 +972,8 @@ class MemberServiceTest {
         member.setClientId("XXXX-XXXX-XXXX-XXXX");
         member.setClientName("clientname");
         member.setIsConsortiumLead(true);
-        member.setSalesforceId("two");
+        member.setSalesforceId("parentSalesforceId");
+        member.setId("parentMemberId");;
         return member;
     }
 

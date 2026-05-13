@@ -126,7 +126,7 @@ public class MemberResource {
      * {@code POST  /members/:id/language/:language } : Updates an existing member's
      * default language.
      *
-     * @param salesforceId - the salesforceId of the member to update
+     * @param memberId - the id of the member to update
      * @param language     - the language of the member to update
      * @return the {@link ResponseEntity} with status {@code 200 (OK)},
      *         or with status {@code 400 (Bad Request)}
@@ -134,12 +134,12 @@ public class MemberResource {
      *         {@code 500 (Internal Server Error)} if the member couldn't be
      *         updated.
      */
-    @PostMapping("/{salesforceId}/language/{language}")
-    public ResponseEntity<Void> updateMemberDefaultLanguage(@PathVariable String salesforceId,
+    @PostMapping("/{memberId}/language/{language}")
+    public ResponseEntity<Void> updateMemberDefaultLanguage(@PathVariable String memberId,
             @PathVariable String language) {
-        LOG.info("REST request to update default language for member : {}", salesforceId);
+        LOG.info("REST request to update default language for member : {}", memberId);
         try {
-            memberService.updateMemberDefaultLanguage(salesforceId, language);
+            memberService.updateMemberDefaultLanguage(memberId, language);
         } catch (UnauthorizedMemberAccessException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -147,8 +147,8 @@ public class MemberResource {
     }
 
     /**
-     * {@code PUT /members/{salesforceId}/member-details} : update details of member
-     * specified by salesforceID
+     * {@code PUT /members/{memberId}/member-details} : update details of member
+     * specified by member ID
      *
      * @return the {@link MemberUpdateData}
      */

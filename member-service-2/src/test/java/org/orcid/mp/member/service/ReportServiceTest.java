@@ -15,7 +15,6 @@ import org.orcid.mp.member.domain.Member;
 import org.orcid.mp.member.domain.User;
 import org.orcid.mp.member.error.BadRequestAlertException;
 import org.orcid.mp.member.report.ReportInfo;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.crypto.SecretKey;
@@ -75,7 +74,7 @@ public class ReportServiceTest {
     @SuppressWarnings("unchecked")
     public void testGetMemberReportInfo() {
         Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        Mockito.when(mockMemberService.getMember(Mockito.eq("member-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
 
         ReportInfo reportInfo = reportService.getMemberReportInfo();
         assertThat(reportInfo).isNotNull();
@@ -104,7 +103,7 @@ public class ReportServiceTest {
     @Test
     public void testGetAffiliationReportInfo() {
         Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumMember()));
+        Mockito.when(mockMemberService.getMember(Mockito.eq("member-id"))).thenReturn(Optional.of(getConsortiumMember()));
 
         ReportInfo reportInfo = reportService.getAffiliationReportInfo();
         assertThat(reportInfo).isNotNull();
@@ -126,7 +125,7 @@ public class ReportServiceTest {
     @Test
     public void testGetIntegrationReportInfo() {
         Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        Mockito.when(mockMemberService.getMember(Mockito.eq("member-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
 
         ReportInfo reportInfo = reportService.getIntegrationReportInfo();
         assertThat(reportInfo).isNotNull();
@@ -149,7 +148,7 @@ public class ReportServiceTest {
     @Test
     public void testGetConsortiaReportInfo() {
         Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        Mockito.when(mockMemberService.getMember(Mockito.eq("member-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
 
         ReportInfo reportInfo = reportService.getConsortiaReportInfo();
         assertThat(reportInfo).isNotNull();
@@ -181,7 +180,7 @@ public class ReportServiceTest {
         assertThat((boolean) memberNameFilter.get(ReportService.HIDDEN_PARAM)).isTrue();
 
         Mockito.verify(mockUserService, Mockito.times(3)).getLoggedInUser();
-        Mockito.verify(mockMemberService).getMember(Mockito.eq("salesforce-id"));
+        Mockito.verify(mockMemberService).getMember(Mockito.eq("member-id"));
 
 
     }
@@ -190,7 +189,7 @@ public class ReportServiceTest {
     @Test
     public void testGetConsortiaMemberAffiliationsReportInfo() {
         Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(mockMemberService.getMember(Mockito.eq("salesforce-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        Mockito.when(mockMemberService.getMember(Mockito.eq("member-id"))).thenReturn(Optional.of(getConsortiumLeadMember()));
 
         ReportInfo reportInfo = reportService.getConsortiaMemberAffiliationsReportInfo();
         assertThat(reportInfo).isNotNull();
@@ -215,13 +214,13 @@ public class ReportServiceTest {
         assertThat(drillthrough.get(ReportService.FILTER_PARAM)).isNotNull();
 
         Mockito.verify(mockUserService, Mockito.times(2)).getLoggedInUser();
-        Mockito.verify(mockMemberService).getMember(Mockito.eq("salesforce-id"));
+        Mockito.verify(mockMemberService).getMember(Mockito.eq("member-id"));
     }
 
     @Test
     public void testGetConsortiumReportInfo_IllegalAccess_ConsortiaLeadFalse() {
         Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getOtherUser());
-        Mockito.when(mockMemberService.getMember(Mockito.eq("other-salesforce-id"))).thenReturn(Optional.of(getNonConsortiumLeadMember()));
+        Mockito.when(mockMemberService.getMember(Mockito.eq("other-member-id"))).thenReturn(Optional.of(getNonConsortiumLeadMember()));
 
         Assertions.assertThrows(BadRequestAlertException.class, () -> {
             reportService.getConsortiaReportInfo();
@@ -231,7 +230,7 @@ public class ReportServiceTest {
     @Test
     public void testGetConsortiumReportInfo_IllegalAccess_ConsortiaLeadNull() {
         Mockito.when(mockUserService.getLoggedInUser()).thenReturn(getThirdUser());
-        Mockito.when(mockMemberService.getMember(Mockito.eq("final-salesforce-id"))).thenReturn(Optional.of(getMemberWithNullConsortiumLead()));
+        Mockito.when(mockMemberService.getMember(Mockito.eq("final-member-id"))).thenReturn(Optional.of(getMemberWithNullConsortiumLead()));
 
         Assertions.assertThrows(BadRequestAlertException.class, () -> {
             reportService.getConsortiaReportInfo();
@@ -240,46 +239,46 @@ public class ReportServiceTest {
 
     private User getUser() {
         User user = new User();
-        user.setSalesforceId("salesforce-id");
+        user.setMemberId("member-id");
         return user;
     }
 
     private User getOtherUser() {
         User user = new User();
-        user.setSalesforceId("other-salesforce-id");
+        user.setMemberId("other-member-id");
         return user;
     }
 
     private User getThirdUser() {
         User user = new User();
-        user.setSalesforceId("final-salesforce-id");
+        user.setMemberId("final-member-id");
         return user;
     }
 
     private Member getMemberWithNullConsortiumLead() {
         Member member = new Member();
-        member.setSalesforceId("final-salesforce-id");
+        member.setId("final-member-id");
         member.setIsConsortiumLead(null);
         return member;
     }
 
     private Member getNonConsortiumLeadMember() {
         Member member = new Member();
-        member.setSalesforceId("other-salesforce-id");
+        member.setId("other-member-id");
         member.setIsConsortiumLead(false);
         return member;
     }
 
     private Member getConsortiumLeadMember() {
         Member member = new Member();
-        member.setSalesforceId("salesforce-id");
+        member.setId("member-id");
         member.setIsConsortiumLead(true);
         return member;
     }
 
     private Member getConsortiumMember() {
         Member member = new Member();
-        member.setSalesforceId("salesforce-id");
+        member.setId("member-id");
         member.setParentSalesforceId("parent");
         member.setIsConsortiumLead(false);
         return member;
