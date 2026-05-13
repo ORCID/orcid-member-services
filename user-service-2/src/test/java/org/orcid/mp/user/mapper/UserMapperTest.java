@@ -33,7 +33,7 @@ public class UserMapperTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        Mockito.when(memberServiceClient.getMember(eq("salesforce1"))).thenReturn(getMember());
+        Mockito.when(memberServiceClient.getMember(eq("member1"))).thenReturn(getMember());
         Mockito.when(authorityService.getAuthoritiesForUser(Mockito.any(User.class))).thenReturn(new HashSet<String>(Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER, AuthoritiesConstants.ORG_OWNER)));
     }
 
@@ -43,7 +43,7 @@ public class UserMapperTest {
         assertThat(user.getFirstName()).isEqualTo("hello");
         assertThat(user.getLastName()).isEqualTo("orcid");
         assertThat(user.getEmail()).isEqualTo("hello@orcid.org");
-        assertThat(user.getSalesforceId()).isEqualTo("salesforce1");
+        assertThat(user.getMemberId()).isEqualTo("member1");
         assertThat(user.getMemberName()).isEqualTo("member 1");
         assertThat(user.getImageUrl()).isEqualTo("http://placehold.it/50x50");
         assertThat(user.getLangKey()).isEqualTo("en");
@@ -56,7 +56,7 @@ public class UserMapperTest {
         assertThat(user.getFirstName()).isEqualTo("first name");
         assertThat(user.getLastName()).isEqualTo("last name");
         assertThat(user.getEmail()).isEqualTo("some@email.com");
-        assertThat(user.getSalesforceId()).isEqualTo("salesforce2");
+        assertThat(user.getMemberId()).isEqualTo("member2");
         assertThat(user.getMemberName()).isEqualTo("member 2");
         assertThat(user.getImageUrl()).isEqualTo("http://placehold.it/50x50");
         assertThat(user.getLangKey()).isEqualTo("en");
@@ -73,7 +73,7 @@ public class UserMapperTest {
         userDTO.setEmail("hello@orcid.org");
         userDTO.setFirstName("hello");
         userDTO.setLastName("orcid");
-        userDTO.setSalesforceId("salesforce1");
+        userDTO.setMemberId("member1");
         userDTO.setActivated(true);
         userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setLangKey("en");
@@ -89,7 +89,7 @@ public class UserMapperTest {
         user.setFirstName("first name");
         user.setLastName("last name");
         user.setEmail("some@email.com");
-        user.setSalesforceId("salesforce2");
+        user.setMemberId("member2");
         user.setActivated(true);
         user.setImageUrl("http://placehold.it/50x50");
         user.setLangKey("en");
@@ -104,7 +104,7 @@ public class UserMapperTest {
     private Member getMember() {
         Member member = new Member();
         member.setClientName("member 1");
-        member.setSalesforceId("salesforce1");
+        member.setMemberId("member1");
         return member;
     }
 

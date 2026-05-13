@@ -61,9 +61,9 @@ public class UserCsvReaderTest {
         assertEquals("Mendoza", userDTO2.getLastName());
         assertEquals("Palafox", userDTO3.getLastName());
 
-        assertEquals("sssalesforceid1", userDTO1.getSalesforceId());
-        assertEquals("salesforceid3", userDTO2.getSalesforceId());
-        assertEquals("salesforceid2", userDTO3.getSalesforceId());
+        assertEquals("ssmemberid1", userDTO1.getMemberId());
+        assertEquals("memberid3", userDTO2.getMemberId());
+        assertEquals("memberid2", userDTO3.getMemberId());
     }
 
     @Test
@@ -92,7 +92,7 @@ public class UserCsvReaderTest {
         user.setId("some-id");
         user.setLangKey(langKey);
         user.setEmail("something@orcid.org");
-        user.setSalesforceId("something");
+        user.setMemberId("something");
         user.setMemberName("some member name");
         return user;
     }
