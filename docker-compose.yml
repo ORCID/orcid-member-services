@@ -106,9 +106,10 @@ services:
     image: ${DOCKER_REG}/memberservice2:${TAG}
     ports:
       - "9010:9010"
+      - "5005:5005"
     environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+      
       # bridge so dynamic logging level can be passed in via docker compose (environment variable passed in my be declared in this file)
       - LOGGING_LEVEL_ORG_ORCID_MP=${APP_LOG_LEVEL:-INFO}
       - SPRING_DATA_MONGODB_URI=${MONGO_DB}
