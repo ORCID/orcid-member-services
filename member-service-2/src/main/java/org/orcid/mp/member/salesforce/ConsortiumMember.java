@@ -10,6 +10,16 @@ public class ConsortiumMember {
     @JsonProperty("Account")
     private Metadata metadata;
 
+    private String memberId;
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
+
     public String getSalesforceId() {
         return salesforceId;
     }

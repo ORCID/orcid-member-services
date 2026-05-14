@@ -205,9 +205,20 @@ public class MemberService {
         Member member = memberRepository.findBySalesforceId(salesforceId).orElseThrow();
         try {
             if (Boolean.TRUE.equals(member.getIsConsortiumLead())) {
-                return salesforceClient.getConsortiumLeadDetails(salesforceId);
+                ConsortiumLeadDetails clDetails = salesforceClient.getConsortiumLeadDetails(salesforceId);
+                clDetails.setMemberId(member.getId());
+                clDetails.getConsortiumMembers().forEach(salesforceConsortiumMember -> {
+                    Optional<Member> consortiumMember = memberRepository.findBySalesforceId(salesforceConsortiumMember.getSalesforceId());
+                    if (consortiumMember.isEmpty()) {
+                        throw new RuntimeException("Consortium member " + salesforceConsortiumMember.getSalesforceId() + " does not exist in the database");
+                    }
+                    salesforceConsortiumMember.setMemberId(consortiumMember.get().getId());
+                });
+                return clDetails;
             } else {
-                return salesforceClient.getMemberDetails(salesforceId);
+                MemberDetails details = salesforceClient.getMemberDetails(salesforceId);
+                details.setMemberId(member.getId());
+                return details;
             }
         } catch (IOException e) {
             LOG.error("Error fetching member details from salesforce client", e);
