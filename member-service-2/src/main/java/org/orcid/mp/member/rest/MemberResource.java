@@ -10,7 +10,6 @@ import org.orcid.mp.member.pojo.AddConsortiumMember;
 import org.orcid.mp.member.pojo.MemberContactUpdate;
 import org.orcid.mp.member.pojo.MemberContactUpdateResponse;
 import org.orcid.mp.member.pojo.RemoveConsortiumMember;
-import org.orcid.mp.member.security.SecurityUtils;
 import org.orcid.mp.member.validation.MemberValidation;
 import org.orcid.mp.member.salesforce.*;
 import org.orcid.mp.member.service.MemberService;
@@ -152,10 +151,12 @@ public class MemberResource {
      *
      * @return the {@link MemberUpdateData}
      */
-    @PutMapping("/{salesforceId}/member-details")
+    @PutMapping("/{memberId}/member-details")
     public ResponseEntity<Boolean> updatePublicMemberDetails(@RequestBody MemberUpdateData memberUpdateData,
-            @PathVariable String salesforceId) {
+            @PathVariable String memberId) {
+        String salesforceId = getSalesforceId(memberId);
         LOG.info("REST request to update member public details for salesforce id {}", salesforceId);
+
         if (!memberDetailsUpdateValid(memberUpdateData)) {
             return ResponseEntity.badRequest().build();
         }
@@ -168,13 +169,14 @@ public class MemberResource {
     }
 
     /**
-     * {@code GET /members/{salesforceId}/member-details} : get details of member
+     * {@code GET /members/{memberId}/member-details} : get details of member
      * specified by salesforceId param
      *
      * @return the {@link MemberDetails}
      */
-    @GetMapping("/{salesforceId}/member-details")
-    public ResponseEntity<MemberDetails> getMemberDetails(@PathVariable String salesforceId) {
+    @GetMapping("/{memberId}/member-details")
+    public ResponseEntity<MemberDetails> getMemberDetails(@PathVariable String memberId) {
+        String salesforceId = getSalesforceId(memberId);
         LOG.debug("REST request to get member details");
         try {
             MemberDetails memberDetails = memberService.getMemberDetails(salesforceId);
@@ -193,13 +195,14 @@ public class MemberResource {
     }
 
     /**
-     * {@code GET /members/{salesforceId}/member-contacts} : get contacts of member
+     * {@code GET /members/{memberId}/member-contacts} : get contacts of member
      * specified by salesforceId param
      *
      * @return the {@link MemberDetails}
      */
-    @GetMapping("/{salesforceId}/member-contacts")
-    public ResponseEntity<MemberContacts> getMemberContacts(@PathVariable String salesforceId) {
+    @GetMapping("/{memberId}/member-contacts")
+    public ResponseEntity<MemberContacts> getMemberContacts(@PathVariable String memberId) {
+        String salesforceId = getSalesforceId(memberId);
         LOG.debug("REST request to get member contacts for member {}", salesforceId);
         try {
             MemberContacts memberContacts = memberService.getCurrentMemberContacts(salesforceId);
@@ -210,13 +213,14 @@ public class MemberResource {
     }
 
     /**
-     * {@code GET /members/{salesforceId}/member-org-ids} : get org ids of member
+     * {@code GET /members/{memberId}/member-org-ids} : get org ids of member
      * specified by salesforceId param
      *
      * @return the {@link MemberDetails}
      */
-    @GetMapping("/{salesforceId}/member-org-ids")
-    public ResponseEntity<MemberOrgIds> getMemberOrgIds(@PathVariable String salesforceId) {
+    @GetMapping("/{memberId}/member-org-ids")
+    public ResponseEntity<MemberOrgIds> getMemberOrgIds(@PathVariable String memberId) {
+        String salesforceId = getSalesforceId(memberId);
         LOG.debug("REST request to get member org ids for member {}", salesforceId);
         try {
             MemberOrgIds memberOrgIds = memberService.getCurrentMemberOrgIds(salesforceId);
@@ -305,10 +309,11 @@ public class MemberResource {
         return ResponseEntity.ok(member.get());
     }
 
-    @PostMapping("/{salesforceId}/contact-update")
+    @PostMapping("/{memberId}/contact-update")
     public ResponseEntity<MemberContactUpdateResponse> processMemberContactUpdate(
             @RequestBody MemberContactUpdate memberContactUpdate,
-            @PathVariable String salesforceId) {
+            @PathVariable String memberId) {
+        String salesforceId = getSalesforceId(memberId);
         LOG.debug("REST request to create new member contact update for member {}", salesforceId);
         try {
             memberService.processMemberContact(memberContactUpdate, salesforceId);
@@ -347,5 +352,13 @@ public class MemberResource {
             return false;
         }
         return true;
+    }
+
+    private String getSalesforceId(String memberId) {
+        Optional<Member> member = memberService.getMember(memberId);
+        if (member.isPresent() && member.get().getSalesforceId() != null) {
+            return member.get().getSalesforceId();
+        }
+        throw new BadRequestAlertException("Member not present or missing salesforce ID");
     }
 }
