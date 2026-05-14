@@ -23,9 +23,11 @@ export interface ISFMemberData {
   orgIds?: ISFMemberOrgIds
   billingAddress?: ISFAddress
   trademarkLicense?: string
+  memberId?: string
 }
 
 export interface ISFConsortiumMemberData {
+  memberId?: string
   orgName?: string
   salesforceId?: string
   metadata?: ISFConsortiumMemberMetadata

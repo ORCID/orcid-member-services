@@ -47,9 +47,9 @@ export class UserService {
     return this.http.get<boolean>(`${this.resourceUrl}/${salesforceId}/owner`)
   }
 
-  findBySalesForceId(salesforceId: string | null, req?: any): Observable<Page<User>> {
+  findByMemberId(memberId: string | null, req?: any): Observable<Page<User>> {
     const options = createRequestOption(req)
-    return this.http.get<Page<User>>(`${this.resourceUrl}/salesforce/${salesforceId}/p`, { params: options })
+    return this.http.get<Page<User>>(`${this.resourceUrl}/member/${memberId}/p`, { params: options })
   }
 
   query(req?: any): Observable<Page<User>> {

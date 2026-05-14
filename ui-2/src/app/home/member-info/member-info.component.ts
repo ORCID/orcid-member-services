@@ -61,7 +61,7 @@ export class MemberInfoComponent implements OnInit, OnDestroy {
               this.memberService.setManagedMember(params['id'])
               return this.memberService.getMemberData(this.managedMember)
             } else {
-              return this.memberService.getMemberData(account?.salesforceId)
+              return this.memberService.getMemberData(account?.memberId)
             }
           } else {
             return EMPTY
@@ -77,7 +77,7 @@ export class MemberInfoComponent implements OnInit, OnDestroy {
 
   stopManagingMember() {
     this.memberService.setManagedMember(null)
-    this.memberService.getMemberData(this.account?.salesforceId, true)
+    this.memberService.getMemberData(this.account?.memberId, true)
   }
 
   ngOnDestroy() {
