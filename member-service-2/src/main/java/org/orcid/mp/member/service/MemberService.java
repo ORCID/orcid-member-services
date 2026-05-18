@@ -12,10 +12,6 @@ import org.orcid.mp.member.client.SalesforceClient;
 import org.orcid.mp.member.domain.Member;
 import org.orcid.mp.member.domain.User;
 import org.orcid.mp.member.error.BadRequestAlertException;
-import org.orcid.mp.member.error.UnauthorizedMemberAccessException;
-import org.orcid.mp.member.pojo.AddConsortiumMember;
-import org.orcid.mp.member.pojo.MemberContactUpdate;
-import org.orcid.mp.member.pojo.RemoveConsortiumMember;
 import org.orcid.mp.member.repository.MemberRepository;
 import org.orcid.mp.member.validation.MemberValidation;
 import org.orcid.mp.member.validation.MemberValidator;
@@ -212,54 +208,7 @@ public class MemberService {
         }
     }
 
-    public MemberDetails getMemberDetails(String salesforceId) throws UnauthorizedMemberAccessException {
-        LOG.debug("Fetching salesforce data for {}...", salesforceId);
-        validateUserAccess(salesforceId);
-        Member member = memberRepository.findBySalesforceId(salesforceId).orElseThrow();
-        try {
-            if (Boolean.TRUE.equals(member.getIsConsortiumLead())) {
-                return salesforceClient.getConsortiumLeadDetails(salesforceId);
-            } else {
-                return salesforceClient.getMemberDetails(salesforceId);
-            }
-        } catch (IOException e) {
-            LOG.error("Error fetching member details from salesforce client", e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Boolean updateMemberData(MemberUpdateData memberUpdateData, String salesforceId) throws UnauthorizedMemberAccessException {
-        validateUserAccess(salesforceId);
-        memberUpdateData.setSalesforceId(salesforceId);
-        try {
-            return salesforceClient.updatePublicMemberDetails(memberUpdateData);
-        } catch (IOException e) {
-            LOG.error("Error updating member contacts", e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    public MemberContacts getCurrentMemberContacts(String salesforceId) throws UnauthorizedMemberAccessException {
-        validateUserAccess(salesforceId);
-        try {
-            return salesforceClient.getMemberContacts(salesforceId);
-        } catch (IOException e) {
-            LOG.error("Error fetching member contacts from salesforce client", e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    public MemberOrgIds getCurrentMemberOrgIds(String salesforceId) throws UnauthorizedMemberAccessException {
-        validateUserAccess(salesforceId);
-        try {
-            return salesforceClient.getMemberOrgIds(salesforceId);
-        } catch (IOException e) {
-            LOG.error("Error fetching member org ids from salesforce client", e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void updateMemberDefaultLanguage(String salesforceId, String language) throws UnauthorizedMemberAccessException {
+    public void updateMemberDefaultLanguage(String salesforceId, String language) {
         Optional<Member> optional = memberRepository.findBySalesforceId(salesforceId);
         if (optional.isPresent()) {
             Member member = optional.get();
@@ -270,80 +219,4 @@ public class MemberService {
         }
     }
 
-    public void processMemberContact(MemberContactUpdate memberContactUpdate, String salesforceId) throws UnauthorizedMemberAccessException {
-        validateUserAccess(salesforceId);
-        User user = userService.getLoggedInUser();
-        memberContactUpdate.setRequestedByEmail(user.getEmail());
-        memberContactUpdate.setRequestedByName(user.getFirstName() + " " + user.getLastName());
-        memberContactUpdate.setRequestedByMember(user.getMemberName());
-
-        if (memberContactUpdate.getContactEmail() == null) {
-            mailService.sendAddContactEmail(memberContactUpdate);
-        } else if (memberContactUpdate.getContactNewEmail() == null
-            && memberContactUpdate.getContactNewName() == null
-            && memberContactUpdate.getContactNewPhone() == null
-            && memberContactUpdate.getContactNewRoles() == null
-            && memberContactUpdate.getContactNewJobTitle() == null) {
-            // no new data, must be remove operation
-            mailService.sendRemoveContactEmail(memberContactUpdate);
-        } else {
-            mailService.sendUpdateContactEmail(memberContactUpdate);
-        }
-    }
-
-    public void requestNewConsortiumMember(AddConsortiumMember addConsortiumMember) {
-        User user = userService.getLoggedInUser();
-
-        Optional<Member> optionalMember = memberRepository.findBySalesforceId(user.getSalesforceId());
-        Member member = optionalMember.get();
-        if (!member.getIsConsortiumLead()) {
-            throw new RuntimeException("Requesting member is not a consortium lead");
-        }
-
-        addConsortiumMember.setRequestedByEmail(user.getEmail());
-        addConsortiumMember.setRequestedByName(user.getFirstName() + " " + user.getLastName());
-        addConsortiumMember.setConsortium(user.getMemberName());
-
-        mailService.sendAddConsortiumMemberEmail(addConsortiumMember);
-    }
-
-    public void requestRemoveConsortiumMember(RemoveConsortiumMember removeConsortiumMember) {
-        User user = userService.getLoggedInUser();
-
-        Optional<Member> optionalMember = memberRepository.findBySalesforceId(user.getSalesforceId());
-        Member member = optionalMember.get();
-        if (!member.getIsConsortiumLead()) {
-            throw new RuntimeException("Requesting member is not a consortium lead");
-        }
-
-        removeConsortiumMember.setRequestedByEmail(user.getEmail());
-        removeConsortiumMember.setRequestedByName(user.getFirstName() + " " + user.getLastName());
-        removeConsortiumMember.setConsortium(user.getMemberName());
-
-
-        mailService.sendRemoveConsortiumMemberEmail(removeConsortiumMember);
-    }
-
-    public List<Country> getSalesforceCountries() {
-        return salesforceClient.getSalesforceCountries();
-    }
-
-    /**
-     * validates whether current user can access member with specified salesforceId
-     *
-     * @param salesforceId
-     */
-    private void validateUserAccess(String salesforceId) throws UnauthorizedMemberAccessException {
-        User user = userService.getLoggedInUser();
-        if (!user.getSalesforceId().equals(salesforceId)) {
-            // user not accessing own member
-
-            Optional<Member> member = memberRepository.findBySalesforceId(salesforceId);
-            if (!user.getSalesforceId().equals(member.get().getParentSalesforceId())) {
-                // member not part of user's consortium
-                LOG.warn("Illegal attempt by user {} to access member {}", user.getEmail(), salesforceId);
-                throw new UnauthorizedMemberAccessException(user.getEmail(), salesforceId);
-            }
-        }
-    }
 }
