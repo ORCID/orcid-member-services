@@ -61,14 +61,14 @@ public class UserResourceIT {
     private static final String LOGGED_IN_LASTNAME = "in";
     private static final String UPDATED_LASTNAME = "jhipsterLastName";
 
-    private static final String DEFAULT_SALESFORCE_ID = "salesforceId";
+    private static final String DEFAULT_MEMBER_ID = "memberId";
     private static final String DEFAULT_MEMBER_NAME = "memberName";
-    private static final String LOGGED_IN_SALESFORCE_ID = "salesforceId";
+    private static final String LOGGED_IN_MEMBER_ID = "memberId";
     private static final String LOGGED_IN_MEMBER_NAME = "memberName";
-    private static final String UPDATED_SALESFORCE_ID = "anotherSalesforceId";
+    private static final String UPDATED_MEMBER_ID = "anotherMemberId";
     private static final String UPDATED_MEMBER_NAME = "anotherMemberName";
     private static final String ADMIN_MEMBER_NAME = "admin-member-name";
-    private static final String ADMIN_SALESFORCE_ID = "admin-member-id";
+    private static final String ADMIN_MEMBER_ID = "admin-member-id";
 
     private static final String DEFAULT_IMAGEURL = "http://placehold.it/50x50";
     private static final String UPDATED_IMAGEURL = "http://placehold.it/40x40";
@@ -78,7 +78,7 @@ public class UserResourceIT {
 
     private static final String MAIN_CONTACT_EMAIL = "main.contact@orcid.org";
 
-    private static final String MAIN_CONTACT_SALESFORCE_ID = "main-contact";
+    private static final String MAIN_CONTACT_MEMBER_ID = "main-contact";
 
     @Autowired
     private UserRepository userRepository;
@@ -124,9 +124,9 @@ public class UserResourceIT {
 
         // mock out calls to member service
         MemberServiceClient memberServiceClient = Mockito.mock(MemberServiceClient.class);
-        when(memberServiceClient.getMember(eq(DEFAULT_SALESFORCE_ID))).thenReturn(getDefaultMember());
-        when(memberServiceClient.getMember(eq(UPDATED_SALESFORCE_ID))).thenReturn(getUpdatedMember());
-        when(memberServiceClient.getMember(eq(ADMIN_SALESFORCE_ID))).thenReturn(getAdminMember());
+        when(memberServiceClient.getMember(eq(DEFAULT_MEMBER_ID))).thenReturn(getDefaultMember());
+        when(memberServiceClient.getMember(eq(UPDATED_MEMBER_ID))).thenReturn(getUpdatedMember());
+        when(memberServiceClient.getMember(eq(ADMIN_MEMBER_ID))).thenReturn(getAdminMember());
 
         ReflectionTestUtils.setField(userService, "memberServiceClient", memberServiceClient);
         ReflectionTestUtils.setField(userMapper, "memberServiceClient", memberServiceClient);
@@ -138,14 +138,14 @@ public class UserResourceIT {
     private Member getDefaultMember() {
         Member member = new Member();
         member.setClientName(DEFAULT_MEMBER_NAME);
-        member.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        member.setMemberId(DEFAULT_MEMBER_ID);
         return member;
     }
 
     private Member getAdminMember() {
         Member member = new Member();
         member.setClientName(ADMIN_MEMBER_NAME);
-        member.setSalesforceId(ADMIN_SALESFORCE_ID);
+        member.setMemberId(ADMIN_MEMBER_ID);
         member.setSuperadminEnabled(true);
         return member;
     }
@@ -153,7 +153,7 @@ public class UserResourceIT {
     private Member getUpdatedMember() {
         Member member = new Member();
         member.setClientName(UPDATED_MEMBER_NAME);
-        member.setSalesforceId(UPDATED_SALESFORCE_ID);
+        member.setMemberId(UPDATED_MEMBER_ID);
         return member;
     }
 
@@ -166,7 +166,7 @@ public class UserResourceIT {
         user.setLastName(LOGGED_IN_LASTNAME);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setSalesforceId(LOGGED_IN_SALESFORCE_ID);
+        user.setMemberId(LOGGED_IN_MEMBER_ID);
         user.setMemberName(LOGGED_IN_MEMBER_NAME);
         user.setMainContact(false);
         userRepository.save(user);
@@ -181,7 +181,7 @@ public class UserResourceIT {
         user.setLastName(LOGGED_IN_LASTNAME);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setSalesforceId(MAIN_CONTACT_SALESFORCE_ID);
+        user.setMemberId(MAIN_CONTACT_MEMBER_ID);
         user.setMemberName(LOGGED_IN_MEMBER_NAME);
         user.setMainContact(true);
         userRepository.save(user);
@@ -196,7 +196,7 @@ public class UserResourceIT {
         user.setLastName(DEFAULT_LASTNAME);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        user.setMemberId(DEFAULT_MEMBER_ID);
         user.setMainContact(false);
         return user;
     }
@@ -216,7 +216,7 @@ public class UserResourceIT {
         managedUser.setImageUrl(DEFAULT_IMAGEURL);
         managedUser.setLangKey(DEFAULT_LANGKEY);
         managedUser.setMainContact(false);
-        managedUser.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        managedUser.setMemberId(DEFAULT_MEMBER_ID);
         managedUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 
         restUserMockMvc.perform(post("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUser)))
@@ -231,7 +231,7 @@ public class UserResourceIT {
         assertThat(testUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
         assertThat(testUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         assertThat(testUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
-        assertThat(testUser.getSalesforceId()).isEqualTo(DEFAULT_SALESFORCE_ID);
+        assertThat(testUser.getMemberId()).isEqualTo(DEFAULT_MEMBER_ID);
         assertThat(testUser.getMemberName()).isEqualTo(DEFAULT_MEMBER_NAME);
     }
 
@@ -329,7 +329,7 @@ public class UserResourceIT {
         managedUser.setActivated(true);
         managedUser.setImageUrl(DEFAULT_IMAGEURL);
         managedUser.setLangKey(DEFAULT_LANGKEY);
-        managedUser.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        managedUser.setMemberId(DEFAULT_MEMBER_ID);
         managedUser.setMainContact(true);
         managedUser.setIsAdmin(true);
         managedUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
@@ -358,7 +358,7 @@ public class UserResourceIT {
         managedUser.setActivated(true);
         managedUser.setImageUrl(DEFAULT_IMAGEURL);
         managedUser.setLangKey(DEFAULT_LANGKEY);
-        managedUser.setSalesforceId(ADMIN_SALESFORCE_ID);
+        managedUser.setMemberId(ADMIN_MEMBER_ID);
         managedUser.setMainContact(true);
         managedUser.setIsAdmin(true);
         managedUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
@@ -431,7 +431,7 @@ public class UserResourceIT {
         managedUser.setLastModifiedBy(updatedUser.getLastModifiedBy());
         managedUser.setLastModifiedDate(updatedUser.getLastModifiedDate());
         managedUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-        managedUser.setSalesforceId(UPDATED_SALESFORCE_ID);
+        managedUser.setMemberId(UPDATED_MEMBER_ID);
 
         restUserMockMvc.perform(put("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUser)))
                 .andExpect(status().isOk());
@@ -445,70 +445,70 @@ public class UserResourceIT {
         assertThat(testUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
         assertThat(testUser.getImageUrl()).isEqualTo(UPDATED_IMAGEURL);
         assertThat(testUser.getLangKey()).isEqualTo(UPDATED_LANGKEY);
-        assertThat(testUser.getSalesforceId()).isEqualTo(UPDATED_SALESFORCE_ID);
+        assertThat(testUser.getMemberId()).isEqualTo(UPDATED_MEMBER_ID);
         assertThat(testUser.getMemberName()).isEqualTo(UPDATED_MEMBER_NAME);
     }
 
     @Test
     @WithMockUser(username = MAIN_CONTACT_EMAIL, authorities = {"ROLE_USER"}, password = LOGGED_IN_PASSWORD)
-    public void getUsersBySalesforceId() throws Exception {
-        saveTenUsersWithSalesforceId(MAIN_CONTACT_SALESFORCE_ID);
+    public void getUsersByMemberId() throws Exception {
+        saveTenUsersWithMemberId(MAIN_CONTACT_MEMBER_ID);
         userRepository.save(user);
 
         MvcResult result = restUserMockMvc
-                .perform(get("/users/salesforce/" + MAIN_CONTACT_SALESFORCE_ID + "/p").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
+                .perform(get("/users/member/" + MAIN_CONTACT_MEMBER_ID + "/p").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.content.length()").value(11)).andReturn();
 
         restUserMockMvc
-                .perform(get("/users/salesforce/incorrect-salesforce-id/p").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
+                .perform(get("/users/member/incorrect-member-id/p").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isBadRequest());
 
-        result = restUserMockMvc.perform(get("/users/salesforce/" + MAIN_CONTACT_SALESFORCE_ID + "/p").param("filter", "firstname").accept(RestTestUtil.APPLICATION_JSON_UTF8)
+        result = restUserMockMvc.perform(get("/users/member/" + MAIN_CONTACT_MEMBER_ID + "/p").param("filter", "firstname").accept(RestTestUtil.APPLICATION_JSON_UTF8)
                 .contentType(RestTestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andExpect(jsonPath("$.content.length()").value(10)).andReturn();
 
-        result = restUserMockMvc.perform(get("/users/salesforce/" + MAIN_CONTACT_SALESFORCE_ID + "/p").param("filter", "firstname 1").accept(RestTestUtil.APPLICATION_JSON_UTF8)
+        result = restUserMockMvc.perform(get("/users/member/" + MAIN_CONTACT_MEMBER_ID + "/p").param("filter", "firstname 1").accept(RestTestUtil.APPLICATION_JSON_UTF8)
                 .contentType(RestTestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andExpect(jsonPath("$.content.length()").value(2)).andReturn();
 
-        result = restUserMockMvc.perform(get("/users/salesforce/" + MAIN_CONTACT_SALESFORCE_ID + "/p").param("filter", "lastname 2").accept(RestTestUtil.APPLICATION_JSON_UTF8)
+        result = restUserMockMvc.perform(get("/users/member/" + MAIN_CONTACT_MEMBER_ID + "/p").param("filter", "lastname 2").accept(RestTestUtil.APPLICATION_JSON_UTF8)
                 .contentType(RestTestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andExpect(jsonPath("$.content.length()").value(1)).andReturn();
 
-        result = restUserMockMvc.perform(get("/users/salesforce/" + MAIN_CONTACT_SALESFORCE_ID + "/p").param("filter", "membername 3").accept(RestTestUtil.APPLICATION_JSON_UTF8)
+        result = restUserMockMvc.perform(get("/users/member/" + MAIN_CONTACT_MEMBER_ID + "/p").param("filter", "membername 3").accept(RestTestUtil.APPLICATION_JSON_UTF8)
                 .contentType(RestTestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andExpect(jsonPath("$.content.length()").value(1)).andReturn();
 
-        result = restUserMockMvc.perform(get("/users/salesforce/" + MAIN_CONTACT_SALESFORCE_ID + "/p").param("filter", "4@" + MAIN_CONTACT_SALESFORCE_ID + ".org").accept(RestTestUtil.APPLICATION_JSON_UTF8)
+        result = restUserMockMvc.perform(get("/users/member/" + MAIN_CONTACT_MEMBER_ID + "/p").param("filter", "4@" + MAIN_CONTACT_MEMBER_ID + ".org").accept(RestTestUtil.APPLICATION_JSON_UTF8)
                 .contentType(RestTestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isOk()).andExpect(jsonPath("$.content.length()").value(1)).andReturn();
 
         result = restUserMockMvc
-                .perform(get("/users/salesforce/" + MAIN_CONTACT_SALESFORCE_ID + "/p").param("filter", "%2B").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
+                .perform(get("/users/member/" + MAIN_CONTACT_MEMBER_ID + "/p").param("filter", "%2B").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.content.length()").value(1)).andReturn();
 
         result = restUserMockMvc
-                .perform(get("/users/salesforce/" + MAIN_CONTACT_SALESFORCE_ID + "/p").param("filter", "10%2Btest").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
+                .perform(get("/users/member/" + MAIN_CONTACT_MEMBER_ID + "/p").param("filter", "10%2Btest").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.content.length()").value(1)).andReturn();
 
         result = restUserMockMvc
-                .perform(get("/users/salesforce/" + MAIN_CONTACT_SALESFORCE_ID + "/p").param("filter", "lastname+10%2Btest").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
+                .perform(get("/users/member/" + MAIN_CONTACT_MEMBER_ID + "/p").param("filter", "lastname+10%2Btest").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.content.length()").value(1)).andReturn();
 
-        // bad salesforce id
-        restUserMockMvc.perform(get("/users/salesforce/salesforce-id-5/p").param("filter", "4@orcid.org").accept(RestTestUtil.APPLICATION_JSON_UTF8)
+        // bad member id
+        restUserMockMvc.perform(get("/users/member/member-id-5/p").param("filter", "4@orcid.org").accept(RestTestUtil.APPLICATION_JSON_UTF8)
                 .contentType(RestTestUtil.APPLICATION_JSON_UTF8)).andExpect(status().isBadRequest());
     }
 
     @Test
     @WithMockUser(username = LOGGED_IN_EMAIL, authorities = {"ROLE_USER", "ROLE_ADMIN"}, password = LOGGED_IN_PASSWORD)
-    public void getUsersBySalesforceId_notMainContact() throws Exception {
+    public void getUsersByMemberId_notMainContact() throws Exception {
         MvcResult result = restUserMockMvc.perform(
-                        get("/users/salesforce/" + LOGGED_IN_SALESFORCE_ID + "/p").param("size", "50").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
+                        get("/users/member/" + LOGGED_IN_MEMBER_ID + "/p").param("size", "50").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isUnauthorized()).andReturn();
     }
 
     @Test
     @WithMockUser(username = LOGGED_IN_EMAIL, authorities = {"ROLE_USER", "ROLE_ADMIN"}, password = LOGGED_IN_PASSWORD)
     public void getAllUsersWithFilter() throws Exception {
-        saveTenUsersWithSalesforceId("salesforce-id-1");
-        saveTenUsersWithSalesforceId("salesforce-id-2");
-        saveTenUsersWithSalesforceId("salesforce-id-3");
+        saveTenUsersWithMemberId("member-id-1");
+        saveTenUsersWithMemberId("member-id-2");
+        saveTenUsersWithMemberId("member-id-3");
         userRepository.save(user);
 
         MvcResult result = restUserMockMvc.perform(
@@ -528,7 +528,7 @@ public class UserResourceIT {
                 .andExpect(status().isOk()).andExpect(jsonPath("$.content.length()").value(3)).andReturn();
 
         result = restUserMockMvc
-                .perform(get("/users").param("filter", "4@salesforce-id-1.org").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
+                .perform(get("/users").param("filter", "4@member-id-1.org").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.content.length()").value(1)).andReturn();
 
         result = restUserMockMvc
@@ -536,7 +536,7 @@ public class UserResourceIT {
                 .andExpect(status().isOk()).andExpect(jsonPath("$.content.length()").value(3)).andReturn();
 
         result = restUserMockMvc
-                .perform(get("/users").param("filter", "10%2Btest@salesforce-id-1.org").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
+                .perform(get("/users").param("filter", "10%2Btest@member-id-1.org").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.content.length()").value(1)).andReturn();
 
         result = restUserMockMvc
@@ -552,25 +552,25 @@ public class UserResourceIT {
                 .andExpect(status().isForbidden()).andReturn();
     }
 
-    private void saveTenUsersWithSalesforceId(String salesforceId) {
+    private void saveTenUsersWithMemberId(String memberId) {
         for (int i = 0; i < 9; i++) {
-            userRepository.save(createUser(String.valueOf(i), salesforceId));
+            userRepository.save(createUser(String.valueOf(i), memberId));
         }
         // Add one user with a special character
-        userRepository.save(createUser("10+test", salesforceId));
+        userRepository.save(createUser("10+test", memberId));
     }
 
-    private User createUser(String id, String salesforceId) {
+    private User createUser(String id, String memberId) {
         User user = new User();
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
-        user.setEmail(id + "@" + salesforceId + ".org");
+        user.setEmail(id + "@" + memberId + ".org");
         user.setFirstName("firstname " + id);
         user.setLastName("lastname " + id);
         user.setMemberName("membername " + id);
         user.setImageUrl(DEFAULT_IMAGEURL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setSalesforceId(salesforceId);
+        user.setMemberId(memberId);
         user.setMainContact(false);
         return user;
     }
@@ -599,7 +599,7 @@ public class UserResourceIT {
         managedUser.setLastModifiedBy(updatedUser.getLastModifiedBy());
         managedUser.setLastModifiedDate(updatedUser.getLastModifiedDate());
         managedUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-        managedUser.setSalesforceId(ADMIN_SALESFORCE_ID);
+        managedUser.setMemberId(ADMIN_MEMBER_ID);
         managedUser.setIsAdmin(true);
 
         restUserMockMvc.perform(put("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUser)))
@@ -629,7 +629,7 @@ public class UserResourceIT {
         managedUser.setLastModifiedBy(updatedUser.getLastModifiedBy());
         managedUser.setLastModifiedDate(updatedUser.getLastModifiedDate());
         managedUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-        managedUser.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        managedUser.setMemberId(DEFAULT_MEMBER_ID);
         managedUser.setIsAdmin(true);
 
         restUserMockMvc.perform(put("/users").contentType(RestTestUtil.APPLICATION_JSON_UTF8).content(RestTestUtil.convertObjectToJsonBytes(managedUser)))

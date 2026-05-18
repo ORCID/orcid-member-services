@@ -9,6 +9,8 @@ public class User {
 
     private String salesforceId;
 
+    private String memberId;
+
     private String createdBy;
 
     private Instant createdDate;
@@ -55,6 +57,14 @@ public class User {
 
     public void setSalesforceId(String salesforceId) {
         this.salesforceId = salesforceId;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public String getCreatedBy() {

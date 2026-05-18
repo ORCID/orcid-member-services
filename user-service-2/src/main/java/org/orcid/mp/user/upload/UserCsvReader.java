@@ -61,9 +61,9 @@ public class UserCsvReader {
         UserDTO u = new UserDTO();
         u.setFirstName(record.get("firstName"));
         u.setLastName(record.get("lastName"));
-        u.setSalesforceId(record.get("salesforceId"));
+        u.setMemberId(record.get("memberId"));
         u.setPassword(RandomStringUtils.randomAlphanumeric(10));
-        u.setSalesforceId(record.get("salesforceId"));
+        u.setMemberId(record.get("memberId"));
         u.setCreatedBy(createdBy);
         u.setCreatedDate(now);
         u.setLastModifiedBy(createdBy);

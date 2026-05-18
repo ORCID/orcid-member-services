@@ -17,8 +17,8 @@ public class MemberServiceClient {
         return restClient.get().uri("/members/" + id).retrieve().toEntity(Member.class).getBody();
     }
 
-    public String updateMemberDefaultLanguage(String salesforceId, String language) {
-        return restClient.post().uri("/members/" + salesforceId + "/language/" + language).retrieve().toEntity(String.class).getBody();
+    public String updateMemberDefaultLanguage(String memberId, String language) {
+        return restClient.post().uri("/members/" + memberId + "/language/" + language).retrieve().toEntity(String.class).getBody();
     }
 
 }

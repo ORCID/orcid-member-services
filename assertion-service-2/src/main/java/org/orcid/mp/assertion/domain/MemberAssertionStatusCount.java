@@ -2,14 +2,14 @@ package org.orcid.mp.assertion.domain;
 
 public class MemberAssertionStatusCount {
 
-    private String salesforceId;
+    private String memberId;
 
     private String status;
 
     private Integer statusCount;
 
-    public MemberAssertionStatusCount(String salesforceId, String status, Integer statusCount) {
-        this.salesforceId = salesforceId;
+    public MemberAssertionStatusCount(String memberId, String status, Integer statusCount) {
+        this.memberId = memberId;
         this.status = status;
         this.statusCount = statusCount;
     }
@@ -17,12 +17,12 @@ public class MemberAssertionStatusCount {
     public MemberAssertionStatusCount() {
     }
 
-    public String getSalesforceId() {
-        return salesforceId;
+    public String getMemberId() {
+        return memberId;
     }
 
-    public void setSalesforceId(String salesforceId) {
-        this.salesforceId = salesforceId;
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public String getStatus() {

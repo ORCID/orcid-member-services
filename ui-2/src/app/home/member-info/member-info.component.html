@@ -272,7 +272,7 @@
           <hr class="green-hr mb-0" />
           <div *ngFor="let consortiumMember of memberData.consortiumMembers; let i = index">
             <div class="pt-16 pb-16">
-              <a routerLink="/manage/{{ consortiumMember.salesforceId }}" class="font-size-14 font-weight-normal">{{
+              <a routerLink="/manage/{{ consortiumMember.memberId }}" class="font-size-14 font-weight-normal">{{
                 consortiumMember.orgName
               }}</a>
               <a routerLink="consortium-member/{{ consortiumMember.salesforceId }}/remove"

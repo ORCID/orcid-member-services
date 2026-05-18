@@ -116,44 +116,44 @@ public class UserResource {
     }
 
     /**
-     * {@code GET /users/salesforce/:salesforceId} : get users by salesforce id.
+     * {@code GET /users/member/:memberId} : get users by member id.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      * body all users.
      */
-    @GetMapping("/salesforce/{salesforceId}")
-    public ResponseEntity<List<UserDTO>> getUsersBySalesforceId(@PathVariable String salesforceId) {
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<List<UserDTO>> getUsersByMemberId(@PathVariable String memberId) {
         User currentUser = getCurrentUser();
-        if (!currentUser.getSalesforceId().equals(salesforceId)) {
-            throw new BadRequestAlertException("Salesforce id doesn't match current user's memeber");
+        if (!currentUser.getMemberId().equals(memberId)) {
+            throw new BadRequestAlertException("Member id doesn't match current user's memeber");
         }
 
         if (currentUser.getMainContact() == null || !currentUser.getMainContact().booleanValue()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        List<UserDTO> users = userService.getAllUsersBySalesforceId(salesforceId);
+        List<UserDTO> users = userService.getAllUsersByMemberId(memberId);
         return ResponseEntity.ok(users);
     }
 
     /**
-     * {@code GET /users/salesforce/:salesforceId/p} : get users by salesforce
+     * {@code GET /users/member/:memberId/p} : get users by member
      * id.
      *
-     * @param salesforceId the salesforce id for the organization.
+     * @param memberId the member id for the organization.
      * @param queryParams  a {@link MultiValueMap} query parameters.
      * @param uriBuilder   a {@link UriComponentsBuilder} URI builder.
      * @param pageable     the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      * body all users.
      */
-    @GetMapping("/salesforce/{salesforceId}/p")
-    public ResponseEntity<Page<UserDTO>> getUsersBySalesforceId(@PathVariable String salesforceId, @RequestParam MultiValueMap<String, String> queryParams,
+    @GetMapping("/member/{memberId}/p")
+    public ResponseEntity<Page<UserDTO>> getUsersByMemberId(@PathVariable String memberId, @RequestParam MultiValueMap<String, String> queryParams,
                                                                 UriComponentsBuilder uriBuilder, @RequestParam(required = false, name = "filter") String filter,
                                                                 Pageable pageable) {
         User currentUser = getCurrentUser();
-        if (!currentUser.getSalesforceId().equals(salesforceId)) {
-            throw new BadRequestAlertException("Salesforce id doesn't match current user's memeber");
+        if (!currentUser.getMemberId().equals(memberId)) {
+            throw new BadRequestAlertException("Member id doesn't match current user's memeber");
         }
 
         if (currentUser.getMainContact() == null || !currentUser.getMainContact().booleanValue()) {
@@ -162,7 +162,7 @@ public class UserResource {
 
         Page<UserDTO> page = null;
         if (StringUtils.isBlank(filter)) {
-            page = userService.getAllUsersBySalesforceId(pageable, salesforceId);
+            page = userService.getAllUsersByMemberId(pageable, memberId);
         } else {
             String decodedFilter;
             try {
@@ -171,7 +171,7 @@ public class UserResource {
                 /* try without decoding if this ever happens */
                 decodedFilter = filter;
             }
-            page = userService.getAllUsersBySalesforceId(pageable, salesforceId, decodedFilter);
+            page = userService.getAllUsersByMemberId(pageable, memberId, decodedFilter);
         }
         return ResponseEntity.ok(page);
     }
@@ -314,40 +314,20 @@ public class UserResource {
     }
 
     /**
-     * {@code PUT /users/:salesforceId/:newSalesforceId} : Updates salesForceId
-     * for existing Users.
-     *
-     * @param salesforceId    the salesforceId to the find the users to update.
-     * @param newSalesforceId the new salesforceId to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
-     */
-    @PutMapping("/{salesforceId}/{newSalesforceId}")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Void> updateUsersSalesforceId(@PathVariable String salesforceId, @PathVariable String newSalesforceId) {
-        LOG.debug("REST request to update users' salesforce id from {} to {}", salesforceId, newSalesforceId);
-        boolean success = userService.updateUsersSalesforceId(salesforceId, newSalesforceId);
-        if (success) {
-            return ResponseEntity.ok().headers(JHipsterAlerts.createEntityUpdateAlert(applicationName, true, "user", salesforceId)).build();
-        } else {
-            return ResponseEntity.status(500).build();
-        }
-    }
-
-    /**
      * {@code PUT /users/memberName/:oldMemberName/:newMemberName} : Updates memberName
      * for existing Users.
      *
-     * @param salesforceId  the salesforceId for finding users to update
+     * @param memberId  the memberId for finding users to update
      * @param newMemberName the new Value of the memberName to update
      * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
      */
-    @PutMapping("/memberName/{salesforceId}/{newMemberName}")
+    @PutMapping("/memberName/{memberId}/{newMemberName}")
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Void> updateUsersMemberName(@PathVariable String salesforceId, @PathVariable String newMemberName) {
+    public ResponseEntity<Void> updateUsersMemberName(@PathVariable String memberId, @PathVariable String newMemberName) {
         LOG.debug("REST request to update users' member names id to {}", newMemberName);
-        boolean success = userService.updateUsersMemberName(salesforceId, newMemberName);
+        boolean success = userService.updateUsersMemberName(memberId, newMemberName);
         if (success) {
-            return ResponseEntity.ok().headers(JHipsterAlerts.createEntityUpdateAlert(applicationName, true, "user", salesforceId)).build();
+            return ResponseEntity.ok().headers(JHipsterAlerts.createEntityUpdateAlert(applicationName, true, "user", memberId)).build();
         } else {
             return ResponseEntity.status(500).build();
         }
@@ -359,10 +339,10 @@ public class UserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
      * body the "login" user, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/{salesforceId}/owner")
-    public boolean getOwner(@PathVariable String salesforceId) {
-        LOG.debug("REST request to get Owner for : {}", salesforceId);
-        return userService.hasOwnerForSalesforceId(salesforceId);
+    @GetMapping("/{memberId}/owner")
+    public boolean getOwner(@PathVariable String memberId) {
+        LOG.debug("REST request to get Owner for : {}", memberId);
+        return userService.hasOwnerForMemberId(memberId);
     }
 
     private User getCurrentUser() {

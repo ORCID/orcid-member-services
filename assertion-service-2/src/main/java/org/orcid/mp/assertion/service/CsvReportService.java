@@ -84,7 +84,7 @@ public class CsvReportService {
 
     private void processCsvReportRequest(CsvReport csvReport) throws IOException {
         User user = internalUserServiceClient.getUser(csvReport.getOwnerId());
-        String salesforceId = user.getSalesforceId();
+        String memberId = user.getMemberId();
         Locale locale = LocaleUtils.getLocale(user.getLangKey());
 
         String subject = null;
@@ -93,15 +93,15 @@ public class CsvReportService {
 
         LOG.info("Generating csv report of type {} for user {}", csvReport.getReportType(), user.getEmail());
         if (CsvReport.ASSERTIONS_FOR_EDIT_TYPE.equals(csvReport.getReportType())) {
-            report = assertionsForEditCsvWriter.writeCsv(salesforceId);
+            report = assertionsForEditCsvWriter.writeCsv(memberId);
             subject = messageSource.getMessage("email.csvReport.affiliationsForEdit.subject", null, locale);
             content = messageSource.getMessage("email.csvReport.affiliationsForEdit.content", null, locale);
         } else if (CsvReport.ASSERTIONS_REPORT_TYPE.equals(csvReport.getReportType())) {
-            report = assertionsReportCsvWriter.writeCsv(salesforceId);
+            report = assertionsReportCsvWriter.writeCsv(memberId);
             subject = messageSource.getMessage("email.csvReport.affiliationStatusReport.subject", null, locale);
             content = messageSource.getMessage("email.csvReport.affiliationStatusReport.content", null, locale);
         } else if (CsvReport.PERMISSION_LINKS_TYPE.equals(csvReport.getReportType())) {
-            report = permissionLinksCsvWriter.writeCsv(salesforceId);
+            report = permissionLinksCsvWriter.writeCsv(memberId);
             subject = messageSource.getMessage("email.csvReport.permissionLinks.subject", null, locale);
             content = messageSource.getMessage("email.csvReport.permissionLinks.content", null, locale);
         }

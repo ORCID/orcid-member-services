@@ -19,7 +19,7 @@ public class UserMapper {
     private AuthorityService authorityService;
 
     public User toUser(UserDTO userDTO) {
-        Member member = memberServiceClient.getMember(userDTO.getSalesforceId());
+        Member member = memberServiceClient.getMember(userDTO.getMemberId());
 
         User user = new User();
         user.setFirstName(userDTO.getFirstName());
@@ -27,7 +27,7 @@ public class UserMapper {
         user.setEmail(userDTO.getEmail().toLowerCase());
         user.setImageUrl(userDTO.getImageUrl());
         user.setDeleted(Boolean.FALSE);
-        user.setSalesforceId(userDTO.getSalesforceId());
+        user.setMemberId(userDTO.getMemberId());
         user.setMemberName(member.getClientName());
         user.setMainContact(userDTO.getMainContact());
         user.setLangKey(userDTO.getLangKey());
@@ -51,7 +51,7 @@ public class UserMapper {
         userDTO.setLastModifiedBy(user.getLastModifiedBy());
         userDTO.setLastModifiedDate(user.getLastModifiedDate());
         userDTO.setAuthorities(authorityService.getAuthoritiesForUser(user));
-        userDTO.setSalesforceId(user.getSalesforceId());
+        userDTO.setMemberId(user.getMemberId());
         userDTO.setMemberName(user.getMemberName());
         userDTO.setMainContact(user.getMainContact());
         userDTO.setId(user.getId());

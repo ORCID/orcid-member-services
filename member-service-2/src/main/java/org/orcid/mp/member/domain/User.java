@@ -7,7 +7,7 @@ public class User {
 
     private String id;
 
-    private String salesforceId;
+    private String memberId;
 
     private String createdBy;
 
@@ -16,10 +16,6 @@ public class User {
     private String lastModifiedBy;
 
     private Instant lastModifiedDate;
-
-    private String salesforceIdError;
-
-    private String parentSalesforceId;
 
     private Boolean mainContact;
 
@@ -49,12 +45,12 @@ public class User {
         this.id = id;
     }
 
-    public String getSalesforceId() {
-        return salesforceId;
+    public String getMemberId() {
+        return memberId;
     }
 
-    public void setSalesforceId(String salesforceId) {
-        this.salesforceId = salesforceId;
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public String getCreatedBy() {
@@ -87,22 +83,6 @@ public class User {
 
     public void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public String getSalesforceIdError() {
-        return salesforceIdError;
-    }
-
-    public void setSalesforceIdError(String salesforceIdError) {
-        this.salesforceIdError = salesforceIdError;
-    }
-
-    public String getParentSalesforceId() {
-        return parentSalesforceId;
-    }
-
-    public void setParentSalesforceId(String parentSalesforceId) {
-        this.parentSalesforceId = parentSalesforceId;
     }
 
     public Boolean getMainContact() {

@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
  * Service class for managing members.
@@ -87,16 +88,6 @@ public class MemberService {
         }
     }
 
-    public Boolean memberExists(String salesforceId) {
-        Optional<Member> existingMember = memberRepository.findBySalesforceId(salesforceId);
-        return existingMember.isPresent();
-    }
-
-    public Boolean memberSuperadminEnabled(String salesforceId) {
-        Optional<Member> existingMember = memberRepository.findBySalesforceId(salesforceId);
-        return existingMember.get().getSuperadminEnabled();
-    }
-
     public Member createMember(Member member) {
         MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser());
         if (!validation.isValid()) {
@@ -130,13 +121,9 @@ public class MemberService {
 
     private void propagateUpdatesAndSave(Member member, Member existingMember) {
         if (!member.getClientName().equals(existingMember.getClientName())) {
-            updateUserMemberNames(existingMember.getSalesforceId(), member.getClientName());
+            userService.updateUsersMemberNames(existingMember.getId(), member.getClientName());
             existingMember.setClientName(member.getClientName());
         }
-    }
-
-    private void updateUserMemberNames(String salesforceId, String newClientName) {
-        userService.updateUsersMemberNames(salesforceId, newClientName);
     }
 
     private void validateMemberUpdate(Member member, Optional<Member> existingMember) {
@@ -196,7 +183,7 @@ public class MemberService {
             throw new BadRequestAlertException("Invalid id");
         }
         if (Boolean.compare(existentMember.getIsConsortiumLead(), member.getIsConsortiumLead()) != 0) {
-            List<User> usersBelongingToMember = userService.getUsersBySalesforceId(member.getSalesforceId());
+            List<User> usersBelongingToMember = userService.getUsersByMemberId(member.getId());
             for (User user : usersBelongingToMember) {
                 Set<String> authorities = user.getAuthorities();
                 if (member.getIsConsortiumLead()) {
@@ -218,9 +205,20 @@ public class MemberService {
         Member member = memberRepository.findBySalesforceId(salesforceId).orElseThrow();
         try {
             if (Boolean.TRUE.equals(member.getIsConsortiumLead())) {
-                return salesforceClient.getConsortiumLeadDetails(salesforceId);
+                ConsortiumLeadDetails clDetails = salesforceClient.getConsortiumLeadDetails(salesforceId);
+                clDetails.setMemberId(member.getId());
+                clDetails.getConsortiumMembers().forEach(salesforceConsortiumMember -> {
+                    Optional<Member> consortiumMember = memberRepository.findBySalesforceId(salesforceConsortiumMember.getSalesforceId());
+                    if (consortiumMember.isEmpty()) {
+                        throw new RuntimeException("Consortium member " + salesforceConsortiumMember.getSalesforceId() + " does not exist in the database");
+                    }
+                    salesforceConsortiumMember.setMemberId(consortiumMember.get().getId());
+                });
+                return clDetails;
             } else {
-                return salesforceClient.getMemberDetails(salesforceId);
+                MemberDetails details = salesforceClient.getMemberDetails(salesforceId);
+                details.setMemberId(member.getId());
+                return details;
             }
         } catch (IOException e) {
             LOG.error("Error fetching member details from salesforce client", e);
@@ -259,8 +257,8 @@ public class MemberService {
         }
     }
 
-    public void updateMemberDefaultLanguage(String salesforceId, String language) throws UnauthorizedMemberAccessException {
-        Optional<Member> optional = memberRepository.findBySalesforceId(salesforceId);
+    public void updateMemberDefaultLanguage(String memberId, String language) throws UnauthorizedMemberAccessException {
+        Optional<Member> optional = memberRepository.findById(memberId);
         if (optional.isPresent()) {
             Member member = optional.get();
             member.setDefaultLanguage(language);
@@ -294,7 +292,7 @@ public class MemberService {
     public void requestNewConsortiumMember(AddConsortiumMember addConsortiumMember) {
         User user = userService.getLoggedInUser();
 
-        Optional<Member> optionalMember = memberRepository.findBySalesforceId(user.getSalesforceId());
+        Optional<Member> optionalMember = memberRepository.findById(user.getMemberId());
         Member member = optionalMember.get();
         if (!member.getIsConsortiumLead()) {
             throw new RuntimeException("Requesting member is not a consortium lead");
@@ -310,7 +308,7 @@ public class MemberService {
     public void requestRemoveConsortiumMember(RemoveConsortiumMember removeConsortiumMember) {
         User user = userService.getLoggedInUser();
 
-        Optional<Member> optionalMember = memberRepository.findBySalesforceId(user.getSalesforceId());
+        Optional<Member> optionalMember = memberRepository.findById(user.getMemberId());
         Member member = optionalMember.get();
         if (!member.getIsConsortiumLead()) {
             throw new RuntimeException("Requesting member is not a consortium lead");
@@ -329,17 +327,22 @@ public class MemberService {
     }
 
     /**
-     * validates whether current user can access member with specified salesforceId
+     * validates whether current user can access member with specified memberId
      *
      * @param salesforceId
      */
     private void validateUserAccess(String salesforceId) throws UnauthorizedMemberAccessException {
         User user = userService.getLoggedInUser();
-        if (!user.getSalesforceId().equals(salesforceId)) {
-            // user not accessing own member
+        Optional<Member> member = memberRepository.findById(user.getMemberId());
+        if (!member.get().getSalesforceId().equals(salesforceId)) {
+            // user not accessing own member, but could belong to parent
+            Optional<Member> possibleChild = memberRepository.findBySalesforceId(salesforceId);
+            if (possibleChild.isEmpty() || StringUtils.isEmpty(possibleChild.get().getParentSalesforceId())) {
+                throw new UnauthorizedMemberAccessException(user.getEmail(), salesforceId);
+            }
 
-            Optional<Member> member = memberRepository.findBySalesforceId(salesforceId);
-            if (!user.getSalesforceId().equals(member.get().getParentSalesforceId())) {
+            Optional<Member> parent = memberRepository.findBySalesforceId(possibleChild.get().getParentSalesforceId());
+            if (!user.getMemberId().equals(parent.get().getId())) {
                 // member not part of user's consortium
                 LOG.warn("Illegal attempt by user {} to access member {}", user.getEmail(), salesforceId);
                 throw new UnauthorizedMemberAccessException(user.getEmail(), salesforceId);

@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 public class PermissionLinksCsvWriterTest {
 
-    private static final String DEFAULT_SALESFORCE_ID = "salesforce-id";
+    private static final String DEFAULT_MEMBER_ID = "member-id";
 
     @Mock
     private EncryptUtil encryptUtil;
@@ -41,8 +41,8 @@ public class PermissionLinksCsvWriterTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         ReflectionTestUtils.setField(csvWriter, "landingPageUrl", "https://member-portal.com");
-        when(orcidRecordService.getRecordsWithoutTokens(Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(getListOfOrcidRecords());
-        when(assertionsRepository.countByEmailAndSalesforceId(Mockito.anyString(), Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(10L);
+        when(orcidRecordService.getRecordsWithoutTokens(Mockito.eq(DEFAULT_MEMBER_ID))).thenReturn(getListOfOrcidRecords());
+        when(assertionsRepository.countByEmailAndMemberId(Mockito.anyString(), Mockito.eq(DEFAULT_MEMBER_ID))).thenReturn(10L);
         when(encryptUtil.encrypt(Mockito.anyString())).thenAnswer(new Answer<String>() {
             // just return unencrypted arg
             @Override
@@ -67,7 +67,7 @@ public class PermissionLinksCsvWriterTest {
 
     @Test
     public void testWriteAssertionsReport() throws IOException {
-        String test = csvWriter.writeCsv(DEFAULT_SALESFORCE_ID);
+        String test = csvWriter.writeCsv(DEFAULT_MEMBER_ID);
         assertNotNull(test);
         assertTrue(test.length() > 0);
         String[] lines = test.split("\\n");
@@ -87,7 +87,7 @@ public class PermissionLinksCsvWriterTest {
 
     private void checkValues(String[] values, int i) {
         assertEquals(i + "@test.com", values[0].trim());
-        assertEquals("https://member-portal.com?state=" + DEFAULT_SALESFORCE_ID + "&&" + i + "@test.com", values[1].trim());
+        assertEquals("https://member-portal.com?state=" + DEFAULT_MEMBER_ID + "&&" + i + "@test.com", values[1].trim());
     }
 
     private void checkHeaders(String[] headers) {

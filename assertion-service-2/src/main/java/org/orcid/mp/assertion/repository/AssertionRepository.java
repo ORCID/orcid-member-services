@@ -20,23 +20,23 @@ public interface AssertionRepository extends MongoRepository<Assertion, String>,
     @Query("{ownerId: ?0}")
     List<Assertion> findAllByOwnerId(String ownerId, Sort sort);
 
-    Page<Assertion> findBySalesforceId(String salesforceId, Pageable pageable);
+    Page<Assertion> findByMemberId(String memberId, Pageable pageable);
 
     List<Assertion> findByStatus(String status, Pageable pageable);
 
-    Page<Assertion> findBySalesforceIdAndAffiliationSectionContainingIgnoreCaseOrSalesforceIdAndDepartmentNameContainingIgnoreCaseOrSalesforceIdAndOrgNameContainingIgnoreCaseOrSalesforceIdAndDisambiguatedOrgIdContainingIgnoreCaseOrSalesforceIdAndEmailContainingIgnoreCaseOrSalesforceIdAndOrcidIdContainingIgnoreCaseOrSalesforceIdAndRoleTitleContainingIgnoreCase(
-            Pageable pageable, String salesforceId1, String affiliationSection, String salesforceId2, String departmentName, String salesforceId3, String orcName,
-            String salesforceId4, String disambiguatedOrgId, String salesforceId5, String email, String salesforceId6, String orcidId, String salesforceId7,
+    Page<Assertion> findByMemberIdAndAffiliationSectionContainingIgnoreCaseOrMemberIdAndDepartmentNameContainingIgnoreCaseOrMemberIdAndOrgNameContainingIgnoreCaseOrMemberIdAndDisambiguatedOrgIdContainingIgnoreCaseOrMemberIdAndEmailContainingIgnoreCaseOrMemberIdAndOrcidIdContainingIgnoreCaseOrMemberIdAndRoleTitleContainingIgnoreCase(
+            Pageable pageable, String memberId1, String affiliationSection, String memberId2, String departmentName, String memberId3, String orcName,
+            String memberId4, String disambiguatedOrgId, String memberId5, String email, String memberId6, String orcidId, String memberId7,
             String roleTitle);
 
-    @Query("{salesforceId: ?0}")
-    List<Assertion> findBySalesforceId(String salesforceId, Sort sort);
+    @Query("{memberId: ?0}")
+    List<Assertion> findByMemberId(String memberId, Sort sort);
 
-    List<Assertion> findBySalesforceId(String salesforceId);
+    List<Assertion> findByMemberId(String memberId);
 
     List<Assertion> findByEmail(String email);
 
-    List<Assertion> findByEmailAndSalesforceId(String email, String salesforceId);
+    List<Assertion> findByEmailAndMemberId(String email, String memberId);
 
     Optional<Assertion> findOneByEmailIgnoreCase(String email);
 
@@ -44,9 +44,9 @@ public interface AssertionRepository extends MongoRepository<Assertion, String>,
 
     List<Assertion> findAllByEmail(String email);
 
-    Long countByEmailAndSalesforceId(String email, String salesforceId);
+    Long countByEmailAndMemberId(String email, String memberId);
 
-    List<Assertion> findByEmailAndSalesforceIdAndStatus(String email, String salesforceId, String status);
+    List<Assertion> findByEmailAndMemberIdAndStatus(String email, String memberId, String status);
 
     @Query("{ addedToORCID: { $exists: false }, $or: [ { notificationSent: { $exists: true } }, { invitationSent: { $exists: true } } ] }")
     Page<Assertion> findNotificationResendCandidates(Pageable pageable);

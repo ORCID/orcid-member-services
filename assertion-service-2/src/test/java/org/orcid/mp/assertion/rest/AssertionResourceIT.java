@@ -34,8 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = AssertionServiceApplication.class)
 public class AssertionResourceIT {
 
-    private static final String DEFAULT_SALESFORCE_ID = "salesforce-id";
-    private static final String OTHER_SALESFORCE_ID = "other-salesforce-id";
+    private static final String DEFAULT_MEMBER_ID = "member-id";
+    private static final String OTHER_MEMBER_ID = "other-member-id";
     private static final String LOGGED_IN_PASSWORD = "0123456789";
     private static final String LOGGED_IN_EMAIL = "loggedin@orcid.org";
     private static final String DEFAULT_LANGKEY = "en";
@@ -69,8 +69,8 @@ public class AssertionResourceIT {
     @BeforeEach
     public void setup() {
         assertionRepository.deleteAll();
-        createAssertions(DEFAULT_SALESFORCE_ID, 30);
-        createAssertions(OTHER_SALESFORCE_ID, 70);
+        createAssertions(DEFAULT_MEMBER_ID, 30);
+        createAssertions(OTHER_MEMBER_ID, 70);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(assertionResource).setCustomArgumentResolvers(pageableArgumentResolver)
                 .setControllerAdvice(simpleExceptionHandler).setMessageConverters(jacksonMessageConverter).build();
         Mockito.when(userServiceClient.getUser(anyString())).thenReturn(getLoggedInUser());
@@ -83,7 +83,7 @@ public class AssertionResourceIT {
     @Test
     @WithMockUser(username = LOGGED_IN_EMAIL, authorities = {"ROLE_ADMIN", "ROLE_USER"}, password = LOGGED_IN_PASSWORD)
     public void testGetAssertions() throws Exception {
-        // test only the 30 assertions for default salesforce id come back
+        // test only the 30 assertions for default member id come back
         MvcResult result = restUserMockMvc
                 .perform(get("/assertions").param("size", "50").accept(RestTestUtil.APPLICATION_JSON_UTF8).contentType(RestTestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.content.length()").value(30)).andReturn();
@@ -109,20 +109,20 @@ public class AssertionResourceIT {
     @WithMockUser(username = LOGGED_IN_EMAIL, authorities = {"ROLE_ADMIN", "ROLE_USER"}, password = LOGGED_IN_PASSWORD)
     public void testSendNotifications() throws Exception {
         restUserMockMvc.perform(post("/assertions/notification-request").content("{ \"language\":\"en\" }").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-        List<Assertion> updatedAssertions = assertionRepository.findBySalesforceId(DEFAULT_SALESFORCE_ID);
+        List<Assertion> updatedAssertions = assertionRepository.findByMemberId(DEFAULT_MEMBER_ID);
         updatedAssertions.forEach(a -> assertThat(a.getStatus()).isEqualTo(AssertionStatus.NOTIFICATION_REQUESTED.name()));
     }
 
-    private void createAssertions(String salesforceId, int quantity) {
+    private void createAssertions(String memberId, int quantity) {
         for (int i = 0; i < quantity; i++) {
-            assertionRepository.save(getAssertion(String.valueOf(i), salesforceId));
+            assertionRepository.save(getAssertion(String.valueOf(i), memberId));
         }
     }
 
-    private Assertion getAssertion(String identifier, String salesforceId) {
+    private Assertion getAssertion(String identifier, String memberId) {
         Assertion assertion = new Assertion();
         assertion.setEmail(identifier + "@orcid.org");
-        assertion.setSalesforceId(salesforceId);
+        assertion.setMemberId(memberId);
         assertion.setAffiliationSection(AffiliationSection.EMPLOYMENT);
         assertion.setDepartmentName("department " + identifier);
         assertion.setOrgCity("city " + identifier);
@@ -139,7 +139,7 @@ public class AssertionResourceIT {
         User user = new User();
         user.setEmail(LOGGED_IN_EMAIL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        user.setMemberId(DEFAULT_MEMBER_ID);
         return user;
     }
 

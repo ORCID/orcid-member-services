@@ -135,7 +135,7 @@ public class AccountResourceIT {
         user.setEmail("john.doe@jhipster.com");
         user.setImageUrl("http://placehold.it/50x50");
         user.setLangKey("en");
-        user.setSalesforceId("salesforceId");
+        user.setMemberId("memberId");
         user.setAdmin(true);
         when(mockUserService.getCurrentUser()).thenReturn(user);
 

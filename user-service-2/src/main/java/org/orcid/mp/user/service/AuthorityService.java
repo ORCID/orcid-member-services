@@ -25,8 +25,8 @@ public class AuthorityService {
             authorities.add(AuthoritiesConstants.ORG_OWNER);
         }
 
-        if (!org.apache.commons.lang3.StringUtils.isBlank(user.getSalesforceId())) {
-            Member member = internalMemberServiceClient.getMember(user.getSalesforceId());
+        if (!org.apache.commons.lang3.StringUtils.isBlank(user.getMemberId())) {
+            Member member = internalMemberServiceClient.getMember(user.getMemberId());
             if (member != null) {
                 if (member.getAssertionServiceEnabled() != null && member.getAssertionServiceEnabled().booleanValue()) {
                     authorities.add(AuthoritiesConstants.ASSERTION_SERVICE_ENABLED);

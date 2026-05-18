@@ -29,12 +29,12 @@ public class AssertionsReportCsvWriter extends CsvDownloadWriter {
     private OrcidRecordService orcidRecordService;
 
     @Override
-    public String writeCsv(String salesforceId) throws IOException {
-        List<Assertion> assertions = assertionsRepository.findBySalesforceId(salesforceId, this.SORT);
-        return super.writeCsv(HEADERS, getRows(assertions, salesforceId));
+    public String writeCsv(String memberId) throws IOException {
+        List<Assertion> assertions = assertionsRepository.findByMemberId(memberId, this.SORT);
+        return super.writeCsv(HEADERS, getRows(assertions, memberId));
     }
 
-    private List<List<String>> getRows(List<Assertion> assertions, String salesforceId) {
+    private List<List<String>> getRows(List<Assertion> assertions, String memberId) {
         Map<String, OrcidRecord> orcidRecordMap = new HashMap<>();
         List<List<String>> rows = new ArrayList<>();
         for (Assertion a : assertions) {

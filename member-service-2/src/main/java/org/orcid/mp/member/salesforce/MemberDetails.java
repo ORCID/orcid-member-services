@@ -51,6 +51,16 @@ public class MemberDetails {
     @JsonProperty("BillingAddress")
     private BillingAddress billingAddress;
 
+    private String memberId;
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
+
     public String getId() {
         return id;
     }

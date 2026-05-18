@@ -28,17 +28,12 @@ public class UserService {
         return getLoggedInUser().getId();
     }
 
-    public List<User> getUsersBySalesforceId(String salesforceId) {
-        return userServiceClient.getUsersBySalesforceId(salesforceId);
+    public List<User> getUsersByMemberId(String memberId) {
+        return userServiceClient.getUsersByMemberId(memberId);
     }
 
     public void updateUser(User user) {
         userServiceClient.updateUser(user);
-    }
-
-    public String getSalesforceIdForUser(String userId) {
-        User user = userServiceClient.getUser(userId);
-        return user.getSalesforceId();
     }
 
     public void updateUsersMemberNames(String salesforceId, String newClientName) {

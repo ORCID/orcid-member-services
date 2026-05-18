@@ -48,11 +48,7 @@ public class UserDTO {
 
     private Instant lastModifiedDate;
 
-    private String salesforceId;
-
-    private String salesforceIdError;
-
-    private String parentSalesforceId;
+    private String memberId;
 
     private Boolean mainContact;
 
@@ -164,12 +160,12 @@ public class UserDTO {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public String getSalesforceId() {
-        return salesforceId;
+    public String getMemberId() {
+        return memberId;
     }
 
-    public void setSalesforceId(String salesforceId) {
-        this.salesforceId = salesforceId;
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public Boolean getMainContact() {
@@ -180,28 +176,12 @@ public class UserDTO {
         this.mainContact = mainContact;
     }
 
-    public String getParentSalesforceId() {
-        return parentSalesforceId;
-    }
-
-    public void setParentSalesforceId(String parentSalesforceId) {
-        this.parentSalesforceId = parentSalesforceId;
-    }
-
     public String getLoginError() {
         return loginError;
     }
 
     public void setLoginError(String loginError) {
         this.loginError = loginError;
-    }
-
-    public String getSalesforceIdError() {
-        return salesforceIdError;
-    }
-
-    public void setSalesforceIdError(String salesforceIdError) {
-        this.salesforceIdError = salesforceIdError;
     }
 
     public Set<String> getAuthorities() {
@@ -250,7 +230,6 @@ public class UserDTO {
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((mainContact == null) ? 0 : mainContact.hashCode());
         result = prime * result + ((password == null) ? 0 : password.hashCode());
-        result = prime * result + ((salesforceId == null) ? 0 : salesforceId.hashCode());
         result = prime * result + (mfaEnabled ? 0 : 1);
         return result;
     }
@@ -313,16 +292,6 @@ public class UserDTO {
             if (other.password != null)
                 return false;
         } else if (!password.equals(other.password))
-            return false;
-        if (salesforceId == null) {
-            if (other.salesforceId != null)
-                return false;
-        } else if (!salesforceId.equals(other.salesforceId))
-            return false;
-        if (parentSalesforceId == null) {
-            if (other.parentSalesforceId != null)
-                return false;
-        } else if (!parentSalesforceId.equals(other.parentSalesforceId))
             return false;
         if (mfaEnabled != other.mfaEnabled) {
             return false;

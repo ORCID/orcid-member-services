@@ -63,9 +63,9 @@ class CsvReportServiceTest {
     void testProcessCsvReports() throws IOException {
         Mockito.when(csvReportRepository.findAllUnprocessed()).thenReturn(getUnprocessedCsvReports());
         Mockito.when(internalUserServiceClient.getUser(Mockito.eq("user"))).thenReturn(getDummyUser());
-        Mockito.when(assertionsReportCsvWriter.writeCsv(Mockito.eq("salesforce"))).thenReturn("report");
-        Mockito.when(assertionsForEditCsvWriter.writeCsv(Mockito.eq("salesforce"))).thenReturn("report");
-        Mockito.when(permissionLinksCsvWriter.writeCsv(Mockito.eq("salesforce"))).thenReturn("report");
+        Mockito.when(assertionsReportCsvWriter.writeCsv(Mockito.eq("member"))).thenReturn("report");
+        Mockito.when(assertionsForEditCsvWriter.writeCsv(Mockito.eq("member"))).thenReturn("report");
+        Mockito.when(permissionLinksCsvWriter.writeCsv(Mockito.eq("member"))).thenReturn("report");
         Mockito.when(storedFileService.storeCsvReportFile(Mockito.eq("report"), Mockito.eq("file.csv"), Mockito.any(User.class)))
                 .thenReturn(getDummyStoredfile());
         Mockito.when(messageSource.getMessage(Mockito.eq("email.csvReport.affiliationsForEdit.subject"), Mockito.isNull(), Mockito.any(Locale.class))).thenReturn("edit subject");
@@ -79,9 +79,9 @@ class CsvReportServiceTest {
 
         csvReportService.processCsvReports();
 
-        Mockito.verify(assertionsReportCsvWriter).writeCsv(Mockito.eq("salesforce"));
-        Mockito.verify(assertionsForEditCsvWriter).writeCsv(Mockito.eq("salesforce"));
-        Mockito.verify(permissionLinksCsvWriter).writeCsv(Mockito.eq("salesforce"));
+        Mockito.verify(assertionsReportCsvWriter).writeCsv(Mockito.eq("member"));
+        Mockito.verify(assertionsForEditCsvWriter).writeCsv(Mockito.eq("member"));
+        Mockito.verify(permissionLinksCsvWriter).writeCsv(Mockito.eq("member"));
         Mockito.verify(mailService).sendCsvReportMail(Mockito.any(File.class), Mockito.any(User.class), Mockito.eq("edit subject"), Mockito.eq("edit content"));
         Mockito.verify(mailService).sendCsvReportMail(Mockito.any(File.class), Mockito.any(User.class), Mockito.eq("links subject"), Mockito.eq("links content"));
         Mockito.verify(mailService).sendCsvReportMail(Mockito.any(File.class), Mockito.any(User.class), Mockito.eq("report subject"), Mockito.eq("report content"));
@@ -92,11 +92,11 @@ class CsvReportServiceTest {
     void testProcessCsvReportsWithError() throws IOException {
         Mockito.when(csvReportRepository.findAllUnprocessed()).thenReturn(List.of(getCsvReport(CsvReport.PERMISSION_LINKS_TYPE)));
         Mockito.when(internalUserServiceClient.getUser(Mockito.eq("user"))).thenReturn(getDummyUser());
-        Mockito.when(permissionLinksCsvWriter.writeCsv(Mockito.eq("salesforce"))).thenThrow(new IOException("some error"));
+        Mockito.when(permissionLinksCsvWriter.writeCsv(Mockito.eq("member"))).thenThrow(new IOException("some error"));
 
         csvReportService.processCsvReports();
 
-        Mockito.verify(permissionLinksCsvWriter).writeCsv(Mockito.eq("salesforce"));
+        Mockito.verify(permissionLinksCsvWriter).writeCsv(Mockito.eq("member"));
         Mockito.verify(mailService, Mockito.never()).sendCsvReportMail(Mockito.any(File.class), Mockito.any(User.class), Mockito.eq("links subject"), Mockito.eq("links content"));
         Mockito.verify(storedFileService, Mockito.never()).markAsProcessed(Mockito.any(StoredFile.class));
         Mockito.verify(csvReportRepository).save(csvReportCaptor.capture());
@@ -140,7 +140,7 @@ class CsvReportServiceTest {
     private User getDummyUser() {
         User user = new User();
         user.setEmail("email");
-        user.setSalesforceId("salesforce");
+        user.setMemberId("member");
         user.setLangKey("en");
         return user;
     }

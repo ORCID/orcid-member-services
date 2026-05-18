@@ -30,7 +30,7 @@ public class MemberResourceIT {
 
     private static final String LOGGED_IN_PASSWORD = "0123456789";
     private static final String LOGGED_IN_EMAIL = "loggedin@orcid.org";
-    private static final String LOGGED_IN_SALESFORCE_ID = "salesforceId";
+    private static final String LOGGED_IN_MEMBER_ID = "memberId";
     private static final String DEFAULT_LANGKEY = "en";
 
     @Autowired
@@ -145,7 +145,7 @@ public class MemberResourceIT {
         User user = new User();
         user.setEmail(LOGGED_IN_EMAIL);
         user.setLangKey(DEFAULT_LANGKEY);
-        user.setSalesforceId(LOGGED_IN_SALESFORCE_ID);
+        user.setMemberId(LOGGED_IN_MEMBER_ID);
         return user;
     }
 
