@@ -1,30 +1,27 @@
 package org.orcid.mp.member.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.orcid.mp.member.domain.Member;
-import org.orcid.mp.member.salesforce.*;
-import org.springframework.core.ParameterizedTypeReference;
+import org.orcid.mp.member.salesforce.MemberUpdateData;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.util.MultiValueMap;
+import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.test.web.client.match.MockRestRequestMatchers;
+import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
 
 @ExtendWith(MockitoExtension.class)
 class SalesforceClientTest {
@@ -32,200 +29,261 @@ class SalesforceClientTest {
     @InjectMocks
     private SalesforceClient salesforceClient;
 
-    @Mock
-    private RestClient restClient;
+    private MockRestServiceServer mockServer;
 
-    @Mock
-    private RestClient.RequestHeadersUriSpec requestHeadersUriSpec;
-
-    @Mock
-    private RestClient.RequestBodyUriSpec requestBodyUriSpec;
-
-    @Mock
-    private RestClient.ResponseSpec responseSpec;
-
-    private static final String CLIENT_ID = "test-client-id";
-    private static final String CLIENT_SECRET = "test-client-secret";
-    private static final String CLIENT_ENDPOINT = "http://salesforce.com/api";
-    private static final String TOKEN_ENDPOINT = "http://salesforce.com/token";
+    private final String MOCK_TOKEN = "mock-access-token-123";
+    private final String BASE_URL = "https://api.salesforce.mock";
 
     @BeforeEach
     void setUp() {
-        ReflectionTestUtils.setField(salesforceClient, "orcidApiClientId", CLIENT_ID);
-        ReflectionTestUtils.setField(salesforceClient, "orcidApiClientSecret", CLIENT_SECRET);
-        ReflectionTestUtils.setField(salesforceClient, "salesforceClientEndpoint", CLIENT_ENDPOINT);
-        ReflectionTestUtils.setField(salesforceClient, "salesforceTokenEndpoint", TOKEN_ENDPOINT);
+        RestClient.Builder builder = RestClient.builder();
+        mockServer = MockRestServiceServer.bindTo(builder).build();
+        RestClient restClient = builder.build();
+
+        ReflectionTestUtils.setField(salesforceClient, "accessToken", new AtomicReference<>());
+        ReflectionTestUtils.setField(salesforceClient, "restClient", restClient);
+        ReflectionTestUtils.setField(salesforceClient, "salesforceAPIBaseUrl", BASE_URL);
+        ReflectionTestUtils.setField(salesforceClient, "username", "test-user");
+        ReflectionTestUtils.setField(salesforceClient, "password", "test-pass");
+        ReflectionTestUtils.setField(salesforceClient, "clientId", "test-client-id");
+        ReflectionTestUtils.setField(salesforceClient, "clientSecret", "test-client-secret");
+        ReflectionTestUtils.setField(salesforceClient, "loginUrl", "https://login.salesforce.mock");
     }
 
+    // ==========================================
+    // SUCCESSFUL GET METHOD TESTS
+    // ==========================================
+
     @Test
-    void testGetMemberDetails_Success() throws IOException {
-        MemberDetailsWrapper response = new MemberDetailsWrapper();
-        MemberDetails details = new MemberDetails();
-        details.setId("details 1");
-        details.setName("details 1");
-        response.setMember(details);
+    void getMemberDetails_shouldReturnData() {
+        expectTokenRequest();
+        expectQueryRequest("SF_123", "{\"records\":[{\"Name\":\"Test Member\"}]}");
 
-        mockAccessTokenCall("fake-access-token");
-
-        MemberDetailsWrapper responseWrapper = new MemberDetailsWrapper();
-        MemberDetails responseMember = new MemberDetails();
-        responseMember.setId("details 1");
-        responseMember.setName("details 1");
-        responseWrapper.setMember(details);
-
-        mockGetRequest("/member/123/details", responseWrapper);
-
-        MemberDetails result = salesforceClient.getMemberDetails("123");
+        String result = salesforceClient.getMemberDetails("SF_123");
 
         assertNotNull(result);
-        assertEquals(responseWrapper.getMember(), result);
-
-        verify(restClient).post();
+        assertTrue(result.contains("Test Member"));
+        mockServer.verify();
     }
 
     @Test
-    void testUpdatePublicMemberDetails_Success() throws IOException {
-        mockAccessTokenCall("fake-access-token");
+    void getConsortium_shouldReturnData() {
+        expectTokenRequest();
+        expectQueryRequest("SF_CONS_1", "{\"records\":[{\"Name\":\"Consortium\"}]}");
+
+        String result = salesforceClient.getConsortium("SF_CONS_1");
+
+        assertNotNull(result);
+        assertTrue(result.contains("Consortium"));
+        mockServer.verify();
+    }
+
+    @Test
+    void getMemberContacts_shouldReturnData() {
+        expectTokenRequest();
+        expectQueryRequest("SF_ORG_1", "{\"records\":[{\"Contact__c\":\"Contact_1\"}]}");
+
+        String result = salesforceClient.getMemberContacts("SF_ORG_1");
+
+        assertNotNull(result);
+        assertTrue(result.contains("Contact_1"));
+        mockServer.verify();
+    }
+
+    @Test
+    void getMemberContactData_shouldReturnData() {
+        expectTokenRequest();
+        expectQueryRequest("CONTACT_123", "{\"records\":[{\"Email\":\"test@test.com\"}]}");
+
+        String result = salesforceClient.getMemberContactData("CONTACT_123");
+
+        assertNotNull(result);
+        assertTrue(result.contains("test@test.com"));
+        mockServer.verify();
+    }
+
+    @Test
+    void getMemberOrgIds_shouldReturnData() {
+        expectTokenRequest();
+        expectQueryRequest("SF_123", "{\"records\":[{\"Identifier_Type__c\":\"ROR\"}]}");
+
+        String result = salesforceClient.getMemberOrgIds("SF_123");
+
+        assertNotNull(result);
+        assertTrue(result.contains("ROR"));
+        mockServer.verify();
+    }
+
+    @Test
+    void getMetadata_shouldParseAndReturnMap() {
+        expectTokenRequest();
+
+        mockServer.expect(requestTo(BASE_URL + "/sobjects/Account/describe"))
+                .andExpect(method(HttpMethod.GET))
+                .andExpect(header("Authorization", "Bearer " + MOCK_TOKEN))
+                .andRespond(withSuccess("{\"fields\": [{\"name\": \"Id\"}]}", MediaType.APPLICATION_JSON));
+
+        Map<String, Object> metadata = salesforceClient.getMetadata();
+
+        assertNotNull(metadata);
+        assertTrue(metadata.containsKey("fields"));
+        mockServer.verify();
+    }
+
+    // ==========================================
+    // SUCCESSFUL POST/PATCH TESTS
+    // ==========================================
+
+    @Test
+    void updatePublicMemberDetails_shouldPatchCorrectly() {
+        expectTokenRequest();
+
+        String salesforceId = "SF_999";
+        mockServer.expect(requestTo(BASE_URL + "/sobjects/Account/" + salesforceId + "?_HttpMethod=PATCH"))
+                .andExpect(method(HttpMethod.POST))
+                .andExpect(header("Authorization", "Bearer " + MOCK_TOKEN))
+                .andRespond(withNoContent());
 
         MemberUpdateData updateData = new MemberUpdateData();
-        updateData.setSalesforceId("123");
+        updateData.setSalesforceId(salesforceId);
+        updateData.setOrgName("New Org Name");
 
-        mockPutRequest("/member/123/member-data", updateData, "Success");
-
-        Boolean result = salesforceClient.updatePublicMemberDetails(updateData);
-
-        assertTrue(result);
+        assertDoesNotThrow(() -> salesforceClient.updatePublicMemberDetails(updateData));
+        mockServer.verify();
     }
 
+    // ==========================================
+    // RETRY & ERROR HANDLING TESTS
+    // ==========================================
+
     @Test
-    void testGetMemberDetails_RetryLogic() throws IOException {
-        MemberDetailsWrapper response = new MemberDetailsWrapper();
-        MemberDetails details = new MemberDetails();
-        details.setId("details 1");
-        details.setName("details 1");
-        response.setMember(details);
+    void request_shouldRefreshTokenOnExceptionAndRetry() {
+        AtomicReference<String> tokenRef = (AtomicReference<String>) ReflectionTestUtils.getField(salesforceClient, "accessToken");
+        tokenRef.set("expired-token");
 
-        mockAccessTokenCall("initial-token");
+        // 1. Initial request fails with 401
+        mockServer.expect(requestTo(org.hamcrest.CoreMatchers.startsWith(BASE_URL + "/query")))
+                .andExpect(header("Authorization", "Bearer expired-token"))
+                .andRespond(withUnauthorizedRequest());
 
-        when(restClient.get()).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.uri(contains("/member/123/details"))).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.accept(any())).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.accept(any())).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.headers(any())).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.retrieve()).thenReturn(responseSpec);
+        // 2. Automatically requests new token
+        expectTokenRequest();
 
-        when(responseSpec.toEntity(any(ParameterizedTypeReference.class)))
-                .thenThrow(new RuntimeException("Token expired")) // First call fails
-                .thenReturn(ResponseEntity.ok(response)); // Second call succeeds
+        // 3. Retries original request with new token
+        mockServer.expect(requestTo(org.hamcrest.CoreMatchers.startsWith(BASE_URL + "/query")))
+                .andExpect(header("Authorization", "Bearer " + MOCK_TOKEN))
+                .andRespond(withSuccess("{\"records\":[]}", MediaType.APPLICATION_JSON));
 
-        MemberDetails result = salesforceClient.getMemberDetails("123");
+        String result = salesforceClient.getMemberDetails("SF_123");
+
         assertNotNull(result);
-        verify(restClient, times(2)).post();
+        mockServer.verify();
     }
 
     @Test
-    void testGetSalesforceCountries() {
-        mockAccessTokenCall("token");
-        List<Country> countries = List.of(new Country(), new Country());
+    void get_non2xxResponse_shouldReturnNull() {
+        expectTokenRequest();
 
-        mockGetRequest("/countries", countries);
+        // Simulate a 500 Internal Server Error
+        mockServer.expect(requestTo(org.hamcrest.CoreMatchers.startsWith(BASE_URL + "/query")))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withServerError().body("Internal Server Error"));
 
-        List<Country> result = salesforceClient.getSalesforceCountries();
-        assertEquals(2, result.size());
-    }
-
-    @Test
-    void testGetConsortiumLeadDetails_Success() throws IOException {
-        mockAccessTokenCall("token");
-
-        ConsortiumLeadDetailsWrapper wrapper = new ConsortiumLeadDetailsWrapper();
-
-        ConsortiumLeadDetails consortiumLead = new ConsortiumLeadDetails();
-        consortiumLead.setName("consortium lead");
-        ConsortiumMember consortiumMember = new ConsortiumMember();
-        consortiumMember.setSalesforceId("sfid1");
-        wrapper.setConsortiumMembers(Arrays.asList(consortiumMember));
-        wrapper.setConsortiumLead(consortiumLead);
-
-        mockGetRequest("/member/123/details", wrapper);
-
-        ConsortiumLeadDetails cl = salesforceClient.getConsortiumLeadDetails("123");
-
-        assertNotNull(cl);
-        assertEquals("consortium lead", cl.getName());
-        assertNotNull(cl.getConsortiumMembers());
-        assertEquals(1, cl.getConsortiumMembers().size());
-        assertEquals("sfid1", cl.getConsortiumMembers().getFirst().getSalesforceId());
-    }
-
-    @Test
-    void testGetMemberContacts_Success() throws IOException {
-        mockAccessTokenCall("token");
-
-        MemberContacts mockContacts = new MemberContacts();
-        mockGetRequest("/member/123/contacts", mockContacts);
-
-        MemberContacts result = salesforceClient.getMemberContacts("123");
-        assertNotNull(result);
-        assertEquals(mockContacts, result);
-    }
-
-    @Test
-    void testProcessResponse_Non2xx() {
-        mockAccessTokenCall("token");
-
-        when(restClient.get()).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.accept(any())).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.headers(any())).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.retrieve()).thenReturn(responseSpec);
-
-        ResponseEntity responseEntity = new ResponseEntity<>("Error Body", HttpStatus.INTERNAL_SERVER_ERROR);
-        when(responseSpec.toEntity(any(ParameterizedTypeReference.class))).thenReturn(responseEntity);
-
-        MemberOrgIds result = null;
-        try {
-            result = salesforceClient.getMemberOrgIds("123");
-        } catch (IOException e) {
-            fail("Should not throw IO exception");
-        }
+        // The client catches non-auth RestClientResponseExceptions and returns null
+        String result = salesforceClient.getMemberDetails("SF_123");
 
         assertNull(result);
+        mockServer.verify();
     }
 
-    private void mockAccessTokenCall(String tokenValue) {
-        lenient().when(restClient.post()).thenReturn(requestBodyUriSpec);
-        lenient().when(requestBodyUriSpec.uri(TOKEN_ENDPOINT)).thenReturn(requestBodyUriSpec);
-        lenient().when(requestBodyUriSpec.accept(any())).thenReturn(requestBodyUriSpec);
-        lenient().when(requestBodyUriSpec.contentType(MediaType.APPLICATION_FORM_URLENCODED)).thenReturn(requestBodyUriSpec);
-        lenient().when(requestBodyUriSpec.body(any(MultiValueMap.class))).thenReturn(requestBodyUriSpec);
-        lenient().when(requestBodyUriSpec.retrieve()).thenReturn(responseSpec);
+    @Test
+    void get_403ForbiddenResponse_shouldThrowException() {
+        // Setup initial token to bypass token creation block
+        AtomicReference<String> tokenRef = (AtomicReference<String>) ReflectionTestUtils.getField(salesforceClient, "accessToken");
+        tokenRef.set(MOCK_TOKEN);
 
-        String jsonResponse = "{\"access_token\": \"" + tokenValue + "\"}";
-        lenient().when(responseSpec.body(String.class)).thenReturn(jsonResponse);
+        // Fail once, triggering a retry
+        mockServer.expect(requestTo(org.hamcrest.CoreMatchers.startsWith(BASE_URL + "/query")))
+                .andRespond(withStatus(HttpStatus.FORBIDDEN));
+
+        // Fetch new token
+        expectTokenRequest();
+
+        // Fail again on the retry
+        mockServer.expect(requestTo(org.hamcrest.CoreMatchers.startsWith(BASE_URL + "/query")))
+                .andRespond(withStatus(HttpStatus.FORBIDDEN));
+
+        // The client explicitly throws 401 and 403 errors
+        assertThrows(RestClientResponseException.class, () -> salesforceClient.getMemberDetails("SF_123"));
+        mockServer.verify();
     }
 
-    private <T> void mockGetRequest(String pathSuffix, T responseBody) {
-        when(restClient.get()).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.uri(CLIENT_ENDPOINT + pathSuffix)).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.accept(any())).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.headers(any())).thenReturn(requestHeadersUriSpec);
-        when(requestHeadersUriSpec.retrieve()).thenReturn(responseSpec);
+    @Test
+    void post_non2xxResponse_shouldBeCaughtAndLogged() {
+        expectTokenRequest();
 
-        ResponseEntity<T> responseEntity = new ResponseEntity<>(responseBody, HttpStatus.OK);
-        when(responseSpec.toEntity(any(ParameterizedTypeReference.class))).thenReturn(responseEntity);
+        String salesforceId = "SF_999";
+        // Simulate a 500 Error during POST
+        mockServer.expect(requestTo(BASE_URL + "/sobjects/Account/" + salesforceId + "?_HttpMethod=PATCH"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withServerError());
+
+        MemberUpdateData updateData = new MemberUpdateData();
+        updateData.setSalesforceId(salesforceId);
+
+        // The exception should be caught and logged internally, not bubbled up
+        assertDoesNotThrow(() -> salesforceClient.updatePublicMemberDetails(updateData));
+        mockServer.verify();
     }
 
-    private <T> void mockPutRequest(String pathSuffix, Object requestBody, T responseBody) {
-        when(restClient.put()).thenReturn(requestBodyUriSpec);
-        when(requestBodyUriSpec.uri(CLIENT_ENDPOINT + pathSuffix)).thenReturn(requestBodyUriSpec);
-        when(requestBodyUriSpec.accept(any())).thenReturn(requestBodyUriSpec);
-        when(requestBodyUriSpec.contentType(any())).thenReturn(requestBodyUriSpec);
-        when(requestBodyUriSpec.body(requestBody)).thenReturn(requestBodyUriSpec);
-        when(requestBodyUriSpec.headers(any())).thenReturn(requestBodyUriSpec);
-        when(requestBodyUriSpec.retrieve()).thenReturn(responseSpec);
+    @Test
+    void getMetadata_badJsonResponse_shouldThrowRuntimeException() {
+        // First attempt
+        expectTokenRequest();
+        mockServer.expect(requestTo(BASE_URL + "/sobjects/Account/describe"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess("{\"fields\": [{\"name\": \"Id\"}", MediaType.APPLICATION_JSON));
 
-        ResponseEntity<T> responseEntity = new ResponseEntity<>(responseBody, HttpStatus.OK);
-        when(responseSpec.toEntity(any(ParameterizedTypeReference.class))).thenReturn(responseEntity);
+        // The blanket catch(Exception) in request() triggers a token refresh and a second attempt
+        expectTokenRequest();
+        mockServer.expect(requestTo(BASE_URL + "/sobjects/Account/describe"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess("{\"fields\": [{\"name\": \"Id\"}", MediaType.APPLICATION_JSON));
+
+        // The exception will successfully bubble up after the second failed attempt
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> salesforceClient.getMetadata());
+        assertEquals("Error getting salesforce metadata", exception.getMessage());
+        mockServer.verify();
+    }
+
+    @Test
+    void createAccessToken_failureShouldThrowRuntimeException() {
+        // Simulate a failure reaching the login/token URL
+        mockServer.expect(MockRestRequestMatchers.requestTo("https://login.salesforce.mock/services/oauth2/token"))
+                .andRespond(withServerError());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> salesforceClient.getMemberDetails("SF_123"));
+        assertTrue(exception.getMessage().contains("java.lang.RuntimeException"));
+        mockServer.verify();
+    }
+
+    // ==========================================
+    // HELPER METHODS
+    // ==========================================
+
+    private void expectTokenRequest() {
+        String tokenResponse = String.format("{\"access_token\":\"%s\"}", MOCK_TOKEN);
+        mockServer.expect(MockRestRequestMatchers.requestTo("https://login.salesforce.mock/services/oauth2/token"))
+                .andExpect(method(HttpMethod.POST))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_FORM_URLENCODED))
+                .andRespond(withSuccess(tokenResponse, MediaType.APPLICATION_JSON));
+    }
+
+    private void expectQueryRequest(String id, String responseBody) {
+        // Using startsWith allows us to bypass checking the complex URL-encoded SOQL string
+        mockServer.expect(requestTo(org.hamcrest.CoreMatchers.startsWith(BASE_URL + "/query?q=")))
+                .andExpect(method(HttpMethod.GET))
+                .andExpect(header("Authorization", "Bearer " + MOCK_TOKEN))
+                .andRespond(withSuccess(responseBody, MediaType.APPLICATION_JSON));
     }
 }
