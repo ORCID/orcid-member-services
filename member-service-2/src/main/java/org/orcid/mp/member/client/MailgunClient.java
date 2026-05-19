@@ -34,16 +34,13 @@ public class MailgunClient {
         this.client = client;
     }
 
-    public void sendMail(String to, String subject, String html) throws MailException {
-        sendMail(to, getFrom(), subject, html);
-    }
-
-    public void sendMail(String to, String from, String subject, String html) throws MailException {
-        LOGGER.info("Preparing email {} for sending to {} from {}", subject, to, from);
+    public void sendMail(String to, String cc, String subject, String html) throws MailException {
+        LOGGER.info("Preparing email {} for sending to {} cc {} from {}", subject, to, cc, getFrom());
 
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-        formData.add("from", from);
         formData.add("to", to);
+        formData.add("cc", cc);
+        formData.add("from", getFrom());
         formData.add("subject", subject);
         formData.add("html", html);
 
