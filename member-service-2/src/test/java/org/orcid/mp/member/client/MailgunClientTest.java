@@ -56,7 +56,7 @@ public class MailgunClientTest {
 
         when(responseSpec.toEntity(String.class)).thenReturn(ResponseEntity.ok("Success"));
 
-        mailgunClient.sendMail("recipient@orcid.org", "test email", "<p>test email</p>");
+        mailgunClient.sendMail("recipient@orcid.org", "cl@member.org", "test email", "<p>test email</p>");
 
         verify(requestBodySpec).body(formDataCaptor.capture());
 
@@ -64,6 +64,7 @@ public class MailgunClientTest {
         assertThat(params.getFirst("to")).isEqualTo("recipient@orcid.org");
         assertThat(params.getFirst("subject")).isEqualTo("test email");
         assertThat(params.getFirst("html")).isEqualTo("<p>test email</p>");
+        assertThat(params.getFirst("cc")).isEqualTo("cl@member.org");
         assertThat(params.getFirst("from")).contains("memberportal@orcid.org");
     }
 }
