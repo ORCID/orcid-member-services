@@ -883,7 +883,7 @@ class AssertionServiceTest {
         assertion.setAddedToORCID(addedToOrcid);
         assertion.setLastSyncAttempt(addedToOrcid);
         assertion.setModified(Instant.now());
-        assertion.setStatus(AssertionStatus.PENDING_RETRY.name());
+        assertion.setStatus(AssertionStatus.ERROR_UPDATING_TO_ORCID.name());
 
         Mockito.when(orcidRecordService.findByEmail("test@orcid.org")).thenReturn(Optional.of(orcidRecord));
         Mockito.when(orcidApiClient.exchangeToken(Mockito.eq("idToken1234"), anyString())).thenReturn("accessToken1234");

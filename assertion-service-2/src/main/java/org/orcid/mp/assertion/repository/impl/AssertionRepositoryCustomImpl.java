@@ -53,10 +53,13 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
         Criteria notDeprecatedOrDeactivated = new Criteria();
         notDeprecatedOrDeactivated.andOperator(Criteria.where("status").ne(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name()));
 
-        Criteria needsUpdatingInOrcidAndNotDeprecatedOrDeactivated = new Criteria();
-        needsUpdatingInOrcidAndNotDeprecatedOrDeactivated.andOperator(needsUpdatingInOrcid, notDeprecatedOrDeactivated);
+        Criteria notErrorUpdating = new Criteria();
+        notDeprecatedOrDeactivated.andOperator(Criteria.where("status").ne(AssertionStatus.ERROR_UPDATING_TO_ORCID.name()));
 
-        MatchOperation matchUpdatedAfterSync = Aggregation.match(needsUpdatingInOrcidAndNotDeprecatedOrDeactivated);
+        Criteria criteria = new Criteria();
+        criteria.andOperator(needsUpdatingInOrcid, notDeprecatedOrDeactivated, notErrorUpdating);
+
+        MatchOperation matchUpdatedAfterSync = Aggregation.match(criteria);
 
         // pagination aggregation operations
         SortOperation sort = new SortOperation(pageable.getSort());
