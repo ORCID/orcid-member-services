@@ -45,6 +45,7 @@ public class MailgunClient {
         if (testMode) {
             formData.add("o:testmode", "yes");
             LOGGER.info("Test mode email {} to {}", subject, to);
+            LOGGER.info(html);
         }
 
         try {
