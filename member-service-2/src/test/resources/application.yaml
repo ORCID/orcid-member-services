@@ -23,10 +23,12 @@ application:
     testMode: true
     contactUpdateRecipient: someone@orcid.org
   salesforce:
-    orcidApiClientId: some-client-id
-    orcidApiClientSecret: some-secret
-    clientEndpoint: http://some.com/endpoint
-    tokenEndpoint: http://some.come/token/endpoint
+    clientId: some-client-id
+    clientSecret: some-secret
+    loginUrl: https://login-url
+    apiBaseUrl: https://api.baseurl.salesforce/
+    username: username
+    password: password
   userService:
     apiUrl: http://user.com/service
   reports:
