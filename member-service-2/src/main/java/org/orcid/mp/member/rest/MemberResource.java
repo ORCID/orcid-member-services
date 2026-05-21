@@ -387,7 +387,7 @@ public class MemberResource {
             // user not accessing own member - is it accessing a child member?
             Optional<Member> parent = memberService.getMember(user.getMemberId());
             Optional<Member> member = memberService.getMember(memberId);
-            if (member.isEmpty() || !member.get().getParentSalesforceId().equals(parent.get().getSalesforceId())) {
+            if (member.isEmpty() || member.get().getParentSalesforceId() == null || !member.get().getParentSalesforceId().equals(parent.get().getSalesforceId())) {
                 // member not part of user's consortium
                 LOG.warn("Illegal attempt by user {} to access member {}", user.getEmail(), memberId);
                 throw new UnauthorizedMemberAccessException(user.getEmail(), memberId);
