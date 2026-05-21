@@ -3,7 +3,7 @@ import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
-import * as moment from 'moment';
+import * as moment from 'moment'
 import { EMPTY, of } from 'rxjs'
 import { AccountService } from 'src/app/account'
 import { HasAnyAuthorityDirective } from 'src/app/shared/directive/has-any-authority.directive'
@@ -20,11 +20,11 @@ describe('AffiliationsComponent', () => {
   let affiliationService: jasmine.SpyObj<AffiliationService>
   let accountService: jasmine.SpyObj<AccountService>
   let eventService: jasmine.SpyObj<EventService>
-  const baseTime = new Date('2026-03-31T10:00:00Z');
+  const baseTime = new Date('2026-03-31T10:00:00Z')
 
   beforeEach(() => {
-    jasmine.clock().install();
-    jasmine.clock().mockDate(baseTime);
+    jasmine.clock().install()
+    jasmine.clock().mockDate(baseTime)
 
     const accountServiceSpy = jasmine.createSpyObj('AccountService', [
       'getAccountData',
@@ -92,6 +92,7 @@ describe('AffiliationsComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: false,
+        memberId: 'memberId',
       })
     )
 
@@ -100,8 +101,8 @@ describe('AffiliationsComponent', () => {
   })
 
   afterEach(() => {
-    jasmine.clock().uninstall();
-  });
+    jasmine.clock().uninstall()
+  })
 
   it('should create', () => {
     expect(component).toBeTruthy()
@@ -172,28 +173,36 @@ describe('AffiliationsComponent', () => {
     // The service's convertDateFromServer wraps raw API strings in moment() before
     // handing data to the component. The mock must reflect that post-deserialization
     // state, otherwise the template's .toDate() call will throw at render time.
-    const created = moment('2026-03-31T10:00:00Z');
+    const created = moment('2026-03-31T10:00:00Z')
     affiliationService.query.and.returnValue(
       of({
         content: [
           new Affiliation(
-            '456',       // id
-            null,        // addedToORCID
-            undefined,   // affiliationSection
-            created,     // created — Moment object, as returned by convertDateFromServer
-            undefined,   // deletedFromORCID
-            undefined,   // departmentName
-            undefined,   // disambiguatedOrgId
-            undefined,   // disambiguationSource
+            '456', // id
+            null, // addedToORCID
+            undefined, // affiliationSection
+            created, // created — Moment object, as returned by convertDateFromServer
+            undefined, // deletedFromORCID
+            undefined, // departmentName
+            undefined, // disambiguatedOrgId
+            undefined, // disambiguationSource
             'user@example.com', // email
-            undefined, undefined, undefined, undefined, undefined, undefined,
-            undefined,   // modified
-            undefined, undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined, // modified
+            undefined,
+            undefined,
             'Springfield', // orgCity
             undefined,
             'Acme Corp', // orgName
-            undefined, undefined, undefined,
-            'Software Engineer', // roleTitle
+            undefined,
+            undefined,
+            undefined,
+            'Software Engineer' // roleTitle
           ),
         ],
         page: { totalElements: 1, number: 0, size: 20, totalPages: 1 },

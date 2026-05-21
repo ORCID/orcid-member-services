@@ -66,6 +66,7 @@ describe('MembersComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: false,
+        memberId: 'memberId',
       })
     )
     spyOn(routerSpy, 'navigate').and.returnValue(Promise.resolve(true))

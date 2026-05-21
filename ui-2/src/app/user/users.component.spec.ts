@@ -90,6 +90,7 @@ describe('UsersComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: false,
+        memberId: 'memberId',
       })
     )
 

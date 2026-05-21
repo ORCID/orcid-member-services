@@ -85,6 +85,7 @@ describe('NavbarComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: false,
+        memberId: 'memberId',
       })
     )
     memberService.find.and.returnValue(of({ id: 'id', client_id: 'a', isConsortiumLead: false }))
@@ -130,6 +131,7 @@ describe('NavbarComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: false,
+        memberId: 'memberId',
       })
     )
     memberService.find.and.returnValue(of({ id: 'id', client_id: 'a', isConsortiumLead: true }))
@@ -168,6 +170,7 @@ describe('NavbarComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: false,
+        memberId: 'memberId',
       })
     )
     memberService.find.and.returnValue(of({ id: 'id', client_id: 'a', isConsortiumLead: true }))
