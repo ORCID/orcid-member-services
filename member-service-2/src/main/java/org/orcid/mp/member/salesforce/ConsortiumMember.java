@@ -1,7 +1,9 @@
 package org.orcid.mp.member.salesforce;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ConsortiumMember {
 
     @JsonProperty("AccountId")
@@ -36,6 +38,7 @@ public class ConsortiumMember {
         this.metadata = metadata;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public class Metadata {
 
         @JsonProperty("Public_Display_Name__c")

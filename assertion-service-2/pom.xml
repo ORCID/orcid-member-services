@@ -29,6 +29,7 @@
 	<properties>
 		<java.version>21</java.version>
 		<spring-security.version>6.5.9</spring-security.version>
+		<thymeleaf.version>3.1.4.RELEASE</thymeleaf.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>

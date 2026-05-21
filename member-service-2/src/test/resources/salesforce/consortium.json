@@ -1,0 +1,34 @@
+{
+	"totalSize": 1,
+	"done": true,
+	"records": [{
+		"attributes": {
+			"type": "Account",
+			"url": "/services/data/v54.0/sobjects/Account/0012i000002pwQ3AAI"
+		},
+		"ConsortiaOpportunities__r": {
+			"totalSize": 1,
+			"done": true,
+			"records": [{
+				"attributes": {
+					"type": "Opportunity",
+					"url": "/services/data/v54.0/sobjects/Opportunity/0062i000007reldAAA"
+				},
+				"Id": "id",
+				"AccountId": "some-consortium-member-id",
+				"Account": {
+					"attributes": {
+						"type": "Account",
+						"url": "/services/data/v54.0/sobjects/Account/0012i000002pwQ3AAI"
+					},
+					"Name": "Org 1 Consortium Lead",
+					"Public_Display_Name__c": "Org 1 Consortium Lead"
+				},
+				"StageName": "Agreement Signed",
+				"NextStep": null,
+				"Consortium_member_removal_requested__c": false,
+				"Consortia_Lead__c": "0012i000002pwQ3AAI"
+			}]
+		}
+	}]
+}

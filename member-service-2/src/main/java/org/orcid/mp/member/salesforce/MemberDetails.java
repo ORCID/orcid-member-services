@@ -1,9 +1,10 @@
 package org.orcid.mp.member.salesforce;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-@JsonRootName(value="member")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MemberDetails {
 
     @JsonProperty("Id")

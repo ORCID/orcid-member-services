@@ -4,12 +4,15 @@ import io.micrometer.common.util.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 
 import org.orcid.mp.member.domain.Member;
+import org.orcid.mp.member.domain.User;
 import org.orcid.mp.member.error.BadRequestAlertException;
 import org.orcid.mp.member.error.UnauthorizedMemberAccessException;
 import org.orcid.mp.member.pojo.AddConsortiumMember;
 import org.orcid.mp.member.pojo.MemberContactUpdate;
 import org.orcid.mp.member.pojo.MemberContactUpdateResponse;
 import org.orcid.mp.member.pojo.RemoveConsortiumMember;
+import org.orcid.mp.member.service.SalesforceService;
+import org.orcid.mp.member.service.UserService;
 import org.orcid.mp.member.validation.MemberValidation;
 import org.orcid.mp.member.salesforce.*;
 import org.orcid.mp.member.service.MemberService;
@@ -42,6 +45,12 @@ public class MemberResource {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private SalesforceService salesforceService;
 
     /**
      * {@code POST  /members} : Create a new member.
@@ -138,6 +147,7 @@ public class MemberResource {
             @PathVariable String language) {
         LOG.info("REST request to update default language for member : {}", memberId);
         try {
+            validateUserAccess(memberId);
             memberService.updateMemberDefaultLanguage(memberId, language);
         } catch (UnauthorizedMemberAccessException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -154,15 +164,14 @@ public class MemberResource {
     @PutMapping("/{memberId}/member-details")
     public ResponseEntity<Boolean> updatePublicMemberDetails(@RequestBody MemberUpdateData memberUpdateData,
             @PathVariable String memberId) {
-        String salesforceId = getSalesforceId(memberId);
-        LOG.info("REST request to update member public details for salesforce id {}", salesforceId);
-
-        if (!memberDetailsUpdateValid(memberUpdateData)) {
-            return ResponseEntity.badRequest().build();
-        }
+        LOG.info("REST request to update member public details for salesforce id {}", memberId);
         try {
-            boolean success = memberService.updateMemberData(memberUpdateData, salesforceId);
-            return ResponseEntity.ok(success);
+            validateUserAccess(memberId);
+            if (!memberDetailsUpdateValid(memberUpdateData)) {
+                return ResponseEntity.badRequest().build();
+            }
+            salesforceService.updatePublicMemberDetails(memberUpdateData);
+            return ResponseEntity.ok(true);
         } catch (UnauthorizedMemberAccessException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -176,10 +185,11 @@ public class MemberResource {
      */
     @GetMapping("/{memberId}/member-details")
     public ResponseEntity<MemberDetails> getMemberDetails(@PathVariable String memberId) {
-        String salesforceId = getSalesforceId(memberId);
-        LOG.debug("REST request to get member details");
+        LOG.debug("REST request to get member details for member {}", memberId);
         try {
-            MemberDetails memberDetails = memberService.getMemberDetails(salesforceId);
+            validateUserAccess(memberId);
+            String salesforceId = getSalesforceId(memberId);
+            MemberDetails memberDetails = salesforceService.getMemberDetails(salesforceId);
             LOG.debug("Successfully fetched salesforce member details with id {}", memberDetails.getId());
             return ResponseEntity.ok(memberDetails);
         } catch (UnauthorizedMemberAccessException e) {
@@ -190,7 +200,7 @@ public class MemberResource {
     @GetMapping("/countries")
     public ResponseEntity<List<Country>> getSalesforceCountries() {
         LOG.debug("REST request to get salesforce countries");
-        List<Country> countries = memberService.getSalesforceCountries();
+        List<Country> countries = salesforceService.getSalesforceCountries();
         return ResponseEntity.ok(countries);
     }
 
@@ -202,10 +212,11 @@ public class MemberResource {
      */
     @GetMapping("/{memberId}/member-contacts")
     public ResponseEntity<MemberContacts> getMemberContacts(@PathVariable String memberId) {
-        String salesforceId = getSalesforceId(memberId);
-        LOG.debug("REST request to get member contacts for member {}", salesforceId);
+        LOG.debug("REST request to get member contacts for member {}", memberId);
         try {
-            MemberContacts memberContacts = memberService.getCurrentMemberContacts(salesforceId);
+            validateUserAccess(memberId);
+            String salesforceId = getSalesforceId(memberId);
+            MemberContacts memberContacts = salesforceService.getMemberContacts(salesforceId);
             return ResponseEntity.ok(memberContacts);
         } catch (UnauthorizedMemberAccessException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -220,10 +231,11 @@ public class MemberResource {
      */
     @GetMapping("/{memberId}/member-org-ids")
     public ResponseEntity<MemberOrgIds> getMemberOrgIds(@PathVariable String memberId) {
-        String salesforceId = getSalesforceId(memberId);
-        LOG.debug("REST request to get member org ids for member {}", salesforceId);
+        LOG.debug("REST request to get member org ids for member {}", memberId);
         try {
-            MemberOrgIds memberOrgIds = memberService.getCurrentMemberOrgIds(salesforceId);
+            validateUserAccess(memberId);
+            String salesforceId = getSalesforceId(memberId);
+            MemberOrgIds memberOrgIds = salesforceService.getMemberOrgIds(salesforceId);
             return ResponseEntity.ok(memberOrgIds);
         } catch (UnauthorizedMemberAccessException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -313,10 +325,12 @@ public class MemberResource {
     public ResponseEntity<MemberContactUpdateResponse> processMemberContactUpdate(
             @RequestBody MemberContactUpdate memberContactUpdate,
             @PathVariable String memberId) {
-        String salesforceId = getSalesforceId(memberId);
-        LOG.debug("REST request to create new member contact update for member {}", salesforceId);
+
+        LOG.debug("REST request to create new member contact update for member {}", memberId);
         try {
-            memberService.processMemberContact(memberContactUpdate, salesforceId);
+            validateUserAccess(memberId);
+            String salesforceId = getSalesforceId(memberId);
+            salesforceService.processMemberContact(memberContactUpdate, salesforceId);
             return ResponseEntity.ok(new MemberContactUpdateResponse(true));
         } catch (UnauthorizedMemberAccessException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -327,7 +341,7 @@ public class MemberResource {
     @PostMapping("/add-consortium-member")
     public ResponseEntity<Void> requestNewConsortiumMember(@RequestBody AddConsortiumMember addConsortiumMember) {
         LOG.debug("REST request to request add new consortium member");
-        memberService.requestNewConsortiumMember(addConsortiumMember);
+        salesforceService.requestNewConsortiumMember(addConsortiumMember);
         return ResponseEntity.ok().build();
     }
 
@@ -336,7 +350,7 @@ public class MemberResource {
     public ResponseEntity<Void> requestRemoveConsortiumMember(
             @RequestBody RemoveConsortiumMember removeConsortiumMember) {
         LOG.debug("REST request to request remove consortium member");
-        memberService.requestRemoveConsortiumMember(removeConsortiumMember);
+        salesforceService.requestRemoveConsortiumMember(removeConsortiumMember);
         return ResponseEntity.ok().build();
     }
 
@@ -354,11 +368,30 @@ public class MemberResource {
         return true;
     }
 
-    private String getSalesforceId(String memberId) {
+    private String getSalesforceId(String memberId){
         Optional<Member> member = memberService.getMember(memberId);
         if (member.isPresent() && member.get().getSalesforceId() != null) {
             return member.get().getSalesforceId();
         }
         throw new BadRequestAlertException("Member not present or missing salesforce ID");
+    }
+
+    /**
+     * validates whether current user can access member with specified memberId
+     *
+     * @param memberId
+     */
+    private void validateUserAccess(String memberId) throws UnauthorizedMemberAccessException {
+        User user = userService.getLoggedInUser();
+        if (!user.getMemberId().equals(memberId)) {
+            // user not accessing own member - is it accessing a child member?
+            Optional<Member> parent = memberService.getMember(user.getMemberId());
+            Optional<Member> member = memberService.getMember(memberId);
+            if (member.isEmpty() || !member.get().getParentSalesforceId().equals(parent.get().getSalesforceId())) {
+                // member not part of user's consortium
+                LOG.warn("Illegal attempt by user {} to access member {}", user.getEmail(), memberId);
+                throw new UnauthorizedMemberAccessException(user.getEmail(), memberId);
+            }
+        }
     }
 }

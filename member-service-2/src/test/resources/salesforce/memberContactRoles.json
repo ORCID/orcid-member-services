@@ -1,0 +1,50 @@
+	{
+    "totalSize": 4,
+    "done": true,
+    "records": [
+        {
+            "attributes": {
+                "type": "Membership_Contact_Role__c",
+                "url": "/services/data/v54.0/sobjects/Membership_Contact_Role__c/a192i000002hTrCAAU"
+            },
+            "Contact__c":"1",
+            "Member_Org_Role__c": "Main relationship contact (OFFICIAL)",
+            "Contact_Curr_Email__c": "contact.1@orcid.org",
+            "Voting_Contact__c": false,
+            "Organization__c": "some-id"
+        },
+        {
+            "attributes": {
+                "type": "Membership_Contact_Role__c",
+                "url": "/services/data/v54.0/sobjects/Membership_Contact_Role__c/a192i000002hTrDAAU"
+            },
+            "Contact__c":"2",
+            "Member_Org_Role__c": "Technical contact",
+            "Contact_Curr_Email__c": "contact.2@orcid.org",
+            "Voting_Contact__c": false,
+            "Organization__c": "some-id"
+        },
+        {
+            "attributes": {
+                "type": "Membership_Contact_Role__c",
+                "url": "/services/data/v54.0/sobjects/Membership_Contact_Role__c/a192i000002hTrHAAU"
+            },
+            "Contact__c":"3",
+            "Member_Org_Role__c": "Product Contact",
+            "Contact_Curr_Email__c": "contact.3@orcid.org",
+            "Voting_Contact__c": false,
+            "Organization__c": "some-id"
+        },
+        {
+            "attributes": {
+                "type": "Membership_Contact_Role__c",
+                "url": "/services/data/v54.0/sobjects/Membership_Contact_Role__c/a192i000002hTrIAAU"
+            },
+            "Contact__c":"4",
+            "Member_Org_Role__c": "Agreement signatory (OFFICIAL)",
+            "Contact_Curr_Email__c": "contact.4@orcid.org",
+            "Voting_Contact__c": true,
+            "Organization__c": "some-id"
+        }
+    ]
+}
