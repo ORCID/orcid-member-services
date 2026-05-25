@@ -2,9 +2,17 @@
 """
 Backfill internal member IDs onto related records.
 
-Given a single Salesforce ID (--source), look up the corresponding member
-and backfill its internal `_id` onto related records in the assertion and
-user services. The member document itself is never modified.
+Builds an in-memory salesforce_id -> member._id map from every member in the
+member-service `member` collection, then makes a single pass over each related
+collection, writing the matching member_id via batched bulk updates.
+
+This single-pass design avoids per-member queries: each related collection is
+scanned a small, constant number of times regardless of how many members
+exist, and every write is keyed by `_id` (always indexed). It therefore does
+NOT depend on `salesforce_id` being indexed on the related collections
+(it is not, on orcid_record / send_notifications_request / jhi_user).
+
+A single member can still be targeted with --source for testing.
 
 Backfilled targets:
   - assertionservice.assertion                   (set member_id where salesforce_id matches)
@@ -15,15 +23,18 @@ Backfilled targets:
 Related to: https://orcid.clickup.com/t/9014437828/PD-5585
 
 Usage:
-    python backfill_member_id.py --source=0012i00000aQxlxAAC
+    python backfill_member_id.py                              # backfill ALL members
+    python backfill_member_id.py --source=0012i00000aQxlxAAC  # backfill one member only
 """
 
 import argparse
 import re
 import sys
 from pathlib import Path
-from typing import List, Dict, Any, Tuple
-from pymongo.errors import OperationFailure
+from typing import List, Dict, Tuple, Set
+from pymongo import UpdateOne
+from pymongo.collection import Collection
+from pymongo.errors import OperationFailure, BulkWriteError
 
 CURRENT_DIR = Path(__file__).resolve().parent
 UTILS_DIR = CURRENT_DIR.parent / "utils"
@@ -37,9 +48,14 @@ from db_connection import MongoDBConnection
 from config import Config
 
 # Set up logging
-logger = setup_logger(__name__, log_file='manage-organizations.log')
+logger = setup_logger(__name__, log_file='backfill-member-id.log')
 
 SALESFORCE_ID_PATTERN = re.compile(r"^[a-zA-Z0-9]{18}$")
+
+# Number of bulk operations to accumulate before flushing to MongoDB.
+BATCH_SIZE = 1000
+# How often (in documents scanned) to emit a progress line.
+PROGRESS_EVERY = 100_000
 
 
 class InvalidSalesforceIdError(ValueError):
@@ -47,10 +63,6 @@ class InvalidSalesforceIdError(ValueError):
 
 
 class MemberNotFoundError(LookupError):
-    pass
-
-
-class MissingMemberIdError(ValueError):
     pass
 
 
@@ -67,311 +79,194 @@ def validate_salesforce_id(value: str) -> str:
     return value
 
 
-class MemberLookup:
-    """Read-only lookup of a member by Salesforce ID."""
+class MemberRepository:
+    """Read-only access to the member-service `member` collection."""
 
-    def __init__(self, connection_to_db: MongoDBConnection, source: str):
+    def __init__(self, connection_to_db: MongoDBConnection):
         self.collection_member = connection_to_db.get_collection('member')
-        self.source = source
 
-    def find_member_id(self) -> Tuple[Any, Any]:
+    def build_salesforce_to_member_map(self, source_filter: str = None) -> Dict[str, str]:
+        """Return a {salesforce_id: member_id} map.
+
+        Members missing an `_id` (the value backfilled) or a `salesforce_id`
+        (the key related records are matched on) are skipped with a warning.
+        When `source_filter` is given, only that member is loaded.
+        """
+        scope = f"salesforce_id={source_filter}" if source_filter else "ALL members"
         logger.info("\n" + "="*80)
-        logger.info("Looking up member by Salesforce ID: %s", self.source)
+        logger.info("Loading members (%s)...", scope)
         logger.info("="*80)
 
+        query = {'salesforce_id': source_filter} if source_filter else {}
         try:
-            member = self.collection_member.find_one(
-                {"salesforce_id": self.source}
-            )
+            members = list(self.collection_member.find(
+                query, {'_id': 1, 'salesforce_id': 1, 'client_name': 1}
+            ))
         except OperationFailure as e:
-            logger.error(f"Failed to query member: {e}")
+            logger.error(f"Failed to query members: {e}")
             raise
 
-        if not member:
+        if source_filter and not members:
             raise MemberNotFoundError(
-                f"No member found for salesforce_id={self.source}"
+                f"No member found for salesforce_id={source_filter}"
             )
 
-        raw_member_id = member.get("_id")
-        if not raw_member_id:
-            raise MissingMemberIdError(
-                f"Member with salesforce_id={self.source} has no _id field"
-            )
+        sf_map: Dict[str, str] = {}
+        skipped = 0
+        duplicates: Set[str] = set()
+        for member in members:
+            raw_id = member.get('_id')
+            salesforce_id = member.get('salesforce_id')
+            if not raw_id:
+                logger.warning(" Skipping member with no _id (salesforce_id=%s)", salesforce_id)
+                skipped += 1
+                continue
+            if not salesforce_id:
+                logger.warning(
+                    " Skipping member with no salesforce_id (_id=%s, client_name=%s)",
+                    raw_id, member.get('client_name'),
+                )
+                skipped += 1
+                continue
+            if salesforce_id in sf_map:
+                duplicates.add(salesforce_id)
+            # Java entities declare memberId as String, so persist the hex
+            # representation of the ObjectId to stay consistent with Spring Data.
+            sf_map[salesforce_id] = str(raw_id)
 
-        # Java entities declare memberId as String, so persist the hex
-        # representation of the ObjectId to stay consistent with Spring Data.
-        member_id = str(raw_member_id)
-        client_name = member.get("client_name")
-        logger.info(
-            "Found member: _id=%s, salesforce_id=%s, client_name=%s",
-            member_id,
-            member.get("salesforce_id"),
-            client_name,
-        )
+        logger.info("Members loaded: %d total, %d usable, %d skipped",
+                    len(members), len(sf_map), skipped)
+        if duplicates:
+            logger.warning(
+                " %d salesforce_id(s) are shared by multiple members; related "
+                "records will get the member_id of whichever member was read "
+                "last: %s",
+                len(duplicates), ", ".join(sorted(duplicates)),
+            )
         logger.info("="*80)
-        return member_id, client_name
+        return sf_map
 
 
-class BackfillAssertionRecords:
-    """Backfill member_id on assertion-service collections."""
+class _BulkBackfiller:
+    """Shared bulk-write plumbing for the single-pass backfillers."""
 
-    def __init__(self, connection_to_db: MongoDBConnection, source: str, member_id: Any):
-        self.collection_assertion = connection_to_db.get_collection('assertion')
-        self.collection_orcid_record = connection_to_db.get_collection('orcid_record')
-        self.collection_send_notifications_request = connection_to_db.get_collection('send_notifications_request')
-        self.source = source
-        self.member_id = member_id
+    def __init__(self, collection: Collection, label: str):
+        self.collection = collection
+        self.label = label
 
-    def _mismatch_filter(self) -> Dict[str, Any]:
-        return {
-            'salesforce_id': self.source,
-            '$or': [
-                {'member_id': {'$exists': False}},
-                {'member_id': {'$ne': self.member_id}},
-            ],
-        }
-
-    def count_total_matching(self) -> int:
-        """Total records matching salesforce_id regardless of member_id state."""
-        try:
-            assertion_total = self.collection_assertion.count_documents({'salesforce_id': self.source})
-            orcid_total = self.collection_orcid_record.count_documents({'tokens.salesforce_id': self.source})
-            notifications_total = self.collection_send_notifications_request.count_documents({'salesforce_id': self.source})
-            return assertion_total + orcid_total + notifications_total
-        except OperationFailure as e:
-            logger.error(f"Failed to count assertion-service records: {e}")
+    def _flush(self, batch: List[UpdateOne]) -> int:
+        """Write a batch of updates, returning the number of documents modified."""
+        if not batch:
             return 0
-
-    def find_assertions_needing_backfill(self) -> List[Dict[str, Any]]:
         try:
-            logger.info("Searching for assertions with salesforce_id=%s...", self.source)
-            assertions = list(self.collection_assertion.find(self._mismatch_filter()))
-            logger.info(f"Found {len(assertions)} assertions needing backfill")
-            return assertions
-        except OperationFailure as e:
-            logger.error(f"Failed to query assertions: {e}")
-            return []
+            return self.collection.bulk_write(batch, ordered=False).modified_count
+        except (BulkWriteError, OperationFailure) as e:
+            detail = getattr(e, 'details', e)
+            logger.error(f" Bulk write failed on {self.label}: {detail}")
+            raise BackfillError(f"{self.label} bulk write failed: {e}") from e
 
-    def find_orcid_records_needing_backfill(self) -> List[Dict[str, Any]]:
-        try:
-            logger.info("Searching for orcid records with tokens.salesforce_id=%s...", self.source)
-            query = {
-                'tokens': {
-                    '$elemMatch': {
-                        'salesforce_id': self.source,
-                        '$or': [
-                            {'member_id': {'$exists': False}},
-                            {'member_id': {'$ne': self.member_id}},
-                        ],
-                    }
-                }
-            }
-            orcid_records = list(self.collection_orcid_record.find(query))
-            logger.info(f"Found {len(orcid_records)} orcid records needing backfill")
-            return orcid_records
-        except OperationFailure as e:
-            logger.error(f"Failed to query orcid records: {e}")
-            return []
 
-    def find_send_notifications_needing_backfill(self) -> List[Dict[str, Any]]:
-        try:
-            logger.info("Searching for send_notifications_request with salesforce_id=%s...", self.source)
-            notifications = list(self.collection_send_notifications_request.find(self._mismatch_filter()))
-            logger.info(f"Found {len(notifications)} send_notifications_request needing backfill")
-            return notifications
-        except OperationFailure as e:
-            logger.error(f"Failed to query send_notifications_request: {e}")
-            return []
+class TopLevelBackfiller(_BulkBackfiller):
+    """Backfill member_id on a collection with top-level salesforce_id/member_id."""
 
-    def print_assertions_report(self, assertions: List[Dict[str, Any]]):
-        if not assertions:
-            logger.info("No assertions need backfilling")
-            return
+    def scan(self, sf_map: Dict[str, str], sf_ids: List[str], apply: bool) -> Tuple[int, int, int]:
+        """Single pass over the collection.
 
-        logger.info("\n" + "="*80)
-        logger.info("ASSERTIONS NEEDING BACKFILL")
-        logger.info("="*80)
-
-        for rec in assertions:
-            logger.info(f" Email: {rec.get('email')}, Salesforce Id: {rec.get('salesforce_id')}")
-
-        logger.info("\n" + "="*80)
-
-    def print_orcid_records_report(self, orcid_records: List[Dict[str, Any]]):
-        if not orcid_records:
-            logger.info("No orcid records need backfilling")
-            return
-
-        logger.info("\n" + "="*80)
-        logger.info("ORCID RECORDS NEEDING BACKFILL")
-        logger.info("="*80)
-
-        for rec in orcid_records:
-            logger.info(f" Email: {rec.get('email')}")
-
-        logger.info("\n" + "="*80)
-
-    def print_send_notifications_report(self, notifications: List[Dict[str, Any]]):
-        if not notifications:
-            logger.info("No send_notifications_request need backfilling")
-            return
-
-        logger.info("\n" + "="*80)
-        logger.info("SEND NOTIFICATIONS REQUEST NEEDING BACKFILL")
-        logger.info("="*80)
-
-        for rec in notifications:
-            logger.info(f" Email: {rec.get('email')}, Salesforce Id: {rec.get('salesforce_id')}")
-
-        logger.info("\n" + "="*80)
-
-    def backfill_assertions(self) -> int:
-        logger.info("\n Backfilling member_id on assertions...")
-        try:
-            result = self.collection_assertion.update_many(
-                {'salesforce_id': self.source},
-                {'$set': {'member_id': self.member_id}}
-            )
-            logger.info(f" Successfully backfilled {result.modified_count} assertions")
-            logger.info(f"   Matched: {result.matched_count}")
-            logger.info(f"   Modified: {result.modified_count}")
-            return result.modified_count
-        except OperationFailure as e:
-            logger.error(f" Failed to backfill assertions: {e}")
-            raise BackfillError(f"assertion backfill failed: {e}") from e
-
-    def backfill_orcid_records(self) -> int:
-        logger.info("\n Backfilling tokens[].member_id on orcid_record...")
-        try:
-            result = self.collection_orcid_record.update_many(
-                {'tokens.salesforce_id': self.source},
-                {'$set': {'tokens.$[token].member_id': self.member_id}},
-                array_filters=[{'token.salesforce_id': self.source}]
-            )
-            logger.info(f" Successfully backfilled {result.modified_count} orcid records")
-            logger.info(f"   Matched: {result.matched_count}")
-            logger.info(f"   Modified: {result.modified_count}")
-            return result.modified_count
-        except OperationFailure as e:
-            logger.error(f" Failed to backfill orcid records: {e}")
-            raise BackfillError(f"orcid_record backfill failed: {e}") from e
-
-    def backfill_send_notifications(self) -> int:
-        logger.info("\n Backfilling member_id on send_notifications_request...")
-        try:
-            result = self.collection_send_notifications_request.update_many(
-                {'salesforce_id': self.source},
-                {'$set': {'member_id': self.member_id}}
-            )
-            logger.info(f" Successfully backfilled {result.modified_count} send_notifications_request")
-            logger.info(f"   Matched: {result.matched_count}")
-            logger.info(f"   Modified: {result.modified_count}")
-            return result.modified_count
-        except OperationFailure as e:
-            logger.error(f" Failed to backfill send_notifications_request: {e}")
-            raise BackfillError(f"send_notifications_request backfill failed: {e}") from e
-
-    def verify(self) -> bool:
-        logger.info("\n Verifying assertion-service backfills...")
-        mismatch_filter = {
-            'salesforce_id': self.source,
-            '$or': [
-                {'member_id': {'$exists': False}},
-                {'member_id': {'$ne': self.member_id}},
-            ],
-        }
-        remaining = (
-            self.collection_assertion.count_documents(mismatch_filter)
-            + self.collection_orcid_record.count_documents({
-                'tokens': {'$elemMatch': mismatch_filter}
-            })
-            + self.collection_send_notifications_request.count_documents(mismatch_filter)
+        Returns (scanned, needs_update, modified). When `apply` is False no
+        writes happen and `modified` is 0.
+        """
+        logger.info("  Scanning %s%s ...", self.label, " (applying updates)" if apply else "")
+        scanned = needs_update = modified = 0
+        batch: List[UpdateOne] = []
+        cursor = self.collection.find(
+            {'salesforce_id': {'$in': sf_ids}},
+            {'_id': 1, 'salesforce_id': 1, 'member_id': 1},
+            no_cursor_timeout=True,
         )
-        if remaining == 0:
-            logger.info(" Verification passed: all assertion-service records carry the expected member_id")
-            return True
-        logger.warning(f" Verification failed: {remaining} assertion-service records still missing or mismatched")
-        return False
-
-
-class BackfillUserRecords:
-    """Backfill member_id on user-service collections."""
-
-    def __init__(self, connection_to_db: MongoDBConnection, collection: str, source: str, member_id: Any):
-        self.collection_users = connection_to_db.get_collection(collection)
-        self.source = source
-        self.member_id = member_id
-
-    def _user_filter(self) -> Dict[str, Any]:
-        return {
-            'salesforce_id': self.source,
-            '$or': [
-                {'member_id': {'$exists': False}},
-                {'member_id': {'$ne': self.member_id}},
-            ],
-        }
-
-    def count_total_matching(self) -> int:
-        """Total users matching salesforce_id regardless of member_id state."""
         try:
-            return self.collection_users.count_documents({'salesforce_id': self.source})
-        except OperationFailure as e:
-            logger.error(f"Failed to count users: {e}")
-            return 0
+            for doc in cursor:
+                scanned += 1
+                if scanned % PROGRESS_EVERY == 0:
+                    logger.info("   ...%s: scanned %d, %d need update", self.label, scanned, needs_update)
 
-    def find_users_needing_backfill(self) -> List[Dict[str, Any]]:
+                target = sf_map.get(doc.get('salesforce_id'))
+                if target is None or doc.get('member_id') == target:
+                    continue
+
+                needs_update += 1
+                if apply:
+                    batch.append(UpdateOne(
+                        {'_id': doc['_id']},
+                        {'$set': {'member_id': target}},
+                    ))
+                    if len(batch) >= BATCH_SIZE:
+                        modified += self._flush(batch)
+                        batch = []
+
+            if apply:
+                modified += self._flush(batch)
+        finally:
+            cursor.close()
+
+        return scanned, needs_update, modified
+
+
+class OrcidRecordBackfiller(_BulkBackfiller):
+    """Backfill tokens[].member_id on the orcid_record collection."""
+
+    def __init__(self, collection: Collection):
+        super().__init__(collection, 'orcid_record')
+
+    def scan(self, sf_map: Dict[str, str], sf_ids: List[str], apply: bool) -> Tuple[int, int, int, int]:
+        """Single pass over the collection.
+
+        Returns (scanned, docs_needing_update, tokens_needing_update, modified).
+        Each affected document has its whole `tokens` array rewritten, changing
+        only the member_id of tokens that need it; all other fields are kept.
+        """
+        logger.info("  Scanning %s%s ...", self.label, " (applying updates)" if apply else "")
+        scanned = docs_needing = tokens_needing = modified = 0
+        batch: List[UpdateOne] = []
+        cursor = self.collection.find(
+            {'tokens.salesforce_id': {'$in': sf_ids}},
+            {'_id': 1, 'tokens': 1},
+            no_cursor_timeout=True,
+        )
         try:
-            logger.info("Searching for users with salesforce_id=%s...", self.source)
-            users = list(self.collection_users.find(self._user_filter()))
-            logger.info(f"Found {len(users)} users needing backfill")
-            return users
-        except OperationFailure as e:
-            logger.error(f"Failed to query users: {e}")
-            return []
+            for doc in cursor:
+                scanned += 1
+                if scanned % PROGRESS_EVERY == 0:
+                    logger.info("   ...%s: scanned %d, %d need update", self.label, scanned, docs_needing)
 
-    def print_users_report(self, users: List[Dict[str, Any]]):
-        if not users:
-            logger.info("No users need backfilling")
-            return
+                tokens = doc.get('tokens') or []
+                doc_changed = False
+                for token in tokens:
+                    target = sf_map.get(token.get('salesforce_id'))
+                    if target is None or token.get('member_id') == target:
+                        continue
+                    token['member_id'] = target
+                    tokens_needing += 1
+                    doc_changed = True
 
-        logger.info("\n" + "="*80)
-        logger.info("USERS NEEDING BACKFILL")
-        logger.info("="*80)
+                if not doc_changed:
+                    continue
 
-        for rec in users:
-            logger.info(f" email: {rec.get('email')}, Salesforce Id: {rec.get('salesforce_id')}, Main contact: {rec.get('main_contact')}")
+                docs_needing += 1
+                if apply:
+                    batch.append(UpdateOne(
+                        {'_id': doc['_id']},
+                        {'$set': {'tokens': tokens}},
+                    ))
+                    if len(batch) >= BATCH_SIZE:
+                        modified += self._flush(batch)
+                        batch = []
 
-        logger.info("\n" + "="*80)
+            if apply:
+                modified += self._flush(batch)
+        finally:
+            cursor.close()
 
-    def backfill_users(self) -> int:
-        logger.info("\n Backfilling member_id on users...")
-        try:
-            result = self.collection_users.update_many(
-                {'salesforce_id': self.source},
-                {'$set': {'member_id': self.member_id}}
-            )
-            logger.info(f" Successfully backfilled {result.modified_count} users")
-            logger.info(f"   Matched: {result.matched_count}")
-            logger.info(f"   Modified: {result.modified_count}")
-            return result.modified_count
-        except OperationFailure as e:
-            logger.error(f" Failed to backfill users: {e}")
-            raise BackfillError(f"jhi_user backfill failed: {e}") from e
-
-    def verify(self) -> bool:
-        logger.info("\n Verifying user backfills...")
-        remaining = self.collection_users.count_documents({
-            'salesforce_id': self.source,
-            '$or': [
-                {'member_id': {'$exists': False}},
-                {'member_id': {'$ne': self.member_id}},
-            ],
-        })
-        if remaining == 0:
-            logger.info(" Verification passed: all users carry the expected member_id")
-            return True
-        logger.warning(f" Verification failed: {remaining} users still missing or mismatched")
-        return False
+        return scanned, docs_needing, tokens_needing, modified
 
 
 def parse_arguments():
@@ -380,16 +275,23 @@ def parse_arguments():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python backfill.py --source=0012i00000aQxlxAAC
+  # Backfill every member
+  python backfill_member_id.py
 
+  # Backfill a single member only
+  python backfill_member_id.py --source=0012i00000aQxlxAAC
+
+Environment Variables:
   SPRING_DATA_MONGODB_URI - MongoDB connection string (read from env)
         """
     )
 
     parser.add_argument(
         '--source',
-        required=True,
-        help='Salesforce ID of the member whose related records should be backfilled'
+        required=False,
+        default=None,
+        help='Optional Salesforce ID. When given, only that member is '
+             'backfilled; otherwise every member is processed.'
     )
 
     return parser.parse_args()
@@ -398,11 +300,13 @@ Examples:
 def main():
     args = parse_arguments()
 
-    try:
-        source = validate_salesforce_id(args.source)
-    except InvalidSalesforceIdError as e:
-        logger.error(str(e))
-        return 1
+    source_filter = None
+    if args.source:
+        try:
+            source_filter = validate_salesforce_id(args.source)
+        except InvalidSalesforceIdError as e:
+            logger.error(str(e))
+            return 1
 
     config = Config()
     mongo_uri = config.mongo_uri
@@ -417,7 +321,7 @@ def main():
     logger.info(f"Databases: {database_assertionservice}, {database_userservice}, {database_memberservice}")
     logger.info(f"Collections: assertion, orcid_record, send_notifications_request, jhi_user")
     logger.info(f"MongoDB URI: {mongo_uri[:20]}..." if len(mongo_uri) > 20 else f"MongoDB URI: {mongo_uri}")
-    logger.info(f"Source SF iD: {source}")
+    logger.info("Scope: %s", f"single member (salesforce_id={source_filter})" if source_filter else "ALL members")
     logger.info("="*80 + "\n")
 
     connection_assertionservice = MongoDBConnection(mongo_uri, database_assertionservice)
@@ -435,69 +339,107 @@ def main():
             logger.error("Failed to connect to userservice MongoDB. Exiting.")
             return 1
 
-        member_lookup = MemberLookup(connection_memberservice, source)
-        member_id, client_name = member_lookup.find_member_id()
+        member_repo = MemberRepository(connection_memberservice)
+        sf_map = member_repo.build_salesforce_to_member_map(source_filter)
+        if not sf_map:
+            logger.info("\n No usable members found. Nothing to do.")
+            return 0
+        sf_ids = list(sf_map.keys())
 
-        assertion_backfiller = BackfillAssertionRecords(connection_assertionservice, source, member_id)
-        user_backfiller = BackfillUserRecords(connection_userservice, 'jhi_user', source, member_id)
+        assertion_bf = TopLevelBackfiller(
+            connection_assertionservice.get_collection('assertion'), 'assertion')
+        notification_bf = TopLevelBackfiller(
+            connection_assertionservice.get_collection('send_notifications_request'),
+            'send_notifications_request')
+        user_bf = TopLevelBackfiller(
+            connection_userservice.get_collection('jhi_user'), 'jhi_user')
+        orcid_bf = OrcidRecordBackfiller(
+            connection_assertionservice.get_collection('orcid_record'))
 
-        assertions = assertion_backfiller.find_assertions_needing_backfill()
-        orcid_records = assertion_backfiller.find_orcid_records_needing_backfill()
-        notifications = assertion_backfiller.find_send_notifications_needing_backfill()
-        users = user_backfiller.find_users_needing_backfill()
+        # ---- Planning phase: one read-only pass per collection ----
+        logger.info("\n" + "="*80)
+        logger.info("PLANNING: scanning each collection once to count required changes")
+        logger.info("(no writes happen in this phase)")
+        logger.info("="*80)
 
-        assertion_backfiller.print_assertions_report(assertions)
-        assertion_backfiller.print_orcid_records_report(orcid_records)
-        assertion_backfiller.print_send_notifications_report(notifications)
-        user_backfiller.print_users_report(users)
+        a_scanned, a_needs, _ = assertion_bf.scan(sf_map, sf_ids, apply=False)
+        o_scanned, o_docs_needs, o_tokens_needs, _ = orcid_bf.scan(sf_map, sf_ids, apply=False)
+        n_scanned, n_needs, _ = notification_bf.scan(sf_map, sf_ids, apply=False)
+        u_scanned, u_needs, _ = user_bf.scan(sf_map, sf_ids, apply=False)
 
-        if not assertions and not orcid_records and not notifications and not users:
-            total_existing = (
-                assertion_backfiller.count_total_matching()
-                + user_backfiller.count_total_matching()
+        logger.info("")
+        logger.info(" assertion:                   scanned %d, %d need member_id", a_scanned, a_needs)
+        logger.info(" orcid_record:                scanned %d, %d need member_id (%d tokens)",
+                    o_scanned, o_docs_needs, o_tokens_needs)
+        logger.info(" send_notifications_request:  scanned %d, %d need member_id", n_scanned, n_needs)
+        logger.info(" jhi_user:                    scanned %d, %d need member_id", u_scanned, u_needs)
+
+        total_needs = a_needs + n_needs + u_needs + o_docs_needs
+        if total_needs == 0:
+            logger.info(
+                "\n member_id is already backfilled on all related records "
+                "for the %d member(s) in scope. Nothing to do.",
+                len(sf_map),
             )
-            if total_existing > 0:
-                logger.info(
-                    "\n member_id is already backfilled on all %d records matching salesforce_id=%s. "
-                    "No changes needed.",
-                    total_existing,
-                    source,
-                )
-            else:
-                logger.info(
-                    "\n No records found with salesforce_id=%s in any collection. Nothing to do.",
-                    source,
-                )
             return 0
 
         logger.info("\n" + "="*80)
         logger.info("  WARNING: This will modify the database!")
-        logger.info(f"  {len(assertions)} assertions will be backfilled")
-        logger.info(f"  {len(orcid_records)} orcid records will be backfilled")
-        logger.info(f"  {len(notifications)} send_notifications_request will be backfilled")
-        logger.info(f"  {len(users)} users will be backfilled")
-        logger.info(f"  member_id will be set to {member_id} (client_name={client_name})")
-        logger.info("  The member document itself will NOT be modified")
+        logger.info(f"  Members in scope:               {len(sf_map)}")
+        logger.info(f"  assertion docs to update:       {a_needs}")
+        logger.info(f"  orcid_record docs to update:    {o_docs_needs}  ({o_tokens_needs} tokens)")
+        logger.info(f"  send_notifications to update:   {n_needs}")
+        logger.info(f"  jhi_user docs to update:        {u_needs}")
+        logger.info("  Member documents themselves will NOT be modified")
         logger.info("="*80)
 
         try:
             response = input("\nDo you want to proceed? (yes/no): ").strip().lower()
-            if response not in ['yes', 'y']:
+            if response not in ('yes', 'y'):
                 logger.info("\n Operation cancelled by user")
                 return 0
         except (KeyboardInterrupt, EOFError):
             logger.info("\n\n Operation cancelled by user")
             return 1
 
-        assertion_backfiller.backfill_assertions()
-        assertion_backfiller.backfill_orcid_records()
-        assertion_backfiller.backfill_send_notifications()
-        user_backfiller.backfill_users()
+        # ---- Execution phase: one pass per collection, batched bulk writes ----
+        logger.info("\n" + "="*80)
+        logger.info("EXECUTING BACKFILL")
+        logger.info("="*80)
 
-        if not assertion_backfiller.verify() or not user_backfiller.verify():
-            logger.warning("\n Some records may still need attention")
+        if a_needs:
+            _, _, a_modified = assertion_bf.scan(sf_map, sf_ids, apply=True)
+            logger.info(" assertion: %d documents updated", a_modified)
+        if o_docs_needs:
+            _, _, _, o_modified = orcid_bf.scan(sf_map, sf_ids, apply=True)
+            logger.info(" orcid_record: %d documents updated", o_modified)
+        if n_needs:
+            _, _, n_modified = notification_bf.scan(sf_map, sf_ids, apply=True)
+            logger.info(" send_notifications_request: %d documents updated", n_modified)
+        if u_needs:
+            _, _, u_modified = user_bf.scan(sf_map, sf_ids, apply=True)
+            logger.info(" jhi_user: %d documents updated", u_modified)
+
+        # ---- Verification phase: re-scan, expect nothing left ----
+        logger.info("\n" + "="*80)
+        logger.info("VERIFYING BACKFILL")
+        logger.info("="*80)
+
+        _, a_left, _ = assertion_bf.scan(sf_map, sf_ids, apply=False)
+        _, o_left, _, _ = orcid_bf.scan(sf_map, sf_ids, apply=False)
+        _, n_left, _ = notification_bf.scan(sf_map, sf_ids, apply=False)
+        _, u_left, _ = user_bf.scan(sf_map, sf_ids, apply=False)
+
+        remaining = a_left + o_left + n_left + u_left
+        if remaining > 0:
+            logger.warning(
+                " Verification failed: %d records still missing or mismatched "
+                "(assertion=%d, orcid_record=%d, send_notifications_request=%d, jhi_user=%d)",
+                remaining, a_left, o_left, n_left, u_left,
+            )
             return 1
 
+        logger.info(" Verification passed: all related records carry the expected member_id")
         logger.info("\n" + "="*80)
         logger.info("Script completed successfully")
         logger.info("="*80)
@@ -508,9 +450,6 @@ def main():
         return 1
     except MemberNotFoundError as e:
         logger.error(f"\nMember not found: {e}")
-        return 1
-    except MissingMemberIdError as e:
-        logger.error(f"\nMember is missing _id: {e}")
         return 1
     except BackfillError as e:
         logger.error(f"\nBackfill operation failed: {e}")
