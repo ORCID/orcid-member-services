@@ -190,7 +190,10 @@ public class MemberResource {
         LOG.debug("REST request to get member details");
         try {
             validateUserAccess(salesforceId);
-            MemberDetails memberDetails = salesforceService.getMemberDetails(salesforceId);
+            Optional<Member> member = memberService.getMember(salesforceId);
+            MemberDetails memberDetails = member.isPresent() && Boolean.TRUE.equals(member.get().getIsConsortiumLead())
+                    ? salesforceService.getConsortiumLeadDetails(salesforceId)
+                    : salesforceService.getMemberDetails(salesforceId);
             LOG.debug("Successfully fetched salesforce member details with id {}", memberDetails.getId());
             return ResponseEntity.ok(memberDetails);
         } catch (UnauthorizedMemberAccessException e) {

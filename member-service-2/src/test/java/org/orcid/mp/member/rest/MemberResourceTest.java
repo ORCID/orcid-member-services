@@ -108,6 +108,41 @@ public class MemberResourceTest {
     }
 
     @Test
+    public void testGetMemberDetails_consortiumLeadPath() throws UnauthorizedMemberAccessException {
+        Member consortiumLead = getMember();
+        consortiumLead.setIsConsortiumLead(true);
+        when(memberService.getMember(eq("salesforceId"))).thenReturn(Optional.of(consortiumLead));
+        ConsortiumLeadDetails consortiumLeadDetails = getConsortiumLeadDetails();
+        when(salesforceService.getConsortiumLeadDetails(eq("salesforceId"))).thenReturn(consortiumLeadDetails);
+
+        ResponseEntity<MemberDetails> entity = memberResource.getMemberDetails("salesforceId");
+
+        assertEquals(200, entity.getStatusCodeValue());
+        assertThat(entity.getBody()).isInstanceOf(ConsortiumLeadDetails.class);
+        ConsortiumLeadDetails body = (ConsortiumLeadDetails) entity.getBody();
+        assertThat(body.getConsortiumMembers()).isNotNull();
+        assertThat(body.getConsortiumMembers()).isNotEmpty();
+        Mockito.verify(salesforceService).getConsortiumLeadDetails(eq("salesforceId"));
+        Mockito.verify(salesforceService, Mockito.never()).getMemberDetails(Mockito.anyString());
+    }
+
+    @Test
+    public void testGetMemberDetails_nonConsortiumLeadPath() throws UnauthorizedMemberAccessException {
+        Member nonLead = getMember();
+        nonLead.setIsConsortiumLead(false);
+        when(memberService.getMember(eq("salesforceId"))).thenReturn(Optional.of(nonLead));
+        when(salesforceService.getMemberDetails(eq("salesforceId"))).thenReturn(getMemberDetails());
+
+        ResponseEntity<MemberDetails> entity = memberResource.getMemberDetails("salesforceId");
+
+        assertEquals(200, entity.getStatusCodeValue());
+        assertThat(entity.getBody()).isNotNull();
+        assertThat(entity.getBody()).isNotInstanceOf(ConsortiumLeadDetails.class);
+        Mockito.verify(salesforceService).getMemberDetails(eq("salesforceId"));
+        Mockito.verify(salesforceService, Mockito.never()).getConsortiumLeadDetails(Mockito.anyString());
+    }
+
+    @Test
     public void testUpdatePublicMemberDetails() throws UnauthorizedMemberAccessException {
         Mockito.doNothing().when(salesforceService).updatePublicMemberDetails(Mockito.any(MemberUpdateData.class));
         MemberUpdateData memberUpdateData = getPublicMemberDetails();
@@ -308,6 +343,17 @@ public class MemberResourceTest {
         member.setSalesforceId("salesforceId");
         member.setParentSalesforceId("parentSalesforceId");
         return member;
+    }
+
+    private ConsortiumLeadDetails getConsortiumLeadDetails() {
+        ConsortiumMember consortiumMember = new ConsortiumMember();
+        consortiumMember.setSalesforceId("member-salesforceId");
+
+        ConsortiumLeadDetails details = new ConsortiumLeadDetails();
+        details.setId("consortium-lead-id");
+        details.setName("consortium lead member");
+        details.setConsortiumMembers(Arrays.asList(consortiumMember));
+        return details;
     }
 
     private MemberDetails getMemberDetails() {
