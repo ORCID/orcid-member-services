@@ -83,7 +83,7 @@ public class MemberResourceTest {
 
     @Test
     public void testGetMemberDetails() throws UnauthorizedMemberAccessException {
-        when(memberService.getMember(eq("memberId   "))).thenReturn(Optional.of(getMember()));
+        when(memberService.getMember(eq("memberId"))).thenReturn(Optional.of(getMember()));
         when(salesforceService.getMemberDetails(eq("salesforceId"))).thenReturn(getMemberDetails());
         ResponseEntity<MemberDetails> entity = memberResource.getMemberDetails("memberId");
         assertEquals(200, entity.getStatusCodeValue());
