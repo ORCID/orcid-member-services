@@ -38,6 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class MemberResourceTest {
@@ -82,6 +83,7 @@ public class MemberResourceTest {
 
     @Test
     public void testGetMemberDetails() throws UnauthorizedMemberAccessException {
+        when(memberService.getMember(eq("memberId   "))).thenReturn(Optional.of(getMember()));
         when(salesforceService.getMemberDetails(eq("salesforceId"))).thenReturn(getMemberDetails());
         ResponseEntity<MemberDetails> entity = memberResource.getMemberDetails("memberId");
         assertEquals(200, entity.getStatusCodeValue());
@@ -102,6 +104,22 @@ public class MemberResourceTest {
         assertThat(memberDetails.getLogoUrl()).isEqualTo("some/url/for/a/logo");
         assertThat(memberDetails.getBillingCountry()).isEqualTo("Denmark");
         assertThat(memberDetails.getId()).isEqualTo("id");
+    }
+
+    @Test
+    public void testGetMemberDetails_consortiumLead() throws UnauthorizedMemberAccessException {
+        when(userService.getLoggedInUser()).thenReturn(getClUser());
+        when(memberService.getMember(eq("clId"))).thenReturn(Optional.of(getCLMember()));
+        when(salesforceService.getConsortiumLeadDetails(eq("salesforceId"))).thenReturn(getConsortiumLeadDetails());
+        ResponseEntity<MemberDetails> entity = memberResource.getMemberDetails("clId");
+        assertEquals(200, entity.getStatusCodeValue());
+
+        MemberDetails memberDetails = entity.getBody();
+
+        assertThat(memberDetails).isNotNull();
+        assertThat(memberDetails.getName()).isEqualTo("test CL details");
+
+        verify(salesforceService).getConsortiumLeadDetails(eq("salesforceId"));
     }
 
     @Test
@@ -315,6 +333,18 @@ public class MemberResourceTest {
         return member;
     }
 
+    private Member getCLMember() {
+        Member member = new Member();
+        member.setAssertionServiceEnabled(true);
+        member.setClientId("XXXX-XXXX-XXXX-XXXX");
+        member.setClientName("clientname");
+        member.setIsConsortiumLead(true);
+        member.setSalesforceId("salesforceId");
+        member.setParentSalesforceId("parentSalesforceId");
+        member.setId("clId");
+        return member;
+    }
+
     private MemberDetails getMemberDetails() {
         MemberDetails memberDetails = new MemberDetails();
         memberDetails.setBillingCountry("Denmark");
@@ -331,6 +361,19 @@ public class MemberResourceTest {
         memberDetails.setMembershipEndDateString("2027-01-01");
         memberDetails.setWebsite("https://website.com");
         return memberDetails;
+    }
+
+    private ConsortiumLeadDetails getConsortiumLeadDetails() {
+        ConsortiumLeadDetails consortiumLeadDetails = new ConsortiumLeadDetails();
+        consortiumLeadDetails.setBillingCountry("Denmark");
+        consortiumLeadDetails.setConsortiaLeadId(null);
+        consortiumLeadDetails.setConsortiaMember(false);
+        consortiumLeadDetails.setId("id");
+        consortiumLeadDetails.setLogoUrl("some/url/for/a/logo");
+        consortiumLeadDetails.setMemberType("Research Institute");
+        consortiumLeadDetails.setName("test CL details");
+        consortiumLeadDetails.setPublicDisplayDescriptionHtml("<p>public display description</p>");
+        return consortiumLeadDetails;
     }
 
     private MemberUpdateData getPublicMemberDetails() {
@@ -422,11 +465,11 @@ public class MemberResourceTest {
         return user;
     }
 
-    private User getParentUser() {
+    private User getClUser() {
         User user = new User();
         user.setEmail("parent-user@orcid.org");
         user.setLangKey("en");
-        user.setMemberId("parentMemberId");
+        user.setMemberId("clId");
         user.setMemberName("member");
         return user;
     }
