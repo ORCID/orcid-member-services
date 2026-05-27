@@ -83,16 +83,6 @@ public class MemberService {
         }
     }
 
-    public Boolean memberExists(String salesforceId) {
-        Optional<Member> existingMember = memberRepository.findBySalesforceId(salesforceId);
-        return existingMember.isPresent();
-    }
-
-    public Boolean memberSuperadminEnabled(String salesforceId) {
-        Optional<Member> existingMember = memberRepository.findBySalesforceId(salesforceId);
-        return existingMember.get().getSuperadminEnabled();
-    }
-
     public Member createMember(Member member) {
         MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser());
         if (!validation.isValid()) {
@@ -126,13 +116,9 @@ public class MemberService {
 
     private void propagateUpdatesAndSave(Member member, Member existingMember) {
         if (!member.getClientName().equals(existingMember.getClientName())) {
-            updateUserMemberNames(existingMember.getSalesforceId(), member.getClientName());
+            userService.updateUsersMemberNames(existingMember.getId(), member.getClientName());
             existingMember.setClientName(member.getClientName());
         }
-    }
-
-    private void updateUserMemberNames(String salesforceId, String newClientName) {
-        userService.updateUsersMemberNames(salesforceId, newClientName);
     }
 
     private void validateMemberUpdate(Member member, Optional<Member> existingMember) {
@@ -192,7 +178,7 @@ public class MemberService {
             throw new BadRequestAlertException("Invalid id");
         }
         if (Boolean.compare(existentMember.getIsConsortiumLead(), member.getIsConsortiumLead()) != 0) {
-            List<User> usersBelongingToMember = userService.getUsersBySalesforceId(member.getSalesforceId());
+            List<User> usersBelongingToMember = userService.getUsersByMemberId(member.getId());
             for (User user : usersBelongingToMember) {
                 Set<String> authorities = user.getAuthorities();
                 if (member.getIsConsortiumLead()) {
@@ -208,8 +194,8 @@ public class MemberService {
         }
     }
 
-    public void updateMemberDefaultLanguage(String salesforceId, String language) {
-        Optional<Member> optional = memberRepository.findBySalesforceId(salesforceId);
+    public void updateMemberDefaultLanguage(String memberId, String language) {
+        Optional<Member> optional = memberRepository.findById(memberId);
         if (optional.isPresent()) {
             Member member = optional.get();
             member.setDefaultLanguage(language);
@@ -218,5 +204,4 @@ public class MemberService {
             throw new RuntimeException("Member not found");
         }
     }
-
 }

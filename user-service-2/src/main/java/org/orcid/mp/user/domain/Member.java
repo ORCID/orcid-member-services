@@ -10,6 +10,9 @@ public class Member {
     @Field("salesforce_id")
     private String salesforceId;
 
+    @Field("member_id")
+    private String memberId;
+
     @Field("parent_salesforce_id")
     private String parentSalesforceId;
 
@@ -47,6 +50,14 @@ public class Member {
 
     public void setSalesforceId(String salesforceId) {
         this.salesforceId = salesforceId;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public String getParentSalesforceId() {

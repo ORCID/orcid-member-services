@@ -42,8 +42,8 @@ public class OrcidRecordService {
         return orcidRecordRepository.findOneByEmail(email);
     }
 
-    public void revokeIdToken(String email, String salesForceId) {
-        LOG.info("Revoking id token for email {}, salesforce id {}", email, salesForceId);
+    public void revokeIdToken(String email, String memberId) {
+        LOG.info("Revoking id token for email {}, member id {}", email, memberId);
         OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + email));
 
@@ -51,7 +51,7 @@ public class OrcidRecordService {
         List<OrcidToken> tokens = orcidRecord.getTokens();
         if (tokens != null && !tokens.isEmpty()) {
             for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforceId(), salesForceId)) {
+                if (StringUtils.equals(token.getMemberId(), memberId)) {
                     token.setRevokedDate(Instant.now());
                     break;
                 }
@@ -73,11 +73,11 @@ public class OrcidRecordService {
         orcidRecordRepository.delete(orcidRecord);
     }
 
-    public List<OrcidRecord> getRecordsWithoutTokens(String salesForceId) {
-        return orcidRecordRepository.findAllToInvite(salesForceId);
+    public List<OrcidRecord> getRecordsWithoutTokens(String memberId) {
+        return orcidRecordRepository.findAllToInvite(memberId);
     }
 
-    public OrcidRecord createOrcidRecord(String email, Instant now, String salesForceId) {
+    public OrcidRecord createOrcidRecord(String email, Instant now, String memberId) {
         Optional<OrcidRecord> optional = findByEmail(email);
         if (optional.isPresent()) {
             throw new BadRequestAlertException("An Orcid Record with the email: " + email + " already exists.");
@@ -86,7 +86,7 @@ public class OrcidRecordService {
         OrcidRecord or = new OrcidRecord();
         or.setEmail(email);
         List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-        tokens.add(new OrcidToken(salesForceId, null));
+        tokens.add(new OrcidToken(memberId, null));
         or.setTokens(tokens);
         or.setCreated(now);
         or.setModified(now);
@@ -98,14 +98,14 @@ public class OrcidRecordService {
         return orcidRecordRepository.save(orcidRecord);
     }
 
-    public void deleteOrcidRecordTokenByEmailAndSalesforceId(String email, String salesforceId) {
+    public void deleteOrcidRecordTokenByEmailAndMemberId(String email, String memberId) {
         Optional<OrcidRecord> orcidRecordOptional = findByEmail(email);
         if (orcidRecordOptional.isPresent()) {
             OrcidRecord orcidRecord = orcidRecordOptional.get();
             if (orcidRecord.getTokens() != null) {
                 List<OrcidToken> updated = new ArrayList<>();
                 for (OrcidToken token : orcidRecord.getTokens()) {
-                    if (!StringUtils.equals(token.getSalesforceId(), salesforceId)) {
+                    if (!StringUtils.equals(token.getMemberId(), memberId)) {
                         updated.add(token);
                     }
                 }
@@ -119,28 +119,28 @@ public class OrcidRecordService {
         }
     }
 
-    public boolean userHasGrantedOrDeniedPermission(String email, String salesforceId) {
+    public boolean userHasGrantedOrDeniedPermission(String email, String memberId) {
         Optional<OrcidRecord> orcidRecordOptional = findByEmail(email);
         if (orcidRecordOptional.isEmpty()) {
             return false;
         }
 
-        return !StringUtils.isBlank(orcidRecordOptional.get().getToken(salesforceId, true));
+        return !StringUtils.isBlank(orcidRecordOptional.get().getToken(memberId, true));
     }
 
-    public void storeUserDeniedAccess(String emailInStatus, String salesforceId) {
+    public void storeUserDeniedAccess(String emailInStatus, String memberId) {
         OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus)
                 .orElseThrow(() -> new IllegalArgumentException("Unable to find userInfo for email: " + emailInStatus));
         List<OrcidToken> tokens = orcidRecord.getTokens();
         List<OrcidToken> updatedTokens = new ArrayList<OrcidToken>();
-        OrcidToken deniedToken = new OrcidToken(salesforceId, null);
+        OrcidToken deniedToken = new OrcidToken(memberId, null);
         deniedToken.setDeniedDate(Instant.now());
 
         if (tokens == null || tokens.size() == 0) {
             updatedTokens.add(deniedToken);
         } else {
             for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforceId(), salesforceId)) {
+                if (StringUtils.equals(token.getMemberId(), memberId)) {
                     updatedTokens.add(deniedToken);
                 } else {
                     updatedTokens.add(token);
@@ -153,24 +153,24 @@ public class OrcidRecordService {
     }
 
     public String generateLinkForEmail(String email) {
-        String salesforceId = getLoggedInUser().getSalesforceId();
-        return generateLinkForEmailAndSalesforceId(email, salesforceId);
+        String memberId = getLoggedInUser().getMemberId();
+        return generateLinkForEmailAndMemberId(email, memberId);
     }
 
-    public String generateLinkForEmailAndSalesforceId(String email, String salesforceId) {
+    public String generateLinkForEmailAndMemberId(String email, String memberId) {
         Optional<OrcidRecord> record = orcidRecordRepository.findOneByEmail(email);
         if (!record.isPresent()) {
-            createOrcidRecord(email, Instant.now(), salesforceId);
+            createOrcidRecord(email, Instant.now(), memberId);
         }
-        return landingPageUrl + "?state=" + encryptUtil.encrypt(salesforceId + "&&" + email);
+        return landingPageUrl + "?state=" + encryptUtil.encrypt(memberId + "&&" + email);
     }
 
-    public void storeIdToken(String emailInStatus, String idToken, String orcidIdInJWT, String salesforceId) {
+    public void storeIdToken(String emailInStatus, String idToken, String orcidIdInJWT, String memberId) {
         OrcidRecord orcidRecord = orcidRecordRepository.findOneByEmail(emailInStatus)
                 .orElseThrow(() -> new IllegalArgumentException("Unable to find orcidRecord for email: " + emailInStatus));
 
-        OrcidToken newToken = new OrcidToken(salesforceId, idToken);
-        List<OrcidToken> tokens = orcidRecord.getTokens().stream().filter(t -> !salesforceId.equals(t.getSalesforceId())).collect(Collectors.toList());
+        OrcidToken newToken = new OrcidToken(memberId, idToken);
+        List<OrcidToken> tokens = orcidRecord.getTokens().stream().filter(t -> !memberId.equals(t.getMemberId())).collect(Collectors.toList());
         tokens.add(newToken);
         orcidRecord.setTokens(tokens);
         orcidRecord.setModified(Instant.now());

@@ -21,8 +21,8 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
     }
 
     @Override
-    public boolean updateMemberNames(String salesforceId, String newMemberName) {
-        mongoTemplate.updateMulti(Query.query(Criteria.where("salesforceId").is(salesforceId)), new Update().set("memberName", newMemberName), User.class);
+    public boolean updateMemberNames(String memberId, String newMemberName) {
+        mongoTemplate.updateMulti(Query.query(Criteria.where("memberId").is(memberId)), new Update().set("memberName", newMemberName), User.class);
         return true;
     }
 }

@@ -172,7 +172,6 @@ public class ReportService {
         try {
             LOG.info("report claims are {}", new ObjectMapper().writeValueAsString(claims));
         } catch (JsonProcessingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -183,7 +182,7 @@ public class ReportService {
     }
 
     private void checkConsortiaLeadAccess() {
-        Optional<Member> member = memberService.getMember(getLoggedInSalesforceId());
+        Optional<Member> member = memberService.getMember(getLoggedInMemberId());
         if (!Boolean.TRUE.equals(member.get().getIsConsortiumLead())) {
             throw new BadRequestAlertException("Only consortia leads can view consortia reports");
         }
@@ -219,9 +218,9 @@ public class ReportService {
         return claims;
     }
 
-    private String getLoggedInSalesforceId() {
+    private String getLoggedInMemberId() {
         User loggedInUser = userService.getLoggedInUser();
-        return loggedInUser.getSalesforceId();
+        return loggedInUser.getMemberId();
     }
 
     private Map<String, Object> getIntegrationReportPermissions() {
@@ -294,7 +293,7 @@ public class ReportService {
         Map<String, Object> config = new HashMap<>();
         config.put(OPERATOR_PARAM, OPERATOR);
         config.put(MODIFIER_PARAM, null);
-        config.put(VALUES_PARAM, new String[] { getLoggedInSalesforceId() });
+        config.put(VALUES_PARAM, new String[] { getLoggedInMemberId() });
         return config;
     }
 

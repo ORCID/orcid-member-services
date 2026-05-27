@@ -30,7 +30,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -243,7 +242,7 @@ public class SalesforceServiceTest {
     void testAddConsortiumMember() {
         Mockito.doNothing().when(mailService).sendAddConsortiumMemberEmail(Mockito.any(AddConsortiumMember.class));
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        Mockito.when(memberRepository.findById(Mockito.eq("memberId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
 
         AddConsortiumMember addConsortiumMember = new AddConsortiumMember();
         addConsortiumMember.setOrgName("new org name");
@@ -252,7 +251,7 @@ public class SalesforceServiceTest {
 
         Mockito.verify(mailService).sendAddConsortiumMemberEmail(Mockito.any(AddConsortiumMember.class));
         Mockito.verify(userService).getLoggedInUser();
-        Mockito.verify(memberRepository).findBySalesforceId(Mockito.eq("salesforceId"));
+        Mockito.verify(memberRepository).findById(Mockito.eq("memberId"));
     }
 
     @Test
@@ -273,7 +272,7 @@ public class SalesforceServiceTest {
     void testRemoveConsortiumMember() {
         Mockito.doNothing().when(mailService).sendRemoveConsortiumMemberEmail(Mockito.any(RemoveConsortiumMember.class));
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        Mockito.when(memberRepository.findById(Mockito.eq("memberId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
 
         RemoveConsortiumMember removeConsortiumMember = new RemoveConsortiumMember();
         removeConsortiumMember.setOrgName("old org name");
@@ -282,7 +281,7 @@ public class SalesforceServiceTest {
 
         Mockito.verify(mailService).sendRemoveConsortiumMemberEmail(Mockito.any(RemoveConsortiumMember.class));
         Mockito.verify(userService).getLoggedInUser();
-        Mockito.verify(memberRepository).findBySalesforceId(Mockito.eq("salesforceId"));
+        Mockito.verify(memberRepository).findById(Mockito.eq("memberId"));
     }
 
     @Test
@@ -380,7 +379,7 @@ public class SalesforceServiceTest {
         User user = new User();
         user.setEmail("logged-in-user@orcid.org");
         user.setLangKey("en");
-        user.setSalesforceId("salesforceId");
+        user.setMemberId("memberId");
         user.setMemberName("member");
         return user;
     }
@@ -475,7 +474,7 @@ public class SalesforceServiceTest {
         User user = new User();
         user.setEmail("logged-in-user@orcid.org");
         user.setLangKey("en");
-        user.setSalesforceId("parentSalesforceId");
+        user.setMemberId("parentMemberId");
         user.setMemberName("member");
         return user;
     }

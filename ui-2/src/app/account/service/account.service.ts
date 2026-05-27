@@ -189,6 +189,10 @@ export class AccountService {
     return this.isAuthenticated() && this.accountData ? this.accountData.value!.salesforceId : null
   }
 
+  getMemberId(): string | null {
+    return this.isAuthenticated() && this.accountData ? this.accountData.value!.memberId : null
+  }
+
   isOrganizationOwner(): boolean | null {
     return this.isIdentityResolved() && this.accountData ? this.accountData.value!.mainContact : false
   }

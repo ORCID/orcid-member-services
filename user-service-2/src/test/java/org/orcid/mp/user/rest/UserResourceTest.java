@@ -65,24 +65,10 @@ public class UserResourceTest {
     }
 
     @Test
-    void testUpdateSalesforceId() {
-        Mockito.when(userService.updateUsersSalesforceId(Mockito.eq("salesforce-id"), Mockito.eq("new-salesforce-id"))).thenReturn(true);
-        ResponseEntity<Void> response = userResource.updateUsersSalesforceId("salesforce-id", "new-salesforce-id");
-        assertTrue(response.getStatusCode().is2xxSuccessful());
-    }
-
-    @Test
     void testUpdateUsersMemberName() {
-        Mockito.when(userService.updateUsersMemberName(Mockito.eq("salesforce-id"), Mockito.eq("newName"))).thenReturn(true);
-        ResponseEntity<Void> response = userResource.updateUsersMemberName("salesforce-id", "newName");
+        Mockito.when(userService.updateUsersMemberName(Mockito.eq("member-id"), Mockito.eq("newName"))).thenReturn(true);
+        ResponseEntity<Void> response = userResource.updateUsersMemberName("member-id", "newName");
         assertTrue(response.getStatusCode().is2xxSuccessful());
-    }
-
-    @Test
-    void testUpdateSalesforceIdWithError() {
-        Mockito.when(userService.updateUsersSalesforceId(Mockito.eq("salesforce-id"), Mockito.eq("new-salesforce-id"))).thenReturn(false);
-        ResponseEntity<Void> response = userResource.updateUsersSalesforceId("salesforce-id", "new-salesforce-id");
-        assertTrue(response.getStatusCode().is5xxServerError());
     }
 
     @Test
@@ -157,19 +143,19 @@ public class UserResourceTest {
     }
 
     @Test
-    public void testGetUsersBySalesforceId() { /*
-        Mockito.when(userService.getAllUsersBySalesforceId(Mockito.any(Pageable.class), Mockito.anyString()))
+    public void testGetUsersByMemberId() { /*
+        Mockito.when(userService.getAllUsersByMemberId(Mockito.any(Pageable.class), Mockito.anyString()))
                 .thenReturn(new PageImpl<>(Arrays.asList(getUser(), getUser(), getUser())));
 
         // same method but with filter, return page of only one user
-        Mockito.when(userService.getAllUsersBySalesforceId(Mockito.any(Pageable.class), Mockito.anyString(), Mockito.anyString()))
+        Mockito.when(userService.getAllUsersByMemberId(Mockito.any(Pageable.class), Mockito.anyString(), Mockito.anyString()))
                 .thenReturn(new PageImpl<>(Arrays.asList(getUser())));
 
-        ResponseEntity<Page<UserDTO>> response = userResource.getUsersBySalesforceId("some-salesforceId", new HttpHeaders(), UriComponentsBuilder.newInstance(), "",
+        ResponseEntity<Page<UserDTO>> response = userResource.getUsersByMemberId("some-memberId", new HttpHeaders(), UriComponentsBuilder.newInstance(), "",
                 Mockito.mock(Pageable.class));
         assertEquals(3, response.getBody().getTotalElements());
 
-        response = userResource.getUsersBySalesforceId("some-salesforceId", new HttpHeaders(), UriComponentsBuilder.newInstance(), "some filter",
+        response = userResource.getUsersByMemberId("some-memberId", new HttpHeaders(), UriComponentsBuilder.newInstance(), "some filter",
                 Mockito.mock(Pageable.class));
         assertEquals(1, response.getBody().getTotalElements()); */
     }
@@ -183,7 +169,7 @@ public class UserResourceTest {
         User user = new User();
         user.setEmail("some@email.com");
         user.setLangKey("en");
-        user.setSalesforceId("some-salesforceId");
+        user.setMemberId("some-memberId");
         user.setMainContact(true);
         return Optional.of(user);
     }

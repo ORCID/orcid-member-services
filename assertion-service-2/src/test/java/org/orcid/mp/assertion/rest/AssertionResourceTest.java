@@ -55,7 +55,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 
 class AssertionResourceTest {
 
-    private static final String DEFAULT_SALESFORCE_ID = "salesforce-id";
+    private static final String DEFAULT_MEMBER_ID = "member-id";
 
     @Mock
     private AssertionService assertionService;
@@ -156,17 +156,17 @@ class AssertionResourceTest {
 
     @Test
     void testSendNotifications() {
-        Mockito.doNothing().when(notificationService).createSendNotificationsRequest(Mockito.eq("owner@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
-        Mockito.doNothing().when(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq(DEFAULT_SALESFORCE_ID));
+        Mockito.doNothing().when(notificationService).createSendNotificationsRequest(Mockito.eq("owner@orcid.org"), Mockito.eq(DEFAULT_MEMBER_ID));
+        Mockito.doNothing().when(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq(DEFAULT_MEMBER_ID));
         assertionResource.sendNotifications(getNotificationRequest());
-        Mockito.verify(notificationService).createSendNotificationsRequest(Mockito.eq("owner@orcid.org"), Mockito.eq(DEFAULT_SALESFORCE_ID));
-        Mockito.verify(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq(DEFAULT_SALESFORCE_ID));
-        Mockito.verify(memberServiceClient).updateMemberDefaultLanguage(Mockito.eq(DEFAULT_SALESFORCE_ID), Mockito.eq("en"));
+        Mockito.verify(notificationService).createSendNotificationsRequest(Mockito.eq("owner@orcid.org"), Mockito.eq(DEFAULT_MEMBER_ID));
+        Mockito.verify(assertionService).markPendingAssertionsAsNotificationRequested(Mockito.eq(DEFAULT_MEMBER_ID));
+        Mockito.verify(memberServiceClient).updateMemberDefaultLanguage(Mockito.eq(DEFAULT_MEMBER_ID), Mockito.eq("en"));
     }
 
     @Test
     void testGetNotificationRequestInProgress_inProgressIsTrue() {
-        Mockito.when(notificationService.requestInProgress(Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(true);
+        Mockito.when(notificationService.requestInProgress(Mockito.eq(DEFAULT_MEMBER_ID))).thenReturn(true);
 
         ResponseEntity<NotificationRequestInProgress> response = assertionResource.getNotificationRequestInProgress();
         assertTrue(response.getStatusCode().is2xxSuccessful());
@@ -176,7 +176,7 @@ class AssertionResourceTest {
 
     @Test
     void testGetNotificationRequestInProgress_inProgressIsFalse() {
-        Mockito.when(notificationService.requestInProgress(Mockito.eq(DEFAULT_SALESFORCE_ID))).thenReturn(false);
+        Mockito.when(notificationService.requestInProgress(Mockito.eq(DEFAULT_MEMBER_ID))).thenReturn(false);
 
         ResponseEntity<NotificationRequestInProgress> response = assertionResource.getNotificationRequestInProgress();
         assertTrue(response.getStatusCode().is2xxSuccessful());
@@ -187,15 +187,15 @@ class AssertionResourceTest {
     @Test
     void testGetOrcidRecord() throws IOException, org.codehaus.jettison.json.JSONException {
         String email = "email@email.com";
-        String encrypted = encryptUtil.encrypt(DEFAULT_SALESFORCE_ID + "&&" + email);
+        String encrypted = encryptUtil.encrypt(DEFAULT_MEMBER_ID + "&&" + email);
 
         OrcidRecord record = new OrcidRecord();
         List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken");
+        OrcidToken newToken = new OrcidToken(DEFAULT_MEMBER_ID, "idToken");
         tokens.add(newToken);
         record.setTokens(tokens);
 
-        Mockito.when(encryptUtil.decrypt(Mockito.eq(encrypted))).thenReturn(DEFAULT_SALESFORCE_ID + "&&" + email);
+        Mockito.when(encryptUtil.decrypt(Mockito.eq(encrypted))).thenReturn(DEFAULT_MEMBER_ID + "&&" + email);
         Mockito.when(orcidRecordService.findByEmail(Mockito.eq(email))).thenReturn(Optional.of(record));
 
         ResponseEntity<OrcidRecord> response = assertionResource.getOrcidRecord(encrypted);
@@ -206,9 +206,9 @@ class AssertionResourceTest {
         Mockito.verify(orcidRecordService, Mockito.times(1)).findByEmail(Mockito.eq(email));
 
         String emailOther = "nope@email.com";
-        String encryptedOther = encryptUtil.encrypt(DEFAULT_SALESFORCE_ID + "&&" + emailOther);
+        String encryptedOther = encryptUtil.encrypt(DEFAULT_MEMBER_ID + "&&" + emailOther);
 
-        Mockito.when(encryptUtil.decrypt(Mockito.eq(encryptedOther))).thenReturn(DEFAULT_SALESFORCE_ID + "&&" + emailOther);
+        Mockito.when(encryptUtil.decrypt(Mockito.eq(encryptedOther))).thenReturn(DEFAULT_MEMBER_ID + "&&" + emailOther);
         Mockito.when(orcidRecordService.findByEmail(Mockito.eq(emailOther))).thenReturn(Optional.empty());
 
         response = assertionResource.getOrcidRecord(encryptedOther);
@@ -362,12 +362,12 @@ class AssertionResourceTest {
         Mockito.verify(assertionService, Mockito.never()).postAssertionToOrcid(Mockito.any(Assertion.class));
         Mockito.verify(assertionService, Mockito.never()).putAssertionInOrcid(Mockito.any(Assertion.class));
         Mockito.verify(assertionService, Mockito.never()).updateAssertion(Mockito.any(Assertion.class), Mockito.any(User.class));
-        Mockito.verify(assertionService).updateOrcidIdsForEmailAndSalesforceId(Mockito.eq(email), Mockito.eq(DEFAULT_SALESFORCE_ID));
+        Mockito.verify(assertionService).updateOrcidIdsForEmailAndMemberId(Mockito.eq(email), Mockito.eq(DEFAULT_MEMBER_ID));
     }
 
     @Test
     void testGetAssertions() throws BadRequestAlertException, org.codehaus.jettison.json.JSONException {
-        Mockito.when(assertionService.findByCurrentSalesforceId(Mockito.any(Pageable.class))).thenReturn(getMockPage());
+        Mockito.when(assertionService.findByCurrentMemberId(Mockito.any(Pageable.class))).thenReturn(getMockPage());
         ResponseEntity<Page<Assertion>> page = assertionResource.getAssertions(Mockito.mock(Pageable.class), new HttpHeaders(), UriComponentsBuilder.newInstance(), "");
         assertNotNull(page.getBody());
     }
@@ -413,7 +413,7 @@ class AssertionResourceTest {
         ObjectNode node = mapper.createObjectNode();
         node.set("state", mapper.convertValue("ermmmm....&&" + email, JsonNode.class));
         node.set("id_token", mapper.convertValue("errrr....", JsonNode.class));
-        node.set("salesforce_id", mapper.convertValue(DEFAULT_SALESFORCE_ID, JsonNode.class));
+        node.set("member_id", mapper.convertValue(DEFAULT_MEMBER_ID, JsonNode.class));
         node.set("denied", mapper.convertValue(false, JsonNode.class));
         return node;
     }
@@ -440,7 +440,7 @@ class AssertionResourceTest {
         User user = new User();
         user.setId("owner");
         user.setEmail("owner@orcid.org");
-        user.setSalesforceId(DEFAULT_SALESFORCE_ID);
+        user.setMemberId(DEFAULT_MEMBER_ID);
         user.setLangKey("en");
         return user;
     }

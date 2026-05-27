@@ -30,25 +30,25 @@ public interface UserRepository extends MongoRepository<User, String>, CustomUse
 
     List<User> findAllByEmailIgnoreCase(String email);
 
-    List<User> findBySalesforceIdAndDeletedIsFalse(String salesforceId);
+    List<User> findByMemberIdAndDeletedIsFalse(String memberId);
 
-    Page<User> findBySalesforceIdAndDeletedIsFalse(Pageable pageable, String salesforceId);
+    Page<User> findByMemberIdAndDeletedIsFalse(Pageable pageable, String memberId);
 
-    Page<User> findByDeletedIsFalseAndSalesforceIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndEmailContainingIgnoreCase(
-            Pageable pageable, String salesforceId1, String memberName, String salesforceId2, String firstName,
-            String salesforceId3, String lastName, String salesforceId4, String email);
+    Page<User> findByDeletedIsFalseAndMemberIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndMemberIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndMemberIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndMemberIdAndEmailContainingIgnoreCase(
+            Pageable pageable, String memberId1, String memberName, String memberId2, String firstName,
+            String memberId3, String lastName, String memberId4, String email);
 
     Page<User> findByDeletedFalse(Pageable pageable);
 
-    Optional<User> findOneByMainContactIsTrueAndSalesforceId(String salesforceId);
+    Optional<User> findOneByMainContactIsTrueAndMemberId(String memberId);
 
-    List<User> findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(String salesforceId);
+    List<User> findAllByMainContactIsTrueAndDeletedIsFalseAndMemberId(String memberId);
 
     List<User> findAllByMainContactIsTrueAndDeletedIsFalse();
 
     List<User> findAllByActivatedIsFalseAndDeletedIsFalse();
 
-    Optional<User> findOneBySalesforceIdAndMainContactIsTrue(String salesforceId);
+    Optional<User> findOneByMemberIdAndMainContactIsTrue(String memberId);
 
     Long countByAdminIsTrue();
 

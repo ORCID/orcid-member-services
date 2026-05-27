@@ -41,6 +41,7 @@ describe('MemberInfoComponent', () => {
       loginAs: '',
       mainContact: false,
       mfaEnabled: false,
+      memberId: 'memberId',
     }
 
     accountServiceSpy.getAccountData.and.returnValue(of(mockAccount))

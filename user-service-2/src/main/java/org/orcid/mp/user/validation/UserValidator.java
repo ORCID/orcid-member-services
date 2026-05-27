@@ -34,7 +34,7 @@ public class UserValidator {
     public UserValidation validate(UserDTO user, String langKey) {
         List<String> errors = new ArrayList<>();
         validateEmail(user, langKey, errors);
-        validateSalesforceId(user, langKey, errors);
+        validateMemberId(user, langKey, errors);
 
         UserValidation validation = new UserValidation();
         validation.setValid(errors.isEmpty());
@@ -42,14 +42,14 @@ public class UserValidator {
         return validation;
     }
 
-    private void validateSalesforceId(UserDTO user, String langKey, List<String> errors) {
-        Member member = memberServiceClient.getMember(user.getSalesforceId());
-        String salesforceId = user.getSalesforceId();
-        if (StringUtils.isBlank(salesforceId)) {
-            errors.add(getError("missingSalesforceId", langKey));
+    private void validateMemberId(UserDTO user, String langKey, List<String> errors) {
+        Member member = memberServiceClient.getMember(user.getMemberId());
+        String memberId = user.getMemberId();
+        if (StringUtils.isBlank(memberId)) {
+            errors.add(getError("missingMemberId", langKey));
         } else if (member == null) {
-            errors.add(getError("invalidSalesforceId", salesforceId, langKey));
-        } else if (user.getIsAdmin() == true && user.getSalesforceId() != null && (member.getSuperadminEnabled() == null || !member.getSuperadminEnabled())) {
+            errors.add(getError("invalidMemberId", memberId, langKey));
+        } else if (user.getIsAdmin() == true && user.getMemberId() != null && (member.getSuperadminEnabled() == null || !member.getSuperadminEnabled())) {
             errors.add(getError("superAdminNotAllowed", langKey));
         }
     }

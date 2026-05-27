@@ -74,6 +74,7 @@ export class NavbarComponent implements OnInit {
             console.log('Fetching member for ID:', salesforceId)
             this.memberService.find(salesforceId).subscribe({
               next: (res: IMember | null) => {
+                console.log('Member fetch successful', res)
                 if (res) {
                   this.organizationName = res.clientName
                   this.consortiumLead = res.isConsortiumLead

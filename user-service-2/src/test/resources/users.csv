@@ -1,4 +1,4 @@
-salesforceId,email,firstName,lastName,grant
-sssalesforceid1,1@user.com,Angel,Montenegro,"[ROLE_USER,ASSERTION_SERVICE_ENABLED]"
-salesforceid3,2@user.com,Leonardo,Mendoza,"[ROLE_USER]"
-salesforceid2,3@user.com,Daniel,Palafox,"[ROLE_USER]"
+memberId,email,firstName,lastName,grant
+ssmemberid1,1@user.com,Angel,Montenegro,"[ROLE_USER,ASSERTION_SERVICE_ENABLED]"
+memberid3,2@user.com,Leonardo,Mendoza,"[ROLE_USER]"
+memberid2,3@user.com,Daniel,Palafox,"[ROLE_USER]"

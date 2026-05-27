@@ -7,7 +7,10 @@ import java.time.Instant;
 public class OrcidToken {
 
     @Field("salesforce_id")
-    private final String salesforceId;
+    private String salesforceId;
+
+    @Field("member_id")
+    private final String memberId;
 
     @Field("token_id")
     private final String tokenId;
@@ -18,8 +21,8 @@ public class OrcidToken {
     @Field("revoked_date")
     private Instant revokedDate;
 
-    public OrcidToken(final String salesforceId, final String tokenId) {
-        this.salesforceId = salesforceId;
+    public OrcidToken(final String memberId, final String tokenId) {
+        this.memberId = memberId;
         this.tokenId = tokenId;
     }
 
@@ -47,4 +50,7 @@ public class OrcidToken {
         this.revokedDate = revokedDate;
     }
 
+    public String getMemberId() {
+        return memberId;
+    }
 }

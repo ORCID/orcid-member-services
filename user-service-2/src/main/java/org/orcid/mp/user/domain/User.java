@@ -81,6 +81,9 @@ public class User implements Serializable {
     @Field("salesforce_id")
     private String salesforceId;
 
+    @Field("member_id")
+    private String memberId;
+
     @Field("member_name")
     private String memberName;
 
@@ -231,6 +234,14 @@ public class User implements Serializable {
 
     public void setSalesforceId(String salesforceId) {
         this.salesforceId = salesforceId;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public Boolean getMainContact() {

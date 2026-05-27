@@ -109,7 +109,7 @@ export class UsersComponent implements OnInit, OnDestroy {
         })
     } else {
       this.userService
-        .findBySalesForceId(this.accountService.getSalesforceId(), {
+        .findByMemberId(this.accountService.getMemberId(), {
           page: this.page - 1,
           size: this.itemsPerPage,
           sort: this.sort(),

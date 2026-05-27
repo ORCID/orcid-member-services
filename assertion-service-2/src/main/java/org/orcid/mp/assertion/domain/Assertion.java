@@ -114,6 +114,10 @@ public class Assertion implements Serializable {
     @Field("salesforce_id")
     private String salesforceId;
 
+    @Indexed
+    @Field("member_id")
+    private String memberId;
+
     @Field("added_to_orcid")
     private Instant addedToORCID;
 
@@ -375,6 +379,14 @@ public class Assertion implements Serializable {
         this.salesforceId = salesforceId;
     }
 
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -512,6 +524,7 @@ public class Assertion implements Serializable {
         result = prime * result + ((putCode == null) ? 0 : putCode.hashCode());
         result = prime * result + ((roleTitle == null) ? 0 : roleTitle.hashCode());
         result = prime * result + ((salesforceId == null) ? 0 : salesforceId.hashCode());
+        result = prime * result + ((memberId == null) ? 0 : memberId.hashCode());
         result = prime * result + ((startDay == null) ? 0 : startDay.hashCode());
         result = prime * result + ((startMonth == null) ? 0 : startMonth.hashCode());
         result = prime * result + ((startYear == null) ? 0 : startYear.hashCode());
@@ -653,6 +666,11 @@ public class Assertion implements Serializable {
             if (other.salesforceId != null)
                 return false;
         } else if (!salesforceId.equals(other.salesforceId))
+            return false;
+        if (memberId == null) {
+            if (other.memberId != null)
+                return false;
+        } else if (!memberId.equals(other.memberId))
             return false;
         if (startDay == null) {
             if (other.startDay != null)

@@ -8,6 +8,7 @@ export interface IAccount {
   lastName: string
   imageUrl: string
   salesforceId: string
+  memberId: string
   loggedAs: boolean
   loginAs: string
   mainContact: boolean

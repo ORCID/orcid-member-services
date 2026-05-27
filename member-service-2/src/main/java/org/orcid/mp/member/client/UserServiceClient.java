@@ -21,8 +21,8 @@ public class UserServiceClient {
         return restClient.get().uri("/users/" + loginOrId).retrieve().toEntity(User.class).getBody();
     }
 
-    public List<User> getUsersBySalesforceId(String salesforceId) {
-        return restClient.get().uri("/users/salesforce/" + salesforceId).retrieve().body(new ParameterizedTypeReference<List<User>>() {
+    public List<User> getUsersByMemberId(String memberId) {
+        return restClient.get().uri("/users/member/" + memberId).retrieve().body(new ParameterizedTypeReference<List<User>>() {
         });
     }
 
@@ -30,7 +30,7 @@ public class UserServiceClient {
         return restClient.put().uri("/users").body(user).retrieve().toEntity(String.class).getBody();
     }
 
-    public String updateUsersMemberNames(String salesforceId, String newMemberName) {
-        return restClient.put().uri("/users/memberName/" + salesforceId + "/" + newMemberName).retrieve().toEntity(String.class).getBody();
+    public String updateUsersMemberNames(String memberId, String newMemberName) {
+        return restClient.put().uri("/users/memberName/" + memberId + "/" + newMemberName).retrieve().toEntity(String.class).getBody();
     }
 }

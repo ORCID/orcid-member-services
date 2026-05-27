@@ -71,20 +71,20 @@ public class NotificationServiceIT {
         ReflectionTestUtils.setField(mailService, "mailgunClient", mailgunClient);
 
         persistedAssertions = new ArrayList<>();
-        persistedAssertions.add(getNotificationRequestedAssertion("1", "0", "salesforceId1"));
-        persistedAssertions.add(getNotificationRequestedAssertion("2", "0", "salesforceId1"));
-        persistedAssertions.add(getNotificationRequestedAssertion("2", "1", "salesforceId1"));
-        persistedAssertions.add(getNotificationRequestedAssertion("3", "0", "salesforceId1"));
-        persistedAssertions.add(getNotificationRequestedAssertion("4", "0", "salesforceId1"));
-        persistedAssertions.add(getNotificationRequestedAssertion("5", "0", "salesforceId1"));
-        persistedAssertions.add(getNotificationRequestedAssertion("5", "1", "salesforceId1"));
-        persistedAssertions.add(getNotificationRequestedAssertion("5", "2", "salesforceId1"));
-        persistedAssertions.add(getNotificationRequestedAssertion("6", "0", "salesforceId2"));
-        persistedAssertions.add(getNotificationRequestedAssertion("7", "0", "salesforceId2"));
-        persistedAssertions.add(getNotificationRequestedAssertion("8", "0", "salesforceId2"));
-        persistedAssertions.add(getNotificationRequestedAssertion("9", "0", "salesforceId3"));
-        persistedAssertions.add(getNotificationRequestedAssertion("9", "1", "salesforceId3"));
-        persistedAssertions.add(getNotificationRequestedAssertion("10", "0", "salesforceId3"));
+        persistedAssertions.add(getNotificationRequestedAssertion("1", "0", "memberId1"));
+        persistedAssertions.add(getNotificationRequestedAssertion("2", "0", "memberId1"));
+        persistedAssertions.add(getNotificationRequestedAssertion("2", "1", "memberId1"));
+        persistedAssertions.add(getNotificationRequestedAssertion("3", "0", "memberId1"));
+        persistedAssertions.add(getNotificationRequestedAssertion("4", "0", "memberId1"));
+        persistedAssertions.add(getNotificationRequestedAssertion("5", "0", "memberId1"));
+        persistedAssertions.add(getNotificationRequestedAssertion("5", "1", "memberId1"));
+        persistedAssertions.add(getNotificationRequestedAssertion("5", "2", "memberId1"));
+        persistedAssertions.add(getNotificationRequestedAssertion("6", "0", "memberId2"));
+        persistedAssertions.add(getNotificationRequestedAssertion("7", "0", "memberId2"));
+        persistedAssertions.add(getNotificationRequestedAssertion("8", "0", "memberId2"));
+        persistedAssertions.add(getNotificationRequestedAssertion("9", "0", "memberId3"));
+        persistedAssertions.add(getNotificationRequestedAssertion("9", "1", "memberId3"));
+        persistedAssertions.add(getNotificationRequestedAssertion("10", "0", "memberId3"));
         persistedAssertions.forEach(assertionRepository::save);
 
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("1@orcid.org"))).thenReturn("orcid1");
@@ -98,17 +98,17 @@ public class NotificationServiceIT {
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("9@orcid.org"))).thenReturn("orcid9");
         Mockito.when(orcidApiClient.getOrcidIdForEmail(Mockito.eq("10@orcid.org"))).thenReturn("orcid10");
 
-        Mockito.when(internalMemberServiceClient.getMember(Mockito.eq("salesforceId1"))).thenReturn(getMember("member 1"));
-        Mockito.when(internalMemberServiceClient.getMember(Mockito.eq("salesforceId2"))).thenReturn(getMember("member 2"));
-        Mockito.when(internalMemberServiceClient.getMember(Mockito.eq("salesforceId3"))).thenReturn(getMember("member 3"));
-        Mockito.when(internalMemberServiceClient.getMember(Mockito.eq("salesforceId4"))).thenReturn(getMember("member 4"));
-        Mockito.when(internalMemberServiceClient.getMember(Mockito.eq("salesforceId5"))).thenReturn(getMember("member 5"));
+        Mockito.when(internalMemberServiceClient.getMember(Mockito.eq("memberId1"))).thenReturn(getMember("member 1"));
+        Mockito.when(internalMemberServiceClient.getMember(Mockito.eq("memberId2"))).thenReturn(getMember("member 2"));
+        Mockito.when(internalMemberServiceClient.getMember(Mockito.eq("memberId3"))).thenReturn(getMember("member 3"));
+        Mockito.when(internalMemberServiceClient.getMember(Mockito.eq("memberId4"))).thenReturn(getMember("member 4"));
+        Mockito.when(internalMemberServiceClient.getMember(Mockito.eq("memberId5"))).thenReturn(getMember("member 5"));
 
-        sendNotificationsRequestRepository.save(getSendNotificationsRequest("email1", "salesforceId1"));
-        sendNotificationsRequestRepository.save(getSendNotificationsRequest("email2", "salesforceId2"));
-        sendNotificationsRequestRepository.save(getSendNotificationsRequest("email3", "salesforceId3"));
-        sendNotificationsRequestRepository.save(getSendNotificationsRequest("email4", "salesforceId4"));
-        sendNotificationsRequestRepository.save(getSendNotificationsRequest("email5", "salesforceId5"));
+        sendNotificationsRequestRepository.save(getSendNotificationsRequest("email1", "memberId1"));
+        sendNotificationsRequestRepository.save(getSendNotificationsRequest("email2", "memberId2"));
+        sendNotificationsRequestRepository.save(getSendNotificationsRequest("email3", "memberId3"));
+        sendNotificationsRequestRepository.save(getSendNotificationsRequest("email4", "memberId4"));
+        sendNotificationsRequestRepository.save(getSendNotificationsRequest("email5", "memberId5"));
 
         Mockito.when(internalUserServiceClient.getUser(Mockito.anyString())).thenReturn(getUser());
     }
@@ -158,25 +158,25 @@ public class NotificationServiceIT {
     @Test
     @WithMockUser(username = "any@orcid.org", authorities = {"ROLE_ADMIN", "ROLE_USER"}, password = "password")
     public void testRequestInProgress() throws Exception {
-        boolean requestInProgress = notificationService.requestInProgress("salesforceId1");
+        boolean requestInProgress = notificationService.requestInProgress("memberId1");
         assertThat(requestInProgress).isTrue();
 
-        requestInProgress = notificationService.requestInProgress("salesforceId6");
+        requestInProgress = notificationService.requestInProgress("memberId6");
         assertThat(requestInProgress).isFalse();
     }
 
     @Test
     @WithMockUser(username = "any@orcid.org", authorities = {"ROLE_ADMIN", "ROLE_USER"}, password = "password")
     public void testCreateSendNotificationsRequest() throws Exception {
-        notificationService.createSendNotificationsRequest("email6", "salesforceId6");
-        boolean requestInProgress = notificationService.requestInProgress("salesforceId6");
+        notificationService.createSendNotificationsRequest("email6", "memberId6");
+        boolean requestInProgress = notificationService.requestInProgress("memberId6");
         assertThat(requestInProgress).isTrue();
     }
 
-    private SendNotificationsRequest getSendNotificationsRequest(String email, String salesforceId) {
+    private SendNotificationsRequest getSendNotificationsRequest(String email, String memberId) {
         SendNotificationsRequest request = new SendNotificationsRequest();
         request.setEmail(email);
-        request.setSalesforceId(salesforceId);
+        request.setMemberId(memberId);
         request.setDateRequested(Instant.now());
         return request;
     }
@@ -195,10 +195,10 @@ public class NotificationServiceIT {
         }
     }
 
-    private Assertion getNotificationRequestedAssertion(String variant, String subvariant, String salesforceId) {
+    private Assertion getNotificationRequestedAssertion(String variant, String subvariant, String memberId) {
         Assertion assertion = new Assertion();
         assertion.setEmail(variant + "@orcid.org");
-        assertion.setSalesforceId(salesforceId);
+        assertion.setMemberId(memberId);
         assertion.setAffiliationSection(AffiliationSection.EMPLOYMENT);
         assertion.setOrgName(variant + " org " + subvariant);
         assertion.setRoleTitle(variant + " role " + subvariant);
@@ -221,7 +221,7 @@ public class NotificationServiceIT {
         User user = new User();
         user.setEmail("notifications@orcid.org");
         user.setLangKey("en");
-        user.setSalesforceId("salesforceId1");
+        user.setMemberId("memberId1");
         return user;
     }
 }

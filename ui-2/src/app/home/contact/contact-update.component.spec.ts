@@ -68,6 +68,7 @@ describe('ContactUpdateComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: true,
+        memberId: 'memberId',
       })
     )
 

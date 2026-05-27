@@ -89,43 +89,6 @@ public class UserService {
     @Autowired
     private EncryptUtil encryptUtil;
 
-    public boolean updateUsersSalesforceId(String from, String to) {
-        return updateUsersSalesforceId(from, to, true);
-    }
-
-    private boolean updateUsersSalesforceId(String from, String to, boolean rollback) {
-        try {
-            Pageable pageable = PageRequest.of(0, BATCH_SIZE, Sort.by(Direction.ASC, "created"));
-            Page<User> page = userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, from);
-            while (!page.isEmpty()) {
-                page.forEach(u -> {
-                    u.setSalesforceId(to);
-                    u.setLastModifiedDate(Instant.now());
-                    userRepository.save(u);
-                });
-
-                // repeat until no more left in db with old sf id
-                page = userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, from);
-            }
-        } catch (Exception e) {
-            LOG.error("Error bulk updating users from salesforce '" + from + "' to salesforce '" + to + "'", e);
-            if (rollback) {
-                LOG.info("Attempting to RESET user salesforce ids from '{}' to '{}'", new Object[]{to, from});
-                boolean success = updateUsersSalesforceId(to, from, false);
-                if (success) {
-                    LOG.info("Succeeded in RESETTING user salesforce ids from '{}' to '{}'", new Object[]{to, from});
-                    return false;
-                } else {
-                    LOG.error("Failed to reset users from '{}' to '{}'", new Object[]{to, from});
-                    LOG.error("Operation to update users salesforce ids from '{}' to '{}' has failed but there may be users with new sf id of '{}' in the database!",
-                        new Object[]{from, to, to});
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     public void completePasswordReset(String newPassword, String key) throws ExpiredKeyException, InvalidKeyException {
         LOG.debug("Reset user password for reset key {}", key);
         if (!validResetKey(key)) {
@@ -213,9 +176,9 @@ public class UserService {
             throw new BadRequestAlertException("A new user cannot already have an ID");
         }
 
-        Member member = memberServiceClient.getMember(userDTO.getSalesforceId());
+        Member member = memberServiceClient.getMember(userDTO.getMemberId());
         if (member == null) {
-            LOG.warn("Attempt to create user with non existent member {}", userDTO.getSalesforceId());
+            LOG.warn("Attempt to create user with non existent member {}", userDTO.getMemberId());
             throw new BadRequestAlertException("Member does not exist");
         }
         String createdBy = SecurityUtil.getCurrentUserLogin().get();
@@ -223,7 +186,7 @@ public class UserService {
         // change the auth if the logged in user is org owner and this is set as
         // mainContact
         boolean owner = userDTO.getMainContact();
-        List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
+        List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndMemberId(userDTO.getMemberId());
         if (owner) {
             for (User prevOwner : owners) {
                 if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
@@ -292,7 +255,7 @@ public class UserService {
      * @return updated user.
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
-        Member member = memberServiceClient.getMember(userDTO.getSalesforceId());
+        Member member = memberServiceClient.getMember(userDTO.getMemberId());
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (!existingUser.isPresent()) {
             throw new EmailNotFoundException();
@@ -304,7 +267,7 @@ public class UserService {
         boolean owner = userDTO.getMainContact() != null ? userDTO.getMainContact() : false;
 
         if (owner && !previouslyOwner) {
-            List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(userDTO.getSalesforceId());
+            List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndMemberId(userDTO.getMemberId());
             for (User prevOwner : owners) {
                 if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
                     removeOwnershipFromUser(prevOwner.getEmail());
@@ -317,14 +280,14 @@ public class UserService {
         user.setLastName(userDTO.getLastName());
         user.setImageUrl(userDTO.getImageUrl());
         user.setMainContact(userDTO.getMainContact());
-        user.setSalesforceId(userDTO.getSalesforceId());
+        user.setMemberId(userDTO.getMemberId());
         user.setMemberName(member.getClientName());
         user.setLangKey(userDTO.getLangKey() != null ? userDTO.getLangKey() : user.getLangKey());
         user.setAdmin(userDTO.getIsAdmin());
 
 
-        if (user.getSalesforceId() != null && userDTO.getSalesforceId() != null && !user.getSalesforceId().equals(userDTO.getSalesforceId())) {
-            user.setSalesforceId(userDTO.getSalesforceId());
+        if (user.getMemberId() != null && userDTO.getMemberId() != null && !user.getMemberId().equals(userDTO.getMemberId())) {
+            user.setMemberId(userDTO.getMemberId());
             user.setLastModifiedBy(SecurityUtil.getCurrentUserLogin().get());
             user.setLastModifiedDate(Instant.now());
         }
@@ -445,9 +408,9 @@ public class UserService {
     @Scheduled(initialDelay = 300000l, fixedDelay = 300000l)
     public void updateMemberNames() {
         Page<User> page = userRepository.findByMemberName(PageRequest.of(0, 10), null);
-        page.getContent().stream().filter(u -> !StringUtils.isBlank(u.getSalesforceId())).forEach(u -> {
+        page.getContent().stream().filter(u -> !StringUtils.isBlank(u.getMemberId())).forEach(u -> {
             LOG.info("Populating member name field for user {}", u.getEmail());
-            Member member = memberServiceClient.getMember(u.getSalesforceId());
+            Member member = memberServiceClient.getMember(u.getMemberId());
             u.setMemberName(member.getClientName());
             userRepository.save(u);
         });
@@ -463,9 +426,9 @@ public class UserService {
         }
 
         usersUpload.getUserDTOs().forEach(userDTO -> {
-            String salesforceId = userDTO.getSalesforceId();
+            String memberId = userDTO.getMemberId();
             Optional<User> existing = getUserByLogin(userDTO.getEmail());
-            if (!existing.isPresent() && !userRepository.findOneBySalesforceIdAndMainContactIsTrue(salesforceId).isPresent()) {
+            if (!existing.isPresent() && !userRepository.findOneByMemberIdAndMainContactIsTrue(memberId).isPresent()) {
                 userDTO.setMainContact(true);
                 createUser(userDTO);
             }
@@ -473,19 +436,19 @@ public class UserService {
         return usersUpload;
     }
 
-    public List<UserDTO> getAllUsersBySalesforceId(String salesforceId) {
-        List<User> users = userRepository.findBySalesforceIdAndDeletedIsFalse(salesforceId);
+    public List<UserDTO> getAllUsersByMemberId(String memberId) {
+        List<User> users = userRepository.findByMemberIdAndDeletedIsFalse(memberId);
         return users.stream().map(u -> userMapper.toUserDTO(u)).collect(Collectors.toList());
     }
 
-    public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId) {
-        return userRepository.findBySalesforceIdAndDeletedIsFalse(pageable, salesforceId).map(u -> userMapper.toUserDTO(u));
+    public Page<UserDTO> getAllUsersByMemberId(Pageable pageable, String memberId) {
+        return userRepository.findByMemberIdAndDeletedIsFalse(pageable, memberId).map(u -> userMapper.toUserDTO(u));
     }
 
-    public Page<UserDTO> getAllUsersBySalesforceId(Pageable pageable, String salesforceId, String filter) {
+    public Page<UserDTO> getAllUsersByMemberId(Pageable pageable, String memberId, String filter) {
         return userRepository
-            .findByDeletedIsFalseAndSalesforceIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndEmailContainingIgnoreCase(
-                pageable, salesforceId, filter, salesforceId, filter, salesforceId, filter, salesforceId, filter)
+            .findByDeletedIsFalseAndMemberIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndMemberIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndMemberIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndMemberIdAndEmailContainingIgnoreCase(
+                pageable, memberId, filter, memberId, filter, memberId, filter, memberId, filter)
             .map(u -> userMapper.toUserDTO(u));
     }
 
@@ -536,8 +499,8 @@ public class UserService {
         mailService.sendActivationEmail(user);
     }
 
-    public boolean hasOwnerForSalesforceId(String salesforceId) {
-        List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndSalesforceId(salesforceId);
+    public boolean hasOwnerForMemberId(String memberId) {
+        List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndMemberId(memberId);
         if (owners.isEmpty()) {
             return false;
         }
@@ -664,7 +627,7 @@ public class UserService {
         }
     }
 
-    public boolean updateUsersMemberName(String salesforceId, String newMemberName) {
-        return userRepository.updateMemberNames(salesforceId, newMemberName);
+    public boolean updateUsersMemberName(String memberId, String newMemberName) {
+        return userRepository.updateMemberNames(memberId, newMemberName);
     }
 }

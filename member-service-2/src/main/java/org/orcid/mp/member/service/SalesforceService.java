@@ -74,7 +74,7 @@ public class SalesforceService {
     public void requestNewConsortiumMember(AddConsortiumMember addConsortiumMember) {
         User user = userService.getLoggedInUser();
 
-        Optional<Member> optionalMember = memberRepository.findBySalesforceId(user.getSalesforceId());
+        Optional<Member> optionalMember = memberRepository.findById(user.getMemberId());
         Member member = optionalMember.get();
         if (!member.getIsConsortiumLead()) {
             throw new RuntimeException("Requesting member is not a consortium lead");
@@ -90,7 +90,7 @@ public class SalesforceService {
     public void requestRemoveConsortiumMember(RemoveConsortiumMember removeConsortiumMember) {
         User user = userService.getLoggedInUser();
 
-        Optional<Member> optionalMember = memberRepository.findBySalesforceId(user.getSalesforceId());
+        Optional<Member> optionalMember = memberRepository.findById(user.getMemberId());
         Member member = optionalMember.get();
         if (!member.getIsConsortiumLead()) {
             throw new RuntimeException("Requesting member is not a consortium lead");

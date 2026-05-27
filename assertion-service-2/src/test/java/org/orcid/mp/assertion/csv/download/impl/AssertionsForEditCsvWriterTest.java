@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 
 public class AssertionsForEditCsvWriterTest {
 
-    private static final String DEFAULT_SALESFORCE_ID = "salesforceId";
+    private static final String DEFAULT_MEMBER_ID = "memberId";
 
     @Mock
     private AssertionRepository assertionsRepository;
@@ -39,13 +39,13 @@ public class AssertionsForEditCsvWriterTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        when(assertionsRepository.findBySalesforceId(Mockito.eq(DEFAULT_SALESFORCE_ID), Mockito.any(Sort.class))).thenReturn(getListOfAsserions());
+        when(assertionsRepository.findByMemberId(Mockito.eq(DEFAULT_MEMBER_ID), Mockito.any(Sort.class))).thenReturn(getListOfAsserions());
         when(orcidRecordService.findByEmail(Mockito.anyString())).thenReturn(getDummyOrcidRecord());
     }
 
     @Test
     public void testWriteAssertionsReport() throws IOException {
-        String test = csvWriter.writeCsv(DEFAULT_SALESFORCE_ID);
+        String test = csvWriter.writeCsv(DEFAULT_MEMBER_ID);
         assertNotNull(test);
         assertTrue(test.length() > 0);
         String[] lines = test.split("\\n");
@@ -151,7 +151,7 @@ public class AssertionsForEditCsvWriterTest {
         record.setEmail("test@test.com");
         record.setId("id");
         List<OrcidToken> tokens = new ArrayList<OrcidToken>();
-        OrcidToken newToken = new OrcidToken(DEFAULT_SALESFORCE_ID, "idToken");
+        OrcidToken newToken = new OrcidToken(DEFAULT_MEMBER_ID, "idToken");
         tokens.add(newToken);
         record.setTokens(tokens);
         record.setLastNotified(Instant.now());

@@ -236,21 +236,21 @@ public class UserServiceTest {
         UserDTO toUpdate = new UserDTO();
         toUpdate.setMainContact(false);
         toUpdate.setEmail("email@orcid.org");
-        toUpdate.setSalesforceId("salesforce");
+        toUpdate.setMemberId("member");
         toUpdate.setId("some-id");
 
         User existing = new User();
         existing.setMainContact(false);
-        existing.setSalesforceId("salesforce");
+        existing.setMemberId("member");
         existing.setId("some-id");
 
         UserDTO existingDTO = new UserDTO();
         existingDTO.setMainContact(false);
-        existingDTO.setSalesforceId("salesforce");
+        existingDTO.setMemberId("member");
 
         when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(existing));
         when(userMapper.toUserDTO(Mockito.any(User.class))).thenReturn(existingDTO);
-        when(memberServiceClient.getMember(eq("salesforce"))).thenReturn(memberWithAMEnabled());
+        when(memberServiceClient.getMember(eq("member"))).thenReturn(memberWithAMEnabled());
 
         userService.updateUser(toUpdate);
 
@@ -262,17 +262,17 @@ public class UserServiceTest {
         UserDTO toUpdate = new UserDTO();
         toUpdate.setMainContact(true);
         toUpdate.setId("some-id");
-        toUpdate.setSalesforceId("salesforce");
+        toUpdate.setMemberId("member");
         toUpdate.setEmail("email@orcid.org");
 
         User existing = new User();
         existing.setMainContact(false);
         existing.setId("some-id");
-        existing.setSalesforceId("salesforce");
+        existing.setMemberId("member");
 
         UserDTO existingDTO = new UserDTO();
         existingDTO.setMainContact(false);
-        existingDTO.setSalesforceId("salesforce");
+        existingDTO.setMemberId("member");
 
         when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(existing));
         when(userMapper.toUserDTO(Mockito.any(User.class))).thenReturn(existingDTO);
@@ -311,7 +311,7 @@ public class UserServiceTest {
 
     @Test
     public void testUploadUserCSV() throws IOException {
-        when(memberServiceClient.getMember(eq("salesforce-id"))).thenReturn(memberWithAMEnabled());
+        when(memberServiceClient.getMember(eq("member-id"))).thenReturn(memberWithAMEnabled());
         when(usersUploadReader.readUsersUpload(Mockito.any(InputStream.class), Mockito.any(User.class))).thenReturn(getUserUpload());
         when(userRepository.findOneByEmailIgnoreCase(eq("user1@orcid.org"))).thenReturn(Optional.empty());
         when(userRepository.findOneByEmailIgnoreCase(eq("user2@orcid.org"))).thenReturn(Optional.of(getUser("user2@orcid.org")));
@@ -390,14 +390,14 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetAllUsersBySalesforceId() {
-        when(userRepository.findBySalesforceIdAndDeletedIsFalse(Mockito.any(Pageable.class), Mockito.anyString())).thenReturn(new PageImpl<>(getListOfUsers(10)));
-        when(userRepository.findByDeletedIsFalseAndSalesforceIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndSalesforceIdAndEmailContainingIgnoreCase(Mockito.any(Pageable.class), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(new PageImpl<>(getListOfUsers(5)));
+    public void testGetAllUsersByMemberId() {
+        when(userRepository.findByMemberIdAndDeletedIsFalse(Mockito.any(Pageable.class), Mockito.anyString())).thenReturn(new PageImpl<>(getListOfUsers(10)));
+        when(userRepository.findByDeletedIsFalseAndMemberIdAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndMemberIdAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndMemberIdAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndMemberIdAndEmailContainingIgnoreCase(Mockito.any(Pageable.class), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(new PageImpl<>(getListOfUsers(5)));
 
-        Page<UserDTO> page = userService.getAllUsersBySalesforceId(Mockito.mock(Pageable.class), "some-salesforce-id");
+        Page<UserDTO> page = userService.getAllUsersByMemberId(Mockito.mock(Pageable.class), "some-member-id");
         assertEquals(10, page.getTotalElements());
 
-        page = userService.getAllUsersBySalesforceId(Mockito.mock(Pageable.class), "some-salesforce-id", "some-filter");
+        page = userService.getAllUsersByMemberId(Mockito.mock(Pageable.class), "some-member-id", "some-filter");
         assertEquals(5, page.getTotalElements());
     }
 
@@ -599,60 +599,19 @@ public class UserServiceTest {
 
     @Test
     void testUpdateUsersMemberName() {
-        when(userRepository.updateMemberNames(eq("salesforce-id"), eq("newName"))).thenReturn(true);
+        when(userRepository.updateMemberNames(eq("member-id"), eq("newName"))).thenReturn(true);
 
-        boolean success = userService.updateUsersMemberName("salesforce-id", "newName");
+        boolean success = userService.updateUsersMemberName("member-id", "newName");
         assertThat(success).isTrue();
 
-        Mockito.verify(userRepository).updateMemberNames(eq("salesforce-id"), eq("newName"));
+        Mockito.verify(userRepository).updateMemberNames(eq("member-id"), eq("newName"));
     }
 
-    @Test
-    void testUpdateUsersSalesforceId() {
-        List<User> firstPage = getUsersForSalesforceId("salesforce-id", 0, UserService.BATCH_SIZE);
-        List<User> secondPage = getUsersForSalesforceId("salesforce-id", UserService.BATCH_SIZE, UserService.BATCH_SIZE * 2);
-        List<User> thirdPage = getUsersForSalesforceId("salesforce-id", UserService.BATCH_SIZE * 2, (UserService.BATCH_SIZE * 3) - 10);
-        ;
-        when(userRepository.findBySalesforceIdAndDeletedIsFalse(Mockito.any(Pageable.class), eq("salesforce-id"))).thenReturn(new PageImpl<User>(firstPage)).thenReturn(new PageImpl<User>(secondPage)).thenReturn(new PageImpl<User>(thirdPage)).thenReturn(new PageImpl<User>(new ArrayList<>()));
-        boolean success = userService.updateUsersSalesforceId("salesforce-id", "new-salesforce-id");
-        assertThat(success).isTrue();
-
-        Mockito.verify(userRepository, Mockito.times((UserService.BATCH_SIZE * 3) - 10)).save(userCaptor.capture());
-        List<User> saved = userCaptor.getAllValues();
-        saved.forEach(u -> assertThat(u.getSalesforceId()).isEqualTo("new-salesforce-id"));
-    }
-
-    @Test
-    void testUpdateUsersSalesforceIdWithFailure() {
-        List<User> firstPage = getUsersForSalesforceId("salesforce-id", 0, UserService.BATCH_SIZE);
-        when(userRepository.findBySalesforceIdAndDeletedIsFalse(Mockito.any(Pageable.class), eq("salesforce-id"))).thenReturn(new PageImpl<User>(firstPage));
-
-        // representing updated assertions that need to be rolled back
-        when(userRepository.findBySalesforceIdAndDeletedIsFalse(Mockito.any(Pageable.class), eq("new-salesforce-id"))).thenReturn(new PageImpl<User>(Arrays.asList(new User(), new User(), new User()))).thenReturn(new PageImpl<User>(new ArrayList<>()));
-
-        // 3 successful updates before error, followed by rollback
-        when(userRepository.save(Mockito.any(User.class))).thenReturn(new User()).thenReturn(new User()).thenReturn(new User()).thenThrow(new RuntimeException("some random problem")).thenReturn(new User()).thenReturn(new User()).thenReturn(new User());
-
-        boolean success = userService.updateUsersSalesforceId("salesforce-id", "new-salesforce-id");
-        assertThat(success).isFalse();
-
-        // 3 updates followed by 1 failure and 3 rollbacks
-        Mockito.verify(userRepository, Mockito.times(7)).save(userCaptor.capture());
-        List<User> saved = userCaptor.getAllValues();
-        assertThat(saved.get(0).getSalesforceId()).isEqualTo("new-salesforce-id");
-        assertThat(saved.get(1).getSalesforceId()).isEqualTo("new-salesforce-id");
-        assertThat(saved.get(2).getSalesforceId()).isEqualTo("new-salesforce-id");
-        assertThat(saved.get(3).getSalesforceId()).isEqualTo("new-salesforce-id");
-        assertThat(saved.get(4).getSalesforceId()).isEqualTo("salesforce-id");
-        assertThat(saved.get(5).getSalesforceId()).isEqualTo("salesforce-id");
-        assertThat(saved.get(6).getSalesforceId()).isEqualTo("salesforce-id");
-    }
-
-    private List<User> getUsersForSalesforceId(String salesforceId, int from, int to) {
+    private List<User> getUsersForMemberId(String memberId, int from, int to) {
         List<User> users = new ArrayList<>();
         for (int i = from; i < to; i++) {
             User user = new User();
-            user.setSalesforceId(salesforceId);
+            user.setMemberId(memberId);
             users.add(user);
         }
         return users;
@@ -699,7 +658,7 @@ public class UserServiceTest {
         User user = new User();
         user.setEmail(login);
         user.setId(login);
-        user.setSalesforceId(login);
+        user.setMemberId(login);
         return user;
     }
 
@@ -707,11 +666,11 @@ public class UserServiceTest {
         UserUpload upload = new UserUpload();
         UserDTO user1 = new UserDTO();
         user1.setEmail("user1@orcid.org");
-        user1.setSalesforceId("salesforce-id");
+        user1.setMemberId("member-id");
 
         UserDTO user2 = new UserDTO();
         user2.setEmail("user2@orcid.org");
-        user2.setSalesforceId("salesforce-id");
+        user2.setMemberId("member-id");
 
         upload.addUserDTO(user1);
         upload.addUserDTO(user2);
@@ -726,7 +685,7 @@ public class UserServiceTest {
         user.setMainContact(false);
         user.setFirstName("first");
         user.setLastName("last");
-        user.setSalesforceId("member");
+        user.setMemberId("member");
         user.setIsAdmin(false);
         user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
         return user;
@@ -734,7 +693,7 @@ public class UserServiceTest {
 
     private Member memberWithAMEnabled() {
         Member member = new Member();
-        member.setSalesforceId("salesforce-id");
+        member.setMemberId("member-id");
         member.setClientName("member");
         member.setAssertionServiceEnabled(true);
         return member;
@@ -742,7 +701,7 @@ public class UserServiceTest {
 
     private Member memberWithoutAMEnabled() {
         Member member = new Member();
-        member.setSalesforceId("salesforce-id");
+        member.setMemberId("member-id");
         member.setClientName("member");
         member.setAssertionServiceEnabled(false);
         return member;

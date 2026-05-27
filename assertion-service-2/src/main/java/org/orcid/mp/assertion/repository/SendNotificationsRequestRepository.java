@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SendNotificationsRequestRepository extends MongoRepository<SendNotificationsRequest, String> {
 
-    @Query("{ salesforceId: ?0, dateCompleted: null }")
-    List<SendNotificationsRequest> findActiveRequestBySalesforceId(String salesforceId);
+    @Query("{ memberId: ?0, dateCompleted: null }")
+    List<SendNotificationsRequest> findActiveRequestByMemberId(String memberId);
 
     @Query("{ dateCompleted: null }")
     List<SendNotificationsRequest> findActiveRequests();

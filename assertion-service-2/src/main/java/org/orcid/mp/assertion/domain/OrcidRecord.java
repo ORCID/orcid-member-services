@@ -16,10 +16,6 @@ import java.util.Locale;
 @Document(collection = "orcid_record")
 public class OrcidRecord {
 
-    public static String KEY_TOKEN_ID = "token_id";
-
-    public static String KEY_SALESFORCE_ID = "salesforce_id";
-
     @Id
     private String id;
 
@@ -123,10 +119,10 @@ public class OrcidRecord {
         this.modified = modified;
     }
 
-    public boolean tokenExists(String salesforceId) {
+    public boolean tokenExists(String memberId) {
         if (tokens != null) {
             for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforceId(), salesforceId)) {
+                if (StringUtils.equals(token.getMemberId(), memberId)) {
                     return true;
                 }
             }
@@ -134,10 +130,10 @@ public class OrcidRecord {
         return false;
     }
 
-    public String getToken(String salesforceId, boolean includeRevoked) {
+    public String getToken(String memberId, boolean includeRevoked) {
         if (tokens != null) {
             for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforceId(), salesforceId)) {
+                if (StringUtils.equals(token.getMemberId(), memberId)) {
                     if (token.getRevokedDate() == null || includeRevoked) {
                         return token.getTokenId();
                     }
@@ -147,11 +143,11 @@ public class OrcidRecord {
         return null;
     }
 
-    public Instant getDeniedDate(String salesforceId) {
+    public Instant getDeniedDate(String memberId) {
         List<OrcidToken> tokens = this.getTokens();
         if (tokens != null) {
             for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforceId(), salesforceId)) {
+                if (StringUtils.equals(token.getMemberId(), memberId)) {
                     if (token.getDeniedDate() == null) {
                         return null;
                     }
@@ -162,11 +158,11 @@ public class OrcidRecord {
         return null;
     }
 
-    public Instant getRevokedDate(String salesforceId) {
+    public Instant getRevokedDate(String memberId) {
         List<OrcidToken> tokens = this.getTokens();
         if (tokens != null) {
             for (OrcidToken token : tokens) {
-                if (StringUtils.equals(token.getSalesforceId(), salesforceId)) {
+                if (StringUtils.equals(token.getMemberId(), memberId)) {
                     if (token.getRevokedDate() == null) {
                         return null;
                     }

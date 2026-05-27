@@ -29,6 +29,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.eq;
 
 class MemberServiceTest {
 
@@ -58,6 +59,10 @@ class MemberServiceTest {
         MockitoAnnotations.initMocks(this);
         SecurityContextHolder.setContext(new MockSecurityContext("me"));
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
+        Mockito.when(memberRepository.findById(eq("memberId"))).thenReturn(Optional.of(getMember()));
+        Mockito.when(memberRepository.findById(eq("parentMemberId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        Mockito.when(memberRepository.findBySalesforceId(eq("salesforceId"))).thenReturn(Optional.of(getMember()));
+        Mockito.when(memberRepository.findBySalesforceId(eq("parentSalesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
     }
 
     @Test
@@ -153,12 +158,11 @@ class MemberServiceTest {
             }
         });
         Member member = getMember();
-        member.setId("id");
         member.setClientName("a new member name");
         memberService.updateMember(member);
 
         // check assertion and user changes rolled back
-        Mockito.verify(userService, Mockito.times(1)).updateUsersMemberNames(Mockito.eq("two"), Mockito.eq("a new member name"));
+        Mockito.verify(userService, Mockito.times(1)).updateUsersMemberNames(eq("memberId"), eq("a new member name"));
         Mockito.verify(memberRepository, Mockito.times(1)).save(memberCaptor.capture());
 
         Member saved = memberCaptor.getValue();
@@ -253,25 +257,15 @@ class MemberServiceTest {
     }
 
     @Test
-    void testMemberExists() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(User.class))).thenReturn(getValidValidation());
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.of(getMember()));
-        assertTrue(memberService.memberExists("anything"));
-
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.empty());
-        assertFalse(memberService.memberExists("anything"));
-    }
-
-    @Test
     void testUploadMemberCSV() throws IOException {
         Mockito.when(membersUploadReader.readMemberUpload(Mockito.any(), Mockito.any(User.class))).thenReturn(getMemberUpload());
         Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(User.class))).thenReturn(getValidValidation());
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("one"))).thenReturn(Optional.empty());
+        Mockito.when(memberRepository.findBySalesforceId(eq("one"))).thenReturn(Optional.empty());
         Member existing = getMember();
         existing.setId("two");
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("two"))).thenReturn(Optional.of(existing));
-        Mockito.when(memberRepository.findById(Mockito.eq("two"))).thenReturn(Optional.of(getMemberUpload().getMembers().get(1)));
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("three"))).thenReturn(Optional.empty());
+        Mockito.when(memberRepository.findBySalesforceId(eq("two"))).thenReturn(Optional.of(existing));
+        Mockito.when(memberRepository.findById(eq("two"))).thenReturn(Optional.of(getMemberUpload().getMembers().get(1)));
+        Mockito.when(memberRepository.findBySalesforceId(eq("three"))).thenReturn(Optional.empty());
         memberService.uploadMemberCSV(null);
         Mockito.verify(memberRepository, Mockito.times(3)).save(Mockito.any(Member.class));
     }
@@ -296,8 +290,7 @@ class MemberServiceTest {
     @Test
     void testUpdateMemberDefaultLanguage() throws UnauthorizedMemberAccessException {
         Member member = getMember();
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(member));
-        memberService.updateMemberDefaultLanguage("salesforceId", "en");
+        memberService.updateMemberDefaultLanguage("memberId", "en");
         Mockito.verify(memberRepository).save(memberCaptor.capture());
         Member captured = memberCaptor.getValue();
         assertThat(captured.getAssertionServiceEnabled()).isEqualTo(member.getAssertionServiceEnabled());
@@ -394,7 +387,7 @@ class MemberServiceTest {
         User user = new User();
         user.setEmail("logged-in-user@orcid.org");
         user.setLangKey("en");
-        user.setSalesforceId("salesforceId");
+        user.setMemberId("memberId");
         user.setMemberName("member");
         return user;
     }
@@ -403,7 +396,7 @@ class MemberServiceTest {
         User user = new User();
         user.setEmail("logged-in-user@orcid.org");
         user.setLangKey("en");
-        user.setSalesforceId("parentSalesforceId");
+        user.setMemberId("parentMemberId");
         user.setMemberName("member");
         return user;
     }
@@ -414,8 +407,16 @@ class MemberServiceTest {
         member.setClientId("XXXX-XXXX-XXXX-XXXX");
         member.setClientName("clientname");
         member.setIsConsortiumLead(false);
-        member.setSalesforceId("two");
+        member.setSalesforceId("salesforceId");
         member.setParentSalesforceId("parentSalesforceId");
+        member.setId("memberId");
+        return member;
+    }
+
+    private Member getConsortiumMember(String id) {
+        Member member = new Member();
+        member.setId(id);
+        member.setSalesforceId(id);
         return member;
     }
 
@@ -425,7 +426,8 @@ class MemberServiceTest {
         member.setClientId("XXXX-XXXX-XXXX-XXXX");
         member.setClientName("clientname");
         member.setIsConsortiumLead(true);
-        member.setSalesforceId("two");
+        member.setSalesforceId("parentSalesforceId");
+        member.setId("parentMemberId");;
         return member;
     }
 

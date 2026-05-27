@@ -103,9 +103,9 @@ public class AssertionResource {
         LOG.debug("REST request to fetch assertions from user {}", SecurityUtil.getCurrentUserLogin().get());
         Page<Assertion> affiliations = null;
         if (org.apache.commons.lang3.StringUtils.isBlank(filter)) {
-            affiliations = assertionService.findByCurrentSalesforceId(pageable);
+            affiliations = assertionService.findByCurrentMemberId(pageable);
         } else {
-            affiliations = assertionService.findBySalesforceId(pageable, filter);
+            affiliations = assertionService.findByMemberId(pageable, filter);
         }
         return ResponseEntity.ok().body(affiliations);
     }
@@ -131,15 +131,15 @@ public class AssertionResource {
     @PostMapping("/notification-request")
     public ResponseEntity<Void> sendNotifications(@RequestBody NotificationRequest notificationRequest) {
         User user = getLoggedInUser();
-        memberServiceClient.updateMemberDefaultLanguage(user.getSalesforceId(), notificationRequest.getLanguage());
-        notificationService.createSendNotificationsRequest(user.getEmail(), user.getSalesforceId());
-        assertionService.markPendingAssertionsAsNotificationRequested(user.getSalesforceId());
+        memberServiceClient.updateMemberDefaultLanguage(user.getMemberId(), notificationRequest.getLanguage());
+        notificationService.createSendNotificationsRequest(user.getEmail(), user.getMemberId());
+        assertionService.markPendingAssertionsAsNotificationRequested(user.getMemberId());
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/notification-request")
     public ResponseEntity<NotificationRequestInProgress> getNotificationRequestInProgress() {
-        boolean notificationRequestInProgress = notificationService.requestInProgress(getLoggedInUser().getSalesforceId());
+        boolean notificationRequestInProgress = notificationService.requestInProgress(getLoggedInUser().getMemberId());
         return ResponseEntity.ok().body(new NotificationRequestInProgress(notificationRequestInProgress));
     }
 
@@ -227,8 +227,8 @@ public class AssertionResource {
         }
     }
 
-    @GetMapping("/salesforce/{state}")
-    public ResponseEntity<String> getSalesforceIdFromState(@PathVariable String state) throws IOException, JSONException {
+    @GetMapping("/member/{state}")
+    public ResponseEntity<String> getMemberIdFromState(@PathVariable String state) throws IOException, JSONException {
         String decryptState = encryptUtil.decrypt(state);
         String[] stateTokens = decryptState.split("&&");
         return ResponseEntity.ok().body(stateTokens[0]);
@@ -238,12 +238,12 @@ public class AssertionResource {
     public ResponseEntity<String> storeIdToken(@RequestBody ObjectNode json) throws ParseException, JAXBException, JSONException {
         String state = json.get("state").asText();
         String idToken = json.has("id_token") ? json.get("id_token").asText() : null;
-        String salesforceId = json.has("salesforce_id") ? json.get("salesforce_id").asText() : null;
+        String memberId = json.has("member_id") ? json.get("member_id").asText() : null;
         Boolean denied = json.has("denied") && json.get("denied").asBoolean();
         String[] stateTokens = encryptUtil.decrypt(state).split("&&");
         String emailInStatus = stateTokens[1];
-        if (salesforceId == null) {
-            salesforceId = stateTokens[0];
+        if (memberId == null) {
+            memberId = stateTokens[0];
         }
         JSONObject responseData = new JSONObject();
 
@@ -277,8 +277,8 @@ public class AssertionResource {
             }
 
             if (!org.apache.commons.lang3.StringUtils.isBlank(emailInStatus) && !org.apache.commons.lang3.StringUtils.isBlank(orcidIdInJWT)) {
-                orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT, salesforceId);
-                assertionService.updateOrcidIdsForEmailAndSalesforceId(emailInStatus, salesforceId);
+                orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT, memberId);
+                assertionService.updateOrcidIdsForEmailAndMemberId(emailInStatus, memberId);
             } else {
                 if (org.apache.commons.lang3.StringUtils.isBlank(emailInStatus)) {
                     LOG.warn("Not storing token for user {} - emailInStatus is empty in the state key: {}", emailInStatus, state);
@@ -290,7 +290,7 @@ public class AssertionResource {
             }
         } else {
             LOG.info("User {} denied access", emailInStatus);
-            orcidRecordService.storeUserDeniedAccess(emailInStatus, salesforceId);
+            orcidRecordService.storeUserDeniedAccess(emailInStatus, memberId);
         }
         return ResponseEntity.ok().body(responseData.toString());
     }
