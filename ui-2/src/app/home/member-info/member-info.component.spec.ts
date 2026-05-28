@@ -36,12 +36,11 @@ describe('MemberInfoComponent', () => {
       langKey: 'en',
       lastName: 'User',
       imageUrl: '',
-      salesforceId: 'test2',
+      memberId: 'test2',
       loggedAs: false,
       loginAs: '',
       mainContact: false,
       mfaEnabled: false,
-      memberId: 'memberId',
     }
 
     accountServiceSpy.getAccountData.and.returnValue(of(mockAccount))
@@ -81,7 +80,7 @@ describe('MemberInfoComponent', () => {
 
   it('should call the member service while managing a member', () => {
     activatedRoute.params = of({ id: 'test' })
-    accountService.getAccountData.and.returnValue(of({ salesforceId: 'test2' } as IAccount))
+    accountService.getAccountData.and.returnValue(of({ memberId: 'test2' } as IAccount))
     fixture.detectChanges()
 
     expect(memberService.setManagedMember).toHaveBeenCalledWith('test')
@@ -89,7 +88,7 @@ describe('MemberInfoComponent', () => {
   })
 
   it('should call the member service without managing a member', () => {
-    accountService.getAccountData.and.returnValue(of({ salesforceId: 'test2' } as IAccount))
+    accountService.getAccountData.and.returnValue(of({ memberId: 'test2' } as IAccount))
     fixture.detectChanges()
 
     expect(memberService.setManagedMember).toHaveBeenCalledTimes(0)
@@ -97,7 +96,7 @@ describe('MemberInfoComponent', () => {
   })
 
   it('should stop managing member', () => {
-    accountService.getAccountData.and.returnValue(of({ salesforceId: 'test2' } as IAccount))
+    accountService.getAccountData.and.returnValue(of({ memberId: 'test2' } as IAccount))
     fixture.detectChanges()
 
     component.stopManagingMember()
@@ -106,7 +105,7 @@ describe('MemberInfoComponent', () => {
   })
 
   it('member should be active', () => {
-    accountService.getAccountData.and.returnValue(of({ salesforceId: 'test2' } as IAccount))
+    accountService.getAccountData.and.returnValue(of({ memberId: 'test2' } as IAccount))
     memberService.getMemberData.and.returnValue(of({ membershipEndDateString: '2050' }))
     fixture.detectChanges()
 
@@ -115,7 +114,7 @@ describe('MemberInfoComponent', () => {
   })
 
   it('member should be inactive', () => {
-    accountService.getAccountData.and.returnValue(of({ salesforceId: 'test2' } as IAccount))
+    accountService.getAccountData.and.returnValue(of({ memberId: 'test2' } as IAccount))
     memberService.getMemberData.and.returnValue(of({ membershipEndDateString: '2022' }))
     fixture.detectChanges()
 
@@ -135,7 +134,7 @@ describe('MemberInfoComponent', () => {
   })
 
   it('should add protocol to websites where it is missing', () => {
-    accountService.getAccountData.and.returnValue(of({ salesforceId: 'test' } as IAccount))
+    accountService.getAccountData.and.returnValue(of({ memberId: 'test' } as IAccount))
     memberService.getMemberData.and.returnValue(of({}))
     fixture.detectChanges()
 

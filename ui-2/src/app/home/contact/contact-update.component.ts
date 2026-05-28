@@ -109,7 +109,7 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
               this.memberService.setManagedMember(params['id'])
               return this.memberService.getMemberData(this.managedMember)
             } else {
-              return this.memberService.getMemberData(this.account?.salesforceId)
+              return this.memberService.getMemberData(this.account?.memberId)
             }
           } else {
             return EMPTY

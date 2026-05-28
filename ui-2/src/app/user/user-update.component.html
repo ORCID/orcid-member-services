@@ -71,19 +71,19 @@
         <div class="form-group mb-0">
           <label
             class="form-control-label"
-            i18n="@@gatewayApp.msUserServiceMSUser.salesforceId.string"
-            for="field_salesforceId.string"
+            i18n="@@gatewayApp.msUserServiceMSUser.memberId.string"
+            for="field_memberId.string"
             >Organization</label
           >
           <fieldset [disabled]="isExistentMember">
             <select
               *ngIf="memberList.length > 0"
               class="custom-select"
-              name="salesforceId"
-              id="field_salesforceId"
-              formControlName="salesforceId"
+              name="memberId"
+              id="field_memberId"
+              formControlName="memberId"
             >
-              <option *ngFor="let member of memberList" [ngValue]="member.salesforceId">{{ member.clientName }}</option>
+              <option *ngFor="let member of memberList" [ngValue]="member.id">{{ member.clientName }}</option>
             </select>
           </fieldset>
           <fieldset [disabled]="true">

@@ -45,7 +45,7 @@ export class UserUpdateComponent {
     lastName: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(50)]),
     mainContact: new FormControl<boolean | null>(null),
     assertionServiceEnabled: new FormControl<boolean | null>(null),
-    salesforceId: new FormControl<string | null>(null, Validators.required),
+    memberId: new FormControl<string | null>(null, Validators.required),
     activated: new FormControl<boolean | null>(null),
     isAdmin: new FormControl<boolean | null>(null),
     createdBy: new FormControl<string | null>(null),
@@ -97,7 +97,7 @@ export class UserUpdateComponent {
         } else {
           if (this.hasRoleOrgOwner() || this.hasRoleConsortiumLead()) {
             this.editForm.patchValue({
-              salesforceId: this.getSalesForceId(),
+              memberId: this.getMemberId(),
             })
           }
         }
@@ -141,7 +141,7 @@ export class UserUpdateComponent {
       firstName: user.firstName,
       lastName: user.lastName,
       mainContact: user.mainContact,
-      salesforceId: user.salesforceId,
+      memberId: user.memberId,
       activated: user.activated,
       isAdmin: user.isAdmin,
       createdBy: user.createdBy,
@@ -155,7 +155,7 @@ export class UserUpdateComponent {
       this.editForm.get('salesforceId')?.disable()
     }
 
-    if (user.salesforceId) {
+    if (user.memberId) {
       this.isExistentMember = true
     }
     if (user.email) {
@@ -200,8 +200,8 @@ export class UserUpdateComponent {
     this.router.navigate(['/'])
   }
 
-  getSalesForceId() {
-    return this.accountService.getSalesforceId()
+  getMemberId() {
+    return this.accountService.getMemberId()
   }
 
   hasRoleAdmin() {
@@ -323,7 +323,7 @@ export class UserUpdateComponent {
       lastName: this.editForm.get(['lastName'])?.value || null,
       mainContact: this.editForm.get(['mainContact'])?.value || false,
       isAdmin: this.editForm.get(['isAdmin'])?.value || false,
-      salesforceId: this.editForm.get(['salesforceId'])?.value || null,
+      memberId: this.editForm.get(['memberId'])?.value || null,
       createdBy: this.editForm.get(['createdBy'])?.value || null,
       createdDate:
         this.editForm.get(['createdDate'])?.value != null

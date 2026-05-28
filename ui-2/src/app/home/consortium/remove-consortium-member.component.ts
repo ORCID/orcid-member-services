@@ -60,7 +60,7 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
 
     this.accountService.getAccountData().subscribe((account) => {
       if (account) {
-        this.memberService.getMemberData(account.salesforceId).subscribe((data) => {
+        this.memberService.getMemberData(account.memberId).subscribe((data) => {
           if (data) {
             this.memberData = data
             if (data.consortiumMembers) {

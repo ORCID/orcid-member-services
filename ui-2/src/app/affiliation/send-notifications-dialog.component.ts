@@ -38,7 +38,7 @@ export class SendNotificationsDialogComponent implements OnInit {
     this.languages = this.languageService.getAllLanguages()
 
     this.accountService.getAccountData().subscribe((account) => {
-      this.memberService.find(account!.salesforceId).subscribe((member) => {
+      this.memberService.find(account!.memberId).subscribe((member) => {
         if (member) {
           this.language = member.defaultLanguage || 'en'
         } else {

@@ -185,10 +185,6 @@ export class AccountService {
     return username
   }
 
-  getSalesforceId(): string | null {
-    return this.isAuthenticated() && this.accountData ? this.accountData.value!.salesforceId : null
-  }
-
   getMemberId(): string | null {
     return this.isAuthenticated() && this.accountData ? this.accountData.value!.memberId : null
   }

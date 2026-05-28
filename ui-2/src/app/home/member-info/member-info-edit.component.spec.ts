@@ -59,14 +59,14 @@ describe('MemberInfoEditComponent', () => {
 
   it('should fetch managed member`s data', () => {
     activatedRoute.params = of({ id: 'test' })
-    accountService.getAccountData.and.returnValue(of({ salesforceId: 'test2' } as IAccount))
+    accountService.getAccountData.and.returnValue(of({ memberId: 'test2' } as IAccount))
     fixture.detectChanges()
     expect(memberService.setManagedMember).toHaveBeenCalledOnceWith('test')
     expect(memberService.getMemberData).toHaveBeenCalledOnceWith('test')
   })
 
   it('should fetch own member`s data', () => {
-    accountService.getAccountData.and.returnValue(of({ salesforceId: 'test2' } as IAccount))
+    accountService.getAccountData.and.returnValue(of({ memberId: 'test2' } as IAccount))
     memberService.getMemberData.and.returnValue(
       of({
         id: 'SfId',
@@ -128,7 +128,7 @@ describe('MemberInfoEditComponent', () => {
   })
 
   it('should add protocol to websites where it is missing', () => {
-    accountService.getAccountData.and.returnValue(of({ salesforceId: 'test' } as IAccount))
+    accountService.getAccountData.and.returnValue(of({ memberId: 'test' } as IAccount))
     memberService.getMemberData.and.returnValue(of({}))
     fixture.detectChanges()
 
@@ -153,7 +153,7 @@ describe('MemberInfoEditComponent', () => {
 
   it('should update member data', () => {
     activatedRoute.params = of({ id: 'test' })
-    accountService.getAccountData.and.returnValue(of({ salesforceId: 'test2' } as IAccount))
+    accountService.getAccountData.and.returnValue(of({ memberId: 'test2' } as IAccount))
     memberService.updateMemberDetails.and.returnValue(of({}))
     memberService.getMemberData.and.returnValue(
       of({

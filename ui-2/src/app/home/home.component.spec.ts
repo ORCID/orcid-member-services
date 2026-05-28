@@ -24,7 +24,6 @@ describe('HomeComponent', () => {
       langKey: 'en',
       lastName: 'User',
       imageUrl: '',
-      salesforceId: 'test2',
       loggedAs: false,
       loginAs: '',
       mainContact: false,
