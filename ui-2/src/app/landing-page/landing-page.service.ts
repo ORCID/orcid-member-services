@@ -10,7 +10,7 @@ export class LandingPageService {
 
   idTokenUri = '/assertionservice/assertions/id-token'
   recordConnectionUri = '/assertionservice/assertions/record/'
-  salesforceIdUrl = '/assertionservice/assertions/salesforce/'
+  memberIdUrl = '/assertionservice/assertions/member/'
   memberInfoUri = '/memberservice/members/authorized/'
   userInfoUri = ORCID_BASE_URL + '/oauth/userinfo'
   publicKeyUri = ORCID_BASE_URL + '/oauth/jwks'
@@ -31,13 +31,13 @@ export class LandingPageService {
     return this.http.get<OrcidRecord>(requestUrl)
   }
 
-  getSalesforceId(state: string): Observable<string> {
-    const requestUrl = this.salesforceIdUrl + state
+  getMemberId(state: string): Observable<string> {
+    const requestUrl = this.memberIdUrl + state
     return this.http.get(requestUrl, { responseType: 'text' })
   }
 
-  getMemberInfo(salesforceId: string): Observable<any> {
-    const requestUrl = this.memberInfoUri + salesforceId
+  getMemberInfo(memberId: string): Observable<any> {
+    const requestUrl = this.memberInfoUri + memberId
     return this.http.get(requestUrl)
   }
 

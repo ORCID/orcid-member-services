@@ -316,7 +316,7 @@ public class MemberResource {
     @GetMapping("/authorized/{memberId}")
     public ResponseEntity<Member> getAuthorizedMember(@PathVariable String memberId) {
         LOG.debug("REST request to get authorized Member details for id {}", memberId);
-        Optional<Member> member = memberService.getMember(memberId);
+        Optional<Member> member = memberService.getMember(memberId); // crucial to call this method as legacy permission links use sf id
         if (!member.isPresent()) {
             LOG.warn("Can't find member for encrypted email");
             return ResponseEntity.notFound().build();

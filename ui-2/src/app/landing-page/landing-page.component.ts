@@ -28,7 +28,7 @@ export class LandingPageComponent implements OnInit {
   showSuccess = false
   key: any
   clientName: string | undefined
-  salesforceId: string | undefined
+  memberId: string | undefined
   clientId: string | undefined
   oauthUrl: string | undefined
   orcidRecord: OrcidRecord | undefined
@@ -67,14 +67,14 @@ export class LandingPageComponent implements OnInit {
   processRequest(state_param: string, id_token_fragment: string | null, access_token_fragment: string | null) {
     this.landingPageService.getOrcidConnectionRecord(state_param).subscribe({
       next: (result) => {
-        this.landingPageService.getSalesforceId(state_param).subscribe({
-          next: (salesforceId) => {
+        this.landingPageService.getMemberId(state_param).subscribe({
+          next: (memberId) => {
             this.orcidRecord = result
-            this.landingPageService.getMemberInfo(salesforceId).subscribe({
+            this.landingPageService.getMemberInfo(memberId).subscribe({
               next: (res: IMember) => {
                 this.clientName = res.clientName
                 this.clientId = res.clientId
-                this.salesforceId = res.salesforceId
+                this.memberId = res.id
                 this.oauthUrl =
                   this.oauthBaseUrl +
                   '?response_type=token&redirect_uri=' +
@@ -112,13 +112,13 @@ export class LandingPageComponent implements OnInit {
                 this.startTimer(600)
               },
               error: (err: HttpErrorResponse) => {
-                console.error('Error fetching member info for salesforce id:', salesforceId, err)
+                console.error('Error fetching member info for member id:', memberId, err)
                 this.showErrorElement(err)
               },
             })
           },
           error: (err: HttpErrorResponse) => {
-            console.error('Error fetching salesforce id for state param:', state_param, err)
+            console.error('Error fetching member id for state param:', state_param, err)
             this.showErrorElement(err)
           },
         })
@@ -143,7 +143,7 @@ export class LandingPageComponent implements OnInit {
         if (response === true) {
           // check if existing token belongs to a different user
 
-          this.landingPageService.submitUserResponse({ id_token, state, salesforce_id: this.salesforceId }).subscribe({
+          this.landingPageService.submitUserResponse({ id_token, state, member_id: this.memberId }).subscribe({
             next: (res) => {
               const data = res
               if (data) {
