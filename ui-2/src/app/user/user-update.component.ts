@@ -218,9 +218,9 @@ export class UserUpdateComponent {
 
   validateOrgOwners() {
     this.isSaving = true
-    const sfId = this.editForm.get('salesforceId')?.value
-    if (sfId) {
-      this.userService.hasOwner(sfId).subscribe((value) => {
+    const memberId = this.editForm.get('memberId')?.value
+    if (memberId) {
+      this.userService.hasOwner(memberId).subscribe((value) => {
         this.isSaving = false
         if (!this.editForm.get('mainContact')?.value) {
           this.hasOwner = false

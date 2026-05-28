@@ -30,7 +30,7 @@ describe('LandingPageComponent', () => {
             'submitUserResponse',
             'getUserInfo',
             'submitUserResponse',
-            'getSalesforceId',
+            'getMemberId',
           ]),
         },
         {
@@ -64,9 +64,9 @@ describe('LandingPageComponent', () => {
   it('New record connection should redirect to the registry', () => {
     windowLocationService.updateWindowLocation.and.returnValue()
     landingPageService.getOrcidConnectionRecord.and.returnValue(of(new OrcidRecord('email', 'orcid')))
-    landingPageService.getSalesforceId.and.returnValue(of('salesforceId'))
+    landingPageService.getMemberId.and.returnValue(of('memberId'))
     landingPageService.getMemberInfo.and.returnValue(
-      of(new Member('id', 'name', 'email', 'orcid', 'salesforceId', 'clientId'))
+      of(new Member('id', 'name', 'email', 'orcid', 'memberId', 'clientId'))
     )
     component.processRequest('someState', '', '')
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
@@ -77,13 +77,13 @@ describe('LandingPageComponent', () => {
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalled()
   })
 
-  fit('New record connection should fail (user denied permission)', () => {
+  it('New record connection should fail (user denied permission)', () => {
     windowLocationService.updateWindowLocation.and.returnValue()
     route.snapshot.fragment = 'error=access_denied'
     landingPageService.getOrcidConnectionRecord.and.returnValue(of(new OrcidRecord('email', 'orcid')))
-    landingPageService.getSalesforceId.and.returnValue(of('salesforceId'))
+    landingPageService.getMemberId.and.returnValue(of('memberId'))
     landingPageService.getMemberInfo.and.returnValue(
-      of(new Member('id', 'name', 'email', 'orcid', 'salesforceId', 'clientId'))
+      of(new Member('id', 'name', 'email', 'orcid', 'memberId', 'clientId'))
     )
     landingPageService.submitUserResponse.and.returnValue(of(''))
     component.processRequest('someState', '', '')
@@ -98,13 +98,13 @@ describe('LandingPageComponent', () => {
     expect(component.showDenied).toBeTruthy()
   })
 
-  fit('New record connection should fail (generic error)', () => {
+  it('New record connection should fail (generic error)', () => {
     windowLocationService.updateWindowLocation.and.returnValue()
-    landingPageService.getSalesforceId.and.returnValue(of('salesforceId'))
+    landingPageService.getMemberId.and.returnValue(of('memberId'))
     route.snapshot.fragment = 'error=123'
     landingPageService.getOrcidConnectionRecord.and.returnValue(of(new OrcidRecord('email', 'orcid')))
     landingPageService.getMemberInfo.and.returnValue(
-      of(new Member('id', 'name', 'email', 'orcid', 'salesforceId', 'clientId'))
+      of(new Member('id', 'name', 'email', 'orcid', 'memberId', 'clientId'))
     )
     landingPageService.submitUserResponse.and.returnValue(of(''))
     component.processRequest('someState', '', '')
@@ -121,10 +121,10 @@ describe('LandingPageComponent', () => {
 
   it('Existing record connection should be identified', () => {
     windowLocationService.updateWindowLocation.and.returnValue()
-    landingPageService.getSalesforceId.and.returnValue(of('salesforceId'))
+    landingPageService.getMemberId.and.returnValue(of('memberId'))
     landingPageService.getOrcidConnectionRecord.and.returnValue(of(new OrcidRecord('email', 'orcid')))
     landingPageService.getMemberInfo.and.returnValue(
-      of(new Member('id', 'name', 'email', 'orcid', 'salesforceId', 'clientId'))
+      of(new Member('id', 'name', 'email', 'orcid', 'memberId', 'clientId'))
     )
     landingPageService.getPublicKey.and.returnValue(of(['publicKey']))
     landingPageService.submitUserResponse.and.returnValue(of(''))

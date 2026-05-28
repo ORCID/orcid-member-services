@@ -38,7 +38,7 @@ describe('UserUpdateComponent', () => {
     const accountServiceSpy = jasmine.createSpyObj('AccountService', [
       'getAccountData',
       'hasAnyAuthority',
-      'getmemberId',
+      'getMemberId',
       'disableMfa',
     ])
     const alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
