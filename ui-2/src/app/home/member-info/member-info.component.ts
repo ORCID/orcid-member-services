@@ -48,24 +48,32 @@ export class MemberInfoComponent implements OnInit, OnDestroy {
     this.oidcSecurityService.isAuthenticated$
       .pipe(
         filter(({ isAuthenticated }) => isAuthenticated),
-        switchMap(() => combineLatest([this.activatedRoute.params, this.accountService.getAccountData()])),
-        switchMap(([params, account]) => {
-          if (params['id']) {
-            this.managedMember = params['id']
-          }
-
-          if (account) {
-            this.account = account
-
-            if (this.managedMember) {
-              this.memberService.setManagedMember(params['id'])
-              return this.memberService.getMemberData(this.managedMember)
-            } else {
-              return this.memberService.getMemberData(account?.memberId)
-            }
-          } else {
+        switchMap(() => this.accountService.getAccountData()),
+        switchMap((account) => {
+          // TypeScript understands this type narrowing perfectly
+          if (!account) {
             return EMPTY
           }
+
+          this.account = account
+
+          return this.activatedRoute.params.pipe(
+            switchMap((params) => {
+              const childId = params['id']
+
+              if (childId) {
+                console.log('Fetching member data for managed member ', childId)
+                this.managedMember = childId
+                this.memberService.setManagedMember(childId)
+                return this.memberService.getMemberData(childId)
+              } else {
+                console.log('Fetching member data for non managed member ', account.memberId)
+                this.managedMember = undefined
+                this.memberService.setManagedMember(null)
+                return this.memberService.getMemberData(account.memberId)
+              }
+            })
+          )
         }),
         takeUntil(this.destroy$)
       )

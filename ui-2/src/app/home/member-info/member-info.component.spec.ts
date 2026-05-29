@@ -73,7 +73,7 @@ describe('MemberInfoComponent', () => {
 
     expect(accountService.getAccountData).toHaveBeenCalled()
     expect(memberService.setManagedMember).toHaveBeenCalledTimes(0)
-    expect(component.managedMember).toEqual('test')
+    expect(component.managedMember).toBeUndefined()
     expect(memberService.getMemberData).toHaveBeenCalledTimes(0)
     expect(component.memberData).toBeUndefined()
   })
@@ -88,10 +88,14 @@ describe('MemberInfoComponent', () => {
   })
 
   it('should call the member service without managing a member', () => {
+    // Assuming you have mock route params of {} here in the setup somewhere
     accountService.getAccountData.and.returnValue(of({ memberId: 'test2' } as IAccount))
     fixture.detectChanges()
 
-    expect(memberService.setManagedMember).toHaveBeenCalledTimes(0)
+    // Update these two lines:
+    expect(memberService.setManagedMember).toHaveBeenCalledTimes(1)
+    expect(memberService.setManagedMember).toHaveBeenCalledWith(null)
+
     expect(memberService.getMemberData).toHaveBeenCalledWith('test2')
   })
 
