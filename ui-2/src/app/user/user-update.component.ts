@@ -181,7 +181,7 @@ export class UserUpdateComponent {
         })
       )
     } else {
-      return this.memberService.find(this.currentAccount.salesforceId).pipe(
+      return this.memberService.find(this.currentAccount.memberId).pipe(
         map((res) => {
           if (res) {
             return [res]
