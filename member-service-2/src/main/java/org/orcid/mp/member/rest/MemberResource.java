@@ -192,14 +192,16 @@ public class MemberResource {
             validateUserAccess(memberId);
             String salesforceId = getSalesforceId(memberId);
             Member member = memberService.getMember(memberId).orElseThrow();
-            MemberDetails memberDetails = null;
             if (member.getIsConsortiumLead()) {
-                memberDetails = salesforceService.getConsortiumLeadDetails(salesforceId);
+                ConsortiumLeadDetails consortiumLeadDetails = salesforceService.getConsortiumLeadDetails(salesforceId);
+                populateConsortiumMemberIds(consortiumLeadDetails);
+                consortiumLeadDetails.setMemberId(memberId);
+                return ResponseEntity.ok(consortiumLeadDetails);
             } else {
-                memberDetails = salesforceService.getMemberDetails(salesforceId);
+                MemberDetails memberDetails = salesforceService.getMemberDetails(salesforceId);
+                memberDetails.setMemberId(memberId);
+                return ResponseEntity.ok(memberDetails);
             }
-            memberDetails.setMemberId(memberId);
-            return ResponseEntity.ok(memberDetails);
         } catch (UnauthorizedMemberAccessException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -401,5 +403,12 @@ public class MemberResource {
                 throw new UnauthorizedMemberAccessException(user.getEmail(), memberId);
             }
         }
+    }
+
+    private void populateConsortiumMemberIds(ConsortiumLeadDetails clDetails) {
+        clDetails.getConsortiumMembers().forEach(memberDetails -> {
+            Member consortiumMember = memberService.getMember(memberDetails.getSalesforceId()).orElseThrow();
+            memberDetails.setMemberId(consortiumMember.getId());
+        });
     }
 }

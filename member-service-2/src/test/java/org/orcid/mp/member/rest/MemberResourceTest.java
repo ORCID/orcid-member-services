@@ -109,6 +109,17 @@ public class MemberResourceTest {
 
     @Test
     public void testGetMemberDetails_consortiumLead() throws UnauthorizedMemberAccessException {
+        Member consortiumMember1 = new Member();
+        consortiumMember1.setSalesforceId("salesforceId1");
+        consortiumMember1.setId("memberId1");
+
+        Member consortiumMember2 = new Member();
+        consortiumMember2.setSalesforceId("salesforceId2");
+        consortiumMember2.setId("memberId2");
+
+        when(memberService.getMember(eq("salesforceId1"))).thenReturn(Optional.of(consortiumMember1));
+        when(memberService.getMember(eq("salesforceId2"))).thenReturn(Optional.of(consortiumMember2));
+
         when(userService.getLoggedInUser()).thenReturn(getClUser());
         when(memberService.getMember(eq("clId"))).thenReturn(Optional.of(getCLMember()));
         when(salesforceService.getConsortiumLeadDetails(eq("salesforceId"))).thenReturn(getConsortiumLeadDetails());
@@ -122,6 +133,8 @@ public class MemberResourceTest {
         assertThat(memberDetails.getMemberId()).isEqualTo("clId");
 
         verify(salesforceService).getConsortiumLeadDetails(eq("salesforceId"));
+        verify(memberService).getMember(eq("salesforceId1"));
+        verify(memberService).getMember(eq("salesforceId2"));
     }
 
     @Test
@@ -375,6 +388,14 @@ public class MemberResourceTest {
         consortiumLeadDetails.setMemberType("Research Institute");
         consortiumLeadDetails.setName("test CL details");
         consortiumLeadDetails.setPublicDisplayDescriptionHtml("<p>public display description</p>");
+
+        ConsortiumMember consortiumMember1 = new ConsortiumMember();
+        consortiumMember1.setSalesforceId("salesforceId1");
+
+        ConsortiumMember consortiumMember2 = new ConsortiumMember();
+        consortiumMember2.setSalesforceId("salesforceId2");
+
+        consortiumLeadDetails.setConsortiumMembers(Arrays.asList(consortiumMember1, consortiumMember2));
         return consortiumLeadDetails;
     }
 

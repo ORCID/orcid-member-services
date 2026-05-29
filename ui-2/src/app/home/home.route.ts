@@ -15,9 +15,9 @@ export const ManageMemberGuard = (route: ActivatedRouteSnapshot): Observable<boo
   const memberService = inject(MemberService)
 
   return memberService.getManagedMember().pipe(
-    map((salesforceId) => {
-      if (salesforceId) {
-        const segments = ['manage', salesforceId]
+    map((memberId) => {
+      if (memberId) {
+        const segments = ['manage', memberId]
 
         if (route['routeConfig']?.path === 'edit') {
           segments.push('edit')

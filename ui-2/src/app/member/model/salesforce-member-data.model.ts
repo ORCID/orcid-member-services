@@ -61,6 +61,7 @@ export interface ISFRawMemberData {
 
 export interface ISFRawConsortiumMemberData {
   AccountId?: string
+  memberId?: string
   Account?: ISFRawConsortiumMemberMetadata
 }
 
@@ -99,6 +100,7 @@ export class SFConsortiumMemberData implements ISFConsortiumMemberData {
     public salesforceId?: string,
     public orgName?: string,
     public terminationMonth?: string,
-    public terminationYear?: string
+    public terminationYear?: string,
+    public memberId?: string
   ) {}
 }

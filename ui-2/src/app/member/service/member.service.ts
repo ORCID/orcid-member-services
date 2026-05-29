@@ -45,7 +45,8 @@ export class MemberService {
   public resourceUrl = '/memberservice'
   public managedMember = new BehaviorSubject<string | null>(null)
 
-  private memberData = new BehaviorSubject<ISFMemberData | undefined | null>(undefined)
+  private memberDataCache = new Map<string, BehaviorSubject<ISFMemberData | undefined | null>>()
+
   private fetchingMemberDataState = false
   public stopFetchingMemberData = new Subject()
   private countries = new BehaviorSubject<ISFCountry[] | undefined>(undefined)
@@ -89,6 +90,7 @@ export class MemberService {
   }
 
   getManagedMember(): Observable<string | null> {
+    console.log('getting managed member, current value is ', this.managedMember.value)
     return this.managedMember.asObservable()
   }
 
@@ -128,15 +130,33 @@ export class MemberService {
       this.stopFetchingMemberData.next(true)
     }
 
-    if (memberId && (!this.memberData.value || this.memberData.value.id !== memberId || force)) {
-      this.fetchMemberData(memberId)
+    if (!memberId) {
+      return of(undefined)
     }
 
-    return this.memberData.asObservable()
+    if (!this.memberDataCache.has(memberId)) {
+      this.memberDataCache.set(memberId, new BehaviorSubject<ISFMemberData | undefined | null>(undefined))
+    }
+
+    const subject = this.memberDataCache.get(memberId)!
+
+    if (!subject.value || subject.value.id !== memberId || force) {
+      this.fetchMemberData(memberId, subject)
+    }
+
+    return subject.asObservable()
   }
 
   setMemberData(memberData: ISFMemberData | undefined | null) {
-    this.memberData.next(memberData)
+    if (!memberData) {
+      this.memberDataCache.clear()
+    } else if (memberData.id) {
+      if (!this.memberDataCache.has(memberData.id)) {
+        this.memberDataCache.set(memberData.id, new BehaviorSubject<ISFMemberData | undefined | null>(memberData))
+      } else {
+        this.memberDataCache.get(memberData.id)!.next(memberData)
+      }
+    }
   }
 
   addConsortiumMember(consortiumMember: ISFNewConsortiumMember): Observable<boolean> {
@@ -167,24 +187,24 @@ export class MemberService {
       )
   }
 
-  private fetchMemberData(memberId: string) {
+  private fetchMemberData(memberId: string, subject: BehaviorSubject<ISFMemberData | undefined | null>) {
     this.fetchingMemberDataState = true
     this.fetchSFMemberData(memberId)
       .pipe(
         switchMap((res) => {
-          this.memberData.next(res)
+          subject.next(res)
           return combineLatest([
-            this.fetchMemberContacts(memberId),
-            this.getMemberOrgIds(memberId),
-            this.getConsortiaLeadName(res.consortiaLeadId!),
-            this.getIsConsortiumLead(memberId),
+            this.fetchMemberContacts(memberId, subject),
+            this.getMemberOrgIds(memberId, subject),
+            this.getConsortiaLeadName(res.consortiaLeadId!, subject),
+            this.getIsConsortiumLead(memberId, subject),
           ])
         }),
         tap(() => {
           this.fetchingMemberDataState = false
         }),
         catchError(() => {
-          this.memberData.next(null)
+          subject.next(null)
           this.fetchingMemberDataState = false
           return EMPTY
         })
@@ -218,13 +238,19 @@ export class MemberService {
     return this.http.put(`${this.resourceUrl}/members/${memberId}/member-details`, memberDetails)
   }
 
-  private fetchMemberContacts(salesforceId: string): Observable<SFMemberContact[]> {
+  private fetchMemberContacts(
+    salesforceId: string,
+    subject: BehaviorSubject<ISFMemberData | undefined | null>
+  ): Observable<SFMemberContact[]> {
     return this.http
       .get<ISFRawMemberContacts>(`${this.resourceUrl}/members/${salesforceId}/member-contacts`, { observe: 'response' })
       .pipe(
         takeUntil(this.stopFetchingMemberData),
         map((res: HttpResponse<ISFRawMemberContacts>) => this.convertToSalesforceMemberContacts(res)),
-        tap((res) => this.memberData.next({ ...this.memberData.value, contacts: res })),
+        tap((res) => {
+          const current = subject.value
+          if (current) subject.next({ ...current, contacts: res })
+        }),
         catchError((err) => {
           return of(err)
         })
@@ -247,26 +273,36 @@ export class MemberService {
     )
   }
 
-  getMemberOrgIds(memberId: string): Observable<SFMemberOrgIds> {
+  getMemberOrgIds(
+    memberId: string,
+    subject: BehaviorSubject<ISFMemberData | undefined | null>
+  ): Observable<SFMemberOrgIds> {
     return this.http
       .get<ISFRawMemberOrgIds>(`${this.resourceUrl}/members/${memberId}/member-org-ids`, { observe: 'response' })
       .pipe(
         takeUntil(this.stopFetchingMemberData),
         map((res: HttpResponse<ISFRawMemberOrgIds>) => this.convertToMemberOrgIds(res)),
         filter((res): res is SFMemberOrgIds => !!res),
-        tap((res) => this.memberData.next({ ...this.memberData.value, orgIds: res })),
+        tap((res) => {
+          const current = subject.value
+          if (current) subject.next({ ...current, orgIds: res })
+        }),
         catchError((err) => {
           return of(err)
         })
       )
   }
 
-  getConsortiaLeadName(consortiaLeadId: string): Observable<IMember | null> {
+  getConsortiaLeadName(
+    consortiaLeadId: string,
+    subject: BehaviorSubject<ISFMemberData | undefined | null>
+  ): Observable<IMember | null> {
     if (consortiaLeadId) {
       return this.find(consortiaLeadId).pipe(
         tap((member) => {
-          if (member) {
-            this.memberData.next({ ...this.memberData.value, consortiumLeadName: member.clientName })
+          const current = subject.value
+          if (member && current) {
+            subject.next({ ...current, consortiumLeadName: member.clientName })
           }
         })
       )
@@ -274,13 +310,17 @@ export class MemberService {
     return of(null)
   }
 
-  getIsConsortiumLead(memberId: string): Observable<IMember | never | null> {
+  getIsConsortiumLead(
+    memberId: string,
+    subject: BehaviorSubject<ISFMemberData | undefined | null>
+  ): Observable<IMember | never | null> {
     if (memberId) {
       return this.find(memberId).pipe(
         tap((member) => {
-          if (member) {
+          const current = subject.value
+          if (member && current) {
             const { isConsortiumLead } = member
-            this.memberData.next({ ...this.memberData.value, isConsortiumLead })
+            subject.next({ ...current, isConsortiumLead })
           }
         })
       )
@@ -342,6 +382,7 @@ export class MemberService {
     const consortiumMember: SFConsortiumMemberData = new SFConsortiumMemberData()
     consortiumMember.orgName = consortiumOpportunity?.Account?.Public_Display_Name__c
     consortiumMember.salesforceId = consortiumOpportunity.AccountId
+    consortiumMember.memberId = consortiumOpportunity.memberId
     return consortiumMember
   }
 
@@ -349,7 +390,6 @@ export class MemberService {
     const contacts: { [email: string]: SFMemberContact } = {}
     if (res.body && res.body.records && res.body.records.length > 0) {
       for (const contact of res.body.records) {
-        // Merge contacts with different roles to a single entry if they have a matching email
         if (contact.Contact_Curr_Email__c) {
           if (!contacts[contact.Contact_Curr_Email__c]) {
             contacts[contact.Contact_Curr_Email__c] = this.convertToSalesforceMemberContact(contact)
