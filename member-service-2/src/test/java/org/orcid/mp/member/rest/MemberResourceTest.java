@@ -104,6 +104,7 @@ public class MemberResourceTest {
         assertThat(memberDetails.getLogoUrl()).isEqualTo("some/url/for/a/logo");
         assertThat(memberDetails.getBillingCountry()).isEqualTo("Denmark");
         assertThat(memberDetails.getId()).isEqualTo("id");
+        assertThat(memberDetails.getMemberId()).isEqualTo("memberId");
     }
 
     @Test
@@ -118,6 +119,7 @@ public class MemberResourceTest {
 
         assertThat(memberDetails).isNotNull();
         assertThat(memberDetails.getName()).isEqualTo("test CL details");
+        assertThat(memberDetails.getMemberId()).isEqualTo("clId");
 
         verify(salesforceService).getConsortiumLeadDetails(eq("salesforceId"));
     }

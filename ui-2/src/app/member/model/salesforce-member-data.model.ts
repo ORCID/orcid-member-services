@@ -56,6 +56,7 @@ export interface ISFRawMemberData {
   consortiumOpportunities: [ISFRawConsortiumMemberData]
   BillingAddress: ISFAddress
   Trademark_License__c: string
+  memberId?: string
 }
 
 export interface ISFRawConsortiumMemberData {
@@ -88,7 +89,8 @@ export class SFMemberData implements ISFMemberData {
     public contacts?: ISFMemberContact[],
     public orgIds?: ISFMemberOrgIds,
     public billingAddress?: ISFAddress,
-    public trademarkLicense?: string
+    public trademarkLicense?: string,
+    public memberId?: string
   ) {}
 }
 

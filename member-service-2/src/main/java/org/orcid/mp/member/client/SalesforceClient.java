@@ -82,7 +82,7 @@ public class SalesforceClient {
         Map<String, Object> data = getDataMapForUpdate(memberUpdateData);
         try {
             String jsonData = objectMapper.writeValueAsString(data);
-            post("/sobjects/Account/" + salesforceId + "?_HttpMethod=PATCH", memberUpdateData);
+            post("/sobjects/Account/" + salesforceId + "?_HttpMethod=PATCH", jsonData);
             return true;
         } catch (JsonProcessingException e) {
             LOG.warn("Error writing member JSON to update", e);
@@ -202,13 +202,13 @@ public class SalesforceClient {
         }
     }
 
-    private void post(String path, MemberUpdateData updateData) {
+    private void post(String path, String updateDataJson) {
         String url = salesforceAPIBaseUrl + path;
         try {
             restClient.post().uri(url)
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(updateData)
+                    .body(updateDataJson)
                     .headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken.get()))
                     .retrieve()
                     .toBodilessEntity();

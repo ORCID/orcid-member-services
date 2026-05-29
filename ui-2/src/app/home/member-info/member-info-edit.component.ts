@@ -180,8 +180,8 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
       this.isSaving = true
       const details: ISFMemberUpdate = this.createDetailsFromForm()
 
-      if (this.memberData?.id) {
-        this.memberService.updateMemberDetails(details, this.memberData?.id).subscribe({
+      if (this.memberData?.memberId) {
+        this.memberService.updateMemberDetails(details, this.memberData?.memberId).subscribe({
           next: () => {
             this.memberService.setMemberData({
               ...this.memberData,

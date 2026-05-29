@@ -170,6 +170,8 @@ public class MemberResource {
             if (!memberDetailsUpdateValid(memberUpdateData)) {
                 return ResponseEntity.badRequest().build();
             }
+            String salesforceId = getSalesforceId(memberId);
+            memberUpdateData.setSalesforceId(salesforceId);
             salesforceService.updatePublicMemberDetails(memberUpdateData);
             return ResponseEntity.ok(true);
         } catch (UnauthorizedMemberAccessException e) {
@@ -190,11 +192,14 @@ public class MemberResource {
             validateUserAccess(memberId);
             String salesforceId = getSalesforceId(memberId);
             Member member = memberService.getMember(memberId).orElseThrow();
+            MemberDetails memberDetails = null;
             if (member.getIsConsortiumLead()) {
-                return ResponseEntity.ok(salesforceService.getConsortiumLeadDetails(salesforceId));
+                memberDetails = salesforceService.getConsortiumLeadDetails(salesforceId);
             } else {
-                return ResponseEntity.ok(salesforceService.getMemberDetails(salesforceId));
+                memberDetails = salesforceService.getMemberDetails(salesforceId);
             }
+            memberDetails.setMemberId(memberId);
+            return ResponseEntity.ok(memberDetails);
         } catch (UnauthorizedMemberAccessException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

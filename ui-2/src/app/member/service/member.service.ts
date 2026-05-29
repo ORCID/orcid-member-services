@@ -214,8 +214,8 @@ export class MemberService {
     )
   }
 
-  updateMemberDetails(memberDetails: ISFMemberUpdate, salesforceId: string): Observable<ISFMemberUpdate> {
-    return this.http.put(`${this.resourceUrl}/members/${salesforceId}/member-details`, memberDetails)
+  updateMemberDetails(memberDetails: ISFMemberUpdate, memberId: string): Observable<ISFMemberUpdate> {
+    return this.http.put(`${this.resourceUrl}/members/${memberId}/member-details`, memberDetails)
   }
 
   private fetchMemberContacts(salesforceId: string): Observable<SFMemberContact[]> {
@@ -323,6 +323,7 @@ export class MemberService {
           : undefined,
         billingAddress: res.BillingAddress,
         trademarkLicense: res.Trademark_License__c,
+        memberId: res.memberId,
       }
     } else {
       return new SFMemberData()
