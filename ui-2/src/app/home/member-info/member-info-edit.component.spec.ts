@@ -190,6 +190,7 @@ describe('MemberInfoEditComponent', () => {
         ],
         orgIds: { ROR: ['123', '456'], GRID: ['1213', '1415'] },
         billingAddress: new SFAddress('city', 'United Kingdom', 'GBR', 'postalCode', 'England', 'stateCode', 'street'),
+        memberId: 'test2',
       })
     )
     fixture.detectChanges()
