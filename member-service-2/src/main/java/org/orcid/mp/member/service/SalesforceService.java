@@ -168,14 +168,7 @@ public class SalesforceService {
     }
 
     public void updatePublicMemberDetails(MemberUpdateData memberUpdateData) {
-        String salesforceId = memberUpdateData.getSalesforceId();
-        Map<String, Object> data = getDataMapForUpdate(memberUpdateData);
-        try {
-            String jsonData = objectMapper.writeValueAsString(data);
-            salesforceClient.updatePublicMemberDetails(memberUpdateData);
-        } catch (JsonProcessingException e) {
-            LOG.warn("Error writing member JSON to update", e);
-        }
+        salesforceClient.updatePublicMemberDetails(memberUpdateData);
     }
 
     private Map<String, Object> getDataMapForUpdate(MemberUpdateData memberData) {
