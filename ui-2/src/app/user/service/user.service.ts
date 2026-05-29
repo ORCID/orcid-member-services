@@ -43,8 +43,8 @@ export class UserService {
     return this.http.get<User>(`${this.resourceUrl}/${email}`).pipe(map((res: User) => this.convertFromServer(res)))
   }
 
-  hasOwner(salesforceId: string): Observable<boolean> {
-    return this.http.get<boolean>(`${this.resourceUrl}/${salesforceId}/owner`)
+  hasOwner(memberId: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.resourceUrl}/${memberId}/owner`)
   }
 
   findByMemberId(memberId: string | null, req?: any): Observable<Page<User>> {

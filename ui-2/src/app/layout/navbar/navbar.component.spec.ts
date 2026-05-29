@@ -31,7 +31,7 @@ describe('NavbarComponent', () => {
       'isLoggedAs',
       'isOrganizationOwner',
       'getImageUrl',
-      'getSalesforceId',
+      'getMemberId',
     ])
     const mockOidcSecurityService = {
       checkAuth: () => of({ isAuthenticated: true, userData: { email: 'test@email.com' } }),
