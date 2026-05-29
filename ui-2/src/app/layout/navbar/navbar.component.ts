@@ -68,11 +68,11 @@ export class NavbarComponent implements OnInit {
         if (!this.memberCallDone && this.hasRoleUser()) {
           this.memberCallDone = true
 
-          const salesforceId = this.accountService.getSalesforceId()
+          const memberId = this.accountService.getMemberId()
 
-          if (salesforceId) {
-            console.log('Fetching member for ID:', salesforceId)
-            this.memberService.find(salesforceId).subscribe({
+          if (memberId) {
+            console.log('Fetching member for ID:', memberId)
+            this.memberService.find(memberId).subscribe({
               next: (res: IMember | null) => {
                 console.log('Member fetch successful', res)
                 if (res) {

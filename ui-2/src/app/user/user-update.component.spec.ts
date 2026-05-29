@@ -38,7 +38,7 @@ describe('UserUpdateComponent', () => {
     const accountServiceSpy = jasmine.createSpyObj('AccountService', [
       'getAccountData',
       'hasAnyAuthority',
-      'getSalesforceId',
+      'getmemberId',
       'disableMfa',
     ])
     const alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
@@ -78,12 +78,11 @@ describe('UserUpdateComponent', () => {
         langKey: 'en',
         lastName: 'surname',
         imageUrl: 'url',
-        salesforceId: 'sfid',
+        memberId: 'sfid',
         loggedAs: false,
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: false,
-        memberId: 'memberId',
       })
     )
     memberService.getAllMembers.and.returnValue(of([]))
@@ -103,8 +102,8 @@ describe('UserUpdateComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/users'])
   })
 
-  it('should disable salesforceId dropdown on init for existing users', () => {
-    activatedRoute.data = of({ user: { salesforceId: 'test', id: 'id' } as IUser })
+  it('should disable memberId dropdown on init for existing users', () => {
+    activatedRoute.data = of({ user: { memberId: 'test', id: 'id' } as IUser })
     accountService.hasAnyAuthority.and.returnValue(false)
     fixture.detectChanges()
 
@@ -114,7 +113,7 @@ describe('UserUpdateComponent', () => {
   it('should display disable 2fa checkbox for admins when editing an existing user', () => {
     activatedRoute.data = of({
       user: {
-        salesforceId: 'test',
+        memberId: 'test',
         id: 'id',
         email: 'test@test.com',
         firstName: 'hello',
@@ -136,7 +135,7 @@ describe('UserUpdateComponent', () => {
   it('should not disable 2fa if 2fa checkmark remains ticked', () => {
     activatedRoute.data = of({
       user: {
-        salesforceId: 'test',
+        memberId: 'test',
         id: 'id',
         email: 'test@test.com',
         firstName: 'hello',
@@ -156,7 +155,7 @@ describe('UserUpdateComponent', () => {
   it('should not disable 2fa checkbox if 2fa is not enabled', () => {
     activatedRoute.data = of({
       user: {
-        salesforceId: 'test',
+        memberId: 'test',
         id: 'id',
         email: 'test@test.com',
         firstName: 'hello',
@@ -188,7 +187,7 @@ describe('UserUpdateComponent', () => {
     expect(twoFactorAuthenticationCheckbox).toBeFalsy()
   })
 
-  it('should display salesforceId dropdown for admin users', () => {
+  it('should display memberId dropdown for admin users', () => {
     accountService.hasAnyAuthority.and.returnValue(true)
     fixture.detectChanges()
 
@@ -196,11 +195,11 @@ describe('UserUpdateComponent', () => {
   })
 
   it('should validate non-owners', () => {
-    activatedRoute.data = of({ user: { salesforceId: 'test', id: 'id' } as IUser })
+    activatedRoute.data = of({ user: { memberId: 'test', id: 'id' } as IUser })
     userService.hasOwner.and.returnValue(of(true))
     fixture.detectChanges()
 
-    component.editForm.patchValue({ salesforceId: '123', mainContact: false })
+    component.editForm.patchValue({ memberId: '123', mainContact: false })
     component.validateOrgOwners()
     expect(component.hasOwner).toBe(false)
     expect(component.isExistentMember).toBe(true)
@@ -210,14 +209,14 @@ describe('UserUpdateComponent', () => {
     userService.hasOwner.and.returnValue(of(true))
     fixture.detectChanges()
 
-    component.editForm.patchValue({ salesforceId: '123', mainContact: true })
+    component.editForm.patchValue({ memberId: '123', mainContact: true })
     component.validateOrgOwners()
     expect(component.hasOwner).toBe(true)
   })
 
   it('should create new user', () => {
     component.editForm.patchValue({
-      salesforceId: 'sfid',
+      memberId: 'sfid',
       email: 'test@test.com',
       firstName: 'firstName',
       lastName: 'lastName',
@@ -238,7 +237,7 @@ describe('UserUpdateComponent', () => {
 
   it('should create new user as org owner', () => {
     component.editForm.patchValue({
-      salesforceId: 'sfid',
+      memberId: 'sfid',
       email: 'test@test.com',
       firstName: 'firstName',
       lastName: 'lastName',
@@ -260,7 +259,7 @@ describe('UserUpdateComponent', () => {
   it('should update existing user', () => {
     activatedRoute.data = of({
       user: {
-        salesforceId: 'test',
+        memberId: 'test',
         id: 'test',
         email: 'test@test.com',
         firstName: 'hello',
@@ -283,7 +282,7 @@ describe('UserUpdateComponent', () => {
   it('should update user to org owner and redirect to homepage', () => {
     activatedRoute.data = of({
       user: {
-        salesforceId: 'test',
+        memberId: 'test',
         id: 'test',
         email: 'test@test.com',
         firstName: 'hello',
@@ -306,7 +305,7 @@ describe('UserUpdateComponent', () => {
   it('should update user to org owner and redirect to users list', () => {
     activatedRoute.data = of({
       user: {
-        salesforceId: 'test',
+        memberId: 'test',
         id: 'testing',
         email: 'test@test.com',
         firstName: 'hello',
@@ -328,7 +327,7 @@ describe('UserUpdateComponent', () => {
   })
 
   it('should send activation email for existing user', () => {
-    activatedRoute.data = of({ user: { salesforceId: 'test', id: 'id' } as IUser })
+    activatedRoute.data = of({ user: { memberId: 'test', id: 'id' } as IUser })
     userService.sendActivate.and.returnValue(of(new User()))
     fixture.detectChanges()
 

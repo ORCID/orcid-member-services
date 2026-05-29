@@ -106,7 +106,7 @@ export class AddConsortiumMemberComponent implements OnInit {
 
     this.accountService.getAccountData().subscribe((account) => {
       if (account) {
-        combineLatest([this.memberService.getMemberData(account.salesforceId), this.memberService.getCountries()])
+        combineLatest([this.memberService.getMemberData(account.memberId), this.memberService.getCountries()])
           .pipe(take(1))
           .subscribe(([data, countries]) => {
             this.memberData = data

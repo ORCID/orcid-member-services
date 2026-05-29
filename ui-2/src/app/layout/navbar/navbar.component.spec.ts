@@ -69,7 +69,7 @@ describe('NavbarComponent', () => {
     accountService.hasAnyAuthority.withArgs(['ROLE_USER']).and.returnValue(true)
     accountService.isOrganizationOwner.and.returnValue(false)
     accountService.getImageUrl.and.returnValue(null)
-    accountService.getSalesforceId.and.returnValue('sfid')
+    accountService.getMemberId.and.returnValue('memberId')
     accountService.getAccountData.and.returnValue(
       of({
         id: 'id',
@@ -115,7 +115,7 @@ describe('NavbarComponent', () => {
     accountService.hasAnyAuthority.withArgs(['ROLE_USER']).and.returnValue(true)
     accountService.isOrganizationOwner.and.returnValue(false)
     accountService.getImageUrl.and.returnValue(null)
-    accountService.getSalesforceId.and.returnValue('sfid')
+    accountService.getMemberId.and.returnValue('memberId')
     accountService.getAccountData.and.returnValue(
       of({
         id: 'id',
@@ -154,7 +154,7 @@ describe('NavbarComponent', () => {
     accountService.hasAnyAuthority.withArgs(['ROLE_USER']).and.returnValue(true)
     accountService.isOrganizationOwner.and.returnValue(false)
     accountService.getImageUrl.and.returnValue(null)
-    accountService.getSalesforceId.and.returnValue('sfid')
+    accountService.getMemberId.and.returnValue('memberId')
     accountService.getAccountData.and.returnValue(
       of({
         id: 'id',

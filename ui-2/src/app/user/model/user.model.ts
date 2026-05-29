@@ -13,9 +13,9 @@ export interface IUser {
   firstName?: string
   lastName?: string
   mainContact?: boolean
-  salesforceId?: string
+  memberId?: string
   memberName?: string
-  parentSalesforceId?: string
+  parentMemberId?: string
   activated?: boolean
   isAdmin?: boolean
   authorities?: [string]
@@ -33,9 +33,9 @@ export class User implements IUser {
     public firstName?: string,
     public lastName?: string,
     public mainContact?: boolean,
-    public salesforceId?: string,
+    public memberId?: string,
     public memberName?: string,
-    public parentSalesforceId?: string,
+    public parentMemberId?: string,
     public createdBy?: string,
     public createdDate?: Moment | undefined | null,
     public lastModifiedBy?: string,
