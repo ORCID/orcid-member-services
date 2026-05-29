@@ -58,7 +58,7 @@ public class CsvReportService {
         reports.forEach(r -> {
             try {
                 processCsvReportRequest(r);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 LOG.warn("Failed to generate CSV report of type {} for user {}", r.getReportType(), r.getOwnerId(), e);
                 StringWriter sw = new StringWriter();
                 PrintWriter pw = new PrintWriter(sw);
