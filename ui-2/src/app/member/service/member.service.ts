@@ -196,7 +196,7 @@ export class MemberService {
           return combineLatest([
             this.fetchMemberContacts(memberId, subject),
             this.getMemberOrgIds(memberId, subject),
-            this.getConsortiaLeadName(res.consortiaLeadId!, subject),
+            this.getConsortiaLeadName(res.parentMemberId!, subject),
             this.getIsConsortiumLead(memberId, subject),
           ])
         }),
