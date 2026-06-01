@@ -24,6 +24,7 @@ export interface ISFMemberData {
   billingAddress?: ISFAddress
   trademarkLicense?: string
   memberId?: string
+  parentMemberId?: string
 }
 
 export interface ISFConsortiumMemberData {
@@ -57,6 +58,7 @@ export interface ISFRawMemberData {
   BillingAddress: ISFAddress
   Trademark_License__c: string
   memberId?: string
+  parentMemberId?: string
 }
 
 export interface ISFRawConsortiumMemberData {
@@ -91,7 +93,8 @@ export class SFMemberData implements ISFMemberData {
     public orgIds?: ISFMemberOrgIds,
     public billingAddress?: ISFAddress,
     public trademarkLicense?: string,
-    public memberId?: string
+    public memberId?: string,
+    public parentMemberId?: string
   ) {}
 }
 

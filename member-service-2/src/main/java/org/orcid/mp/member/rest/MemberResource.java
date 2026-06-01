@@ -200,6 +200,9 @@ public class MemberResource {
             } else {
                 MemberDetails memberDetails = salesforceService.getMemberDetails(salesforceId);
                 memberDetails.setMemberId(memberId);
+                if (memberDetails.getConsortiaLeadId() != null) {
+                    memberDetails.setParentMemberId(getMemberIdForSalesforceId(memberDetails.getConsortiaLeadId()));
+                }
                 return ResponseEntity.ok(memberDetails);
             }
         } catch (UnauthorizedMemberAccessException e) {
@@ -384,6 +387,11 @@ public class MemberResource {
             return member.get().getSalesforceId();
         }
         throw new BadRequestAlertException("Member not present or missing salesforce ID");
+    }
+
+    private String getMemberIdForSalesforceId(String salesforceId) {
+        Member member = memberService.getMember(salesforceId).orElseThrow();
+        return member.getId();
     }
 
     /**
