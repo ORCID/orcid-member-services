@@ -52,7 +52,7 @@ export class MemberService {
   private countries = new BehaviorSubject<ISFCountry[] | undefined>(undefined)
 
   find(id: string): Observable<IMember> {
-    console.log('getting memember')
+    console.log('getting member ', id)
 
     return this.http
       .get<IMember>(`${this.resourceUrl}/members/${id}`)
@@ -298,6 +298,7 @@ export class MemberService {
     subject: BehaviorSubject<ISFMemberData | undefined | null>
   ): Observable<IMember | null> {
     if (consortiaLeadId) {
+      console.log('getting consortiaLeadName for member ', consortiaLeadId)
       return this.find(consortiaLeadId).pipe(
         tap((member) => {
           const current = subject.value
@@ -315,6 +316,7 @@ export class MemberService {
     subject: BehaviorSubject<ISFMemberData | undefined | null>
   ): Observable<IMember | never | null> {
     if (memberId) {
+      console.log('getting isConsortiumLead for member ', memberId)
       return this.find(memberId).pipe(
         tap((member) => {
           const current = subject.value
@@ -364,6 +366,7 @@ export class MemberService {
         billingAddress: res.BillingAddress,
         trademarkLicense: res.Trademark_License__c,
         memberId: res.memberId,
+        parentMemberId: res.parentMemberId,
       }
     } else {
       return new SFMemberData()

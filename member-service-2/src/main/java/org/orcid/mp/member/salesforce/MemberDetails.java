@@ -54,6 +54,8 @@ public class MemberDetails {
 
     private String memberId;
 
+    private String parentMemberId;
+
     public String getMemberId() {
         return memberId;
     }
@@ -180,5 +182,13 @@ public class MemberDetails {
 
     public void setBillingAddress(BillingAddress billingAddress) {
         this.billingAddress = billingAddress;
+    }
+
+    public String getParentMemberId() {
+        return parentMemberId;
+    }
+
+    public void setParentMemberId(String parentMemberId) {
+        this.parentMemberId = parentMemberId;
     }
 }

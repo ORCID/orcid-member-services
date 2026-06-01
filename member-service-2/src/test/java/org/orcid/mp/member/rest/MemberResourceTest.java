@@ -84,6 +84,7 @@ public class MemberResourceTest {
     @Test
     public void testGetMemberDetails() throws UnauthorizedMemberAccessException {
         when(memberService.getMember(eq("memberId"))).thenReturn(Optional.of(getMember()));
+        when(memberService.getMember(eq("consortiumLeadSFId"))).thenReturn(Optional.of(getCLMember()));
         when(salesforceService.getMemberDetails(eq("salesforceId"))).thenReturn(getMemberDetails());
         ResponseEntity<MemberDetails> entity = memberResource.getMemberDetails("memberId");
         assertEquals(200, entity.getStatusCodeValue());
@@ -97,7 +98,7 @@ public class MemberResourceTest {
         assertThat(memberDetails.getMembershipStartDateString()).isEqualTo("2022-01-01");
         assertThat(memberDetails.getMembershipEndDateString()).isEqualTo("2027-01-01");
         assertThat(memberDetails.getPublicDisplayEmail()).isEqualTo("orcid@testmember.com");
-        assertThat(memberDetails.getConsortiaLeadId()).isNull();
+        assertThat(memberDetails.getConsortiaLeadId()).isEqualTo("consortiumLeadSFId");
         assertThat(memberDetails.isConsortiaMember()).isFalse();
         assertThat(memberDetails.getPublicDisplayDescriptionHtml()).isEqualTo("<p>public display description</p>");
         assertThat(memberDetails.getMemberType()).isEqualTo("Research Institute");
@@ -105,6 +106,7 @@ public class MemberResourceTest {
         assertThat(memberDetails.getBillingCountry()).isEqualTo("Denmark");
         assertThat(memberDetails.getId()).isEqualTo("id");
         assertThat(memberDetails.getMemberId()).isEqualTo("memberId");
+        assertThat(memberDetails.getParentMemberId()).isEqualTo("clId");
     }
 
     @Test
@@ -375,6 +377,7 @@ public class MemberResourceTest {
         memberDetails.setMembershipStartDateString("2022-01-01");
         memberDetails.setMembershipEndDateString("2027-01-01");
         memberDetails.setWebsite("https://website.com");
+        memberDetails.setConsortiaLeadId("consortiumLeadSFId");
         return memberDetails;
     }
 
