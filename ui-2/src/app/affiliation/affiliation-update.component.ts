@@ -1,24 +1,24 @@
 import { Component, ErrorHandler, Inject, OnInit } from '@angular/core'
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
-import * as moment from 'moment'
-import { IAffiliation, Affiliation } from './model/affiliation.model'
-import { AffiliationService } from './service/affiliation.service'
+import moment from 'moment'
 import { DateUtilService } from '../shared/service/date-util.service'
+import { Affiliation, IAffiliation } from './model/affiliation.model'
+import { AffiliationService } from './service/affiliation.service'
 
+import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
 import {
-  DATE_TIME_FORMAT,
-  EMAIL_REGEXP,
   AFFILIATION_TYPES,
-  COUNTRIES,
-  ORG_ID_TYPES,
-  DEFAULT_LATEST_YEAR_INCREMENT,
   AlertMessage,
   AlertType,
+  COUNTRIES,
+  DATE_TIME_FORMAT,
+  DEFAULT_LATEST_YEAR_INCREMENT,
+  EMAIL_REGEXP,
+  ORG_ID_TYPES,
 } from '../app.constants'
-import { AlertService } from '../shared/service/alert.service'
-import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
 import { ErrorService } from '../error/service/error.service'
+import { AlertService } from '../shared/service/alert.service'
 
 function dateValidator() {
   return (formGroup: FormGroup) => {

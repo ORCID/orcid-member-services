@@ -1,9 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core'
-import { HttpResponse } from '@angular/common/http'
 import { FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { EMPTY, Observable } from 'rxjs'
-import * as moment from 'moment'
+import { Observable } from 'rxjs'
+import moment from 'moment'
 import { faBan, faCheckCircle, faSave } from '@fortawesome/free-solid-svg-icons'
 
 import { map } from 'rxjs/operators'
