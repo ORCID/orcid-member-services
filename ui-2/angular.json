@@ -137,7 +137,8 @@
           "builder": "@angular/build:dev-server",
           "options": {
             "proxyConfig": "src/proxy.conf.mjs",
-            "buildTarget": "ui:build"
+            "buildTarget": "ui:build",
+            "allowedHosts": ["all"]
           },
           "configurations": {
             "production": {
