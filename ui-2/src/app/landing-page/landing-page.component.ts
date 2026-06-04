@@ -12,8 +12,9 @@ import { log } from 'console'
 import { ActivatedRoute } from '@angular/router'
 
 @Component({
-  selector: 'app-landing-page',
-  templateUrl: './landing-page.component.html',
+    selector: 'app-landing-page',
+    templateUrl: './landing-page.component.html',
+    standalone: false
 })
 export class LandingPageComponent implements OnInit {
   issuer = ORCID_BASE_URL

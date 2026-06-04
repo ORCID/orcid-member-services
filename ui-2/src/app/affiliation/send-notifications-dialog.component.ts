@@ -12,9 +12,10 @@ import { AlertMessage, AlertType, EventType } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 
 @Component({
-  selector: 'app-send-notifications-dialog',
-  templateUrl: './send-notifications-dialog.component.html',
-  styleUrls: ['./send-notifications-dialog.component.scss'],
+    selector: 'app-send-notifications-dialog',
+    templateUrl: './send-notifications-dialog.component.html',
+    styleUrls: ['./send-notifications-dialog.component.scss'],
+    standalone: false
 })
 export class SendNotificationsDialogComponent implements OnInit {
   faPaperPlane = faPaperPlane
@@ -77,8 +78,9 @@ export class SendNotificationsDialogComponent implements OnInit {
 }
 
 @Component({
-  selector: 'app-send-notifications-popup',
-  template: '',
+    selector: 'app-send-notifications-popup',
+    template: '',
+    standalone: false
 })
 export class SendNotificationsPopupComponent implements OnInit, OnDestroy {
   protected ngbModalRef: NgbModalRef | undefined | null

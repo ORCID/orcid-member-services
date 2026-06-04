@@ -4,9 +4,10 @@ import { DomSanitizer } from '@angular/platform-browser'
 import { ActivatedRoute } from '@angular/router'
 
 @Component({
-  selector: 'app-report',
-  templateUrl: './report.component.html',
-  styleUrls: ['report.scss'],
+    selector: 'app-report',
+    templateUrl: './report.component.html',
+    styleUrls: ['report.scss'],
+    standalone: false
 })
 export class ReportComponent implements OnInit {
   reportSrc: any

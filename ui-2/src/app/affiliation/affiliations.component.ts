@@ -25,9 +25,10 @@ import { DateUtilService } from '../shared/service/date-util.service'
 import { Page } from '../shared/model/page.model'
 
 @Component({
-  selector: 'app-affiliations',
-  templateUrl: './affiliations.component.html',
-  styleUrls: ['./affiliations.component.scss'],
+    selector: 'app-affiliations',
+    templateUrl: './affiliations.component.html',
+    styleUrls: ['./affiliations.component.scss'],
+    standalone: false
 })
 export class AffiliationsComponent implements OnInit, OnDestroy {
   errorAddingToOrcid: string = AFFILIATION_STATUS.ERROR_ADDING_TO_ORCID

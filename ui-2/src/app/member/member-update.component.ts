@@ -11,8 +11,9 @@ import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
 import { clientIdValidator, parentSalesforceIdValidator, salesforceIdFormatValidator } from './validators/member.validators'
 
 @Component({
-  selector: 'app-member-update',
-  templateUrl: './member-update.component.html',
+    selector: 'app-member-update',
+    templateUrl: './member-update.component.html',
+    standalone: false
 })
 export class MemberUpdateComponent implements OnInit {
   orcidBaseUrl: string = ORCID_BASE_URL

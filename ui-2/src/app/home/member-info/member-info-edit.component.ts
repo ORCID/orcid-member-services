@@ -14,9 +14,10 @@ import { ISFMemberUpdate, SFMemberUpdate } from 'src/app/member/model/salesforce
 import { MemberService } from 'src/app/member/service/member.service'
 
 @Component({
-  selector: 'app-member-info-edit',
-  templateUrl: './member-info-edit.component.html',
-  styleUrls: ['./member-info-edit.component.scss'],
+    selector: 'app-member-info-edit',
+    templateUrl: './member-info-edit.component.html',
+    styleUrls: ['./member-info-edit.component.scss'],
+    standalone: false
 })
 export class MemberInfoEditComponent implements OnInit, OnDestroy {
   countries: ISFCountry[] | undefined

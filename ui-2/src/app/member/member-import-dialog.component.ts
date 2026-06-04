@@ -9,9 +9,10 @@ import { EventType } from '../app.constants'
 import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
-  selector: 'app-member-import-dialog',
-  templateUrl: './member-import-dialog.component.html',
-  styleUrls: ['./member-import-dialog.component.scss'],
+    selector: 'app-member-import-dialog',
+    templateUrl: './member-import-dialog.component.html',
+    styleUrls: ['./member-import-dialog.component.scss'],
+    standalone: false
 })
 export class MemberImportDialogComponent {
   public resourceUrl
@@ -64,8 +65,9 @@ export class MemberImportDialogComponent {
 }
 
 @Component({
-  selector: 'app-member-import-popup',
-  template: '',
+    selector: 'app-member-import-popup',
+    template: '',
+    standalone: false
 })
 export class MemberImportPopupComponent implements OnInit, OnDestroy {
   protected ngbModalRef: NgbModalRef | undefined | null

@@ -7,8 +7,9 @@ import { faPencilAlt, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { DateUtilService } from '../shared/service/date-util.service'
 
 @Component({
-  selector: 'app-affiliation-detail',
-  templateUrl: './affiliation-detail.component.html',
+    selector: 'app-affiliation-detail',
+    templateUrl: './affiliation-detail.component.html',
+    standalone: false
 })
 export class AffiliationDetailComponent implements OnInit {
   affiliation: IAffiliation = new Affiliation()
