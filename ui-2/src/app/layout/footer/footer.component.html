@@ -15,9 +15,11 @@
           <li class="list-group-item">
             <a href="https://orcid.org/content/orcid-terms-use" i18n="@@footer.termsOfUse.string">Terms of Use</a>
           </li>
-          <li *ngIf="isAuthenticated()" class="list-group-item">
-            <a id="helpLink" href="/" i18n="@@footer.help.string">Help</a>
-          </li>
+          @if (isAuthenticated()) {
+            <li class="list-group-item">
+              <a id="helpLink" href="/" i18n="@@footer.help.string">Help</a>
+            </li>
+          }
           <li class="list-group-item">
             <a href="https://orcid.org/signin" i18n="@@footer.orcidRegistry.string">ORCID Registry</a>
           </li>
@@ -25,7 +27,9 @@
       </nav>
     </div>
   </div>
-  <div *ngIf="releaseVersion" class="release-version">
-    {{ releaseVersion }}
-  </div>
+  @if (releaseVersion) {
+    <div class="release-version">
+      {{ releaseVersion }}
+    </div>
+  }
 </footer>
