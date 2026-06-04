@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { ORCID_BASE_URL } from '../app.constants'
@@ -6,6 +6,8 @@ import { OrcidRecord } from '../shared/model/orcid-record.model'
 
 @Injectable({ providedIn: 'root' })
 export class LandingPageService {
+  private http = inject(HttpClient)
+
   private headers: HttpHeaders
 
   idTokenUri = '/assertionservice/assertions/id-token'
@@ -15,7 +17,7 @@ export class LandingPageService {
   userInfoUri = ORCID_BASE_URL + '/oauth/userinfo'
   publicKeyUri = ORCID_BASE_URL + '/oauth/jwks'
 
-  constructor(private http: HttpClient) {
+  constructor() {
     this.headers = new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json',

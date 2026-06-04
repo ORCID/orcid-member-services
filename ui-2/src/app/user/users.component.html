@@ -50,7 +50,7 @@
       <div class="col-md-12">
         <app-alert-error></app-alert-error>
         <app-alert-toast></app-alert-toast>
-        @if (users && users?.length === 0) {
+        @if (users && users.length === 0) {
           <div class="alert alert-warning">
             <span i18n="@@gatewayApp.msUserServiceMSUser.home.notFound.string">No users to show</span>
           </div>

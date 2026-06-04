@@ -11,11 +11,17 @@ import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
 import { clientIdValidator, parentSalesforceIdValidator, salesforceIdFormatValidator } from './validators/member.validators'
 
 @Component({
-    selector: 'app-member-update',
-    templateUrl: './member-update.component.html',
-    standalone: false
+  selector: 'app-member-update',
+  templateUrl: './member-update.component.html',
+  standalone: false,
 })
 export class MemberUpdateComponent implements OnInit {
+  protected activatedRoute = inject(ActivatedRoute)
+  protected router = inject(Router)
+  protected memberService = inject(MemberService)
+  private fb = inject(FormBuilder)
+  private alertService = inject(AlertService)
+
   orcidBaseUrl: string = ORCID_BASE_URL
   baseUrl: string = BASE_URL
   isSaving = false
@@ -37,13 +43,7 @@ export class MemberUpdateComponent implements OnInit {
     lastModifiedDate: new FormControl<string | null>(null),
   })
 
-  constructor(
-    protected activatedRoute: ActivatedRoute,
-    protected router: Router,
-    protected memberService: MemberService,
-    private fb: FormBuilder,
-    private alertService: AlertService
-  ) {
+  constructor() {
     this.validation = {}
   }
 

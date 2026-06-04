@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { tap } from 'rxjs/operators'
@@ -8,13 +8,11 @@ import { OidcSecurityService } from 'angular-auth-oidc-client'
 
 @Injectable()
 export class AuthExpiredInterceptor implements HttpInterceptor {
-  NON_CHECKED_URLS = ['/', '/reset/request', '/reset/finish']
+  private router = inject(Router)
+  private loginService = inject(LoginService)
+  private oidcSecurityService = inject(OidcSecurityService)
 
-  constructor(
-    private router: Router,
-    private loginService: LoginService,
-    private oidcSecurityService: OidcSecurityService
-  ) {}
+  NON_CHECKED_URLS = ['/', '/reset/request', '/reset/finish']
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
@@ -24,7 +22,7 @@ export class AuthExpiredInterceptor implements HttpInterceptor {
             if (err.status === 401) {
               if (err.error?.error === 'mfa_required' || (err.url && err.url.includes('/account/login'))) {
                 // if it's an mfa required error, take no action here
-                return;
+                return
               }
               const token = this.oidcSecurityService.getAccessToken()
               if (token) {

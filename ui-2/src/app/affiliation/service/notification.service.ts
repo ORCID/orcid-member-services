@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { AffiliationService } from './affiliation.service'
 
 @Injectable({ providedIn: 'root' })
 export class NotificationService {
+  private http = inject(HttpClient)
+  private affiliationService = inject(AffiliationService)
+
   resourceUrl: string
 
-  constructor(
-    private http: HttpClient,
-    private affiliationService: AffiliationService
-  ) {
+  constructor() {
     this.resourceUrl = this.affiliationService.resourceUrl + '/notification-request'
   }
 

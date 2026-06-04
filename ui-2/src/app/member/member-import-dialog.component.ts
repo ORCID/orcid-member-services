@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { MemberService } from './service/member.service'
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { EventService } from '../shared/service/event.service'
@@ -9,12 +9,17 @@ import { EventType } from '../app.constants'
 import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
-    selector: 'app-member-import-dialog',
-    templateUrl: './member-import-dialog.component.html',
-    styleUrls: ['./member-import-dialog.component.scss'],
-    standalone: false
+  selector: 'app-member-import-dialog',
+  templateUrl: './member-import-dialog.component.html',
+  styleUrls: ['./member-import-dialog.component.scss'],
+  standalone: false,
 })
 export class MemberImportDialogComponent {
+  protected memberService = inject(MemberService)
+  activeModal = inject(NgbActiveModal)
+  protected eventService = inject(EventService)
+  private uploadService = inject(FileUploadService)
+
   public resourceUrl
   isSaving: boolean
   currentFile: FileList | null
@@ -23,12 +28,7 @@ export class MemberImportDialogComponent {
   faBan = faBan
   faSave = faSave
 
-  constructor(
-    protected memberService: MemberService,
-    public activeModal: NgbActiveModal,
-    protected eventService: EventService,
-    private uploadService: FileUploadService
-  ) {
+  constructor() {
     this.currentFile = null
     this.isSaving = false
     this.resourceUrl = this.memberService.resourceUrl + '/members/upload'
@@ -65,18 +65,16 @@ export class MemberImportDialogComponent {
 }
 
 @Component({
-    selector: 'app-member-import-popup',
-    template: '',
-    standalone: false
+  selector: 'app-member-import-popup',
+  template: '',
+  standalone: false,
 })
 export class MemberImportPopupComponent implements OnInit, OnDestroy {
-  protected ngbModalRef: NgbModalRef | undefined | null
+  protected activatedRoute = inject(ActivatedRoute)
+  protected router = inject(Router)
+  protected modalService = inject(NgbModal)
 
-  constructor(
-    protected activatedRoute: ActivatedRoute,
-    protected router: Router,
-    protected modalService: NgbModal
-  ) {}
+  protected ngbModalRef: NgbModalRef | undefined | null
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ msMember }) => {

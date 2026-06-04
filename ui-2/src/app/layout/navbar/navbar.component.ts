@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import {
   faAddressCard,
   faUniversity,
@@ -19,12 +19,17 @@ import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { filter, switchMap } from 'rxjs/operators'
 
 @Component({
-    selector: 'app-navbar',
-    templateUrl: './navbar.component.html',
-    styleUrls: ['./navbar.scss'],
-    standalone: false
+  selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.scss'],
+  standalone: false,
 })
 export class NavbarComponent implements OnInit {
+  private loginService = inject(LoginService)
+  private accountService = inject(AccountService)
+  private memberService = inject(MemberService)
+  private oidcSecurityService = inject(OidcSecurityService)
+
   isNavbarCollapsed: boolean
 
   organizationName: string | undefined
@@ -45,12 +50,7 @@ export class NavbarComponent implements OnInit {
   faChartPie = faChartPie
   faLightbulb = faLightbulb
 
-  constructor(
-    private loginService: LoginService,
-    private accountService: AccountService,
-    private memberService: MemberService,
-    private oidcSecurityService: OidcSecurityService
-  ) {
+  constructor() {
     this.isNavbarCollapsed = true
   }
 

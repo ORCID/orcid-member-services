@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Subscription } from 'rxjs'
@@ -14,12 +14,20 @@ import { AlertService } from 'src/app/shared/service/alert.service'
 import { DateUtilService } from 'src/app/shared/service/date-util.service'
 
 @Component({
-    selector: 'app-remove-consortium-member',
-    templateUrl: './remove-consortium-member.component.html',
-    styleUrls: ['./remove-consortium-member.component.scss'],
-    standalone: false
+  selector: 'app-remove-consortium-member',
+  templateUrl: './remove-consortium-member.component.html',
+  styleUrls: ['./remove-consortium-member.component.scss'],
+  standalone: false,
 })
 export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
+  private memberService = inject(MemberService)
+  private accountService = inject(AccountService)
+  private fb = inject(FormBuilder)
+  private alertService = inject(AlertService)
+  private router = inject(Router)
+  private dateUtilService = inject(DateUtilService)
+  protected activatedRoute = inject(ActivatedRoute)
+
   memberDataSubscription: Subscription | undefined
   memberData: ISFMemberData | undefined | null
   consortiumMember: SFConsortiumMemberData | undefined
@@ -35,16 +43,6 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
     terminationMonth: [null, [Validators.required]],
     terminationYear: [null, [Validators.required]],
   })
-
-  constructor(
-    private memberService: MemberService,
-    private accountService: AccountService,
-    private fb: FormBuilder,
-    private alertService: AlertService,
-    private router: Router,
-    private dateUtilService: DateUtilService,
-    protected activatedRoute: ActivatedRoute
-  ) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe((params) => {

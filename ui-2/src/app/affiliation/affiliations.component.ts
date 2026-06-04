@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { IAffiliation } from './model/affiliation.model'
 import { AFFILIATION_STATUS } from '../shared/constants/orcid-api.constants'
 import { Subscription, delay, tap } from 'rxjs'
@@ -25,12 +25,21 @@ import { DateUtilService } from '../shared/service/date-util.service'
 import { Page } from '../shared/model/page.model'
 
 @Component({
-    selector: 'app-affiliations',
-    templateUrl: './affiliations.component.html',
-    styleUrls: ['./affiliations.component.scss'],
-    standalone: false
+  selector: 'app-affiliations',
+  templateUrl: './affiliations.component.html',
+  styleUrls: ['./affiliations.component.scss'],
+  standalone: false,
 })
 export class AffiliationsComponent implements OnInit, OnDestroy {
+  protected affiliationService = inject(AffiliationService)
+  protected alertService = inject(AlertService)
+  protected accountService = inject(AccountService)
+  protected activatedRoute = inject(ActivatedRoute)
+  protected router = inject(Router)
+  protected eventService = inject(EventService)
+  protected translate = inject(LanguageService)
+  protected dateUtilService = inject(DateUtilService)
+
   errorAddingToOrcid: string = AFFILIATION_STATUS.ERROR_ADDING_TO_ORCID
   errorUpdatingInOrcid: string = AFFILIATION_STATUS.ERROR_UPDATING_TO_ORCID
   errorDeletingInOrcid: string = AFFILIATION_STATUS.ERROR_DELETING_IN_ORCID
@@ -67,16 +76,7 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   showLinksReportPendingMessage: boolean | undefined
   paginationHeaderSubscription: Subscription | undefined
 
-  constructor(
-    protected affiliationService: AffiliationService,
-    protected alertService: AlertService,
-    protected accountService: AccountService,
-    protected activatedRoute: ActivatedRoute,
-    protected router: Router,
-    protected eventService: EventService,
-    protected translate: LanguageService,
-    protected dateUtilService: DateUtilService
-  ) {
+  constructor() {
     this.itemsPerPage = ITEMS_PER_PAGE
   }
 
