@@ -4,10 +4,11 @@ import { MemberImportDialogComponent } from './member-import-dialog.component'
 import { EventService } from '../shared/service/event.service'
 import { FileUploadService } from '../shared/service/file-upload.service'
 import { FormBuilder } from '@angular/forms'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { EMPTY, of } from 'rxjs'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MemberImportDialogComponent', () => {
   let component: MemberImportDialogComponent
@@ -19,11 +20,11 @@ describe('MemberImportDialogComponent', () => {
     uploadServiceSpy = jasmine.createSpyObj('FileUploadService', ['uploadFile'])
 
     TestBed.configureTestingModule({
-      declarations: [MemberImportDialogComponent],
-      imports: [HttpClientTestingModule],
-      providers: [FormBuilder, NgbModal, NgbActiveModal, { provide: FileUploadService, useValue: uploadServiceSpy }],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
+    declarations: [MemberImportDialogComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [],
+    providers: [FormBuilder, NgbModal, NgbActiveModal, { provide: FileUploadService, useValue: uploadServiceSpy }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
     fixture = TestBed.createComponent(MemberImportDialogComponent)
     component = fixture.componentInstance
     fixture.detectChanges()

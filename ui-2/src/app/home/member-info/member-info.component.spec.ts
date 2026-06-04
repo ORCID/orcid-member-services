@@ -8,8 +8,9 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { of } from 'rxjs'
 import { IAccount } from 'src/app/account/model/account.model'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MemberInfoComponent', () => {
   let component: MemberInfoComponent
@@ -46,15 +47,17 @@ describe('MemberInfoComponent', () => {
     accountServiceSpy.getAccountData.and.returnValue(of(mockAccount))
 
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), HttpClientTestingModule],
-      providers: [
+    declarations: [MemberInfoComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [RouterTestingModule.withRoutes([])],
+    providers: [
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: OidcSecurityService, useValue: mockOidcSecurityService },
-      ],
-      declarations: [MemberInfoComponent],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+})
     activatedRoute = TestBed.inject(ActivatedRoute) as jasmine.SpyObj<ActivatedRoute>
     accountService = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
     memberService = TestBed.inject(MemberService) as jasmine.SpyObj<MemberService>
