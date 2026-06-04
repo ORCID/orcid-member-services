@@ -152,7 +152,7 @@
                 </td>
                 @if (hasRoleAdmin()) {
                   <td>
-                    <a [routerLink]="['/members', user.salesforceId, 'view']">{{ user.memberName }}</a>
+                    <a [routerLink]="['/members', user.memberId, 'view']">{{ user.memberName }}</a>
                   </td>
                 }
                 @if (!hasRoleAdmin()) {

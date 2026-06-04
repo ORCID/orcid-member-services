@@ -136,15 +136,17 @@
               (editForm.get('clientName')?.dirty || editForm.get('clientName')?.touched)
             "
           >
-            <small
-              class="form-text text-danger"
-              *ngIf="(editForm.get('clientName')?.errors)!['required']"
-              i18n="@@entity.validation.required.string"
-              data-cy="fieldIsRequired"
-            >
-                    }
+            @if ((editForm.get('clientName')?.errors)!['required']){
+              <small
+                class="form-text text-danger"
+                *ngIf="(editForm.get('clientName')?.errors)!['required']"
+                i18n="@@entity.validation.required.string"
+                data-cy="fieldIsRequired"
+              >
+                This field is required.
+              </small>
+            }
                   </div>
-                }
               </div>
               <div class="form-group">
                 <label
