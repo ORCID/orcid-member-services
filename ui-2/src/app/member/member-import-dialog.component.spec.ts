@@ -1,14 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { MemberImportDialogComponent } from './member-import-dialog.component'
-import { EventService } from '../shared/service/event.service'
-import { FileUploadService } from '../shared/service/file-upload.service'
-import { FormBuilder } from '@angular/forms'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler'
+import { FormBuilder } from '@angular/forms'
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { EMPTY, of } from 'rxjs'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler'
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { FileUploadService } from '../shared/service/file-upload.service'
+import { MemberImportDialogComponent } from './member-import-dialog.component'
 
 describe('MemberImportDialogComponent', () => {
   let component: MemberImportDialogComponent
@@ -59,7 +58,7 @@ describe('MemberImportDialogComponent', () => {
       1: file,
       length: 2,
       item: (index: number) => file,
-    }
+    } as unknown as FileList
     return fileList
   }
 })

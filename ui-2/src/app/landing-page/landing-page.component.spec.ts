@@ -1,13 +1,13 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { LandingPageComponent } from './landing-page.component'
-import { LandingPageService } from './landing-page.service'
-import { OrcidRecord } from '../shared/model/orcid-record.model'
+import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { ActivatedRoute } from '@angular/router'
+import * as KEYUTIL from 'jsrsasign'
 import { of } from 'rxjs'
 import { Member } from '../member/model/member.model'
+import { OrcidRecord } from '../shared/model/orcid-record.model'
 import { WindowLocationService } from '../shared/service/window-location.service'
-import * as KEYUTIL from 'jsrsasign'
-import { ActivatedRoute } from '@angular/router'
+import { LandingPageComponent } from './landing-page.component'
+import { LandingPageService } from './landing-page.service'
 
 describe('LandingPageComponent', () => {
   let component: LandingPageComponent

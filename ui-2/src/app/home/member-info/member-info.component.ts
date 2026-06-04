@@ -80,7 +80,7 @@ export class MemberInfoComponent implements OnInit, OnDestroy {
       )
       .subscribe((data) => {
         this.memberData = data
-        console.log('Member Data successfully loaded:', data)
+        // console.log('Member Data successfully loaded:', data)
       })
   }
 

@@ -1,15 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { RemoveConsortiumMemberComponent } from './remove-consortium-member.component'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { ActivatedRoute, Router } from '@angular/router'
+import { RouterTestingModule } from '@angular/router/testing'
+import { of } from 'rxjs'
 import { AccountService } from 'src/app/account'
+import { AlertType } from 'src/app/app.constants'
 import { MemberService } from 'src/app/member/service/member.service'
 import { AlertService } from 'src/app/shared/service/alert.service'
-import { RouterTestingModule } from '@angular/router/testing'
-import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { of } from 'rxjs'
-import { AlertType } from 'src/app/app.constants'
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { RemoveConsortiumMemberComponent } from './remove-consortium-member.component'
 
 describe('RemoveConsortiumMemberComponent', () => {
   let component: RemoveConsortiumMemberComponent
@@ -22,7 +22,7 @@ describe('RemoveConsortiumMemberComponent', () => {
   let router: jasmine.SpyObj<Router>
 
   beforeEach(() => {
-    memberServiceSpy = jasmine.createSpyObj('MemberService', ['removeConsortiumMember'])
+    memberServiceSpy = jasmine.createSpyObj('MemberService', ['removeConsortiumMember', 'getMemberData'])
     accountServiceSpy = jasmine.createSpyObj('AccountService', ['getAccountData'])
     alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
 
@@ -48,6 +48,8 @@ describe('RemoveConsortiumMemberComponent', () => {
     component = fixture.componentInstance
 
     spyOn(router, 'navigate').and.returnValue(Promise.resolve(true))
+
+    memberServiceSpy.getMemberData.and.returnValue(of(null))
 
     accountServiceSpy.getAccountData.and.returnValue(
       of({

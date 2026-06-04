@@ -1,17 +1,16 @@
 /* tslint:disable max-line-length */
-import { TestBed, getTestBed } from '@angular/core/testing'
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing'
-import { take, map } from 'rxjs/operators'
-import * as moment from 'moment'
+import { TestBed } from '@angular/core/testing'
+import moment from 'moment'
+import { take } from 'rxjs/operators'
 import { DATE_TIME_FORMAT } from '../../app.constants'
 
-import { IUser, User } from '../model/user.model'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import { User } from '../model/user.model'
 import { UserService } from './user.service'
-import { HttpHeaders, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 
 describe('Service Tests', () => {
   describe('Member service users service', () => {
-    let injector: TestBed
     let service: UserService
     let httpMock: HttpTestingController
     let elemDefault: User
@@ -23,9 +22,8 @@ describe('Service Tests', () => {
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 })
       result = {}
-      injector = getTestBed()
-      service = injector.get(UserService)
-      httpMock = injector.get(HttpTestingController)
+      service = TestBed.inject(UserService)
+      httpMock = TestBed.inject(HttpTestingController)
       currentDate = moment()
 
       elemDefault = new User(
