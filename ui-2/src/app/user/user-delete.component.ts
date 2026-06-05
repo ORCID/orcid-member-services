@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { UserService } from './service/user.service'
 import { AlertService } from '../shared/service/alert.service'
 import { IUser } from './model/user.model'
@@ -12,19 +12,18 @@ import { faBan, faTimes } from '@fortawesome/free-solid-svg-icons'
 @Component({
   selector: 'app-user-delete-dialog',
   templateUrl: './user-delete.component.html',
+  standalone: false,
 })
 export class UserDeleteDialogComponent implements OnInit {
+  protected userService = inject(UserService)
+  activeModal = inject(NgbActiveModal)
+  protected eventService = inject(EventService)
+  private alertService = inject(AlertService)
+
   user: IUser | undefined
   message = ''
   faBan = faBan
   faTimes = faTimes
-
-  constructor(
-    protected userService: UserService,
-    public activeModal: NgbActiveModal,
-    protected eventService: EventService,
-    private alertService: AlertService
-  ) {}
 
   clear() {
     this.activeModal.dismiss('cancel')
@@ -48,15 +47,14 @@ export class UserDeleteDialogComponent implements OnInit {
 @Component({
   selector: 'app-user-delete-popup',
   template: '',
+  standalone: false,
 })
 export class UserDeletePopupComponent implements OnInit, OnDestroy {
-  protected ngbModalRef: NgbModalRef | undefined
+  protected activatedRoute = inject(ActivatedRoute)
+  protected router = inject(Router)
+  protected modalService = inject(NgbModal)
 
-  constructor(
-    protected activatedRoute: ActivatedRoute,
-    protected router: Router,
-    protected modalService: NgbModal
-  ) {}
+  protected ngbModalRef: NgbModalRef | undefined
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ user }) => {
       setTimeout(() => {

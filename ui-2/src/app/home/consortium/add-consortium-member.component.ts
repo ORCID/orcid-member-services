@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { combineLatest, take } from 'rxjs'
@@ -20,8 +20,17 @@ import { DateUtilService } from '../../shared/service/date-util.service'
   selector: 'app-add-consortium-member',
   templateUrl: './add-consortium-member.component.html',
   styleUrls: ['./add-consortium-member.component.scss'],
+  standalone: false,
 })
 export class AddConsortiumMemberComponent implements OnInit {
+  private memberService = inject(MemberService)
+  private fb = inject(FormBuilder)
+  private alertService = inject(AlertService)
+  private router = inject(Router)
+  private dateUtilService = inject(DateUtilService)
+  private accountService = inject(AccountService)
+  protected activatedRoute = inject(ActivatedRoute)
+
   countries: ISFCountry[] | undefined
   states: ISFState[] | undefined
   memberData: ISFMemberData | undefined | null
@@ -87,16 +96,6 @@ export class AddConsortiumMemberComponent implements OnInit {
       description: `Legal entity's annual operating budget above 1 B USD`,
     },
   ]
-
-  constructor(
-    private memberService: MemberService,
-    private fb: FormBuilder,
-    private alertService: AlertService,
-    private router: Router,
-    private dateUtilService: DateUtilService,
-    private accountService: AccountService,
-    protected activatedRoute: ActivatedRoute
-  ) {}
 
   ngOnInit() {
     this.currentMonth = this.dateUtilService.getCurrentMonthNumber()

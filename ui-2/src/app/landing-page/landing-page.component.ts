@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http'
 import { interval } from 'rxjs'
 import { KEYUTIL, KJUR, RSAKey } from 'jsrsasign'
@@ -14,8 +14,14 @@ import { ActivatedRoute } from '@angular/router'
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
+  standalone: false,
 })
 export class LandingPageComponent implements OnInit {
+  private landingPageService = inject(LandingPageService)
+  private windowLocationService = inject(WindowLocationService)
+  protected memberService = inject(MemberService)
+  private route = inject(ActivatedRoute)
+
   issuer = ORCID_BASE_URL
   oauthBaseUrl = ORCID_BASE_URL + '/oauth/authorize'
   redirectUri = BASE_URL + '/landing-page'
@@ -42,13 +48,6 @@ export class LandingPageComponent implements OnInit {
   allowToUpdateRecordMessage = ''
   successfullyGrantedMessage = ''
   thanksMessage = ''
-
-  constructor(
-    private landingPageService: LandingPageService,
-    private windowLocationService: WindowLocationService,
-    protected memberService: MemberService,
-    private route: ActivatedRoute
-  ) {}
 
   ngOnInit() {
     const fragmentString = this.route.snapshot.fragment

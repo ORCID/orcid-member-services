@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { HttpClient, HttpRequest, HttpEvent, HttpResponse } from '@angular/common/http'
 import { Observable } from 'rxjs/internal/Observable'
 import { filter, map, of } from 'rxjs'
 
 @Injectable({ providedIn: 'root' })
 export class FileUploadService {
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient)
 
   uploadFile(
     resourceUrl: string,

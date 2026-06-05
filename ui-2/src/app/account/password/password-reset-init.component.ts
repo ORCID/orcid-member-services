@@ -1,15 +1,19 @@
-import { Component, AfterViewInit, Renderer2 } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { AfterViewInit, Component, OnDestroy, Renderer2, inject } from '@angular/core'
+import { FormBuilder, Validators } from '@angular/forms'
 
-import { PasswordService } from '../service/password.service'
-import { EMAIL_NOT_FOUND_TYPE } from 'src/app/app.constants'
 import { PasswordResetInitResult } from '../model/password-reset-init-result.model'
+import { PasswordService } from '../service/password.service'
 
 @Component({
   selector: 'app-password-reset-init',
   templateUrl: './password-reset-init.component.html',
+  standalone: false,
 })
-export class PasswordResetInitComponent implements AfterViewInit {
+export class PasswordResetInitComponent implements AfterViewInit, OnDestroy {
+  private passwordResetInitService = inject(PasswordService)
+  private renderer = inject(Renderer2)
+  private fb = inject(FormBuilder)
+
   error: string | undefined
   errorEmailNotExists: string | undefined
   success: string | undefined
@@ -17,14 +21,16 @@ export class PasswordResetInitComponent implements AfterViewInit {
     email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100), Validators.email]],
   })
 
-  constructor(
-    private passwordResetInitService: PasswordService,
-    private renderer: Renderer2,
-    private fb: FormBuilder
-  ) {}
+  private focusTimeout: ReturnType<typeof setTimeout> | null = null
 
   ngAfterViewInit() {
-    setTimeout(() => this.renderer.selectRootElement('#email').focus())
+    this.focusTimeout = setTimeout(() => this.renderer.selectRootElement('#email').focus())
+  }
+
+  ngOnDestroy() {
+    if (this.focusTimeout !== null) {
+      clearTimeout(this.focusTimeout)
+    }
   }
 
   requestReset() {

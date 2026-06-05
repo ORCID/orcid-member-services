@@ -1,20 +1,19 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AccountService } from '../account'
 
 @Component({
   selector: 'app-error',
   templateUrl: './error.component.html',
+  standalone: false,
 })
 export class ErrorComponent implements OnInit {
+  private route = inject(ActivatedRoute)
+  private accountService = inject(AccountService)
+
   errorMessage: string | undefined
   error403: boolean | undefined
   error404: boolean | undefined
-
-  constructor(
-    private route: ActivatedRoute,
-    private accountService: AccountService
-  ) {}
 
   ngOnInit() {
     this.route.data.subscribe((routeData) => {

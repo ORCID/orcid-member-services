@@ -1,4 +1,4 @@
-import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core'
+import { Directive, Input, TemplateRef, ViewContainerRef, inject } from '@angular/core'
 import { AccountService } from 'src/app/account/service/account.service'
 
 /**
@@ -14,15 +14,14 @@ import { AccountService } from 'src/app/account/service/account.service'
  */
 @Directive({
   selector: '[appHasAnyAuthority]',
+  standalone: false,
 })
 export class HasAnyAuthorityDirective {
-  private authorities: string[] = []
+  private accountService = inject(AccountService)
+  private templateRef = inject<TemplateRef<any>>(TemplateRef)
+  private viewContainerRef = inject(ViewContainerRef)
 
-  constructor(
-    private accountService: AccountService,
-    private templateRef: TemplateRef<any>,
-    private viewContainerRef: ViewContainerRef
-  ) {}
+  private authorities: string[] = []
 
   @Input()
   set appHasAnyAuthority(value: string | string[]) {

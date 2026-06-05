@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { MemberImportDialogComponent } from './member-import-dialog.component'
-import { EventService } from '../shared/service/event.service'
-import { FileUploadService } from '../shared/service/file-upload.service'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler'
 import { FormBuilder } from '@angular/forms'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { EMPTY, of } from 'rxjs'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler'
+import { FileUploadService } from '../shared/service/file-upload.service'
+import { MemberImportDialogComponent } from './member-import-dialog.component'
 
 describe('MemberImportDialogComponent', () => {
   let component: MemberImportDialogComponent
@@ -19,11 +19,11 @@ describe('MemberImportDialogComponent', () => {
     uploadServiceSpy = jasmine.createSpyObj('FileUploadService', ['uploadFile'])
 
     TestBed.configureTestingModule({
-      declarations: [MemberImportDialogComponent],
-      imports: [HttpClientTestingModule],
-      providers: [FormBuilder, NgbModal, NgbActiveModal, { provide: FileUploadService, useValue: uploadServiceSpy }],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
+    declarations: [MemberImportDialogComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [],
+    providers: [FormBuilder, NgbModal, NgbActiveModal, { provide: FileUploadService, useValue: uploadServiceSpy }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+})
     fixture = TestBed.createComponent(MemberImportDialogComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
@@ -58,7 +58,7 @@ describe('MemberImportDialogComponent', () => {
       1: file,
       length: 2,
       item: (index: number) => file,
-    }
+    } as unknown as FileList
     return fileList
   }
 })

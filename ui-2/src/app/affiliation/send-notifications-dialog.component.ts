@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { NotificationService } from './service/notification.service'
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { EventService } from '../shared/service/event.service'
@@ -15,24 +15,23 @@ import { ActivatedRoute, Router } from '@angular/router'
   selector: 'app-send-notifications-dialog',
   templateUrl: './send-notifications-dialog.component.html',
   styleUrls: ['./send-notifications-dialog.component.scss'],
+  standalone: false,
 })
 export class SendNotificationsDialogComponent implements OnInit {
+  protected notificationService = inject(NotificationService)
+  activeModal = inject(NgbActiveModal)
+  protected eventService = inject(EventService)
+  protected alertService = inject(AlertService)
+  private languageService = inject(LanguageService)
+  private memberService = inject(MemberService)
+  private accountService = inject(AccountService)
+
   faPaperPlane = faPaperPlane
   faBan = faBan
   requestAlreadyInProgress = false
   languages: { [langCode: string]: { name: string } } | undefined
   language = ''
   account: IUser | undefined
-
-  constructor(
-    protected notificationService: NotificationService,
-    public activeModal: NgbActiveModal,
-    protected eventService: EventService,
-    protected alertService: AlertService,
-    private languageService: LanguageService,
-    private memberService: MemberService,
-    private accountService: AccountService
-  ) {}
 
   ngOnInit() {
     this.languages = this.languageService.getAllLanguages()
@@ -79,15 +78,14 @@ export class SendNotificationsDialogComponent implements OnInit {
 @Component({
   selector: 'app-send-notifications-popup',
   template: '',
+  standalone: false,
 })
 export class SendNotificationsPopupComponent implements OnInit, OnDestroy {
-  protected ngbModalRef: NgbModalRef | undefined | null
+  protected activatedRoute = inject(ActivatedRoute)
+  protected router = inject(Router)
+  protected modalService = inject(NgbModal)
 
-  constructor(
-    protected activatedRoute: ActivatedRoute,
-    protected router: Router,
-    protected modalService: NgbModal
-  ) {}
+  protected ngbModalRef: NgbModalRef | undefined | null
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ assertion }) => {

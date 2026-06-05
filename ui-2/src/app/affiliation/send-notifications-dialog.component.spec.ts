@@ -7,13 +7,14 @@ import { AccountService } from '../account'
 import { MemberService } from '../member/service/member.service'
 import { AlertService } from '../shared/service/alert.service'
 import { LanguageService } from '../shared/service/language.service'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { FormBuilder } from '@angular/forms'
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
 import { ErrorService } from '../error/service/error.service'
 import { FileUploadService } from '../shared/service/file-upload.service'
 import { UserService } from '../user/service/user.service'
 import { of } from 'rxjs'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('SendNotificationsDialogComponent', () => {
   let component: SendNotificationsDialogComponent
@@ -39,9 +40,9 @@ describe('SendNotificationsDialogComponent', () => {
     ])
 
     TestBed.configureTestingModule({
-      declarations: [SendNotificationsDialogComponent],
-      imports: [HttpClientTestingModule],
-      providers: [
+    declarations: [SendNotificationsDialogComponent],
+    imports: [],
+    providers: [
         FormBuilder,
         NgbModal,
         NgbActiveModal,
@@ -52,8 +53,10 @@ describe('SendNotificationsDialogComponent', () => {
         { provide: LanguageService, useValue: languageServiceSpy },
         { provide: NotificationService, useValue: notificationServiceSpy },
         { provide: ErrorService, useValue: {} },
-      ],
-    }).compileComponents()
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}).compileComponents()
 
     fixture = TestBed.createComponent(SendNotificationsDialogComponent)
     component = fixture.componentInstance

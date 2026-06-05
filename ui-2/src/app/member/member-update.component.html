@@ -10,29 +10,33 @@
       </h1>
       <div>
         <app-alert-error></app-alert-error>
-        <div class="alerts top right" role="alert" *ngIf="validation.errors && validation.errors.length > 0">
-          <ngb-alert
-            class="alert alert-danger alert-dismissible"
-            role="alert"
-            ng-reflect-type="danger"
-            (close)="validation.errors = null"
-            [dismissible]="false"
-          >
-            <ul class="validation-errors">
-              <li *ngFor="let error of validation.errors">
-                {{ error }}
-              </li>
-            </ul>
-            <a
-              (click)="validation.errors = null"
-              (keyup.esc)="validation.errors = null"
-              (keyup.enter)="validation.errors = null"
-              tabindex="0"
-              class="close"
-              >×</a
+        @if (validation.errors && validation.errors.length > 0) {
+          <div class="alerts top right" role="alert">
+            <ngb-alert
+              class="alert alert-danger alert-dismissible"
+              role="alert"
+              ng-reflect-type="danger"
+              (close)="validation.errors = null"
+              [dismissible]="false"
             >
-          </ngb-alert>
-        </div>
+              <ul class="validation-errors">
+                @for (error of validation.errors; track error) {
+                  <li>
+                    {{ error }}
+                  </li>
+                }
+              </ul>
+              <a
+                (click)="validation.errors = null"
+                (keyup.esc)="validation.errors = null"
+                (keyup.enter)="validation.errors = null"
+                tabindex="0"
+                class="close"
+                >×</a
+              >
+            </ngb-alert>
+          </div>
+        }
         <div class="form-group">
           <label
             class="form-control-label"
@@ -47,29 +51,31 @@
             id="field_salesforceId"
             formControlName="salesforceId"
           />
-          <div
-            *ngIf="
-              editForm.get('salesforceId')?.invalid &&
-              (editForm.get('salesforceId')?.dirty || editForm.get('salesforceId')?.touched)
-            "
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="(editForm.get('salesforceId')?.errors)!['required']"
-              i18n="@@entity.validation.required.string"
-              data-cy="fieldIsRequired"
-            >
-              This field is required.
-            </small>
-            <small
-              class="form-text text-danger"
-              *ngIf="(editForm.get('salesforceId')?.errors)!['pattern']"
-              i18n="@@gatewayApp.msUserServiceMSMember.salesforceId.validation.pattern.string"
-              data-cy="fieldPatternInvalid"
-            >
-              Must be exactly 18 alphanumeric characters.
-            </small>
-          </div>
+          @if (
+            editForm.get('salesforceId')?.invalid &&
+            (editForm.get('salesforceId')?.dirty || editForm.get('salesforceId')?.touched)
+          ) {
+            <div>
+              @if ((editForm.get('salesforceId')?.errors)!['required']) {
+                <small
+                  class="form-text text-danger"
+                  i18n="@@entity.validation.required.string"
+                  data-cy="fieldIsRequired"
+                >
+                  This field is required.
+                </small>
+              }
+              @if ((editForm.get('salesforceId')?.errors)!['required']) {
+                <small
+                  class="form-text text-danger"
+                  i18n="@@gatewayApp.msUserServiceMSMember.salesforceId.validation.pattern.string"
+                  data-cy="fieldPatternInvalid"
+                >
+                  Must be exactly 18 alphanumeric characters.
+                </small>
+              }
+            </div>
+          }
         </div>
         <div class="form-group">
           <label
@@ -85,29 +91,31 @@
             id="field_parentSalesforceId"
             formControlName="parentSalesforceId"
           />
-          <div
-            *ngIf="
-              editForm.get('parentSalesforceId')?.invalid &&
-              (editForm.get('parentSalesforceId')?.dirty || editForm.get('parentSalesforceId')?.touched)
-            "
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('parentSalesforceId')?.hasError('pattern')"
-              i18n="@@gatewayApp.msUserServiceMSMember.parentSalesforceId.validation.pattern.string"
-              data-cy="parentSalesforceIdPatternInvalid"
-            >
-              Must be exactly 18 alphanumeric characters.
-            </small>
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('parentSalesforceId')?.hasError('validParentSalesforceIdValue')"
-              i18n="@@gatewayApp.msUserServiceMSMember.parentSalesforceId.validation.consortiumLead.string"
-              data-cy="parentSalesforceIdConsortiumLeadInvalid"
-            >
-              Must match the organization's Salesforce ID for consortium leads.
-            </small>
-          </div>
+          @if (
+            editForm.get('parentSalesforceId')?.invalid &&
+            (editForm.get('parentSalesforceId')?.dirty || editForm.get('parentSalesforceId')?.touched)
+          ) {
+            <div>
+              @if (editForm.get('parentSalesforceId')?.hasError('pattern')) {
+                <small
+                  class="form-text text-danger"
+                  i18n="@@gatewayApp.msUserServiceMSMember.parentSalesforceId.validation.pattern.string"
+                  data-cy="parentSalesforceIdPatternInvalid"
+                >
+                  Must be exactly 18 alphanumeric characters.
+                </small>
+              }
+              @if (editForm.get('parentSalesforceId')?.hasError('validParentSalesforceIdValue')) {
+                <small
+                  class="form-text text-danger"
+                  i18n="@@gatewayApp.msUserServiceMSMember.parentSalesforceId.validation.consortiumLead.string"
+                  data-cy="parentSalesforceIdConsortiumLeadInvalid"
+                >
+                  Must match the organization's Salesforce ID for consortium leads.
+                </small>
+              }
+            </div>
+          }
         </div>
         <div class="form-group">
           <label
@@ -123,21 +131,22 @@
             id="field_clientName"
             formControlName="clientName"
           />
-          <div
-            *ngIf="
-              editForm.get('clientName')?.invalid &&
-              (editForm.get('clientName')?.dirty || editForm.get('clientName')?.touched)
-            "
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="(editForm.get('clientName')?.errors)!['required']"
-              i18n="@@entity.validation.required.string"
-              data-cy="fieldIsRequired"
-            >
-              This field is required.
-            </small>
-          </div>
+          @if (
+            editForm.get('clientName')?.invalid &&
+            (editForm.get('clientName')?.dirty || editForm.get('clientName')?.touched)
+          ) {
+            <div>
+              @if ((editForm.get('clientName')?.errors)!['required']) {
+                <small
+                  class="form-text text-danger"
+                  i18n="@@entity.validation.required.string"
+                  data-cy="fieldIsRequired"
+                >
+                  This field is required.
+                </small>
+              }
+            </div>
+          }
         </div>
         <div class="form-group">
           <label
@@ -159,25 +168,27 @@
             >
           </p>
           <input type="text" class="form-control" name="clientId" id="field_clientId" formControlName="clientId" />
-          <div
-            *ngIf="
-              editForm.get('clientId')?.invalid &&
-              (editForm.get('clientId')?.dirty || editForm.get('clientId')?.touched)
-            "
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="(editForm.get('clientId')?.errors)!['required']"
-              i18n="@@entity.validation.required.string"
-              data-cy="fieldIsRequired"
-            >
-              This field is required.
-            </small>
-            <small class="form-text text-danger" *ngIf="!this.editForm.get('clientId')?.hasError('validClientId')">
-              Client Id should be in the format XXXX-XXXX-XXXX-XXXX or APP-XXXXXXXXXXXXXXXX. X can be a digit or an
-              uppercase character."
-            </small>
-          </div>
+          @if (
+            editForm.get('clientId')?.invalid && (editForm.get('clientId')?.dirty || editForm.get('clientId')?.touched)
+          ) {
+            <div>
+              @if ((editForm.get('clientId')?.errors)!['required']) {
+                <small
+                  class="form-text text-danger"
+                  i18n="@@entity.validation.required.string"
+                  data-cy="fieldIsRequired"
+                >
+                  This field is required.
+                </small>
+              }
+              @if (!this.editForm.get('clientId')?.hasError('validClientId')) {
+                <small class="form-text text-danger">
+                  Client Id should be in the format XXXX-XXXX-XXXX-XXXX or APP-XXXXXXXXXXXXXXXX. X can be a digit or an
+                  uppercase character."
+                </small>
+              }
+            </div>
+          }
         </div>
         <div class="form-group">
           <label
@@ -210,9 +221,11 @@
           />
         </div>
       </div>
-      <div *ngIf="isSaving" class="progress progress-striped">
-        <div class="progress-bar indeterminate" role="progressbar"></div>
-      </div>
+      @if (isSaving) {
+        <div class="progress progress-striped">
+          <div class="progress-bar indeterminate" role="progressbar"></div>
+        </div>
+      }
       <br />
       <div class="form-group">
         <button type="button" id="cancel-save" class="btn btn-outline-primary mr-2" (click)="navigateToMembersList()">

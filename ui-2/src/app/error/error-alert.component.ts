@@ -1,20 +1,19 @@
-import { ChangeDetectorRef, Component, ErrorHandler, HostListener, Inject, OnInit } from '@angular/core'
-import { ErrorService } from './service/error.service'
+import { ChangeDetectorRef, Component, HostListener, OnInit, inject } from '@angular/core'
 import { Subscription } from 'rxjs'
 import { AppError, ErrorAlert } from './model/error.model'
+import { ErrorService } from './service/error.service'
 
 @Component({
   selector: 'app-alert-error',
   templateUrl: './error-alert.component.html',
+  standalone: false,
 })
 export class ErrorAlertComponent implements OnInit {
+  private errorService = inject(ErrorService)
+  private cdr = inject(ChangeDetectorRef)
+
   alerts: any[] = []
   sub: Subscription | undefined
-
-  constructor(
-    @Inject(ErrorHandler) private errorService: ErrorService,
-    private cdr: ChangeDetectorRef
-  ) {}
 
   ngOnInit(): void {
     this.sub = this.errorService.on().subscribe((err: AppError) => {
@@ -35,7 +34,7 @@ export class ErrorAlertComponent implements OnInit {
     this.sub?.unsubscribe()
   }
 
-  @HostListener('document:keyup.escape', ['$event'])
+  @HostListener('document:keyup.escape')
   closeOldestAlert() {
     this.alerts.shift()
     this.cdr.detectChanges()
