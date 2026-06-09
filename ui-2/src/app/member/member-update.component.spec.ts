@@ -8,7 +8,7 @@ import { of } from 'rxjs'
 import { AlertMessage, AlertType } from '../app.constants'
 import { AlertService } from '../shared/service/alert.service'
 import { MemberUpdateComponent } from './member-update.component'
-import { IMember } from './model/member.model'
+import { IMember, Member } from './model/member.model'
 import { MemberService } from './service/member.service'
 
 describe('MemberUpdateComponent', () => {
@@ -60,7 +60,7 @@ describe('MemberUpdateComponent', () => {
 
   describe('salesforceId validation messages', () => {
       beforeEach(() => {
-        activatedRoute.data = of({})
+        activatedRoute.data = of({ member: new Member() })
         fixture.detectChanges()
       })
 
@@ -104,7 +104,7 @@ describe('MemberUpdateComponent', () => {
     })
 
     it('should create a new member', () => {
-    activatedRoute.data = of({})
+    activatedRoute.data = of({ member: new Member() })
     memberService.create.and.returnValue(of({ id: 'test' } as IMember))
     component.save()
     expect(memberService.create).toHaveBeenCalled()
