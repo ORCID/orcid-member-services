@@ -65,7 +65,7 @@
                   This field is required.
                 </small>
               }
-              @if ((editForm.get('salesforceId')?.errors)!['required']) {
+              @if (!(editForm.get('salesforceId')?.errors)!['required'] && editForm.get('salesforceId')?.hasError('pattern')) {
                 <small
                   class="form-text text-danger"
                   i18n="@@gatewayApp.msUserServiceMSMember.salesforceId.validation.pattern.string"
