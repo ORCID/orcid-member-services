@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -149,7 +148,6 @@ public class ReportService {
 
         Map<String, Object> claims = getClaimsWithDrillthrough(getConsortiaReportPermissions(), CONSORTIA_DRILLTHROUGH_KEY, FILTERS_PARAM, getMemberNameFilter());
 
-
         ReportInfo info = new ReportInfo();
         info.setUrl(holisticsConsortiaDashboardUrl);
         info.setJwt(getJwt(claims, holisticsConsortiaDashboardSecret));
@@ -182,7 +180,7 @@ public class ReportService {
     }
 
     private void checkConsortiaLeadAccess() {
-        Optional<Member> member = memberService.getMember(getLoggedInMemberId());
+        Optional<Member> member = memberService.getMember(userService.getLoggedInUser().getMemberId());
         if (!Boolean.TRUE.equals(member.get().getIsConsortiumLead())) {
             throw new BadRequestAlertException("Only consortia leads can view consortia reports");
         }
@@ -218,9 +216,11 @@ public class ReportService {
         return claims;
     }
 
-    private String getLoggedInMemberId() {
+    private String getLoggedInMemberSalesforceId() {
         User loggedInUser = userService.getLoggedInUser();
-        return loggedInUser.getMemberId();
+        String memberId = loggedInUser.getMemberId();
+        Member member = memberService.getMember(memberId).orElseThrow(() -> new BadRequestAlertException("Member not found for ID " + memberId));
+        return member.getSalesforceId();
     }
 
     private Map<String, Object> getIntegrationReportPermissions() {
@@ -293,7 +293,7 @@ public class ReportService {
         Map<String, Object> config = new HashMap<>();
         config.put(OPERATOR_PARAM, OPERATOR);
         config.put(MODIFIER_PARAM, null);
-        config.put(VALUES_PARAM, new String[] { getLoggedInMemberId() });
+        config.put(VALUES_PARAM, new String[] { getLoggedInMemberSalesforceId() });
         return config;
     }
 

@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
 
 public class ReportServiceTest {
 
@@ -179,10 +180,8 @@ public class ReportServiceTest {
         assertThat(memberNameFilter.get(ReportService.HIDDEN_PARAM)).isNotNull();
         assertThat((boolean) memberNameFilter.get(ReportService.HIDDEN_PARAM)).isTrue();
 
-        Mockito.verify(mockUserService, Mockito.times(3)).getLoggedInUser();
-        Mockito.verify(mockMemberService).getMember(Mockito.eq("member-id"));
-
-
+        Mockito.verify(mockUserService, times(3)).getLoggedInUser();
+        Mockito.verify(mockMemberService, times(3)).getMember(Mockito.eq("member-id"));
     }
 
     @SuppressWarnings("unchecked")
@@ -213,8 +212,8 @@ public class ReportServiceTest {
         Map<String, Object> drillthrough = (Map<String, Object>) drillthroughs.get(ReportService.CONSORTIUM_MEMBER_AFFILIATION_REPORT_DRILLTHROUGH_KEY);
         assertThat(drillthrough.get(ReportService.FILTER_PARAM)).isNotNull();
 
-        Mockito.verify(mockUserService, Mockito.times(2)).getLoggedInUser();
-        Mockito.verify(mockMemberService).getMember(Mockito.eq("member-id"));
+        Mockito.verify(mockUserService, times(2)).getLoggedInUser();
+        Mockito.verify(mockMemberService, times(2)).getMember(Mockito.eq("member-id"));
     }
 
     @Test
@@ -258,6 +257,7 @@ public class ReportServiceTest {
     private Member getMemberWithNullConsortiumLead() {
         Member member = new Member();
         member.setId("final-member-id");
+        member.setSalesforceId("final-salesforce-id");
         member.setIsConsortiumLead(null);
         return member;
     }
@@ -265,6 +265,7 @@ public class ReportServiceTest {
     private Member getNonConsortiumLeadMember() {
         Member member = new Member();
         member.setId("other-member-id");
+        member.setSalesforceId("other-salesforce-id");
         member.setIsConsortiumLead(false);
         return member;
     }
@@ -272,6 +273,7 @@ public class ReportServiceTest {
     private Member getConsortiumLeadMember() {
         Member member = new Member();
         member.setId("member-id");
+        member.setSalesforceId("salesforce-cl-id");
         member.setIsConsortiumLead(true);
         return member;
     }
@@ -280,6 +282,7 @@ public class ReportServiceTest {
         Member member = new Member();
         member.setId("member-id");
         member.setParentSalesforceId("parent");
+        member.setSalesforceId("salesforce-cm-id");
         member.setIsConsortiumLead(false);
         return member;
     }
