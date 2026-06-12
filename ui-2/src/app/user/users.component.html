@@ -6,7 +6,7 @@
         id="jh-create-entity"
         class="btn btn-primary float-right jh-create-entity ml-1"
         [routerLink]="['/users/new']"
-        >
+      >
         <fa-icon [icon]="faPlus"></fa-icon>
         <span i18n="@@gatewayApp.msUserServiceMSUser.home.createLabel.string">Add user </span>
       </button>
@@ -15,7 +15,7 @@
         id="jh-upload-entities"
         class="btn btn-primary float-right jh-create-entity create-ms-user ml-1"
         [routerLink]="['/' + 'users', { outlets: { popup: 'import' } }]"
-        >
+      >
         <fa-icon [icon]="faPlus"></fa-icon>
         <span i18n="@@gatewayApp.msUserServiceMSUser.home.uploadLabel.string">Import users from CSV </span>
       </button>
