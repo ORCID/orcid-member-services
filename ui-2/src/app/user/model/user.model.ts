@@ -14,6 +14,7 @@ export interface IUser {
   lastName?: string
   mainContact?: boolean
   memberId?: string
+  salesforceId?: string
   memberName?: string
   parentMemberId?: string
   activated?: boolean

@@ -144,7 +144,6 @@ export class UserUpdateComponent {
       mainContact: user.mainContact,
       memberId: user.memberId,
       manageApiCredentialsEnabled: user.manageApiCredsEnabled,
-      salesforceId: user.salesforceId,
       activated: user.activated,
       isAdmin: user.isAdmin,
       createdBy: user.createdBy,
