@@ -30,7 +30,9 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
     @Override
     public List<Assertion> findAllToUpdateInOrcidRegistry(Pageable pageable) {
-        ProjectionOperation timeModifiedAfterSync = Aggregation.project("added_to_orcid", "updated_in_orcid", "modified", "created").andExpression("modified - added_to_orcid").as("timeModifiedAfterAddingToOrcid").andExpression("modified - updated_in_orcid").as("timeModifiedAfterUpdatingInOrcid");
+        ProjectionOperation timeModifiedAfterSync = Aggregation.project("added_to_orcid", "updated_in_orcid", "modified", "created", "email", "memberId", "status")
+                .andExpression("modified - added_to_orcid").as("timeModifiedAfterAddingToOrcid")
+                .andExpression("modified - updated_in_orcid").as("timeModifiedAfterUpdatingInOrcid");
 
         Criteria addedToOrcidSet = new Criteria();
         addedToOrcidSet.andOperator(Criteria.where("added_to_orcid").exists(true), Criteria.where("added_to_orcid").ne(null));
@@ -58,14 +60,54 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
         MatchOperation matchUpdatedAfterSync = Aggregation.match(needsUpdatingInOrcidAndNotDeprecatedOrDeactivated);
 
+        // Lookup operation to join the 'orcid_record' collection using the 'email' field
+        LookupOperation lookupRecord = Aggregation.lookup("orcid_record", "email", "email", "linked_record");
+
+        // Added Unwind operation to flatten the joined array.
+        // preserveNullAndEmptyArrays = false acts as an INNER JOIN, dropping assertions without an orcid_record entirely.
+        UnwindOperation unwindRecord = Aggregation.unwind("linked_record", false);
+
+        // Built a pure Java AggregationExpression for the individual token matching logic
+        AggregationExpression tokenCondition = BooleanOperators.And.and(
+                ComparisonOperators.Eq.valueOf("$$token.memberId").equalTo("$memberId"),
+                ComparisonOperators.Ne.valueOf("$$token.tokenId").notEqualToValue(null),
+                ComparisonOperators.Ne.valueOf("$$token.tokenId").notEqualToValue(""),
+                ComparisonOperators.Eq.valueOf("$$token.revokedDate").equalToValue(null),
+                ComparisonOperators.Eq.valueOf("$$token.deniedDate").equalToValue(null)
+        );
+
+        // token condition to filter the 'linked_record.tokens' array
+        AggregationExpression validTokensFilter = ArrayOperators.Filter.filter("linked_record.tokens")
+                .as("token")
+                .by(tokenCondition);
+
+        AggregationExpression hasValidTokens = ComparisonOperators.Gt.valueOf(ArrayOperators.Size.lengthOfArray(validTokensFilter)).greaterThanValue(0);
+
+        // check ORCID id in orcid_record
+        Criteria validRecordCriteria = new Criteria().andOperator(
+                Criteria.where("linked_record.orcid").exists(true).ne(null).ne(""),
+                Criteria.expr(hasValidTokens)
+        );
+
+        MatchOperation matchValidTokenAndOrcid = Aggregation.match(validRecordCriteria);
+
         // pagination aggregation operations
         SortOperation sort = new SortOperation(pageable.getSort());
         SkipOperation skip = new SkipOperation(pageable.getOffset());
         LimitOperation limit = new LimitOperation(pageable.getPageSize());
 
-        Aggregation aggregation = Aggregation.newAggregation(timeModifiedAfterSync, matchUpdatedAfterSync, sort, skip, limit);
-        AggregationResults<Assertion> results = mongoTemplate.aggregate(aggregation, "assertion", Assertion.class);
+        Aggregation aggregation = Aggregation.newAggregation(
+                timeModifiedAfterSync,
+                matchUpdatedAfterSync,
+                lookupRecord,
+                unwindRecord,
+                matchValidTokenAndOrcid,
+                sort,
+                skip,
+                limit
+        );
 
+        AggregationResults<Assertion> results = mongoTemplate.aggregate(aggregation, "assertion", Assertion.class);
         return results.getMappedResults();
     }
 
@@ -89,9 +131,51 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
         Criteria notAddedToOrcidAndNotDeprecatedOrDeactivated = new Criteria();
         notAddedToOrcidAndNotDeprecatedOrDeactivated.andOperator(notAddedToOrcid, notDeprecatedOrDeactivated);
 
-        Query query = new Query(notAddedToOrcidAndNotDeprecatedOrDeactivated);
-        query.with(pageable);
-        return mongoTemplate.find(query, Assertion.class);
+        MatchOperation initialMatch = Aggregation.match(notAddedToOrcidAndNotDeprecatedOrDeactivated);
+
+        // add lookup operation to join the 'orcid_record' collection using the 'email' field
+        LookupOperation lookupRecord = Aggregation.lookup("orcid_record", "email", "email", "linked_record");
+        UnwindOperation unwindRecord = Aggregation.unwind("linked_record", false);
+
+        // token matching logic
+        AggregationExpression tokenCondition = BooleanOperators.And.and(
+                ComparisonOperators.Eq.valueOf("$$token.memberId").equalTo("$memberId"),
+                ComparisonOperators.Ne.valueOf("$$token.tokenId").notEqualToValue(null),
+                ComparisonOperators.Ne.valueOf("$$token.tokenId").notEqualToValue(""),
+                ComparisonOperators.Eq.valueOf("$$token.revokedDate").equalToValue(null),
+                ComparisonOperators.Eq.valueOf("$$token.deniedDate").equalToValue(null)
+        );
+
+        // apply token condition to filter the 'linked_record.tokens' array
+        AggregationExpression validTokensFilter = ArrayOperators.Filter.filter("linked_record.tokens")
+                .as("token")
+                .by(tokenCondition);
+
+        AggregationExpression hasValidTokens = ComparisonOperators.Gt.valueOf(ArrayOperators.Size.lengthOfArray(validTokensFilter)).greaterThanValue(0);
+
+        Criteria validRecordCriteria = new Criteria().andOperator(
+                Criteria.where("linked_record.orcid").exists(true).ne(null).ne(""),
+                Criteria.expr(hasValidTokens)
+        );
+
+        MatchOperation matchValidTokenAndOrcid = Aggregation.match(validRecordCriteria);
+
+        SortOperation sort = new SortOperation(pageable.getSort());
+        SkipOperation skip = new SkipOperation(pageable.getOffset());
+        LimitOperation limit = new LimitOperation(pageable.getPageSize());
+
+        Aggregation aggregation = Aggregation.newAggregation(
+                initialMatch,
+                lookupRecord,
+                unwindRecord,
+                matchValidTokenAndOrcid,
+                sort,
+                skip,
+                limit
+        );
+
+        AggregationResults<Assertion> results = mongoTemplate.aggregate(aggregation, "assertion", Assertion.class);
+        return results.getMappedResults();
     }
 
     @Override

@@ -48,8 +48,6 @@ public class AssertionService {
 
     public static final int TOKEN_PROPAGATION_PAUSE = 500;
 
-    private final Sort SORT = Sort.by(Sort.Direction.ASC, "email", "status", "created", "modified", "deletedFromORCID");
-
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.getDefault())
             .withZone(ZoneId.systemDefault());
 
@@ -191,7 +189,10 @@ public class AssertionService {
         Optional<OrcidRecord> record = orcidRecordService.findByEmail(assertion.getEmail());
         AssertionStatus deniedStatus = checkForTokenDeniedStatus(record, assertion);
 
-        if (tokenAndOrcidIdAvailable(record, assertion) && deniedStatus == null) {
+        if (deniedStatus != null) {
+            assertion.setStatus(deniedStatus.name());
+            assertionRepository.save(assertion);
+        } else {
             OrcidRecord orcidRecord = record.get();
             String idToken = orcidRecord.getToken(assertion.getMemberId(), false);
             String orcid = orcidRecord.getOrcid();
@@ -210,9 +211,6 @@ public class AssertionService {
                 LOG.error("Error posting assertion " + assertion.getId(), e1);
                 storeError(assertion, 0, e1.getMessage(), AssertionStatus.ERROR_ADDING_TO_ORCID);
             }
-        } else if (deniedStatus != null) {
-            assertion.setStatus(deniedStatus.name());
-            assertionRepository.save(assertion);
         }
     }
 
@@ -242,7 +240,10 @@ public class AssertionService {
         Optional<OrcidRecord> record = orcidRecordService.findByEmail(assertion.getEmail());
         AssertionStatus deniedStatus = checkForTokenDeniedStatus(record, assertion);
 
-        if (tokenAndOrcidIdAvailable(record, assertion) && !StringUtils.isBlank(assertion.getPutCode()) && deniedStatus == null) {
+        if (deniedStatus != null) {
+            assertion.setStatus(deniedStatus.name());
+            assertionRepository.save(assertion);
+        } else {
             OrcidRecord orcidRecord = record.get();
             String orcid = orcidRecord.getOrcid();
             String idToken = orcidRecord.getToken(assertion.getMemberId(), false);
@@ -261,9 +262,6 @@ public class AssertionService {
                 LOG.error("Error with assertion " + assertion.getId(), e);
                 storeError(assertion, 0, e.getMessage(), AssertionStatus.ERROR_UPDATING_TO_ORCID);
             }
-        } else if (deniedStatus != null) {
-            assertion.setStatus(deniedStatus.name());
-            assertionRepository.save(assertion);
         }
     }
 
@@ -561,21 +559,6 @@ public class AssertionService {
             }
         }
         return null;
-    }
-
-    private boolean tokenAndOrcidIdAvailable(Optional<OrcidRecord> record, Assertion assertion) {
-        if (!record.isPresent()) {
-            return false;
-        }
-
-        String idToken = record.get().getToken(assertion.getMemberId(), false);
-        String orcid = record.get().getOrcid();
-
-        if (StringUtils.isBlank(orcid)) {
-            return false;
-        }
-
-        return !StringUtils.isBlank(idToken);
     }
 
     private void checkAssertionAccess(Assertion assertion, String memberId) {
