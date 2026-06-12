@@ -174,8 +174,9 @@ public class AssertionService {
         List<Assertion> assertionsToAdd = assertionRepository.findAllToCreateInOrcidRegistry(pageable);
         while (assertionsToAdd != null && !assertionsToAdd.isEmpty()) {
             for (Assertion assertion : assertionsToAdd) {
+                Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
                 try {
-                    postAssertionToOrcid(assertion);
+                    postAssertionToOrcid(refreshed);
                 } catch (Exception e) {
                     LOG.error("Unexpected error POSTing assertion to registry", e);
                 }
