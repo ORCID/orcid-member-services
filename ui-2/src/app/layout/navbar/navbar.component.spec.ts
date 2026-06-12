@@ -24,7 +24,8 @@ describe('NavbarComponent', () => {
   let featureToggleService: jasmine.SpyObj<FeatureToggleService>
 
   beforeEach(() => {
-    const featureToggleSpy = jasmine.createSpyObj('FeatureToggleService', ['isEnabled']);
+    const featureToggleSpy = jasmine.createSpyObj('FeatureToggleService', ['isEnabled', 'initFeatures']);
+    featureToggleSpy.initFeatures.and.returnValue(of(null));
     const loginServiceSpy = jasmine.createSpyObj('LoginService', ['login', 'logout'])
     const memberServiceSpy = jasmine.createSpyObj('MemberService', ['find', 'setManagedMember'])
     const accountServiceSpy = jasmine.createSpyObj('AccountService', [
@@ -217,6 +218,7 @@ describe('NavbarComponent', () => {
         lastName: 'surname',
         imageUrl: 'url',
         salesforceId: 'sfid',
+        memberId: 'memberId',
         loggedAs: false,
         loginAs: 'sfid',
         mainContact: false,
@@ -253,6 +255,7 @@ describe('NavbarComponent', () => {
         langKey: 'en',
         lastName: 'surname',
         imageUrl: 'url',
+        salesforceId: 'sfid',
         memberId: '1234',
         loggedAs: false,
         loginAs: '1234',

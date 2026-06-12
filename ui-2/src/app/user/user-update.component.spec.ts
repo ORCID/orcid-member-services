@@ -15,6 +15,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { RouterTestingModule } from '@angular/router/testing'
 import { of } from 'rxjs'
 import { By } from '@angular/platform-browser'
+import { FeatureToggleService } from '../shared/service/feature-toggle.service'
 
 describe('UserUpdateComponent', () => {
   let component: UserUpdateComponent
@@ -44,6 +45,8 @@ describe('UserUpdateComponent', () => {
     const alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
     const memberServiceSpy = jasmine.createSpyObj('MemberService', ['find', 'getAllMembers'])
     const routerSpy = jasmine.createSpyObj('Router', ['navigate'])
+    const featureToggleSpy = jasmine.createSpyObj('FeatureToggleService', ['isEnabled', 'initFeatures']);
+    featureToggleSpy.initFeatures.and.returnValue(of(null));
 
     TestBed.configureTestingModule({
       declarations: [UserUpdateComponent],
@@ -55,6 +58,7 @@ describe('UserUpdateComponent', () => {
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },
         { provide: ErrorService, useValue: {} },
+        { provide: FeatureToggleService, useValue: featureToggleSpy },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents()
