@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core'
+import { Router } from '@angular/router'
 import {
   faAddressCard,
   faUniversity,
@@ -20,6 +21,7 @@ import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { filter, switchMap } from 'rxjs/operators'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { ApiCredentialsMfaEnabledDialogComponent } from './api-credentials-mfa-enabled-dialog/api-credentials-mfa-enabled-dialog.component'
+import { FeatureToggleService } from 'src/app/shared/service/feature-toggle.service'
 
 @Component({
   selector: 'app-navbar',
@@ -32,6 +34,10 @@ export class NavbarComponent implements OnInit {
   private accountService = inject(AccountService)
   private memberService = inject(MemberService)
   private oidcSecurityService = inject(OidcSecurityService)
+  private featureService = inject(FeatureToggleService)
+  private router = inject(Router)
+  private modalService = inject(NgbModal)
+
 
   isNavbarCollapsed: boolean
 
@@ -69,6 +75,7 @@ export class NavbarComponent implements OnInit {
         switchMap(() => this.accountService.getAccountData())
       )
       .subscribe(() => {
+        this.featureService.initFeatures().subscribe();
         // 3. Now we are safe: We have a Token AND User Data
         if (!this.memberCallDone && this.hasRoleUser()) {
           this.memberCallDone = true

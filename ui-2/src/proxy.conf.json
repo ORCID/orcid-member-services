@@ -1,4 +1,9 @@
 {
+  "/togglz-console*": {
+    "target": "http://localhost:9000",
+    "secure": false,
+    "changeOrigin": true
+  },
   "/userservice/*": {
     "target": "http://localhost:9000",
     "secure": false,

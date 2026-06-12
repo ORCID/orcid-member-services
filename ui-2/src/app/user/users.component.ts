@@ -20,6 +20,7 @@ import { EventService } from '../shared/service/event.service'
 import { IAccount } from '../account/model/account.model'
 import { AlertService } from '../shared/service/alert.service'
 import { Page } from '../shared/model/page.model'
+import { FeatureToggleService } from '../shared/service/feature-toggle.service'
 
 @Component({
   selector: 'app-users',
@@ -35,6 +36,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   protected router = inject(Router)
   protected eventService = inject(EventService)
   private ngZone = inject(NgZone)
+  private featureService = inject(FeatureToggleService)
 
   currentAccount: IAccount | undefined
   users: IUser[] | null | undefined
@@ -72,6 +74,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.featureService.initFeatures().subscribe();
     this.accountService.getAccountData().subscribe((account) => {
       if (account) {
         this.currentAccount = account

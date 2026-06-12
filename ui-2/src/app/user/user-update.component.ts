@@ -14,6 +14,8 @@ import { MemberService } from '../member/service/member.service'
 import { AlertService } from '../shared/service/alert.service'
 import { IUser, User } from './model/user.model'
 import { UserService } from './service/user.service'
+import { FeatureToggleService } from '../shared/service/feature-toggle.service'
+
 
 @Component({
     selector: 'app-user-update',
@@ -31,6 +33,7 @@ export class UserUpdateComponent {
   protected errorService = inject(ErrorService)
   private fb = inject(FormBuilder)
   private cdref = inject(ChangeDetectorRef)
+  private featureService = inject(FeatureToggleService)
 
   isSaving = false
   isExistentMember = false
@@ -74,6 +77,7 @@ export class UserUpdateComponent {
   hasOwner = false
 
   ngOnInit() {
+    this.featureService.initFeatures().subscribe();
     this.isSaving = false
     this.isExistentMember = false
     this.existentUser = null

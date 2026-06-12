@@ -12,6 +12,7 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
+import { FeatureToggleService } from 'src/app/shared/service/feature-toggle.service'
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent
@@ -20,8 +21,10 @@ describe('NavbarComponent', () => {
   let accountService: jasmine.SpyObj<AccountService>
   let memberService: jasmine.SpyObj<MemberService>
   let modalService: jasmine.SpyObj<NgbModal>
+  let featureToggleService: jasmine.SpyObj<FeatureToggleService>
 
   beforeEach(() => {
+    const featureToggleSpy = jasmine.createSpyObj('FeatureToggleService', ['isEnabled']);
     const loginServiceSpy = jasmine.createSpyObj('LoginService', ['login', 'logout'])
     const memberServiceSpy = jasmine.createSpyObj('MemberService', ['find', 'setManagedMember'])
     const accountServiceSpy = jasmine.createSpyObj('AccountService', [
@@ -53,10 +56,11 @@ describe('NavbarComponent', () => {
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: NgbModal, useValue: modalServiceSpy },
         { provide: OidcSecurityService, useValue: mockOidcSecurityService },
+        { provide: FeatureToggleService, useValue: featureToggleSpy },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-}).compileComponents()
+      ]
+    }).compileComponents()
 
     fixture = TestBed.createComponent(NavbarComponent)
     component = fixture.componentInstance
@@ -64,6 +68,7 @@ describe('NavbarComponent', () => {
     memberService = TestBed.inject(MemberService) as jasmine.SpyObj<MemberService>
     accountService = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
     modalService = TestBed.inject(NgbModal) as jasmine.SpyObj<NgbModal>
+    featureToggleService = TestBed.inject(FeatureToggleService) as jasmine.SpyObj<FeatureToggleService>
   })
 
   it('should create', () => {
@@ -193,6 +198,8 @@ describe('NavbarComponent', () => {
   }))
 
   it('should display the manage API credentials link', fakeAsync(() => {
+    featureToggleService.isEnabled.withArgs('MANAGE_API_CREDENTIALS').and.returnValue(true);
+
     accountService.isAuthenticated.and.returnValue(true)
     accountService.hasAnyAuthority.and.returnValue(false)
     accountService.hasAnyAuthority.withArgs(['ROLE_USER']).and.returnValue(true)
@@ -226,6 +233,8 @@ describe('NavbarComponent', () => {
   }))
 
   it('should open MFA dialog when manage API credentials is clicked and MFA is not enabled', fakeAsync(() => {
+    featureToggleService.isEnabled.withArgs('MANAGE_API_CREDENTIALS').and.returnValue(true);
+
     accountService.isAuthenticated.and.returnValue(true)
     accountService.hasAnyAuthority.and.returnValue(false)
     accountService.hasAnyAuthority.withArgs(['ROLE_USER']).and.returnValue(true)
