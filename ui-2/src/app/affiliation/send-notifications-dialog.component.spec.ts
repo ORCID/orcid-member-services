@@ -85,6 +85,7 @@ describe('SendNotificationsDialogComponent', () => {
         mainContact: false,
         mfaEnabled: true,
         memberId: 'memberId',
+        manageApiCredsEnabled: false,
       })
     )
 

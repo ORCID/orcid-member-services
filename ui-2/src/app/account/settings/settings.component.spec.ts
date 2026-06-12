@@ -78,6 +78,7 @@ describe('SettingsComponent', () => {
         mainContact: false,
         mfaEnabled: true,
         memberId: 'memberId',
+        manageApiCredsEnabled: false,
       })
     )
 
@@ -101,6 +102,7 @@ describe('SettingsComponent', () => {
         mainContact: false,
         mfaEnabled: false,
         memberId: 'memberId',
+        manageApiCredsEnabled: false,
       })
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: 'test' }))
@@ -134,6 +136,7 @@ describe('SettingsComponent', () => {
         mainContact: false,
         mfaEnabled: true,
         memberId: 'memberId',
+        manageApiCredsEnabled: false,
       })
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: 'test' }))
@@ -162,6 +165,7 @@ describe('SettingsComponent', () => {
         mainContact: false,
         mfaEnabled: false,
         memberId: 'memberId',
+        manageApiCredsEnabled: false,
       })
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: ['test'] }))
@@ -192,6 +196,7 @@ describe('SettingsComponent', () => {
         mainContact: false,
         mfaEnabled: true,
         memberId: 'memberId',
+        manageApiCredsEnabled: false,
       })
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: ['test'] }))
@@ -223,6 +228,7 @@ describe('SettingsComponent', () => {
         mainContact: false,
         mfaEnabled: true,
         memberId: 'memberId',
+        manageApiCredsEnabled: false,
       })
     )
     fixture.detectChanges()
@@ -250,6 +256,7 @@ describe('SettingsComponent', () => {
         mainContact: false,
         mfaEnabled: true,
         memberId: 'memberId',
+        manageApiCredsEnabled: false,
       })
     )
     fixture.detectChanges()

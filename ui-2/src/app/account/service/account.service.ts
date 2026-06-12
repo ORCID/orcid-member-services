@@ -193,6 +193,14 @@ export class AccountService {
     return this.isIdentityResolved() && this.accountData ? this.accountData.value!.mainContact : false
   }
 
+  isManageApiCredentialsEnabled(): boolean | null {
+    return this.isIdentityResolved() && this.accountData ? this.accountData.value!.manageApiCredsEnabled : false
+  }
+
+  isMFAEnabled(): boolean | null {
+    return this.isIdentityResolved() && this.accountData ? this.accountData.value!.mfaEnabled : false
+  }
+
   getReleaseVersion(): string | null {
     return this.releaseVersion
   }

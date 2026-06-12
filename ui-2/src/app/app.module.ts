@@ -20,8 +20,9 @@ import { HeaderInterceptor } from './shared/interceptor/header.interceptor'
 import { SharedModule } from './shared/shared.module'
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent],
-  bootstrap: [AppComponent], imports: [BrowserModule,
+  declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent, ApiCredentialsMfaEnabledDialogComponent],
+  imports: [
+    BrowserModule,
     HomeModule,
     AccountModule,
     AppRoutingModule,

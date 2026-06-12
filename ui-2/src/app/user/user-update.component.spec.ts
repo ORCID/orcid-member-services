@@ -83,6 +83,7 @@ describe('UserUpdateComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: false,
+        manageApiCredsEnabled: false,
       })
     )
     memberService.getAllMembers.and.returnValue(of([]))

@@ -38,6 +38,10 @@ const routes: Routes = [
     path: 'report',
     loadChildren: () => import('./report/report.module').then((m) => m.ReportModule),
   },
+  {
+    path: 'api-credentials',
+    loadChildren: () => import('./api-credentials/api-credentials.module').then((m) => m.ApiCredentialsModule),
+  },
   { path: 'login', component: LoginComponent },
 ]
 

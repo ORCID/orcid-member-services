@@ -10,6 +10,7 @@ import {
   faSignOutAlt,
   faWrench,
   faLock,
+  faKey,
 } from '@fortawesome/free-solid-svg-icons'
 import { AccountService, LoginService } from '../../account'
 import { MemberService } from 'src/app/member/service/member.service'
@@ -17,6 +18,8 @@ import { IAccount } from 'src/app/account/model/account.model'
 import { IMember } from 'src/app/member/model/member.model'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { filter, switchMap } from 'rxjs/operators'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { ApiCredentialsMfaEnabledDialogComponent } from './api-credentials-mfa-enabled-dialog/api-credentials-mfa-enabled-dialog.component'
 
 @Component({
   selector: 'app-navbar',
@@ -49,6 +52,7 @@ export class NavbarComponent implements OnInit {
   faUniversity = faUniversity
   faChartPie = faChartPie
   faLightbulb = faLightbulb
+  faKey = faKey
 
   constructor() {
     this.isNavbarCollapsed = true
@@ -103,6 +107,14 @@ export class NavbarComponent implements OnInit {
     return this.accountService.isOrganizationOwner()
   }
 
+  isManageApiCredentialsEnabled() {
+    return this.accountService.isManageApiCredentialsEnabled()
+  }
+
+  isMFAEnabled() {
+    return this.accountService.isMFAEnabled()
+  }
+
   hasRoleUser() {
     return this.accountService.hasAnyAuthority(['ROLE_USER'])
   }
@@ -126,5 +138,17 @@ export class NavbarComponent implements OnInit {
 
   getImageUrl() {
     return this.isAuthenticated() ? this.accountService.getImageUrl() : null
+  }
+
+  manageApiCredentials() {
+    if (this.accountService.isMFAEnabled()) {
+      this.collapseNavbar()
+      this.router.navigate(['/api-credentials'])
+    } else {
+      this.modalService.open(ApiCredentialsMfaEnabledDialogComponent, {
+        backdrop: 'static',
+        centered: true,
+      })
+    }
   }
 }
