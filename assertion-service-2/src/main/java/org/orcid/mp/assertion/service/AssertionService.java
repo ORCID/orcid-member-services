@@ -48,8 +48,7 @@ public class AssertionService {
 
     public static final int TOKEN_PROPAGATION_PAUSE = 500;
 
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.getDefault())
-            .withZone(ZoneId.systemDefault());
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.getDefault()).withZone(ZoneId.systemDefault());
 
     @Autowired
     private AssertionRepository assertionRepository;
@@ -289,6 +288,7 @@ public class AssertionService {
         refreshed.setAddedToORCID(now);
         refreshed.setStatus(AssertionStatus.IN_ORCID.name());
         refreshed.setOrcidError(null);
+        refreshed.setLastSyncAttempt(assertion.getLastSyncAttempt());
         assertionRepository.save(refreshed);
     }
 
@@ -297,6 +297,7 @@ public class AssertionService {
         refreshed.setUpdatedInORCID(now);
         refreshed.setStatus(AssertionStatus.IN_ORCID.name());
         refreshed.setOrcidError(null);
+        refreshed.setLastSyncAttempt(assertion.getLastSyncAttempt());
         assertionRepository.save(refreshed);
     }
 
@@ -305,8 +306,7 @@ public class AssertionService {
         AssertionStatus tokenDeniedStatus = checkForTokenDeniedStatus(optionalRecord, assertion);
         if (tokenDeniedStatus != null) {
             return tokenDeniedStatus.name();
-        } else if (AssertionStatus.ERROR_ADDING_TO_ORCID.name().equals(assertion.getStatus())
-                || AssertionStatus.ERROR_UPDATING_TO_ORCID.name().equals(assertion.getStatus())) {
+        } else if (AssertionStatus.ERROR_ADDING_TO_ORCID.name().equals(assertion.getStatus()) || AssertionStatus.ERROR_UPDATING_TO_ORCID.name().equals(assertion.getStatus())) {
             return AssertionStatus.PENDING_RETRY.name();
         } else if (AssertionStatus.ERROR_DELETING_IN_ORCID.name().equals(assertion.getStatus())) {
             return AssertionStatus.ERROR_DELETING_IN_ORCID.name();
@@ -481,10 +481,7 @@ public class AssertionService {
 
     public Page<Assertion> findByMemberId(Pageable pageable, String filter) {
         String memberId = getLoggedInUser().getMemberId();
-        Page<Assertion> assertions = assertionRepository
-                .findByMemberIdAndAffiliationSectionContainingIgnoreCaseOrMemberIdAndDepartmentNameContainingIgnoreCaseOrMemberIdAndOrgNameContainingIgnoreCaseOrMemberIdAndDisambiguatedOrgIdContainingIgnoreCaseOrMemberIdAndEmailContainingIgnoreCaseOrMemberIdAndOrcidIdContainingIgnoreCaseOrMemberIdAndRoleTitleContainingIgnoreCase(
-                        pageable, memberId, filter, memberId, filter, memberId, filter, memberId, filter, memberId, filter, memberId, filter,
-                        memberId, filter);
+        Page<Assertion> assertions = assertionRepository.findByMemberIdAndAffiliationSectionContainingIgnoreCaseOrMemberIdAndDepartmentNameContainingIgnoreCaseOrMemberIdAndOrgNameContainingIgnoreCaseOrMemberIdAndDisambiguatedOrgIdContainingIgnoreCaseOrMemberIdAndEmailContainingIgnoreCaseOrMemberIdAndOrcidIdContainingIgnoreCaseOrMemberIdAndRoleTitleContainingIgnoreCase(pageable, memberId, filter, memberId, filter, memberId, filter, memberId, filter, memberId, filter, memberId, filter, memberId, filter);
         setPrettyStatus(assertions);
         return assertions;
     }
@@ -535,14 +532,7 @@ public class AssertionService {
     }
 
     private boolean assertionToDelete(Assertion assertion) {
-        return assertion.getId() != null && assertion.getAddedToORCID() == null && assertion.getAffiliationSection() == null && assertion.getCreated() == null
-                && assertion.getDepartmentName() == null && assertion.getDisambiguatedOrgId() == null && assertion.getDisambiguationSource() == null
-                && assertion.getEmail() == null && assertion.getEndDay() == null && assertion.getEndMonth() == null && assertion.getEndYear() == null
-                && assertion.getExternalId() == null && assertion.getExternalIdType() == null && assertion.getExternalIdUrl() == null
-                && assertion.getLastModifiedBy() == null && assertion.getModified() == null && assertion.getOrcidError() == null && assertion.getOrcidId() == null
-                && assertion.getOrgCity() == null && assertion.getOrgCity() == null && assertion.getOrgCountry() == null && assertion.getOrgName() == null
-                && assertion.getOrgRegion() == null && assertion.getOwnerId() == null && assertion.getPutCode() == null && assertion.getRoleTitle() == null
-                && assertion.getMemberId() == null && assertion.getStartDay() == null && assertion.getStartMonth() == null && assertion.getStartYear() == null;
+        return assertion.getId() != null && assertion.getAddedToORCID() == null && assertion.getAffiliationSection() == null && assertion.getCreated() == null && assertion.getDepartmentName() == null && assertion.getDisambiguatedOrgId() == null && assertion.getDisambiguationSource() == null && assertion.getEmail() == null && assertion.getEndDay() == null && assertion.getEndMonth() == null && assertion.getEndYear() == null && assertion.getExternalId() == null && assertion.getExternalIdType() == null && assertion.getExternalIdUrl() == null && assertion.getLastModifiedBy() == null && assertion.getModified() == null && assertion.getOrcidError() == null && assertion.getOrcidId() == null && assertion.getOrgCity() == null && assertion.getOrgCity() == null && assertion.getOrgCountry() == null && assertion.getOrgName() == null && assertion.getOrgRegion() == null && assertion.getOwnerId() == null && assertion.getPutCode() == null && assertion.getRoleTitle() == null && assertion.getMemberId() == null && assertion.getStartDay() == null && assertion.getStartMonth() == null && assertion.getStartYear() == null;
     }
 
     private Pageable getPageableForRegistrySync() {
@@ -616,6 +606,7 @@ public class AssertionService {
             throw new RuntimeException(e);
         }
 
+        refreshed.setLastSyncAttempt(assertion.getLastSyncAttempt());
         assertionRepository.save(refreshed);
 
         if (StringUtils.equals(assertion.getStatus(), AssertionStatus.USER_REVOKED_ACCESS.name())) {
