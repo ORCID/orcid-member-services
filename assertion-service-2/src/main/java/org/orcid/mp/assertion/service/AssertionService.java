@@ -48,10 +48,7 @@ public class AssertionService {
 
     public static final int TOKEN_PROPAGATION_PAUSE = 500;
 
-    private final Sort SORT = Sort.by(Sort.Direction.ASC, "email", "status", "created", "modified", "deletedFromORCID");
-
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.getDefault())
-            .withZone(ZoneId.systemDefault());
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.getDefault()).withZone(ZoneId.systemDefault());
 
     @Autowired
     private AssertionRepository assertionRepository;
@@ -174,8 +171,9 @@ public class AssertionService {
         List<Assertion> assertionsToAdd = assertionRepository.findAllToCreateInOrcidRegistry(pageable);
         while (assertionsToAdd != null && !assertionsToAdd.isEmpty()) {
             for (Assertion assertion : assertionsToAdd) {
+                Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
                 try {
-                    postAssertionToOrcid(assertion);
+                    postAssertionToOrcid(refreshed);
                 } catch (Exception e) {
                     LOG.error("Unexpected error POSTing assertion to registry", e);
                 }
@@ -190,7 +188,10 @@ public class AssertionService {
         Optional<OrcidRecord> record = orcidRecordService.findByEmail(assertion.getEmail());
         AssertionStatus deniedStatus = checkForTokenDeniedStatus(record, assertion);
 
-        if (tokenAndOrcidIdAvailable(record, assertion) && deniedStatus == null) {
+        if (deniedStatus != null) {
+            assertion.setStatus(deniedStatus.name());
+            assertionRepository.save(assertion);
+        } else {
             OrcidRecord orcidRecord = record.get();
             String idToken = orcidRecord.getToken(assertion.getMemberId(), false);
             String orcid = orcidRecord.getOrcid();
@@ -199,11 +200,7 @@ public class AssertionService {
 
             try {
                 String putCode = postToOrcidRegistry(orcid, assertion, idToken);
-                assertion.setPutCode(putCode);
-                assertion.setAddedToORCID(now);
-                assertion.setOrcidError(null);
-                assertion.setStatus(AssertionStatus.IN_ORCID.name());
-                assertionRepository.save(assertion);
+                markCreatedInOrcid(assertion, putCode, now);
             } catch (OrcidAPIException oae) {
                 LOG.info("Recieved orcid api exception");
                 storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_ADDING_TO_ORCID);
@@ -213,9 +210,6 @@ public class AssertionService {
                 LOG.error("Error posting assertion " + assertion.getId(), e1);
                 storeError(assertion, 0, e1.getMessage(), AssertionStatus.ERROR_ADDING_TO_ORCID);
             }
-        } else if (deniedStatus != null) {
-            assertion.setStatus(deniedStatus.name());
-            assertionRepository.save(assertion);
         }
     }
 
@@ -245,7 +239,10 @@ public class AssertionService {
         Optional<OrcidRecord> record = orcidRecordService.findByEmail(assertion.getEmail());
         AssertionStatus deniedStatus = checkForTokenDeniedStatus(record, assertion);
 
-        if (tokenAndOrcidIdAvailable(record, assertion) && !StringUtils.isBlank(assertion.getPutCode()) && deniedStatus == null) {
+        if (deniedStatus != null) {
+            assertion.setStatus(deniedStatus.name());
+            assertionRepository.save(assertion);
+        } else {
             OrcidRecord orcidRecord = record.get();
             String orcid = orcidRecord.getOrcid();
             String idToken = orcidRecord.getToken(assertion.getMemberId(), false);
@@ -254,10 +251,7 @@ public class AssertionService {
 
             try {
                 putInOrcidRegistry(orcid, assertion, idToken);
-                assertion.setUpdatedInORCID(now);
-                assertion.setOrcidError(null);
-                assertion.setStatus(AssertionStatus.IN_ORCID.name());
-                assertionRepository.save(assertion);
+                markUpdatedInOrcid(assertion, now);
             } catch (DeactivatedException | DeprecatedException e) {
                 handleDeactivatedOrDeprecated(orcid, assertion);
             } catch (OrcidAPIException oae) {
@@ -267,9 +261,6 @@ public class AssertionService {
                 LOG.error("Error with assertion " + assertion.getId(), e);
                 storeError(assertion, 0, e.getMessage(), AssertionStatus.ERROR_UPDATING_TO_ORCID);
             }
-        } else if (deniedStatus != null) {
-            assertion.setStatus(deniedStatus.name());
-            assertionRepository.save(assertion);
         }
     }
 
@@ -291,13 +282,31 @@ public class AssertionService {
         csvReportService.storeCsvReportRequest(getLoggedInUser().getId(), filename, CsvReport.ASSERTIONS_REPORT_TYPE);
     }
 
+    private void markCreatedInOrcid(Assertion assertion, String putCode, Instant now) {
+        Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
+        refreshed.setPutCode(putCode);
+        refreshed.setAddedToORCID(now);
+        refreshed.setStatus(AssertionStatus.IN_ORCID.name());
+        refreshed.setOrcidError(null);
+        refreshed.setLastSyncAttempt(assertion.getLastSyncAttempt());
+        assertionRepository.save(refreshed);
+    }
+
+    private void markUpdatedInOrcid(Assertion assertion, Instant now) {
+        Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
+        refreshed.setUpdatedInORCID(now);
+        refreshed.setStatus(AssertionStatus.IN_ORCID.name());
+        refreshed.setOrcidError(null);
+        refreshed.setLastSyncAttempt(assertion.getLastSyncAttempt());
+        assertionRepository.save(refreshed);
+    }
+
     private String getAssertionStatus(Assertion assertion) {
         Optional<OrcidRecord> optionalRecord = orcidRecordService.findByEmail(assertion.getEmail());
         AssertionStatus tokenDeniedStatus = checkForTokenDeniedStatus(optionalRecord, assertion);
         if (tokenDeniedStatus != null) {
             return tokenDeniedStatus.name();
-        } else if (AssertionStatus.ERROR_ADDING_TO_ORCID.name().equals(assertion.getStatus())
-                || AssertionStatus.ERROR_UPDATING_TO_ORCID.name().equals(assertion.getStatus())) {
+        } else if (AssertionStatus.ERROR_ADDING_TO_ORCID.name().equals(assertion.getStatus()) || AssertionStatus.ERROR_UPDATING_TO_ORCID.name().equals(assertion.getStatus())) {
             return AssertionStatus.PENDING_RETRY.name();
         } else if (AssertionStatus.ERROR_DELETING_IN_ORCID.name().equals(assertion.getStatus())) {
             return AssertionStatus.ERROR_DELETING_IN_ORCID.name();
@@ -472,10 +481,7 @@ public class AssertionService {
 
     public Page<Assertion> findByMemberId(Pageable pageable, String filter) {
         String memberId = getLoggedInUser().getMemberId();
-        Page<Assertion> assertions = assertionRepository
-                .findByMemberIdAndAffiliationSectionContainingIgnoreCaseOrMemberIdAndDepartmentNameContainingIgnoreCaseOrMemberIdAndOrgNameContainingIgnoreCaseOrMemberIdAndDisambiguatedOrgIdContainingIgnoreCaseOrMemberIdAndEmailContainingIgnoreCaseOrMemberIdAndOrcidIdContainingIgnoreCaseOrMemberIdAndRoleTitleContainingIgnoreCase(
-                        pageable, memberId, filter, memberId, filter, memberId, filter, memberId, filter, memberId, filter, memberId, filter,
-                        memberId, filter);
+        Page<Assertion> assertions = assertionRepository.findByMemberIdAndAffiliationSectionContainingIgnoreCaseOrMemberIdAndDepartmentNameContainingIgnoreCaseOrMemberIdAndOrgNameContainingIgnoreCaseOrMemberIdAndDisambiguatedOrgIdContainingIgnoreCaseOrMemberIdAndEmailContainingIgnoreCaseOrMemberIdAndOrcidIdContainingIgnoreCaseOrMemberIdAndRoleTitleContainingIgnoreCase(pageable, memberId, filter, memberId, filter, memberId, filter, memberId, filter, memberId, filter, memberId, filter, memberId, filter);
         setPrettyStatus(assertions);
         return assertions;
     }
@@ -526,14 +532,7 @@ public class AssertionService {
     }
 
     private boolean assertionToDelete(Assertion assertion) {
-        return assertion.getId() != null && assertion.getAddedToORCID() == null && assertion.getAffiliationSection() == null && assertion.getCreated() == null
-                && assertion.getDepartmentName() == null && assertion.getDisambiguatedOrgId() == null && assertion.getDisambiguationSource() == null
-                && assertion.getEmail() == null && assertion.getEndDay() == null && assertion.getEndMonth() == null && assertion.getEndYear() == null
-                && assertion.getExternalId() == null && assertion.getExternalIdType() == null && assertion.getExternalIdUrl() == null
-                && assertion.getLastModifiedBy() == null && assertion.getModified() == null && assertion.getOrcidError() == null && assertion.getOrcidId() == null
-                && assertion.getOrgCity() == null && assertion.getOrgCity() == null && assertion.getOrgCountry() == null && assertion.getOrgName() == null
-                && assertion.getOrgRegion() == null && assertion.getOwnerId() == null && assertion.getPutCode() == null && assertion.getRoleTitle() == null
-                && assertion.getMemberId() == null && assertion.getStartDay() == null && assertion.getStartMonth() == null && assertion.getStartYear() == null;
+        return assertion.getId() != null && assertion.getAddedToORCID() == null && assertion.getAffiliationSection() == null && assertion.getCreated() == null && assertion.getDepartmentName() == null && assertion.getDisambiguatedOrgId() == null && assertion.getDisambiguationSource() == null && assertion.getEmail() == null && assertion.getEndDay() == null && assertion.getEndMonth() == null && assertion.getEndYear() == null && assertion.getExternalId() == null && assertion.getExternalIdType() == null && assertion.getExternalIdUrl() == null && assertion.getLastModifiedBy() == null && assertion.getModified() == null && assertion.getOrcidError() == null && assertion.getOrcidId() == null && assertion.getOrgCity() == null && assertion.getOrgCity() == null && assertion.getOrgCountry() == null && assertion.getOrgName() == null && assertion.getOrgRegion() == null && assertion.getOwnerId() == null && assertion.getPutCode() == null && assertion.getRoleTitle() == null && assertion.getMemberId() == null && assertion.getStartDay() == null && assertion.getStartMonth() == null && assertion.getStartYear() == null;
     }
 
     private Pageable getPageableForRegistrySync() {
@@ -550,21 +549,6 @@ public class AssertionService {
             }
         }
         return null;
-    }
-
-    private boolean tokenAndOrcidIdAvailable(Optional<OrcidRecord> record, Assertion assertion) {
-        if (!record.isPresent()) {
-            return false;
-        }
-
-        String idToken = record.get().getToken(assertion.getMemberId(), false);
-        String orcid = record.get().getOrcid();
-
-        if (StringUtils.isBlank(orcid)) {
-            return false;
-        }
-
-        return !StringUtils.isBlank(idToken);
     }
 
     private void checkAssertionAccess(Assertion assertion, String memberId) {
@@ -607,18 +591,28 @@ public class AssertionService {
         try {
             obj.put("statusCode", statusCode);
             obj.put("error", error);
-            assertion.setOrcidError(obj.toString());
-            assertion.setStatus(getErrorStatus(assertion, defaultErrorStatus).name());
         } catch (JSONException e) {
             LOG.error("Error storing error for assertion {}", assertion.getId(), e);
             throw new RuntimeException(e);
         }
 
+        Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
+        refreshed.setOrcidError(obj.toString());
+
+        try {
+            refreshed.setStatus(getErrorStatus(refreshed, defaultErrorStatus).name());
+        } catch (JSONException e) {
+            LOG.error("Error storing error status for assertion {}", assertion.getId(), e);
+            throw new RuntimeException(e);
+        }
+
+        refreshed.setLastSyncAttempt(assertion.getLastSyncAttempt());
+        assertionRepository.save(refreshed);
+
         if (StringUtils.equals(assertion.getStatus(), AssertionStatus.USER_REVOKED_ACCESS.name())) {
             LOG.info("Assertion status set to USER_REVOKED_ACCESS, updating id token accordingly");
             orcidRecordService.revokeIdToken(assertion.getEmail(), assertion.getMemberId());
         }
-        assertionRepository.save(assertion);
     }
 
     private AssertionStatus getErrorStatus(Assertion assertion, AssertionStatus defaultError) throws JSONException {
