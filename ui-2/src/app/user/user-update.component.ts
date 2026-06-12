@@ -54,6 +54,7 @@ export class UserUpdateComponent {
     firstName: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(50)]),
     lastName: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(50)]),
     mainContact: new FormControl<boolean | null>(null),
+    manageApiCredentialsEnabled: new FormControl<boolean | null>(null),
     assertionServiceEnabled: new FormControl<boolean | null>(null),
     memberId: new FormControl<string | null>(null, Validators.required),
     activated: new FormControl<boolean | null>(null),
@@ -138,6 +139,8 @@ export class UserUpdateComponent {
       lastName: user.lastName,
       mainContact: user.mainContact,
       memberId: user.memberId,
+      manageApiCredentialsEnabled: user.manageApiCredsEnabled,
+      salesforceId: user.salesforceId,
       activated: user.activated,
       isAdmin: user.isAdmin,
       createdBy: user.createdBy,
@@ -212,7 +215,7 @@ export class UserUpdateComponent {
     return this.accountService.hasAnyAuthority(['ROLE_CONSORTIUM_LEAD'])
   }
 
-  validateOrgOwners() {
+  validateOrgOwners(event?: Event) {
     this.isSaving = true
     const memberId = this.editForm.get('memberId')?.value
     if (memberId) {
@@ -224,6 +227,14 @@ export class UserUpdateComponent {
           this.hasOwner = value
         }
       })
+    }
+    if (event) {
+      const checked = (event.target as HTMLInputElement).checked
+      const manageApiCredentialsControl = this.editForm.get('manageApiCredentialsEnabled')
+      if (checked) {
+        manageApiCredentialsControl?.patchValue(checked)
+      }
+      checked ? manageApiCredentialsControl?.disable() : manageApiCredentialsControl?.enable()
     }
   }
 
@@ -318,6 +329,7 @@ export class UserUpdateComponent {
       firstName: this.editForm.get(['firstName'])?.value || null,
       lastName: this.editForm.get(['lastName'])?.value || null,
       mainContact: this.editForm.get(['mainContact'])?.value || false,
+      manageApiCredsEnabled: this.editForm.get(['manageApiCredentialsEnabled'])?.value || false,
       isAdmin: this.editForm.get(['isAdmin'])?.value || false,
       memberId: this.editForm.get(['memberId'])?.value || null,
       createdBy: this.editForm.get(['createdBy'])?.value || null,
