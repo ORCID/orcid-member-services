@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -9,8 +9,7 @@ import { tap } from 'rxjs/operators';
 export class FeatureToggleService {
   private features: Record<string, boolean> = {};
   private initialized$ = new BehaviorSubject<boolean>(false);
-
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   // Invoke during application boot routines (or App Component initialization)
   public initFeatures(): Observable<Record<string, boolean>> {
