@@ -11,7 +11,7 @@ import org.togglz.core.context.FeatureContext;
 public enum PortalFeatures implements Feature {
 
     @EnabledByDefault
-    @Label("Manage API credentials)")
+    @Label("Manage API credentials")
     MANAGE_API_CREDENTIALS;
 
     public boolean isActive() {
