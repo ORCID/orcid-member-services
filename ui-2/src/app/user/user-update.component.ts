@@ -33,7 +33,7 @@ export class UserUpdateComponent {
   protected errorService = inject(ErrorService)
   private fb = inject(FormBuilder)
   private cdref = inject(ChangeDetectorRef)
-  private featureService = inject(FeatureToggleService)
+  protected featureService = inject(FeatureToggleService)
 
   isSaving = false
   isExistentMember = false

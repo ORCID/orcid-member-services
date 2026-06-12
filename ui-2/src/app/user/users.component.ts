@@ -36,7 +36,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   protected router = inject(Router)
   protected eventService = inject(EventService)
   private ngZone = inject(NgZone)
-  private featureService = inject(FeatureToggleService)
+  protected featureService = inject(FeatureToggleService)
 
   currentAccount: IAccount | undefined
   users: IUser[] | null | undefined

@@ -72,24 +72,23 @@
             >Organization Owner</label
           >
         </div>
-        <div
-          class="form-group"
-          *ngIf="featureService.isEnabled('MANAGE_API_CREDENTIALS')"
-          >
-          <input
-            type="checkbox"
-            class="form-control"
-            name="manageApiCredentialsEnabled"
-            id="field_manageApiCredentialsEnabled"
-            formControlName="manageApiCredentialsEnabled"
-          />
-          <label
-            class="form-control-label"
-            i18n="@@gatewayApp.msUserServiceMSUser.manageApiCredentialsEnabled.string"
-            for="field_manageApiCredentialsEnabled"
+        @if (featureService.isEnabled('MANAGE_API_CREDENTIALS')) {
+          <div class="form-group">
+            <input
+              type="checkbox"
+              class="form-control"
+              name="manageApiCredentialsEnabled"
+              id="field_manageApiCredentialsEnabled"
+              formControlName="manageApiCredentialsEnabled"
+            />
+            <label
+              class="form-control-label"
+              i18n="@@gatewayApp.msUserServiceMSUser.manageApiCredentialsEnabled.string"
+              for="field_manageApiCredentialsEnabled"
             >Manage API credentials</label
-          >
-        </div>
+            >
+          </div>
+        }
         <div class="form-group mb-0">
           <label
             class="form-control-label"

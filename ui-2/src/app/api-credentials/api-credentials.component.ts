@@ -6,6 +6,7 @@ import { ApiCredential } from './model/api-credential'
   selector: 'app-api-credentials',
   templateUrl: './api-credentials.component.html',
   styleUrls: ['./api-credentials.component.scss'],
+  standalone: false,
 })
 export class ApiCredentialsComponent implements OnInit {
   faEnvelope = faEnvelope

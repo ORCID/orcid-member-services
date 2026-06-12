@@ -6,6 +6,7 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
   selector: 'app-api-credentials-mfa-enabled-dialog',
   templateUrl: './api-credentials-mfa-enabled-dialog.component.html',
   styleUrls: ['./api-credentials-mfa-enabled-dialog.component.scss'],
+  standalone: false,
 })
 export class ApiCredentialsMfaEnabledDialogComponent {
   faTimesCircle = faTimesCircle

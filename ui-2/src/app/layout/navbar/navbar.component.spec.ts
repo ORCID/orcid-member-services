@@ -13,6 +13,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { FeatureToggleService } from 'src/app/shared/service/feature-toggle.service'
+import {RouterTestingModule} from "@angular/router/testing";
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent
@@ -50,7 +51,7 @@ describe('NavbarComponent', () => {
     TestBed.configureTestingModule({
     declarations: [NavbarComponent, HasAnyAuthorityDirective],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [ReactiveFormsModule, RouterTestingModule],
+    imports: [ReactiveFormsModule, RouterTestingModule.withRoutes([{ path: 'api-credentials', children: [] }])],
     providers: [
         { provide: LoginService, useValue: loginServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },

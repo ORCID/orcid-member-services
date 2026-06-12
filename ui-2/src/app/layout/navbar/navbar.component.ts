@@ -34,7 +34,7 @@ export class NavbarComponent implements OnInit {
   private accountService = inject(AccountService)
   private memberService = inject(MemberService)
   private oidcSecurityService = inject(OidcSecurityService)
-  private featureService = inject(FeatureToggleService)
+  protected featureService = inject(FeatureToggleService)
   private router = inject(Router)
   private modalService = inject(NgbModal)
 
