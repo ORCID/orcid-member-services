@@ -200,11 +200,7 @@ public class AssertionService {
 
             try {
                 String putCode = postToOrcidRegistry(orcid, assertion, idToken);
-                assertion.setPutCode(putCode);
-                assertion.setAddedToORCID(now);
-                assertion.setOrcidError(null);
-                assertion.setStatus(AssertionStatus.IN_ORCID.name());
-                assertionRepository.save(assertion);
+                markCreatedInOrcid(assertion, putCode, now);
             } catch (OrcidAPIException oae) {
                 LOG.info("Recieved orcid api exception");
                 storeError(assertion, oae.getStatusCode(), oae.getError(), AssertionStatus.ERROR_ADDING_TO_ORCID);
@@ -255,10 +251,7 @@ public class AssertionService {
 
             try {
                 putInOrcidRegistry(orcid, assertion, idToken);
-                assertion.setUpdatedInORCID(now);
-                assertion.setOrcidError(null);
-                assertion.setStatus(AssertionStatus.IN_ORCID.name());
-                assertionRepository.save(assertion);
+                markUpdatedInOrcid(assertion, now);
             } catch (DeactivatedException | DeprecatedException e) {
                 handleDeactivatedOrDeprecated(orcid, assertion);
             } catch (OrcidAPIException oae) {
@@ -290,6 +283,23 @@ public class AssertionService {
     public void generateAssertionsReport() throws IOException {
         String filename = Instant.now() + "_orcid_report.csv";
         csvReportService.storeCsvReportRequest(getLoggedInUser().getId(), filename, CsvReport.ASSERTIONS_REPORT_TYPE);
+    }
+
+    private void markCreatedInOrcid(Assertion assertion, String putCode, Instant now) {
+        Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
+        refreshed.setPutCode(putCode);
+        refreshed.setAddedToORCID(now);
+        refreshed.setStatus(AssertionStatus.IN_ORCID.name());
+        refreshed.setOrcidError(null);
+        assertionRepository.save(refreshed);
+    }
+
+    private void markUpdatedInOrcid(Assertion assertion, Instant now) {
+        Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
+        refreshed.setUpdatedInORCID(now);
+        refreshed.setStatus(AssertionStatus.IN_ORCID.name());
+        refreshed.setOrcidError(null);
+        assertionRepository.save(refreshed);
     }
 
     private String getAssertionStatus(Assertion assertion) {
@@ -608,18 +618,27 @@ public class AssertionService {
         try {
             obj.put("statusCode", statusCode);
             obj.put("error", error);
-            assertion.setOrcidError(obj.toString());
-            assertion.setStatus(getErrorStatus(assertion, defaultErrorStatus).name());
         } catch (JSONException e) {
             LOG.error("Error storing error for assertion {}", assertion.getId(), e);
             throw new RuntimeException(e);
         }
 
+        Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
+        refreshed.setOrcidError(obj.toString());
+
+        try {
+            refreshed.setStatus(getErrorStatus(refreshed, defaultErrorStatus).name());
+        } catch (JSONException e) {
+            LOG.error("Error storing error status for assertion {}", assertion.getId(), e);
+            throw new RuntimeException(e);
+        }
+
+        assertionRepository.save(refreshed);
+
         if (StringUtils.equals(assertion.getStatus(), AssertionStatus.USER_REVOKED_ACCESS.name())) {
             LOG.info("Assertion status set to USER_REVOKED_ACCESS, updating id token accordingly");
             orcidRecordService.revokeIdToken(assertion.getEmail(), assertion.getMemberId());
         }
-        assertionRepository.save(assertion);
     }
 
     private AssertionStatus getErrorStatus(Assertion assertion, AssertionStatus defaultError) throws JSONException {
