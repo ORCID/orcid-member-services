@@ -35,6 +35,7 @@ public class UserMapper {
         user.setAdmin(userDTO.getIsAdmin());
         user.setMainContact(user.getMainContact());
         user.setId(userDTO.getId());
+        user.setManageApiCredsEnabled(userDTO.isManageApiCredsEnabled());
         return user;
     }
 
@@ -57,6 +58,7 @@ public class UserMapper {
         userDTO.setId(user.getId());
         userDTO.setIsAdmin(user.getAdmin());
         userDTO.setMfaEnabled(user.getMfaEnabled() != null ? user.getMfaEnabled() : false);
+        userDTO.setManageApiCredsEnabled(user.getManageApiCredsEnabled() != null ? user.getManageApiCredsEnabled() : false);
         return userDTO;
     }
 

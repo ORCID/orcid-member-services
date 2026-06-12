@@ -65,6 +65,16 @@ public class UserMapperTest {
         assertThat(user.getIsAdmin()).isTrue();
         assertThat(user.getAuthorities()).isNotNull();
         assertThat(user.getAuthorities().size()).isEqualTo(3);
+        assertThat(user.isManageApiCredsEnabled()).isFalse(); // manageApiCredsEnabled not set in user entity
+    }
+
+    @Test
+    public void testToUserDTO_manageApiCredsEnabled() {
+        User user = getUser();
+        user.setManageApiCredsEnabled(true);
+
+        UserDTO userDTO = userMapper.toUserDTO(user);
+        assertThat(userDTO.isManageApiCredsEnabled()).isTrue();
     }
 
     public UserDTO getUserDTO() {
@@ -80,6 +90,7 @@ public class UserMapperTest {
         userDTO.setCreatedBy("someone");
         userDTO.setLastModifiedBy("hello@orcid.org");
         userDTO.setIsAdmin(true);
+        userDTO.setManageApiCredsEnabled(false);
         return userDTO;
     }
 

@@ -124,6 +124,9 @@ public class User implements Serializable {
     @JsonIgnore
     private Instant lastModifiedDate = Instant.now();
 
+    @Field("manage_api_creds_enabled")
+    private Boolean manageApiCredsEnabled;
+
     public String getId() {
         return id;
     }
@@ -330,6 +333,14 @@ public class User implements Serializable {
 
     public void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Boolean getManageApiCredsEnabled() {
+        return manageApiCredsEnabled;
+    }
+
+    public void setManageApiCredsEnabled(Boolean manageApiCredsEnabled) {
+        this.manageApiCredsEnabled = manageApiCredsEnabled;
     }
 
     @Override
