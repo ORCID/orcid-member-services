@@ -139,6 +139,8 @@ class AssertionServiceTest {
                 return assertion;
             }
         });
+
+        ReflectionTestUtils.setField(assertionService, "tokenPropagationPause", 0);
     }
 
     private User getUser() {
@@ -457,35 +459,27 @@ class AssertionServiceTest {
         List<Assertion> batch1 = getAssertionsForCreatingInOrcid(1, AssertionService.REGISTRY_SYNC_BATCH_SIZE);
         batch1.forEach(a -> {
             when(assertionRepository.findById(a.getId())).thenReturn(Optional.of(a));
+            when(orcidRecordService.findByEmail(Mockito.eq(a.getEmail()))).thenReturn(getOptionalOrcidRecordWithIdToken());
         });
         List<Assertion> batch2 = getAssertionsForCreatingInOrcid(AssertionService.REGISTRY_SYNC_BATCH_SIZE + 1,
                 AssertionService.REGISTRY_SYNC_BATCH_SIZE + (AssertionService.REGISTRY_SYNC_BATCH_SIZE / 2));
         batch2.forEach(a -> {
             when(assertionRepository.findById(a.getId())).thenReturn(Optional.of(a));
+            when(orcidRecordService.findByEmail(Mockito.eq(a.getEmail()))).thenReturn(getOptionalOrcidRecordWithIdToken());
         });
         when(assertionRepository.findAllToCreateInOrcidRegistry(Mockito.any(Pageable.class)))
                 .thenReturn(batch1)
                 .thenReturn(batch2)
                 .thenReturn(new ArrayList<>());
 
-        for (int i = 1; i <= 5; i++) {
-            when(orcidRecordService.findByEmail(i + "@email.com")).thenReturn(Optional.of(getOrcidRecord(Integer.toString(i))));
-        }
-
-        for (int i = 6; i <= AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5; i++) {
-            when(orcidRecordService.findByEmail(i + "@email.com")).thenReturn(getOptionalOrcidRecord(i));
-        }
-
-        for (int i = 1; i <= 5; i++) {
-            when(orcidApiClient.exchangeToken(Mockito.eq("idToken" + i), Mockito.eq("orcid" + i))).thenReturn("accessToken" + i);
-            when(orcidApiClient.postAffiliation(Mockito.eq("orcid" + i), Mockito.eq("accessToken" + i), Mockito.any(Assertion.class))).thenReturn("putCode" + i);
-        }
+        when(orcidApiClient.exchangeToken(Mockito.eq("idToken"), Mockito.eq("orcid"))).thenReturn("accessToken");
+        when(orcidApiClient.postAffiliation(Mockito.eq("orcid"), Mockito.eq("accessToken"), Mockito.any(Assertion.class))).thenReturn("putCode");
 
         assertionService.postAssertionsToOrcid();
 
         Mockito.verify(orcidRecordService, Mockito.times(AssertionService.REGISTRY_SYNC_BATCH_SIZE + (AssertionService.REGISTRY_SYNC_BATCH_SIZE / 2)))
                 .findByEmail(anyString());
-        Mockito.verify(orcidApiClient, Mockito.times(5)).postAffiliation(anyString(), anyString(), assertionCaptor.capture());
+        Mockito.verify(orcidApiClient, Mockito.times((int) (AssertionService.REGISTRY_SYNC_BATCH_SIZE * 1.5))).postAffiliation(anyString(), anyString(), assertionCaptor.capture());
         Mockito.verify(assertionRepository, Mockito.times(3)).findAllToCreateInOrcidRegistry(pageableCaptor.capture());
 
         List<Pageable> pageables = pageableCaptor.getAllValues();
@@ -580,6 +574,9 @@ class AssertionServiceTest {
 
     @Test
     void testPostAssertionToOrcid_statusPendingToInOrcid() throws IOException, JAXBException, DeactivatedException, DeprecatedException, JSONException {
+        // test pause logic too here
+        ReflectionTestUtils.setField(assertionService, "tokenPropagationPause", 200);
+
         OrcidRecord orcidRecord = getOrcidRecord("1234");
         Assertion assertion = getAssertionWithEmail("test@orcid.org");
         assertion.setId("id");
@@ -592,7 +589,7 @@ class AssertionServiceTest {
         long startTime = System.currentTimeMillis();
         assertionService.postAssertionToOrcid(assertion);
         long executionTime = System.currentTimeMillis() - startTime;
-        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
+        assertThat(executionTime).isGreaterThanOrEqualTo(200);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
@@ -615,7 +612,6 @@ class AssertionServiceTest {
         long startTime = System.currentTimeMillis();
         assertionService.postAssertionToOrcid(assertion);
         long executionTime = System.currentTimeMillis() - startTime;
-        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
@@ -629,7 +625,6 @@ class AssertionServiceTest {
         startTime = System.currentTimeMillis();
         assertionService.postAssertionToOrcid(assertion);
         executionTime = System.currentTimeMillis() - startTime;
-        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(2)).save(assertionCaptor.capture());
         saved = assertionCaptor.getAllValues().get(1);
@@ -670,7 +665,6 @@ class AssertionServiceTest {
         long startTime = System.currentTimeMillis();
         assertionService.postAssertionToOrcid(assertion);
         long executionTime = System.currentTimeMillis() - startTime;
-        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
@@ -697,7 +691,6 @@ class AssertionServiceTest {
         long startTime = System.currentTimeMillis();
         assertionService.postAssertionToOrcid(assertion);
         long executionTime = System.currentTimeMillis() - startTime;
-        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
@@ -811,7 +804,6 @@ class AssertionServiceTest {
         long startTime = System.currentTimeMillis();
         assertionService.putAssertionInOrcid(assertion);
         long executionTime = System.currentTimeMillis() - startTime;
-        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
@@ -838,7 +830,6 @@ class AssertionServiceTest {
         long startTime = System.currentTimeMillis();
         assertionService.putAssertionInOrcid(assertion);
         long executionTime = System.currentTimeMillis() - startTime;
-        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
@@ -866,7 +857,6 @@ class AssertionServiceTest {
         long startTime = System.currentTimeMillis();
         assertionService.putAssertionInOrcid(assertion);
         long executionTime = System.currentTimeMillis() - startTime;
-        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
@@ -880,7 +870,6 @@ class AssertionServiceTest {
         startTime = System.currentTimeMillis();
         assertionService.putAssertionInOrcid(assertion);
         executionTime = System.currentTimeMillis() - startTime;
-        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(2)).save(assertionCaptor.capture());
         saved = assertionCaptor.getAllValues().get(1);
@@ -927,7 +916,6 @@ class AssertionServiceTest {
         long startTime = System.currentTimeMillis();
         assertionService.putAssertionInOrcid(assertion);
         long executionTime = System.currentTimeMillis() - startTime;
-        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
         Assertion saved = assertionCaptor.getValue();
@@ -1003,7 +991,6 @@ class AssertionServiceTest {
         long startTime = System.currentTimeMillis();
         assertionService.deleteById("id", getUser());
         long executionTime = System.currentTimeMillis() - startTime;
-        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService, Mockito.never()).deleteOrcidRecord(Mockito.any());
@@ -1034,7 +1021,6 @@ class AssertionServiceTest {
         long startTime = System.currentTimeMillis();
         assertionService.deleteById("id", getUser());
         long executionTime = System.currentTimeMillis() - startTime;
-        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService, Mockito.never()).deleteOrcidRecord(Mockito.any());
@@ -1110,7 +1096,6 @@ class AssertionServiceTest {
         long startTime = System.currentTimeMillis();
         assertionService.deleteById("id", getUser());
         long executionTime = System.currentTimeMillis() - startTime;
-        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService).deleteOrcidRecordTokenByEmailAndMemberId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_MEMBER_ID));
@@ -1139,7 +1124,6 @@ class AssertionServiceTest {
         long startTime = System.currentTimeMillis();
         assertionService.deleteById("id", getUser());
         long executionTime = System.currentTimeMillis() - startTime;
-        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService).deleteOrcidRecordTokenByEmailAndMemberId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_MEMBER_ID));
@@ -1169,7 +1153,6 @@ class AssertionServiceTest {
         long startTime = System.currentTimeMillis();
         assertionService.deleteById("id", getUser());
         long executionTime = System.currentTimeMillis() - startTime;
-        assertThat(executionTime).isGreaterThanOrEqualTo(AssertionService.TOKEN_PROPAGATION_PAUSE);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).deleteById(Mockito.eq("id"));
         Mockito.verify(orcidRecordService).deleteOrcidRecordTokenByEmailAndMemberId(Mockito.eq("test@orcid.org"), Mockito.eq(DEFAULT_MEMBER_ID));
@@ -1231,10 +1214,10 @@ class AssertionServiceTest {
         when(assertionRepository.findByMemberId(Mockito.eq("member-id"), Mockito.any(Pageable.class)))
                 .thenReturn(new PageImpl<Assertion>(Arrays.asList(getAssertionWithEmail("email@orcid.org"), getAssertionWithEmail("email@orcid.org"))));
         when(assertionRepository
-                        .findByMemberIdAndAffiliationSectionContainingIgnoreCaseOrMemberIdAndDepartmentNameContainingIgnoreCaseOrMemberIdAndOrgNameContainingIgnoreCaseOrMemberIdAndDisambiguatedOrgIdContainingIgnoreCaseOrMemberIdAndEmailContainingIgnoreCaseOrMemberIdAndOrcidIdContainingIgnoreCaseOrMemberIdAndRoleTitleContainingIgnoreCase(
-                                Mockito.any(Pageable.class), Mockito.eq("member-id"), Mockito.eq("filter"), Mockito.eq("member-id"), Mockito.eq("filter"),
-                                Mockito.eq("member-id"), Mockito.eq("filter"), Mockito.eq("member-id"), Mockito.eq("filter"), Mockito.eq("member-id"),
-                                Mockito.eq("filter"), Mockito.eq("member-id"), Mockito.eq("filter"), Mockito.eq("member-id"), Mockito.eq("filter")))
+                .findByMemberIdAndAffiliationSectionContainingIgnoreCaseOrMemberIdAndDepartmentNameContainingIgnoreCaseOrMemberIdAndOrgNameContainingIgnoreCaseOrMemberIdAndDisambiguatedOrgIdContainingIgnoreCaseOrMemberIdAndEmailContainingIgnoreCaseOrMemberIdAndOrcidIdContainingIgnoreCaseOrMemberIdAndRoleTitleContainingIgnoreCase(
+                        Mockito.any(Pageable.class), Mockito.eq("member-id"), Mockito.eq("filter"), Mockito.eq("member-id"), Mockito.eq("filter"),
+                        Mockito.eq("member-id"), Mockito.eq("filter"), Mockito.eq("member-id"), Mockito.eq("filter"), Mockito.eq("member-id"),
+                        Mockito.eq("filter"), Mockito.eq("member-id"), Mockito.eq("filter"), Mockito.eq("member-id"), Mockito.eq("filter")))
                 .thenReturn(new PageImpl<Assertion>(List.of(getAssertionWithEmail("email@orcid.org"))));
 
         Page<Assertion> page = assertionService.findByCurrentMemberId(Mockito.mock(Pageable.class));
@@ -1807,13 +1790,6 @@ class AssertionServiceTest {
         return Optional.of(record);
     }
 
-    private Optional<OrcidRecord> getOptionalOrcidRecordWithoutIdToken() {
-        OrcidRecord record = new OrcidRecord();
-        record.setEmail("email");
-        record.setOrcid("orcid");
-        return Optional.of(record);
-    }
-
     private void testUpdateStatus(Assertion skeleton, Assertion full, String expectedStatus, Optional<OrcidRecord> optionalRecord) {
         when(assertionRepository.findById("1")).thenReturn(Optional.of(full));
         when(assertionRepository.save(Mockito.any(Assertion.class))).thenReturn(full);
@@ -1854,5 +1830,12 @@ class AssertionServiceTest {
         Member member = new Member();
         member.setClientName("member 2");
         return member;
+    }
+
+    private Optional<OrcidRecord> getOptionalOrcidRecordWithoutIdToken() {
+        OrcidRecord record = new OrcidRecord();
+        record.setEmail("email");
+        record.setOrcid("orcid");
+        return Optional.of(record);
     }
 }

@@ -46,8 +46,6 @@ public class AssertionService {
 
     public static final int REGISTRY_SYNC_BATCH_SIZE = 500;
 
-    public static final int TOKEN_PROPAGATION_PAUSE = 500;
-
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(Locale.getDefault()).withZone(ZoneId.systemDefault());
 
     @Autowired
@@ -82,6 +80,8 @@ public class AssertionService {
 
     @Autowired
     private CsvReportService csvReportService;
+
+    private int tokenPropagationPause = 500;
 
     public Assertion findById(String id) {
         Optional<Assertion> optional = assertionRepository.findById(id);
@@ -576,7 +576,7 @@ public class AssertionService {
     private void pauseForTokenPropagation() {
         LOG.debug("Pausing for 500ms to allow access token to propagate...");
         try {
-            TimeUnit.MILLISECONDS.sleep(TOKEN_PROPAGATION_PAUSE);
+            TimeUnit.MILLISECONDS.sleep(tokenPropagationPause);
         } catch (InterruptedException e) {
             // Restore the interrupt flag
             Thread.currentThread().interrupt();

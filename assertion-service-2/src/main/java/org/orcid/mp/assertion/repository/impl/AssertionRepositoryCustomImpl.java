@@ -141,12 +141,16 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
         UnwindOperation unwindRecord = Aggregation.unwind("linked_record", false);
 
         // token matching logic
+        AggregationExpression tokenIdNotNull = ctx -> new org.bson.Document("$ne", java.util.Arrays.asList("$$token.tokenId", null));
+        AggregationExpression revokedDateIsNull = ctx -> new org.bson.Document("$eq", java.util.Arrays.asList("$$token.revokedDate", null));
+        AggregationExpression deniedDateIsNull = ctx -> new org.bson.Document("$eq", java.util.Arrays.asList("$$token.deniedDate", null));
+
         AggregationExpression tokenCondition = BooleanOperators.And.and(
                 ComparisonOperators.Eq.valueOf("$$token.memberId").equalTo("$memberId"),
-                ComparisonOperators.Ne.valueOf("$$token.tokenId").notEqualToValue(null),
+                tokenIdNotNull,                                                         // <-- Replaced notEqualToValue(null)
                 ComparisonOperators.Ne.valueOf("$$token.tokenId").notEqualToValue(""),
-                ComparisonOperators.Eq.valueOf("$$token.revokedDate").equalToValue(null),
-                ComparisonOperators.Eq.valueOf("$$token.deniedDate").equalToValue(null)
+                revokedDateIsNull,                                                      // <-- Replaced equalToValue(null)
+                deniedDateIsNull                                                        // <-- Replaced equalToValue(null)
         );
 
         // apply token condition to filter the 'linked_record.tokens' array
