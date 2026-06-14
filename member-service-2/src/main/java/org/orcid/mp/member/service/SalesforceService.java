@@ -181,7 +181,7 @@ public class SalesforceService {
     }
 
     private void syncMember(MemberDetails member) {
-        LOG.info("Syncing member {}", member.getMemberId());
+        LOG.info("Syncing member {} : {}", member.getId(), member.getName());
     }
 
     private List<MemberDetails> getAllMembers() throws JsonProcessingException {
