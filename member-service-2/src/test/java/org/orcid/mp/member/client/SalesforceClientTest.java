@@ -50,10 +50,6 @@ class SalesforceClientTest {
         ReflectionTestUtils.setField(salesforceClient, "loginUrl", LOGIN_URL);
     }
 
-    // ==========================================
-    // SUCCESSFUL GET METHOD TESTS
-    // ==========================================
-
     @Test
     void getMemberDetails_shouldReturnData() {
         expectTokenRequest();
@@ -160,10 +156,6 @@ class SalesforceClientTest {
         assertTrue(metadata.containsKey("fields"));
         mockServer.verify();
     }
-
-    // ==========================================
-    // SUCCESSFUL POST/PATCH TESTS
-    // ==========================================
 
     @Test
     void updatePublicMemberDetails_shouldPatchCorrectly() {
