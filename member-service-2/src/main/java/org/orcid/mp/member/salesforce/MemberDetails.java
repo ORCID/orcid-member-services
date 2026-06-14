@@ -52,6 +52,9 @@ public class MemberDetails {
     @JsonProperty("BillingAddress")
     private BillingAddress billingAddress;
 
+    @JsonProperty("Active_Member__c")
+    private boolean activeMember;
+
     private String memberId;
 
     private String parentMemberId;
@@ -190,5 +193,13 @@ public class MemberDetails {
 
     public void setParentMemberId(String parentMemberId) {
         this.parentMemberId = parentMemberId;
+    }
+
+    public boolean isActiveMember() {
+        return activeMember;
+    }
+
+    public void setActiveMember(boolean activeMember) {
+        this.activeMember = activeMember;
     }
 }

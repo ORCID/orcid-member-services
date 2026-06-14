@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.orcid.mp.member.client.SalesforceClient;
 import org.orcid.mp.member.domain.Member;
 import org.orcid.mp.member.domain.User;
-import org.orcid.mp.member.error.UnauthorizedMemberAccessException;
 import org.orcid.mp.member.pojo.AddConsortiumMember;
 import org.orcid.mp.member.pojo.MemberContactUpdate;
 import org.orcid.mp.member.pojo.RemoveConsortiumMember;
@@ -169,6 +168,35 @@ public class SalesforceService {
 
     public void updatePublicMemberDetails(MemberUpdateData memberUpdateData) {
         salesforceClient.updatePublicMemberDetails(memberUpdateData);
+    }
+
+    public void syncMembers() {
+        try {
+            List<MemberDetails> members = getAllMembers();
+            members.forEach(this::syncMember);
+        } catch (JsonProcessingException e) {
+            LOG.error("Failed to get active members from Salesforce", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void syncMember(MemberDetails member) {
+        LOG.info("Syncing member {}", member.getMemberId());
+    }
+
+    private List<MemberDetails> getAllMembers() throws JsonProcessingException {
+        List<MemberDetails> activeMembers = new ArrayList<>();
+        String activeMembersJson = salesforceClient.getMembers();
+
+        MembersPage membersPage = objectMapper.readValue(activeMembersJson, MembersPage.class);
+        activeMembers.addAll(membersPage.getRecords());
+
+        while (!membersPage.isDone()) {
+            activeMembersJson = salesforceClient.fetchDataFromUrl(membersPage.getNextRecordsUrl());
+            membersPage = objectMapper.readValue(activeMembersJson, MembersPage.class);
+            activeMembers.addAll(membersPage.getRecords());
+        }
+        return activeMembers;
     }
 
     private Map<String, Object> getDataMapForUpdate(MemberUpdateData memberData) {
