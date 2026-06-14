@@ -70,13 +70,16 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
         // preserveNullAndEmptyArrays = false acts as an INNER JOIN, dropping assertions without an orcid_record entirely.
         UnwindOperation unwindRecord = Aggregation.unwind("linked_record", false);
 
-        // Built a pure Java AggregationExpression for the individual token matching logic
+        AggregationExpression tokenIdNotNull = ctx -> new org.bson.Document("$ne", java.util.Arrays.asList("$$token.tokenId", null));
+        AggregationExpression revokedDateIsNull = ctx -> new org.bson.Document("$eq", java.util.Arrays.asList("$$token.revokedDate", null));
+        AggregationExpression deniedDateIsNull = ctx -> new org.bson.Document("$eq", java.util.Arrays.asList("$$token.deniedDate", null));
+
         AggregationExpression tokenCondition = BooleanOperators.And.and(
                 ComparisonOperators.Eq.valueOf("$$token.memberId").equalTo("$memberId"),
-                ComparisonOperators.Ne.valueOf("$$token.tokenId").notEqualToValue(null),
+                tokenIdNotNull,
                 ComparisonOperators.Ne.valueOf("$$token.tokenId").notEqualToValue(""),
-                ComparisonOperators.Eq.valueOf("$$token.revokedDate").equalToValue(null),
-                ComparisonOperators.Eq.valueOf("$$token.deniedDate").equalToValue(null)
+                revokedDateIsNull,
+                deniedDateIsNull
         );
 
         // token condition to filter the 'linked_record.tokens' array

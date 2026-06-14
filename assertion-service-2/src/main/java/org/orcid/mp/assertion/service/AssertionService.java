@@ -149,12 +149,6 @@ public class AssertionService {
         if (!user.getMemberId().equals(existingAssertion.getMemberId())) {
             throw new BadRequestAlertException("Illegal assertion access");
         }
-
-        if (existingAssertion.getOrcidId() != null && assertion.getOrcidId() == null) {
-            LOG.warn("!! Removing orcid id in assertion {} !!", existingAssertion.getId());
-            new Throwable("Tracing execution path").printStackTrace();
-        }
-
         copyFieldsToUpdate(assertion, existingAssertion);
         existingAssertion.setModified(Instant.now());
         existingAssertion.setLastModifiedBy(user.getEmail());
