@@ -21,8 +21,8 @@ public class ScheduledJobsManager {
     private static final Logger LOG = LoggerFactory.getLogger(ScheduledJobsManager.class);
 
     @Scheduled(cron = "${application.cron.syncSalesforceMembers}")
-    @SchedulerLock(name = "generateMemberAssertionStats", lockAtMostFor = "60m", lockAtLeastFor = "10m")
-    public void generateMemberAssertionStats() throws IOException {
+    @SchedulerLock(name = "syncMembers", lockAtMostFor = "60m", lockAtLeastFor = "10m")
+    public void syncMembers() throws IOException {
         LOG.info("Running cron to sync salesforce members");
         salesforceService.syncMembers();
         LOG.info("Salesforce sync complete");
