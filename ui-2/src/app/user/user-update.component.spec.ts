@@ -15,6 +15,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { RouterTestingModule } from '@angular/router/testing'
 import { of } from 'rxjs'
 import { By } from '@angular/platform-browser'
+import { FeatureToggleService } from '../shared/service/feature-toggle.service'
 
 describe('UserUpdateComponent', () => {
   let component: UserUpdateComponent
@@ -44,6 +45,8 @@ describe('UserUpdateComponent', () => {
     const alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
     const memberServiceSpy = jasmine.createSpyObj('MemberService', ['find', 'getAllMembers'])
     const routerSpy = jasmine.createSpyObj('Router', ['navigate'])
+    const featureToggleSpy = jasmine.createSpyObj('FeatureToggleService', ['isEnabled', 'initFeatures']);
+    featureToggleSpy.initFeatures.and.returnValue(of(null));
 
     TestBed.configureTestingModule({
       declarations: [UserUpdateComponent],
@@ -55,6 +58,7 @@ describe('UserUpdateComponent', () => {
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },
         { provide: ErrorService, useValue: {} },
+        { provide: FeatureToggleService, useValue: featureToggleSpy },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents()
@@ -83,6 +87,7 @@ describe('UserUpdateComponent', () => {
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: false,
+        manageApiCredsEnabled: false,
       })
     )
     memberService.getAllMembers.and.returnValue(of([]))
@@ -324,6 +329,34 @@ describe('UserUpdateComponent', () => {
     expect(userService.create).toHaveBeenCalledTimes(0)
     expect(accountService.disableMfa).toHaveBeenCalledTimes(0)
     expect(router.navigate).toHaveBeenCalledWith(['/users'])
+  })
+
+  it('should check and disable manage api credentials when org owner is checked', () => {
+    fixture.detectChanges()
+
+    const control = component.editForm.get('manageApiCredentialsEnabled')!
+    spyOn(control, 'patchValue')
+    spyOn(control, 'disable')
+
+    const event = { target: { checked: true } } as unknown as Event
+    component.validateOrgOwners(event)
+
+    expect(control.patchValue).toHaveBeenCalledWith(true)
+    expect(control.disable).toHaveBeenCalled()
+  })
+
+  it('should enable manage api credentials when org owner is unchecked', () => {
+    fixture.detectChanges()
+
+    const control = component.editForm.get('manageApiCredentialsEnabled')!
+    const patchValueSpy = spyOn(control, 'patchValue')
+    const enableSpy = spyOn(control, 'enable')
+
+    const event = { target: { checked: false } } as unknown as Event
+    component.validateOrgOwners(event)
+
+    expect(patchValueSpy).not.toHaveBeenCalled()
+    expect(enableSpy).toHaveBeenCalled()
   })
 
   it('should send activation email for existing user', () => {

@@ -14,6 +14,8 @@ import { MemberService } from '../member/service/member.service'
 import { AlertService } from '../shared/service/alert.service'
 import { IUser, User } from './model/user.model'
 import { UserService } from './service/user.service'
+import { FeatureToggleService } from '../shared/service/feature-toggle.service'
+
 
 @Component({
     selector: 'app-user-update',
@@ -31,6 +33,7 @@ export class UserUpdateComponent {
   protected errorService = inject(ErrorService)
   private fb = inject(FormBuilder)
   private cdref = inject(ChangeDetectorRef)
+  protected featureService = inject(FeatureToggleService)
 
   isSaving = false
   isExistentMember = false
@@ -54,6 +57,7 @@ export class UserUpdateComponent {
     firstName: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(50)]),
     lastName: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(50)]),
     mainContact: new FormControl<boolean | null>(null),
+    manageApiCredentialsEnabled: new FormControl<boolean | null>(null),
     assertionServiceEnabled: new FormControl<boolean | null>(null),
     memberId: new FormControl<string | null>(null, Validators.required),
     activated: new FormControl<boolean | null>(null),
@@ -73,6 +77,7 @@ export class UserUpdateComponent {
   hasOwner = false
 
   ngOnInit() {
+    this.featureService.initFeatures().subscribe();
     this.isSaving = false
     this.isExistentMember = false
     this.existentUser = null
@@ -138,6 +143,7 @@ export class UserUpdateComponent {
       lastName: user.lastName,
       mainContact: user.mainContact,
       memberId: user.memberId,
+      manageApiCredentialsEnabled: user.manageApiCredsEnabled,
       activated: user.activated,
       isAdmin: user.isAdmin,
       createdBy: user.createdBy,
@@ -212,7 +218,7 @@ export class UserUpdateComponent {
     return this.accountService.hasAnyAuthority(['ROLE_CONSORTIUM_LEAD'])
   }
 
-  validateOrgOwners() {
+  validateOrgOwners(event?: Event) {
     this.isSaving = true
     const memberId = this.editForm.get('memberId')?.value
     if (memberId) {
@@ -224,6 +230,14 @@ export class UserUpdateComponent {
           this.hasOwner = value
         }
       })
+    }
+    if (event) {
+      const checked = (event.target as HTMLInputElement).checked
+      const manageApiCredentialsControl = this.editForm.get('manageApiCredentialsEnabled')
+      if (checked) {
+        manageApiCredentialsControl?.patchValue(checked)
+      }
+      checked ? manageApiCredentialsControl?.disable() : manageApiCredentialsControl?.enable()
     }
   }
 
@@ -318,6 +332,7 @@ export class UserUpdateComponent {
       firstName: this.editForm.get(['firstName'])?.value || null,
       lastName: this.editForm.get(['lastName'])?.value || null,
       mainContact: this.editForm.get(['mainContact'])?.value || false,
+      manageApiCredsEnabled: this.editForm.get(['manageApiCredentialsEnabled'])?.value || false,
       isAdmin: this.editForm.get(['isAdmin'])?.value || false,
       memberId: this.editForm.get(['memberId'])?.value || null,
       createdBy: this.editForm.get(['createdBy'])?.value || null,

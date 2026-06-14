@@ -30,6 +30,7 @@ describe('HomeComponent', () => {
       mainContact: false,
       mfaEnabled: false,
       memberId: 'memberId',
+      manageApiCredsEnabled: false,
     }
 
     accountServiceSpy.getAccountData.and.returnValue(of(mockAccount))
@@ -85,6 +86,7 @@ describe('HomeComponent', () => {
         mainContact: false,
         mfaEnabled: false,
         memberId: 'memberId',
+        manageApiCredsEnabled: false
       })
     )
 

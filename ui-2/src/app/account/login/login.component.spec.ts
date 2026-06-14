@@ -62,6 +62,7 @@ describe('LoginComponent', () => {
         mainContact: false,
         mfaEnabled: false,
         memberId: 'memberId',
+        manageApiCredsEnabled: false,
       })
     )
 

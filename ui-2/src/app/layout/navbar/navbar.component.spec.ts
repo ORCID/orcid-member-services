@@ -1,18 +1,19 @@
-import { ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing'
-import { NavbarComponent } from './navbar.component'
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing'
 import { ReactiveFormsModule } from '@angular/forms'
-import { RouterTestingModule } from '@angular/router/testing'
-import { of, throwError } from 'rxjs'
-import { MemberService } from 'src/app/member/service/member.service'
-import { AccountService, LoginService } from 'src/app/account'
 import { By } from '@angular/platform-browser'
+import { of } from 'rxjs'
+import { AccountService, LoginService } from 'src/app/account'
+import { MemberService } from 'src/app/member/service/member.service'
 import { HasAnyAuthorityDirective } from 'src/app/shared/directive/has-any-authority.directive'
-import { HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { Member } from 'src/app/member/model/member.model'
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { ApiCredentialsMfaEnabledDialogComponent } from './api-credentials-mfa-enabled-dialog/api-credentials-mfa-enabled-dialog.component'
+import { NavbarComponent } from './navbar.component'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
+import { FeatureToggleService } from 'src/app/shared/service/feature-toggle.service'
+import {RouterTestingModule} from "@angular/router/testing";
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent
@@ -20,8 +21,12 @@ describe('NavbarComponent', () => {
   let loginService: jasmine.SpyObj<LoginService>
   let accountService: jasmine.SpyObj<AccountService>
   let memberService: jasmine.SpyObj<MemberService>
+  let modalService: jasmine.SpyObj<NgbModal>
+  let featureToggleService: jasmine.SpyObj<FeatureToggleService>
 
   beforeEach(() => {
+    const featureToggleSpy = jasmine.createSpyObj('FeatureToggleService', ['isEnabled', 'initFeatures']);
+    featureToggleSpy.initFeatures.and.returnValue(of(null));
     const loginServiceSpy = jasmine.createSpyObj('LoginService', ['login', 'logout'])
     const memberServiceSpy = jasmine.createSpyObj('MemberService', ['find', 'setManagedMember'])
     const accountServiceSpy = jasmine.createSpyObj('AccountService', [
@@ -30,9 +35,12 @@ describe('NavbarComponent', () => {
       'hasAnyAuthority',
       'isLoggedAs',
       'isOrganizationOwner',
+      'isManageApiCredentialsEnabled',
+      'isMFAEnabled',
       'getImageUrl',
       'getMemberId',
     ])
+    const modalServiceSpy = jasmine.createSpyObj('NgbModal', ['open'])
     const mockOidcSecurityService = {
       checkAuth: () => of({ isAuthenticated: true, userData: { email: 'test@email.com' } }),
       userData$: of({ email: 'test@email.com' }),
@@ -43,22 +51,26 @@ describe('NavbarComponent', () => {
     TestBed.configureTestingModule({
     declarations: [NavbarComponent, HasAnyAuthorityDirective],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [ReactiveFormsModule, RouterTestingModule],
+    imports: [ReactiveFormsModule, RouterTestingModule.withRoutes([{ path: 'api-credentials', children: [] }])],
     providers: [
         { provide: LoginService, useValue: loginServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
+        { provide: NgbModal, useValue: modalServiceSpy },
         { provide: OidcSecurityService, useValue: mockOidcSecurityService },
+        { provide: FeatureToggleService, useValue: featureToggleSpy },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-}).compileComponents()
+      ]
+    }).compileComponents()
 
     fixture = TestBed.createComponent(NavbarComponent)
     component = fixture.componentInstance
     loginService = TestBed.inject(LoginService) as jasmine.SpyObj<LoginService>
     memberService = TestBed.inject(MemberService) as jasmine.SpyObj<MemberService>
     accountService = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
+    modalService = TestBed.inject(NgbModal) as jasmine.SpyObj<NgbModal>
+    featureToggleService = TestBed.inject(FeatureToggleService) as jasmine.SpyObj<FeatureToggleService>
   })
 
   it('should create', () => {
@@ -70,6 +82,7 @@ describe('NavbarComponent', () => {
     accountService.hasAnyAuthority.and.returnValue(false)
     accountService.hasAnyAuthority.withArgs(['ROLE_USER']).and.returnValue(true)
     accountService.isOrganizationOwner.and.returnValue(false)
+    accountService.isManageApiCredentialsEnabled.and.returnValue(false)
     accountService.getImageUrl.and.returnValue(null)
     accountService.getMemberId.and.returnValue('memberId')
     accountService.getAccountData.and.returnValue(
@@ -88,6 +101,7 @@ describe('NavbarComponent', () => {
         mainContact: false,
         mfaEnabled: false,
         memberId: 'memberId',
+        manageApiCredsEnabled: false,
       })
     )
     memberService.find.and.returnValue(of({ id: 'id', client_id: 'a', isConsortiumLead: false }))
@@ -134,6 +148,7 @@ describe('NavbarComponent', () => {
         mainContact: false,
         mfaEnabled: false,
         memberId: 'memberId',
+        manageApiCredsEnabled: false,
       })
     )
     memberService.find.and.returnValue(of({ id: 'id', client_id: 'a', isConsortiumLead: true }))
@@ -173,6 +188,7 @@ describe('NavbarComponent', () => {
         mainContact: false,
         mfaEnabled: false,
         memberId: 'memberId',
+        manageApiCredsEnabled: false,
       })
     )
     memberService.find.and.returnValue(of({ id: 'id', client_id: 'a', isConsortiumLead: true }))
@@ -181,5 +197,84 @@ describe('NavbarComponent', () => {
 
     const affiliationManagerLink = fixture.debugElement.query(By.css('#affiliationManagerLink'))
     expect(affiliationManagerLink).toBeTruthy()
+  }))
+
+  it('should display the manage API credentials link', fakeAsync(() => {
+    featureToggleService.isEnabled.withArgs('MANAGE_API_CREDENTIALS').and.returnValue(true);
+
+    accountService.isAuthenticated.and.returnValue(true)
+    accountService.hasAnyAuthority.and.returnValue(false)
+    accountService.hasAnyAuthority.withArgs(['ROLE_USER']).and.returnValue(true)
+    accountService.isOrganizationOwner.and.returnValue(false)
+    accountService.isManageApiCredentialsEnabled.and.returnValue(true)
+    accountService.getImageUrl.and.returnValue(null)
+    accountService.getAccountData.and.returnValue(
+      of({
+        id: 'id',
+        activated: true,
+        authorities: ['ROLE_USER'],
+        email: 'email@email.com',
+        firstName: 'name',
+        langKey: 'en',
+        lastName: 'surname',
+        imageUrl: 'url',
+        salesforceId: 'sfid',
+        memberId: 'memberId',
+        loggedAs: false,
+        loginAs: 'sfid',
+        mainContact: false,
+        mfaEnabled: false,
+        manageApiCredsEnabled: true,
+      })
+    )
+    memberService.find.and.returnValue(of({ id: 'id', client_id: 'a', isConsortiumLead: false }))
+    fixture.detectChanges()
+    tick()
+
+    const manageApiCredentialsLink = fixture.debugElement.query(By.css('#manageApiCredentialsLink'))
+    expect(manageApiCredentialsLink).toBeTruthy()
+  }))
+
+  it('should open MFA dialog when manage API credentials is clicked and MFA is not enabled', fakeAsync(() => {
+    featureToggleService.isEnabled.withArgs('MANAGE_API_CREDENTIALS').and.returnValue(true);
+
+    accountService.isAuthenticated.and.returnValue(true)
+    accountService.hasAnyAuthority.and.returnValue(false)
+    accountService.hasAnyAuthority.withArgs(['ROLE_USER']).and.returnValue(true)
+    accountService.isOrganizationOwner.and.returnValue(false)
+    accountService.isManageApiCredentialsEnabled.and.returnValue(true)
+    accountService.isMFAEnabled.and.returnValue(false)
+    accountService.getImageUrl.and.returnValue(null)
+    accountService.getMemberId.and.returnValue('123')
+    accountService.getAccountData.and.returnValue(
+      of({
+        id: 'id',
+        activated: true,
+        authorities: ['ROLE_USER'],
+        email: 'email@email.com',
+        firstName: 'name',
+        langKey: 'en',
+        lastName: 'surname',
+        imageUrl: 'url',
+        salesforceId: 'sfid',
+        memberId: '1234',
+        loggedAs: false,
+        loginAs: '1234',
+        mainContact: false,
+        mfaEnabled: false,
+        manageApiCredsEnabled: true,
+      })
+    )
+    memberService.find.and.returnValue(of({ id: 'id', client_id: 'a', isConsortiumLead: false }))
+    fixture.detectChanges()
+    tick()
+
+    const manageApiCredentialsLink = fixture.debugElement.query(By.css('#manageApiCredentialsLink'))
+    manageApiCredentialsLink.nativeElement.click()
+
+    expect(modalService.open).toHaveBeenCalledWith(ApiCredentialsMfaEnabledDialogComponent, {
+      backdrop: 'static',
+      centered: true,
+    })
   }))
 })

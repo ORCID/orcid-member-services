@@ -36,7 +36,7 @@ public class AccountResource {
 
     public static final String ROLE_PREVIOUS_ADMINISTRATOR = "ROLE_PREVIOUS_ADMINISTRATOR";
 
-    protected final UserRepository userRepository;
+    protected final UserRepository  userRepository;
 
     protected final UserService userService;
 

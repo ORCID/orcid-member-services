@@ -12,4 +12,5 @@ export interface IAccount {
   loginAs: string
   mainContact: boolean
   mfaEnabled: boolean
+  manageApiCredsEnabled: boolean
 }

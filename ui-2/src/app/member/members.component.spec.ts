@@ -70,6 +70,7 @@ describe('MembersComponent', () => {
         mainContact: false,
         mfaEnabled: false,
         memberId: 'memberId',
+        manageApiCredsEnabled: false
       })
     )
     spyOn(routerSpy, 'navigate').and.returnValue(Promise.resolve(true))

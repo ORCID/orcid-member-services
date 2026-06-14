@@ -1,23 +1,19 @@
-import { ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing'
-import { UsersComponent } from './users.component'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { RouterTestingModule } from '@angular/router/testing'
-import { EMPTY, of, throwError } from 'rxjs'
-import { MemberService } from 'src/app/member/service/member.service'
-import { AccountService, LoginService } from 'src/app/account'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing'
 import { By } from '@angular/platform-browser'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { RouterModule } from '@angular/router'
+import { RouterTestingModule } from '@angular/router/testing'
+import { EMPTY, of } from 'rxjs'
+import { AccountService } from 'src/app/account'
 import { HasAnyAuthorityDirective } from 'src/app/shared/directive/has-any-authority.directive'
-import { HttpHeaders, HttpResponse } from '@angular/common/http'
-import { Member } from 'src/app/member/model/member.model'
-import { UserService } from './service/user.service'
-import { User } from './model/user.model'
+import { LocalizePipe } from '../shared/pipe/localize'
 import { AlertService } from '../shared/service/alert.service'
 import { EventService } from '../shared/service/event.service'
-import { LocalizePipe } from '../shared/pipe/localize'
-import { EventType } from 'src/app/app.constants'
-import { Event } from '../shared/model/event.model'
-import { RouterModule } from '@angular/router'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { User } from './model/user.model'
+import { UserService } from './service/user.service'
+import { UsersComponent } from './users.component'
+import { FeatureToggleService } from '../shared/service/feature-toggle.service'
 describe('UsersComponent', () => {
   let component: UsersComponent
   let fixture: ComponentFixture<UsersComponent>
@@ -25,6 +21,7 @@ describe('UsersComponent', () => {
   let accountService: jasmine.SpyObj<AccountService>
   let alertService: jasmine.SpyObj<AlertService>
   let eventService: jasmine.SpyObj<EventService>
+  let featureToggleService: jasmine.SpyObj<FeatureToggleService>
 
   beforeEach(() => {
     const accountServiceSpy = jasmine.createSpyObj('AccountService', [
@@ -34,10 +31,13 @@ describe('UsersComponent', () => {
       'isOrganizationOwner',
       'getImageUrl',
       'getSalesforceId',
+      'getMemberId',
     ])
-    const userServiceSpy = jasmine.createSpyObj('UserService', ['query', 'findBySalesForceId', 'sendActivate'])
+    const userServiceSpy = jasmine.createSpyObj('UserService', ['query', 'findBySalesForceId', 'sendActivate', 'findByMemberId'])
     const eventServiceSpy = jasmine.createSpyObj('EventService', ['on', 'broadcast'])
     const alertServiceSpy = jasmine.createSpyObj('AlertService', ['on', 'broadcast'])
+    const featureToggleSpy = jasmine.createSpyObj('FeatureToggleService', ['isEnabled', 'initFeatures']);
+    featureToggleSpy.initFeatures.and.returnValue(of(null));
 
     TestBed.configureTestingModule({
       declarations: [UsersComponent, HasAnyAuthorityDirective, LocalizePipe],
@@ -52,6 +52,7 @@ describe('UsersComponent', () => {
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: EventService, useValue: eventServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },
+        { provide: FeatureToggleService, useValue: featureToggleSpy }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents()
@@ -62,18 +63,19 @@ describe('UsersComponent', () => {
     accountService = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
     eventService = TestBed.inject(EventService) as jasmine.SpyObj<EventService>
     alertService = TestBed.inject(AlertService) as jasmine.SpyObj<AlertService>
+    featureToggleService = TestBed.inject(FeatureToggleService) as jasmine.SpyObj<FeatureToggleService>
 
-    userService.query.and.returnValue(
-      of({
-        content: [new User('123')], // Or just { id: '123' } as User if you switched to interfaces
-        page: {
-          totalElements: 1,
-          number: 0,
-          size: 20,
-          totalPages: 1,
-        },
-      })
-    )
+    const usersResponse = of({
+      content: [new User('123')], // Or just { id: '123' } as User if you switched to interfaces
+      page: {
+        totalElements: 1,
+        number: 0,
+        size: 20,
+        totalPages: 1,
+      },
+    })
+    userService.query.and.returnValue(usersResponse)
+    userService.findByMemberId.and.returnValue(usersResponse)
 
     accountService.getAccountData.and.returnValue(
       of({
@@ -91,6 +93,7 @@ describe('UsersComponent', () => {
         mainContact: false,
         mfaEnabled: false,
         memberId: 'memberId',
+        manageApiCredsEnabled: false,
       })
     )
 
@@ -160,5 +163,29 @@ describe('UsersComponent', () => {
     component.resetSearch()
     expect(component.searchTerm).toEqual('')
     expect(component.submittedSearchTerm).toEqual('')
+  })
+
+  it('2FA column should be visible for admin users', () => {
+    featureToggleService.isEnabled.withArgs('MANAGE_API_CREDENTIALS').and.returnValue(true);
+
+    accountService.hasAnyAuthority.and.returnValue(true)
+    component.ngOnInit()
+    fixture.detectChanges()
+
+    const twoFaHeaders = fixture.debugElement
+      .queryAll(By.css('th'))
+      .filter((el) => el.nativeElement.textContent.includes('2FA'))
+    expect(twoFaHeaders.length).toEqual(1)
+  })
+
+  it('2FA column should not be visible for non-admin users', () => {
+    accountService.hasAnyAuthority.and.returnValue(false)
+    component.ngOnInit()
+    fixture.detectChanges()
+
+    const twoFaHeaders = fixture.debugElement
+      .queryAll(By.css('th'))
+      .filter((el) => el.nativeElement.textContent.includes('2FA'))
+    expect(twoFaHeaders.length).toEqual(0)
   })
 })

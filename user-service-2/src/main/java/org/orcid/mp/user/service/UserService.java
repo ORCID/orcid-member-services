@@ -284,7 +284,7 @@ public class UserService {
         user.setMemberName(member.getClientName());
         user.setLangKey(userDTO.getLangKey() != null ? userDTO.getLangKey() : user.getLangKey());
         user.setAdmin(userDTO.getIsAdmin());
-
+        user.setManageApiCredsEnabled(userDTO.isManageApiCredsEnabled());
 
         if (user.getMemberId() != null && userDTO.getMemberId() != null && !user.getMemberId().equals(userDTO.getMemberId())) {
             user.setMemberId(userDTO.getMemberId());

@@ -47,6 +47,14 @@ server:
       pattern: combined
       max-days: 7
 
+togglz:
+  enabled: true
+  console:
+    enabled: true
+    path: /togglz-console
+    secured: true
+    use-management-port: false
+
 logging:
   level:
     root: INFO

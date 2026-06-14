@@ -6,7 +6,7 @@
         id="jh-create-entity"
         class="btn btn-primary float-right jh-create-entity ml-1"
         [routerLink]="['/users/new']"
-        >
+      >
         <fa-icon [icon]="faPlus"></fa-icon>
         <span i18n="@@gatewayApp.msUserServiceMSUser.home.createLabel.string">Add user </span>
       </button>
@@ -15,7 +15,7 @@
         id="jh-upload-entities"
         class="btn btn-primary float-right jh-create-entity create-ms-user ml-1"
         [routerLink]="['/' + 'users', { outlets: { popup: 'import' } }]"
-        >
+      >
         <fa-icon [icon]="faPlus"></fa-icon>
         <span i18n="@@gatewayApp.msUserServiceMSUser.home.uploadLabel.string">Import users from CSV </span>
       </button>
@@ -122,6 +122,11 @@
                   ></fa-icon>
                 }
               </th>
+              @if (hasRoleAdmin() && featureService.isEnabled('MANAGE_API_CREDENTIALS')) {
+                <th class="text-center">
+                  <span i18n="@@gatewayApp.msUserServiceMSUser.mfa.string">2FA</span>
+                </th>
+              }
               <th></th>
             </tr>
           </thead>
@@ -176,6 +181,25 @@
                   }
                 </td>
                 <td>{{ user.lastModifiedDate?.toString() | date: 'medium' }}</td>
+                @if (hasRoleAdmin() && featureService.isEnabled('MANAGE_API_CREDENTIALS')) {
+                  <td class="text-center">
+                    <span class="sr-only">{{ user.mfaEnabled }}</span>
+                    @if (user.mfaEnabled) {
+                      <fa-icon
+                        aria-hidden="true"
+                        [icon]="faCheckCircle"
+                        [style.color]="'#28a745'"
+                      ></fa-icon>
+                    }
+                    @if (!user.mfaEnabled) {
+                      <fa-icon
+                        aria-hidden="true"
+                        [icon]="faTimesCircle"
+                        [style.color]="'#f22112'"
+                      ></fa-icon>
+                    }
+                  </td>
+                }
                 <td class="text-right">
                   <div class="btn-group">
                     @if (!user.activated) {

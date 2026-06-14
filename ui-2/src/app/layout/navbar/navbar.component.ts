@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core'
+import { Router } from '@angular/router'
 import {
   faAddressCard,
   faUniversity,
@@ -10,6 +11,7 @@ import {
   faSignOutAlt,
   faWrench,
   faLock,
+  faKey,
 } from '@fortawesome/free-solid-svg-icons'
 import { AccountService, LoginService } from '../../account'
 import { MemberService } from 'src/app/member/service/member.service'
@@ -17,6 +19,9 @@ import { IAccount } from 'src/app/account/model/account.model'
 import { IMember } from 'src/app/member/model/member.model'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { filter, switchMap } from 'rxjs/operators'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { ApiCredentialsMfaEnabledDialogComponent } from './api-credentials-mfa-enabled-dialog/api-credentials-mfa-enabled-dialog.component'
+import { FeatureToggleService } from 'src/app/shared/service/feature-toggle.service'
 
 @Component({
   selector: 'app-navbar',
@@ -29,6 +34,10 @@ export class NavbarComponent implements OnInit {
   private accountService = inject(AccountService)
   private memberService = inject(MemberService)
   private oidcSecurityService = inject(OidcSecurityService)
+  protected featureService = inject(FeatureToggleService)
+  private router = inject(Router)
+  private modalService = inject(NgbModal)
+
 
   isNavbarCollapsed: boolean
 
@@ -49,6 +58,7 @@ export class NavbarComponent implements OnInit {
   faUniversity = faUniversity
   faChartPie = faChartPie
   faLightbulb = faLightbulb
+  faKey = faKey
 
   constructor() {
     this.isNavbarCollapsed = true
@@ -65,6 +75,7 @@ export class NavbarComponent implements OnInit {
         switchMap(() => this.accountService.getAccountData())
       )
       .subscribe(() => {
+        this.featureService.initFeatures().subscribe();
         // 3. Now we are safe: We have a Token AND User Data
         if (!this.memberCallDone && this.hasRoleUser()) {
           this.memberCallDone = true
@@ -103,6 +114,14 @@ export class NavbarComponent implements OnInit {
     return this.accountService.isOrganizationOwner()
   }
 
+  isManageApiCredentialsEnabled() {
+    return this.accountService.isManageApiCredentialsEnabled()
+  }
+
+  isMFAEnabled() {
+    return this.accountService.isMFAEnabled()
+  }
+
   hasRoleUser() {
     return this.accountService.hasAnyAuthority(['ROLE_USER'])
   }
@@ -126,5 +145,17 @@ export class NavbarComponent implements OnInit {
 
   getImageUrl() {
     return this.isAuthenticated() ? this.accountService.getImageUrl() : null
+  }
+
+  manageApiCredentials() {
+    if (this.accountService.isMFAEnabled()) {
+      this.collapseNavbar()
+      this.router.navigate(['/api-credentials'])
+    } else {
+      this.modalService.open(ApiCredentialsMfaEnabledDialogComponent, {
+        backdrop: 'static',
+        centered: true,
+      })
+    }
   }
 }

@@ -45,6 +45,7 @@
             </span>
           </a>
           <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+            <h6 class="dropdown-header" i18n="@@global.menu.tools.main.string">Tools</h6>
             <li *appHasAnyAuthority="'ASSERTION_SERVICE_ENABLED'">
               <a
                 id="affiliationManagerLink"
@@ -58,6 +59,23 @@
                 <span i18n="@@global.menu.tools.assertionServiceAffiliationManager.string">Affiliation Manager</span>
               </a>
             </li>
+            @if (featureService.isEnabled('MANAGE_API_CREDENTIALS') && (isOrganizationOwner() || isManageApiCredentialsEnabled())) {
+              <li>
+                <a
+                  id="manageApiCredentialsLink"
+                  class="dropdown-item"
+                  routerLink="/api-credentials"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="manageApiCredentials(); $event.preventDefault()"
+                >
+                  <fa-icon [icon]="faKey" [fixedWidth]="true"></fa-icon>
+                  <span i18n="@@global.menu.tools.manageApiCredentials.string">Manage API credentials</span>
+                </a>
+              </li>
+            }
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header" i18n="@@global.menu.reports.main.string">Reports</h6>
             <li>
               <a
                 id="memberReportLink"

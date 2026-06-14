@@ -197,6 +197,78 @@ public class UserServiceTest {
     }
 
     @Test
+    void testUpdateUserForMemberWithManageApiCredentialsEnabled() {
+        when(memberServiceClient.getMember(Mockito.anyString())).thenReturn(memberWithAMEnabled());
+        when(userRepository.save(Mockito.any(User.class))).thenAnswer(new Answer<User>() {
+            @Override
+            public User answer(InvocationOnMock invocation) throws Throwable {
+                return (User) invocation.getArgument(0);
+            }
+        });
+
+        User existing = new User();
+        existing.setId("id");
+        existing.setEmail("email@email.com");
+        existing.setMainContact(false);
+        existing.setManageApiCredsEnabled(false);
+
+        when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(existing));
+        when(userMapper.toUserDTO(Mockito.any(User.class))).thenReturn(new UserDTO());
+
+        UserDTO userDTO = getUserDTO();
+        userDTO.setId("id");
+        userDTO.setMainContact(false);
+        userDTO.setIsAdmin(false);
+        userDTO.setManageApiCredsEnabled(true);
+        userService.updateUser(userDTO);
+
+        Mockito.verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
+
+        User user = userCaptor.getValue();
+        assertEquals(userDTO.getFirstName(), user.getFirstName());
+        assertEquals(userDTO.getLastName(), user.getLastName());
+        assertEquals(userDTO.getEmail(), user.getEmail());
+        assertFalse(user.getAdmin());
+        assertTrue(user.getManageApiCredsEnabled());
+    }
+
+    @Test
+    void testUpdateUserForMemberWithManageApiCredentialsDisabled() {
+        when(memberServiceClient.getMember(Mockito.anyString())).thenReturn(memberWithAMEnabled());
+        when(userRepository.save(Mockito.any(User.class))).thenAnswer(new Answer<User>() {
+            @Override
+            public User answer(InvocationOnMock invocation) throws Throwable {
+                return (User) invocation.getArgument(0);
+            }
+        });
+
+        User existing = new User();
+        existing.setId("id");
+        existing.setEmail("email@email.com");
+        existing.setMainContact(false);
+        existing.setManageApiCredsEnabled(true);
+
+        when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(existing));
+        when(userMapper.toUserDTO(Mockito.any(User.class))).thenReturn(new UserDTO());
+
+        UserDTO userDTO = getUserDTO();
+        userDTO.setId("id");
+        userDTO.setMainContact(false);
+        userDTO.setIsAdmin(false);
+        userDTO.setManageApiCredsEnabled(false);
+        userService.updateUser(userDTO);
+
+        Mockito.verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
+
+        User user = userCaptor.getValue();
+        assertEquals(userDTO.getFirstName(), user.getFirstName());
+        assertEquals(userDTO.getLastName(), user.getLastName());
+        assertEquals(userDTO.getEmail(), user.getEmail());
+        assertFalse(user.getAdmin());
+        assertFalse(user.getManageApiCredsEnabled());
+    }
+
+    @Test
     void testUpdateUserForMemberWithoutAsserionsEnabled() {
         when(memberServiceClient.getMember(Mockito.anyString())).thenReturn(memberWithoutAMEnabled());
         when(userRepository.save(Mockito.any(User.class))).thenAnswer(new Answer<User>() {

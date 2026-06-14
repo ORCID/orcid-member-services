@@ -18,10 +18,12 @@ import { NavbarComponent } from './layout/navbar/navbar.component'
 import { AuthExpiredInterceptor } from './shared/interceptor/auth-expired.interceptor'
 import { HeaderInterceptor } from './shared/interceptor/header.interceptor'
 import { SharedModule } from './shared/shared.module'
+import { ApiCredentialsMfaEnabledDialogComponent } from './layout/navbar/api-credentials-mfa-enabled-dialog/api-credentials-mfa-enabled-dialog.component'
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent],
-  bootstrap: [AppComponent], imports: [BrowserModule,
+  declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent, ApiCredentialsMfaEnabledDialogComponent],
+  imports: [
+    BrowserModule,
     HomeModule,
     AccountModule,
     AppRoutingModule,
