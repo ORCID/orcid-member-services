@@ -42,3 +42,5 @@ application:
     holisticsAffiliationDashboardSecret: some-secret
     holisticsConsortiaMemberAffiliationsDashboardUrl: http://holistics.com/consortiaMember
     holisticsConsortiaMemberAffiliationsDashboardSecret: some-secret
+  cron:
+    syncSalesforceMembers: 0 0 0 * * *
