@@ -163,6 +163,7 @@ public class AssertionService {
 
         LOG.info("POSTing affiliations to orcid registry...");
         List<Assertion> assertionsToAdd = assertionRepository.findAllToCreateInOrcidRegistry(pageable);
+        LOG.info("Fetched {} assertions to create in orcid registry", assertionsToAdd.size());
         while (assertionsToAdd != null && !assertionsToAdd.isEmpty()) {
             for (Assertion assertion : assertionsToAdd) {
                 Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
@@ -174,6 +175,7 @@ public class AssertionService {
             }
             pageable = pageable.next();
             assertionsToAdd = assertionRepository.findAllToCreateInOrcidRegistry(pageable);
+            LOG.info("Fetched {} assertions to create in orcid registry", assertionsToAdd.size());
         }
         LOG.info("POSTing complete");
     }
