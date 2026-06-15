@@ -638,7 +638,6 @@ public class AssertionService {
             assertionRepository.save(a);
         });
 
-        orcidRecordService.deleteOrcidRecordByEmail(assertion.getEmail());
     }
 
     private String getMemberAssertionStatsCsv(Map<String, MemberAssertionStats> stats) throws IOException {
