@@ -12,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.client.match.MockRestRequestMatchers;
-import org.springframework.test.web.client.response.MockRestResponseCreators;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
 
@@ -33,6 +32,7 @@ class SalesforceClientTest {
 
     private final String MOCK_TOKEN = "mock-access-token-123";
     private final String BASE_URL = "https://api.salesforce.mock";
+    private final String LOGIN_URL = "https://login.salesforce.mock";
 
     @BeforeEach
     void setUp() {
@@ -47,12 +47,8 @@ class SalesforceClientTest {
         ReflectionTestUtils.setField(salesforceClient, "password", "test-pass");
         ReflectionTestUtils.setField(salesforceClient, "clientId", "test-client-id");
         ReflectionTestUtils.setField(salesforceClient, "clientSecret", "test-client-secret");
-        ReflectionTestUtils.setField(salesforceClient, "loginUrl", "https://login.salesforce.mock");
+        ReflectionTestUtils.setField(salesforceClient, "loginUrl", LOGIN_URL);
     }
-
-    // ==========================================
-    // SUCCESSFUL GET METHOD TESTS
-    // ==========================================
 
     @Test
     void getMemberDetails_shouldReturnData() {
@@ -115,6 +111,37 @@ class SalesforceClientTest {
     }
 
     @Test
+    void getMembers_shouldReturnData() {
+        expectTokenRequest();
+        expectQueryRequest("Active_Member__c", "{\"records\":[{\"Name\":\"Mock Member\"}]}");
+
+        String result = salesforceClient.getMembers();
+
+        assertNotNull(result);
+        assertTrue(result.contains("Mock Member"));
+        mockServer.verify();
+    }
+
+    @Test
+    void fetchDataFromUrl_shouldReturnData() {
+        expectTokenRequest();
+
+        String nextRecordsUrl = "/services/data/v60.0/query/01gD0000002huKiIAI-500";
+        String expectedFullUrl = LOGIN_URL + nextRecordsUrl;
+
+        mockServer.expect(requestTo(expectedFullUrl))
+                .andExpect(method(HttpMethod.GET))
+                .andExpect(header("Authorization", "Bearer " + MOCK_TOKEN))
+                .andRespond(withSuccess("{\"records\":[{\"Name\":\"Next Page Member\"}]}", MediaType.APPLICATION_JSON));
+
+        String result = salesforceClient.fetchDataFromUrl(nextRecordsUrl);
+
+        assertNotNull(result);
+        assertTrue(result.contains("Next Page Member"));
+        mockServer.verify();
+    }
+
+    @Test
     void getMetadata_shouldParseAndReturnMap() {
         expectTokenRequest();
 
@@ -129,10 +156,6 @@ class SalesforceClientTest {
         assertTrue(metadata.containsKey("fields"));
         mockServer.verify();
     }
-
-    // ==========================================
-    // SUCCESSFUL POST/PATCH TESTS
-    // ==========================================
 
     @Test
     void updatePublicMemberDetails_shouldPatchCorrectly() {
@@ -152,13 +175,11 @@ class SalesforceClientTest {
         mockServer.verify();
     }
 
-    // ==========================================
-    // RETRY & ERROR HANDLING TESTS
-    // ==========================================
-
     @Test
+    @SuppressWarnings("unchecked")
     void request_shouldRefreshTokenOnExceptionAndRetry() {
         AtomicReference<String> tokenRef = (AtomicReference<String>) ReflectionTestUtils.getField(salesforceClient, "accessToken");
+        assertNotNull(tokenRef);
         tokenRef.set("expired-token");
 
         // 1. Initial request fails with 401
@@ -197,9 +218,11 @@ class SalesforceClientTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     void get_403ForbiddenResponse_shouldThrowException() {
         // Setup initial token to bypass token creation block
         AtomicReference<String> tokenRef = (AtomicReference<String>) ReflectionTestUtils.getField(salesforceClient, "accessToken");
+        assertNotNull(tokenRef);
         tokenRef.set(MOCK_TOKEN);
 
         // Fail once, triggering a retry
@@ -259,7 +282,7 @@ class SalesforceClientTest {
     @Test
     void createAccessToken_failureShouldThrowRuntimeException() {
         // Simulate a failure reaching the login/token URL
-        mockServer.expect(MockRestRequestMatchers.requestTo("https://login.salesforce.mock/services/oauth2/token"))
+        mockServer.expect(MockRestRequestMatchers.requestTo(LOGIN_URL + "/services/oauth2/token"))
                 .andRespond(withServerError());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> salesforceClient.getMemberDetails("SF_123"));
@@ -267,13 +290,59 @@ class SalesforceClientTest {
         mockServer.verify();
     }
 
-    // ==========================================
-    // HELPER METHODS
-    // ==========================================
+    @Test
+    void fetchDataFromUrl_non2xxResponse_shouldReturnNull() {
+        expectTokenRequest();
+
+        String nextRecordsUrl = "/services/data/v60.0/query/01gD0000002huKiIAI-500";
+        String expectedFullUrl = LOGIN_URL + nextRecordsUrl;
+
+        // Simulate a 500 Internal Server Error
+        mockServer.expect(requestTo(expectedFullUrl))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withServerError().body("Internal Server Error"));
+
+        // The client catches non-auth RestClientResponseExceptions and returns null
+        String result = salesforceClient.fetchDataFromUrl(nextRecordsUrl);
+
+        assertNull(result);
+        mockServer.verify();
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void fetchDataFromUrl_401Unauthorized_shouldRetryAndReturnData() {
+        // Setup initial expired token
+        AtomicReference<String> tokenRef = (AtomicReference<String>) ReflectionTestUtils.getField(salesforceClient, "accessToken");
+        assertNotNull(tokenRef);
+        tokenRef.set("expired-token");
+
+        String nextRecordsUrl = "/services/data/v60.0/query/01gD0000002huKiIAI-500";
+        String expectedFullUrl = LOGIN_URL + nextRecordsUrl;
+
+        // 1. Initial request fails with 401
+        mockServer.expect(requestTo(expectedFullUrl))
+                .andExpect(header("Authorization", "Bearer expired-token"))
+                .andRespond(withUnauthorizedRequest());
+
+        // 2. Automatically requests new token
+        expectTokenRequest();
+
+        // 3. Retries original request with new token
+        mockServer.expect(requestTo(expectedFullUrl))
+                .andExpect(header("Authorization", "Bearer " + MOCK_TOKEN))
+                .andRespond(withSuccess("{\"records\":[{\"Name\":\"Next Page Member\"}]}", MediaType.APPLICATION_JSON));
+
+        String result = salesforceClient.fetchDataFromUrl(nextRecordsUrl);
+
+        assertNotNull(result);
+        assertTrue(result.contains("Next Page Member"));
+        mockServer.verify();
+    }
 
     private void expectTokenRequest() {
         String tokenResponse = String.format("{\"access_token\":\"%s\"}", MOCK_TOKEN);
-        mockServer.expect(MockRestRequestMatchers.requestTo("https://login.salesforce.mock/services/oauth2/token"))
+        mockServer.expect(MockRestRequestMatchers.requestTo(LOGIN_URL + "/services/oauth2/token"))
                 .andExpect(method(HttpMethod.POST))
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_FORM_URLENCODED))
                 .andRespond(withSuccess(tokenResponse, MediaType.APPLICATION_JSON));

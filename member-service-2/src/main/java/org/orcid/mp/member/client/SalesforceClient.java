@@ -77,6 +77,15 @@ public class SalesforceClient {
         request(() -> updateSFPublicMemberDetails(memberUpdateData));
     }
 
+    public String getMembers() {
+        return request(() -> getSFMembers());
+    }
+
+    public String fetchDataFromUrl(String nextRecordsUrl) {
+        LOG.debug("Fetching paginated data from salesforce url: {}", nextRecordsUrl);
+        return request(() -> getSFDataFromUrl(nextRecordsUrl));
+    }
+
     private Boolean updateSFPublicMemberDetails(MemberUpdateData memberUpdateData) {
         String salesforceId = memberUpdateData.getSalesforceId();
         Map<String, Object> data = getDataMapForUpdate(memberUpdateData);
@@ -96,6 +105,29 @@ public class SalesforceClient {
 
     public Map<String, Object> getMetadata() {
         return request(() -> getSFMetadata());
+    }
+
+    private String getSFDataFromUrl(String nextRecordsUrl) {
+        String fullUrl = loginUrl + nextRecordsUrl;
+
+        LOG.debug("Sending salesforce GET request for next page: {}", fullUrl);
+        try {
+            ResponseEntity<String> response = restClient.get().uri(fullUrl)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken.get()))
+                    .retrieve()
+                    .toEntity(String.class);
+            return response.getBody();
+        } catch (RestClientResponseException ex) {
+            if (ex.getStatusCode().value() == 401 || ex.getStatusCode().value() == 403) {
+                throw ex;
+            }
+
+            LOG.warn("Received non-2xx response from salesforce paginated query to {}", fullUrl, ex);
+            LOG.info("Response code is {}", ex.getStatusCode());
+            LOG.info("Response body is {}", ex.getResponseBodyAsString());
+            return null;
+        }
     }
 
     private Map<String, Object> getDataMapForUpdate(MemberUpdateData memberData) {
@@ -149,8 +181,8 @@ public class SalesforceClient {
     private String getSFMemberDetails(String salesforceId) {
         String query = String.format(
                 "SELECT Account.Id, Account.Consortium_Lead__c, Account.OwnerId, Account.Name, Account.Public_Display_Name__c, Account.Website, Account.BillingCountry, Account.Research_Community__c, Account.Consortia_Member__c, RecordTypeId, "
-                        + "Account.Public_Display_Description__c, Account.Logo_Description__c, Account.Public_Display_Email__c, Account.Last_membership_start_date__c, Account.Last_membership_end_date__c, Account.Trademark_License__c, Account.BillingAddress FROM Account "
-                        + "WHERE Active_Member__c=TRUE AND Account.Id = '%s'",
+                        + "Account.Public_Display_Description__c, Account.Logo_Description__c, Account.Public_Display_Email__c, Account.Last_membership_start_date__c, Account.Last_membership_end_date__c, Account.Trademark_License__c, Account.BillingAddress, Account.Active_Member__c FROM Account "
+                        + "WHERE Account.Id = '%s'",
                 salesforceId);
         return query(query);
     }
@@ -179,6 +211,13 @@ public class SalesforceClient {
         String query = String.format(
                 "SELECT Identifier_Type__c, Name FROM Organization_Identifier__c WHERE (Identifier_Type__c = 'Ringgold ID' OR Identifier_Type__c = 'FundRef ID' OR Identifier_Type__c = 'GRID' OR Identifier_Type__c = 'ROR') AND Organization__c = '%s'",
                 salesforceId);
+        return query(query);
+    }
+
+    private String getSFMembers() {
+        String query = "SELECT Account.Id, Account.Consortium_Lead__c, Account.OwnerId, Account.Name, Account.Public_Display_Name__c, Account.Website, Account.BillingCountry, Account.Research_Community__c, Account.Consortia_Member__c, RecordTypeId, "
+                + "Account.Public_Display_Description__c, Account.Logo_Description__c, Account.Public_Display_Email__c, Account.Last_membership_start_date__c, Account.Last_membership_end_date__c, Account.Active_Member__c FROM Account "
+                + "WHERE Active_Member__c=TRUE";
         return query(query);
     }
 
