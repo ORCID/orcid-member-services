@@ -542,7 +542,7 @@ class AssertionServiceTest {
         Assertion assertion = assertionCaptor.getValue();
         assertThat(assertion.getStatus()).isEqualTo(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name());
         Mockito.verify(assertionRepository, Mockito.times(2)).findAllToCreateInOrcidRegistry(pageableCaptor.capture());
-        Mockito.verify(orcidRecordService).deleteOrcidRecordByEmail(Mockito.eq("1@email.com"));
+        Mockito.verify(orcidRecordService, Mockito.never()).deleteOrcidRecordByEmail(Mockito.anyString());
     }
 
     @Test
@@ -569,7 +569,7 @@ class AssertionServiceTest {
         Assertion assertion = assertionCaptor.getValue();
         assertThat(assertion.getStatus()).isEqualTo(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name());
         Mockito.verify(assertionRepository, Mockito.times(2)).findAllToCreateInOrcidRegistry(pageableCaptor.capture());
-        Mockito.verify(orcidRecordService).deleteOrcidRecordByEmail(Mockito.eq("1@email.com"));
+        Mockito.verify(orcidRecordService, Mockito.never()).deleteOrcidRecordByEmail(Mockito.anyString());
     }
 
     @Test
@@ -756,7 +756,7 @@ class AssertionServiceTest {
         Mockito.verify(assertionRepository).save(assertionCaptor.capture());
         Assertion assertion = assertionCaptor.getValue();
         assertThat(assertion.getStatus()).isEqualTo(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name());
-        Mockito.verify(orcidRecordService).deleteOrcidRecordByEmail(Mockito.eq("1@email.com"));
+        Mockito.verify(orcidRecordService, Mockito.never()).deleteOrcidRecordByEmail(Mockito.anyString());
     }
 
     @Test
@@ -782,7 +782,41 @@ class AssertionServiceTest {
         Mockito.verify(assertionRepository).save(assertionCaptor.capture());
         Assertion assertion = assertionCaptor.getValue();
         assertThat(assertion.getStatus()).isEqualTo(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name());
-        Mockito.verify(orcidRecordService).deleteOrcidRecordByEmail(Mockito.eq("1@email.com"));
+        Mockito.verify(orcidRecordService, Mockito.never()).deleteOrcidRecordByEmail(Mockito.anyString());
+    }
+
+    @Test
+    void testHandleDeactivatedOrDeprecatedPreservesOrcidRecord() throws DeactivatedException, JAXBException {
+        Assertion assertionA = getAssertionWithEmail("test@orcid.org");
+        assertionA.setId("assertion-A");
+        assertionA.setMemberId("member-A");
+        Assertion assertionB = getAssertionWithEmail("test@orcid.org");
+        assertionB.setId("assertion-B");
+        assertionB.setMemberId("member-B");
+        List<Assertion> assertions = Arrays.asList(assertionA, assertionB);
+        OrcidRecord orcidRecord = getOrcidRecord("test");
+        orcidRecord.setTokens(List.of(new OrcidToken("member-A", "idToken-test")));
+
+        Mockito.when(assertionRepository.findByEmail("test@orcid.org")).thenReturn(assertions);
+        Mockito.when(orcidRecordService.findByEmail("test@orcid.org"))
+                .thenReturn(Optional.of(orcidRecord));
+        Mockito.when(orcidApiClient.exchangeToken(anyString(), anyString()))
+                .thenThrow(new DeactivatedException());
+        Mockito.when(assertionRepository.findAllToCreateInOrcidRegistry(Mockito.any(Pageable.class)))
+                .thenReturn(List.of(assertionA))
+                .thenReturn(new ArrayList<>());
+        Mockito.when(assertionRepository.findById(Mockito.anyString()))
+                .thenReturn(Optional.of(assertionA));
+
+        assertionService.postAssertionsToOrcid();
+
+        Mockito.verify(assertionRepository, Mockito.times(2)).save(assertionCaptor.capture());
+        List<Assertion> saved = assertionCaptor.getAllValues();
+        for (Assertion a : saved) {
+            assertThat(a.getStatus()).isEqualTo(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name());
+        }
+
+        Mockito.verify(orcidRecordService, Mockito.never()).deleteOrcidRecordByEmail(Mockito.anyString());
     }
 
     @Test
