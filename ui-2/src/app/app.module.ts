@@ -22,6 +22,7 @@ import { ApiCredentialsMfaEnabledDialogComponent } from './layout/navbar/api-cre
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent, ApiCredentialsMfaEnabledDialogComponent],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     HomeModule,
