@@ -1,5 +1,6 @@
 package org.orcid.mp.member.cron;
 
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.orcid.mp.member.service.SalesforceService;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import java.io.IOException;
 
 @Component
 @EnableScheduling
+@EnableSchedulerLock(defaultLockAtMostFor = "45m")
 public class ScheduledJobsManager {
 
     @Autowired
