@@ -166,6 +166,7 @@ public class AssertionService {
         LOG.info("Fetched {} assertions to create in orcid registry", assertionsToAdd.size());
         while (assertionsToAdd != null && !assertionsToAdd.isEmpty()) {
             for (Assertion assertion : assertionsToAdd) {
+                LOG.debug("Refreshing assertion {} before POST", assertion.getId());
                 Assertion refreshed = assertionRepository.findById(assertion.getId()).get();
                 try {
                     postAssertionToOrcid(refreshed);
@@ -185,17 +186,22 @@ public class AssertionService {
         AssertionStatus deniedStatus = checkForTokenDeniedStatus(record, assertion);
 
         if (deniedStatus != null) {
+            LOG.debug("Not POSTing assertion {} to registry due to denied status {}", assertion.getId(), deniedStatus.name());
             assertion.setStatus(deniedStatus.name());
             assertionRepository.save(assertion);
         } else {
+            LOG.debug("POSTing assertion {} to registry", assertion.getId());
             OrcidRecord orcidRecord = record.get();
             String idToken = orcidRecord.getToken(assertion.getMemberId(), false);
             String orcid = orcidRecord.getOrcid();
+
+            LOG.debug("Found ID token and orcid id");
             Instant now = Instant.now();
             assertion.setLastSyncAttempt(now);
 
             try {
                 String putCode = postToOrcidRegistry(orcid, assertion, idToken);
+                LOG.debug("POSTed assertion {} to registry, put code {}", assertion.getId(), putCode);
                 markCreatedInOrcid(assertion, putCode, now);
             } catch (OrcidAPIException oae) {
                 LOG.info("Recieved orcid api exception");

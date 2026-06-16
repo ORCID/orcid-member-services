@@ -1,5 +1,6 @@
 package org.orcid.mp.assertion.cron;
 
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.orcid.mp.assertion.service.AssertionService;
 import org.orcid.mp.assertion.service.CsvReportService;
@@ -17,6 +18,7 @@ import java.io.IOException;
 
 @Component
 @EnableScheduling
+@EnableSchedulerLock(defaultLockAtMostFor = "15m")
 public class ScheduledJobsManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScheduledJobsManager.class);
