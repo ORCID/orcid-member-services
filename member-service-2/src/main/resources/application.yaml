@@ -72,3 +72,4 @@ application:
     holisticsConsortiaMemberAffiliationsDashboardSecret: ${APPLICATION_REPORTS_CONSORTIA_MEMBER_AFFILIATION_DASHBOARD_SECRET}
   cron:
     syncSalesforceMembers: ${APPLICATION_CRON_SF_SYNC:0 0 0 * * ?}
+    enabled: ${ENABLE_SCHEDULER:true}

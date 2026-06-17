@@ -98,6 +98,7 @@ application:
     syncAffiliationsDelay: ${APPLICATION_SYNC_AFFILIATIONS_DELAY}
     sendPermissionLinkNotificationsDelay: 120000
     resendNotificationsCron: ${APPLICATION_RESEND_NOTIFICATION_CRON}
+    enabled: ${ENABLE_SCHEDULER:true}
   jwt:
     signatureUrl: ${APPLICATION_JWT_SIGNATURE_URL}
   encrypt:
