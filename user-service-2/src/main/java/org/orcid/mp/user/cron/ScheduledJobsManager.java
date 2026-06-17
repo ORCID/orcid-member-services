@@ -1,5 +1,6 @@
 package org.orcid.mp.user.cron;
 
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.orcid.mp.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +13,10 @@ import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 
 @Component
 @EnableScheduling
-public class UserScheduledTasks {
+@EnableSchedulerLock(defaultLockAtMostFor = "15m")
+public class ScheduledJobsManager {
 
-    private final Logger log = LoggerFactory.getLogger(UserScheduledTasks.class);
+    private final Logger log = LoggerFactory.getLogger(ScheduledJobsManager.class);
 
     @Autowired
     private UserService userService;
