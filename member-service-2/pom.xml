@@ -100,7 +100,7 @@
 		<dependency>
 			<groupId>net.javacrumbs.shedlock</groupId>
 			<artifactId>shedlock-provider-mongo</artifactId>
-			<version>4.24.0</version>
+			<version>5.13.0</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.mongodb</groupId>
@@ -111,7 +111,7 @@
 		<dependency>
 			<groupId>net.javacrumbs.shedlock</groupId>
 			<artifactId>shedlock-spring</artifactId>
-			<version>4.24.0</version>
+			<version>5.13.0</version>
 		</dependency>
 	</dependencies>
 
