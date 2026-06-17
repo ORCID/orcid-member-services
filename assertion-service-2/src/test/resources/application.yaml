@@ -66,6 +66,7 @@ application:
     syncAffiliationsDelay: 3
     sendPermissionLinkNotificationsDelay: 3
     resendNotificationsCron: '0 30 * * * ?'
+    enabled: true
   jwt:
     signatureUrl: http://some/url
   encrypt:

@@ -54,3 +54,5 @@ application:
       private-key: classpath:devcerts/private_key.pem
       public-key: classpath:devcerts/public.pem
       key-id: prod-key-id-v1
+  cron:
+    enabled: true

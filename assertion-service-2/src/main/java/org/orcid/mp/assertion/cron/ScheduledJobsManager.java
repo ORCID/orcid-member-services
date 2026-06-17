@@ -9,6 +9,7 @@ import org.orcid.mp.assertion.service.StoredFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -35,9 +36,16 @@ public class ScheduledJobsManager {
     @Autowired
     private NotificationService notificationService;
 
+    @Value("${application.cron.enabled}")
+    private boolean schedulingEnabled;
+
     @Scheduled(initialDelay = 90000, fixedDelayString = "${application.cron.syncAffiliationsDelay}")
     @SchedulerLock(name = "syncAffiliations", lockAtMostFor = "20m", lockAtLeastFor = "2m")
     public void syncAffiliations() throws JAXBException {
+        if (!schedulingEnabled) {
+            LOG.debug("Scheduling is disabled, skipping syncAffiliations");
+            return;
+        }
         LOG.info("Running cron to sync assertions with registry");
         assertionService.postAssertionsToOrcid();
         assertionService.putAssertionsInOrcid();
@@ -47,6 +55,10 @@ public class ScheduledJobsManager {
     @Scheduled(cron = "${application.cron.generateMemberAssertionStatsCron}")
     @SchedulerLock(name = "generateMemberAssertionStats", lockAtMostFor = "60m", lockAtLeastFor = "10m")
     public void generateMemberAssertionStats() throws IOException {
+        if (!schedulingEnabled) {
+            LOG.debug("Scheduling is disabled, skipping generateMemberAssertionStats");
+            return;
+        }
         LOG.info("Running cron to generate member assertion stats");
         assertionService.generateAndSendMemberAssertionStats();
         LOG.info("Stats generation complete");
@@ -55,6 +67,10 @@ public class ScheduledJobsManager {
     @Scheduled(initialDelay = 90000, fixedDelayString = "${application.cron.processAssertionUploadsDelay}")
     @SchedulerLock(name = "processAssertionUploads", lockAtMostFor = "60m", lockAtLeastFor = "2m")
     public void processAssertionUploads() throws IOException {
+        if (!schedulingEnabled) {
+            LOG.debug("Scheduling is disabled, skipping processAssertionUploads");
+            return;
+        }
         LOG.info("Running cron to process assertion uploads");
         assertionService.processAssertionUploads();
         LOG.info("Assertion uploads processed");
@@ -63,6 +79,10 @@ public class ScheduledJobsManager {
     @Scheduled(initialDelay = 90000, fixedDelayString = "${application.cron.removeStoredFilesDelay}")
     @SchedulerLock(name = "removeStoredFiles", lockAtMostFor = "60m", lockAtLeastFor = "2m")
     public void removeStoredFiles() throws IOException {
+        if (!schedulingEnabled) {
+            LOG.debug("Scheduling is disabled, skipping removeStoredFiles");
+            return;
+        }
         LOG.info("Running cron to remove old files");
         storedFileService.removeStoredFiles();
         LOG.info("Old files removed");
@@ -71,6 +91,10 @@ public class ScheduledJobsManager {
     @Scheduled(initialDelay = 90000, fixedDelayString = "${application.cron.processCsvReportsDelay}")
     @SchedulerLock(name = "processCsvReports", lockAtMostFor = "60m", lockAtLeastFor = "2m")
     public void sendCSVReports() throws IOException {
+        if (!schedulingEnabled) {
+            LOG.debug("Scheduling is disabled, skipping processCsvReports");
+            return;
+        }
         LOG.info("Running cron to process CSV reports");
         csvReportService.processCsvReports();
         LOG.info("CSV reports processed");
@@ -79,6 +103,10 @@ public class ScheduledJobsManager {
     @Scheduled(initialDelay = 90000, fixedDelayString = "${application.cron.sendPermissionLinkNotificationsDelay}")
     @SchedulerLock(name = "sendPermissionLinkNotifications", lockAtMostFor = "60m", lockAtLeastFor = "2m")
     public void sendPermissionLinkNotifications() throws IOException {
+        if (!schedulingEnabled) {
+            LOG.debug("Scheduling is disabled, skipping sendPermissionLinkNotifications");
+            return;
+        }
         LOG.info("Running cron to send permission link notifications");
         notificationService.sendPermissionLinkNotifications();
         LOG.info("Permission link notifications sent");
@@ -87,6 +115,10 @@ public class ScheduledJobsManager {
     @Scheduled(cron = "${application.cron.resendNotificationsCron}")
     @SchedulerLock(name = "resendNotifications", lockAtMostFor = "60m", lockAtLeastFor = "10m")
     public void resendNotifications() throws IOException {
+        if (!schedulingEnabled) {
+            LOG.debug("Scheduling is disabled, skipping resendNotifications");
+            return;
+        }
         LOG.info("Running cron to resend notifications");
         notificationService.resendNotifications();
         LOG.info("Notifications resent");

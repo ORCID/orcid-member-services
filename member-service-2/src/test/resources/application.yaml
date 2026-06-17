@@ -44,3 +44,4 @@ application:
     holisticsConsortiaMemberAffiliationsDashboardSecret: some-secret
   cron:
     syncSalesforceMembers: 0 0 0 * * *
+    enabled: true

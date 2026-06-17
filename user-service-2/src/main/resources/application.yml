@@ -98,3 +98,5 @@ application:
       private-key: ${APPLICATION_SECURITY_JWT_PRIVATE_KEY}
       public-key: ${APPLICATION_SECURITY_JWT_PUBLIC_KEY}
       key-id: ${APPLICATION_SECURITY_JWT_KEY_ID}
+  cron:
+    enabled: ${ENABLE_SCHEDULER:true}
