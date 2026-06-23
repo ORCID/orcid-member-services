@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
 import { HomeComponent } from './home.component'
 import { AccountService } from '../account'
@@ -45,6 +46,7 @@ describe('HomeComponent', () => {
     TestBed.configureTestingModule({
     declarations: [HomeComponent],
     imports: [],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: OidcSecurityService, useValue: mockOidcSecurityService },

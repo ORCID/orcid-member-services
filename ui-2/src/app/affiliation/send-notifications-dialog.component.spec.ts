@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
 import { SendNotificationsDialogComponent } from './send-notifications-dialog.component'
 import { NotificationService } from './service/notification.service'
@@ -42,6 +43,7 @@ describe('SendNotificationsDialogComponent', () => {
     TestBed.configureTestingModule({
     declarations: [SendNotificationsDialogComponent],
     imports: [],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
         FormBuilder,
         NgbModal,

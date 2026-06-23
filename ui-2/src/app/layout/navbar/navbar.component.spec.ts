@@ -25,6 +25,8 @@ describe('NavbarComponent', () => {
   let featureToggleService: jasmine.SpyObj<FeatureToggleService>
 
   beforeEach(() => {
+    spyOn(console, 'warn').and.stub()
+
     const featureToggleSpy = jasmine.createSpyObj('FeatureToggleService', ['isEnabled', 'initFeatures']);
     featureToggleSpy.initFeatures.and.returnValue(of(null));
     const loginServiceSpy = jasmine.createSpyObj('LoginService', ['login', 'logout'])

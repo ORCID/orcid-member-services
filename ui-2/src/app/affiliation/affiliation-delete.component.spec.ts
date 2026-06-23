@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
 import { AffiliationDeleteDialogComponent, AffiliationDeletePopupComponent } from './affiliation-delete.component'
 import { RouterTestingModule } from '@angular/router/testing'
@@ -23,6 +24,7 @@ describe('AffiliationDeleteComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AffiliationDeleteDialogComponent],
       imports: [RouterTestingModule],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         NgbModal,
         NgbActiveModal,

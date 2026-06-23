@@ -12,7 +12,7 @@ export class OidcSecurityServiceMock {
   }
 
   authorize() {
-    console.log('Mock authorize called')
+    // No-op for tests.
   }
 
   logoff() {

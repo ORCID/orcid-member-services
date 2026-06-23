@@ -17,6 +17,8 @@ describe('LandingPageComponent', () => {
   let route: ActivatedRoute
 
   beforeEach(() => {
+    spyOn(console, 'error').and.stub()
+
     TestBed.configureTestingModule({
     declarations: [LandingPageComponent],
     imports: [],

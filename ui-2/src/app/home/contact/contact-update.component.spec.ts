@@ -21,6 +21,8 @@ describe('ContactUpdateComponent', () => {
   let router: jasmine.SpyObj<Router>
 
   beforeEach(() => {
+    spyOn(console, 'error').and.stub()
+
     memberServiceSpy = jasmine.createSpyObj('MemberService', ['find', 'getMemberData', 'updateContact', 'setManagedMember'])
     accountServiceSpy = jasmine.createSpyObj('AccountService', ['getAccountData'])
     alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])

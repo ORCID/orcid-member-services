@@ -62,12 +62,10 @@ export class MemberInfoComponent implements OnInit, OnDestroy {
               const childId = params['id']
 
               if (childId) {
-                console.log('Fetching member data for managed member ', childId)
                 this.managedMember = childId
                 this.memberService.setManagedMember(childId)
                 return this.memberService.getMemberData(childId)
               } else {
-                console.log('Fetching member data for non managed member ', account.memberId)
                 this.managedMember = undefined
                 this.memberService.setManagedMember(null)
                 return this.memberService.getMemberData(account.memberId)
@@ -79,7 +77,6 @@ export class MemberInfoComponent implements OnInit, OnDestroy {
       )
       .subscribe((data) => {
         this.memberData = data
-        // console.log('Member Data successfully loaded:', data)
       })
   }
 

@@ -53,8 +53,6 @@ export class SendNotificationsDialogComponent implements OnInit {
   }
 
   send() {
-    console.log('this.language is ', this.language)
-
     this.notificationService.requestInProgress().subscribe((res: any) => {
       if (res.inProgress) {
         this.requestAlreadyInProgress = true

@@ -22,6 +22,8 @@ describe('AddConsortiumMemberComponent', () => {
   let router: jasmine.SpyObj<Router>
 
   beforeEach(() => {
+    spyOn(console, 'error').and.stub()
+
     memberServiceSpy = jasmine.createSpyObj('MemberService', ['addConsortiumMember', 'getMemberData', 'getCountries'])
     accountServiceSpy = jasmine.createSpyObj('AccountService', ['getAccountData'])
     alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])

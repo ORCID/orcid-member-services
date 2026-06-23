@@ -24,7 +24,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated }) => {
       if (isAuthenticated) {
-        console.log('home component fetching account data...')
         this.accountServiceSubscription = this.accountService.getAccountData().subscribe((account) => {
           this.account = account
           if (account) {

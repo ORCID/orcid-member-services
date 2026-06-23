@@ -179,8 +179,6 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
       })
       this.editForm!.markAllAsTouched()
     } else {
-      console.log('form valid')
-
       this.invalidForm = false
       this.isSaving = true
       const contact = this.createContactFromForm()

@@ -131,7 +131,6 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
 
     const redirect = this.stateStorageService.getUrl()
     if (redirect) {
-      console.log('Redirecting to stored url after login:', redirect)
       this.stateStorageService.storeUrl(null)
       this.router.navigateByUrl(redirect)
     }

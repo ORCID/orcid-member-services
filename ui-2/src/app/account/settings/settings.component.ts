@@ -125,7 +125,7 @@ export class SettingsComponent implements OnInit {
               this.mfaSetup = res
             })
           },
-          error: (err) => console.log('error disabling mfa'),
+          error: (err) => console.error('error disabling mfa', err),
         })
       }
     }

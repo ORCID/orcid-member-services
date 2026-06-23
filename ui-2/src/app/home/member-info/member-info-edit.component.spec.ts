@@ -1,8 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { RouterTestingModule } from '@angular/router/testing'
+import { QuillModule } from 'ngx-quill'
 import { of } from 'rxjs'
 import { AccountService } from 'src/app/account'
 import { IAccount } from 'src/app/account/model/account.model'
@@ -21,6 +23,8 @@ describe('MemberInfoEditComponent', () => {
   let activatedRoute: jasmine.SpyObj<ActivatedRoute>
 
   beforeEach(() => {
+    spyOn(console, 'error').and.stub()
+
     const accountServiceSpy = jasmine.createSpyObj('AccountService', ['getAccountData'])
     const memberServiceSpy = jasmine.createSpyObj('MemberService', [
       'getMemberData',
@@ -30,7 +34,7 @@ describe('MemberInfoEditComponent', () => {
       'setMemberData',
     ])
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
+      imports: [ReactiveFormsModule, RouterTestingModule.withRoutes([]), QuillModule.forRoot()],
       providers: [
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },

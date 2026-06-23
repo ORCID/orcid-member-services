@@ -22,6 +22,8 @@ describe('RemoveConsortiumMemberComponent', () => {
   let router: jasmine.SpyObj<Router>
 
   beforeEach(() => {
+    spyOn(console, 'error').and.stub()
+
     memberServiceSpy = jasmine.createSpyObj('MemberService', ['removeConsortiumMember', 'getMemberData'])
     accountServiceSpy = jasmine.createSpyObj('AccountService', ['getAccountData'])
     alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])

@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
@@ -22,6 +23,7 @@ describe('AffiliationImportDialogComponent', () => {
     TestBed.configureTestingModule({
     declarations: [AffiliationImportDialogComponent],
     imports: [],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [
         FormBuilder,
         NgbModal,

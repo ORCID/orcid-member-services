@@ -26,7 +26,6 @@ export class AccountService {
 
   constructor() {
     this.http.get('/userservice/account/releaseVersion', { responseType: 'text' }).subscribe((version) => {
-      console.log('setting release to ', version)
       this.releaseVersion = version
     })
   }
