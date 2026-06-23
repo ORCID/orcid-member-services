@@ -8,6 +8,14 @@ import { of, throwError } from 'rxjs'
 import { ActivationComponent } from './activation.component'
 import { ActivationService } from './activation.service'
 
+type ActivationInternals = {
+  success: boolean
+  error: boolean
+}
+
+const internals = (component: ActivationComponent): ActivationInternals =>
+  component as unknown as ActivationInternals
+
 describe('ActivationComponent', () => {
   let component: ActivationComponent
   let fixture: ComponentFixture<ActivationComponent>
@@ -37,16 +45,16 @@ describe('ActivationComponent', () => {
   it('non-error response from server when sending key should indicate success', () => {
     activationServiceSpy.get.and.returnValue(of({}))
     component.ngOnInit()
-    expect((component as any).success).toBeTruthy()
-    expect((component as any).error).toBeFalsy()
+    expect(internals(component).success).toBeTruthy()
+    expect(internals(component).error).toBeFalsy()
   })
 
   it('error response from server when sending key should indicate failure', () => {
     activationServiceSpy.get.and.returnValue(throwError(() => new Error('error')))
     component.ngOnInit()
 
-    expect((component as any).success).toBeFalsy()
-    expect((component as any).error).toBeTruthy()
+    expect(internals(component).success).toBeFalsy()
+    expect(internals(component).error).toBeTruthy()
   })
 })
 

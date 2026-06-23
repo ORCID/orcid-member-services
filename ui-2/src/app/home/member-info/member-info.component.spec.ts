@@ -6,13 +6,22 @@ import { MemberInfoComponent } from './member-info.component'
 import { AccountService } from 'src/app/account'
 import { MemberService } from 'src/app/member/service/member.service'
 import { RouterModule } from '@angular/router'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { CUSTOM_ELEMENTS_SCHEMA, WritableSignal } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { of } from 'rxjs'
 import { IAccount } from 'src/app/account/model/account.model'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import { ISFMemberData } from 'src/app/member/model/salesforce-member-data.model'
+
+type MemberInfoInternals = {
+  managedMember: WritableSignal<string | null | undefined>
+  memberData: WritableSignal<ISFMemberData | undefined | null>
+}
+
+const internals = (component: MemberInfoComponent): MemberInfoInternals =>
+  component as unknown as MemberInfoInternals
 
 describe('MemberInfoComponent', () => {
   let component: MemberInfoComponent
@@ -79,9 +88,9 @@ describe('MemberInfoComponent', () => {
 
     expect(accountService.getAccountData).toHaveBeenCalled()
     expect(memberService.setManagedMember).toHaveBeenCalledTimes(0)
-    expect((component as any).managedMember()).toBeUndefined()
+    expect(internals(component).managedMember()).toBeUndefined()
     expect(memberService.getMemberData).toHaveBeenCalledTimes(0)
-    expect((component as any).memberData()).toBeNull()
+    expect(internals(component).memberData()).toBeNull()
   })
 
   it('should call the member service while managing a member', () => {
@@ -148,19 +157,32 @@ describe('MemberInfoComponent', () => {
     memberService.getMemberData.and.returnValue(of({}))
     fixture.detectChanges()
 
-    expect((component as any).memberData()).toBeDefined()
-    expect((component as any).memberData()!.website).toBeUndefined()
+    const websiteInput = fixture.nativeElement.querySelector('input[name="website"]') as HTMLInputElement
+
+    expect(websiteInput.value).toBe('')
 
     component.validateUrl()
-    expect((component as any).memberData()!.website).toBeUndefined()
-    ;(component as any).memberData.set({ ...(component as any).memberData(), website: 'example' })
+    expect(websiteInput.value).toBe('')
+
+    websiteInput.value = 'example'
+    websiteInput.dispatchEvent(new Event('input'))
+    fixture.detectChanges()
     component.validateUrl()
-    expect((component as any).memberData()!.website).toEqual('http://example')
-    ;(component as any).memberData.set({ ...(component as any).memberData(), website: 'example.com' })
+    fixture.detectChanges()
+    expect(websiteInput.value).toEqual('http://example')
+
+    websiteInput.value = 'example.com'
+    websiteInput.dispatchEvent(new Event('input'))
+    fixture.detectChanges()
     component.validateUrl()
-    expect((component as any).memberData()!.website).toEqual('http://example.com')
-    ;(component as any).memberData.set({ ...(component as any).memberData(), website: 'https://example.com' })
+    fixture.detectChanges()
+    expect(websiteInput.value).toEqual('http://example.com')
+
+    websiteInput.value = 'https://example.com'
+    websiteInput.dispatchEvent(new Event('input'))
+    fixture.detectChanges()
     component.validateUrl()
-    expect((component as any).memberData()!.website).toEqual('https://example.com')
+    fixture.detectChanges()
+    expect(websiteInput.value).toEqual('https://example.com')
   })
 })

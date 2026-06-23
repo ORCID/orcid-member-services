@@ -32,7 +32,7 @@ describe('FooterComponent', () => {
     fixture.detectChanges()
     const copyright = fixture.debugElement.query(By.css('.copyright'))
     expect(copyright).toBeTruthy()
-    expect(copyright.nativeElement.textContent).toContain((component as any).currentYear.toString())
+    expect(copyright.nativeElement.textContent).toContain(new Date().getFullYear().toString())
   })
 
   it('should expose an accessible label on the ORCID home link', () => {

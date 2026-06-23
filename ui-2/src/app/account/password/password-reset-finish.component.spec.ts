@@ -9,6 +9,14 @@ import { of, throwError } from 'rxjs'
 import { PasswordService } from '../service/password.service'
 import { PasswordResetFinishComponent } from './password-reset-finish.component'
 
+type PasswordResetFinishInternals = {
+  success: () => string
+  error: () => string
+}
+
+const internals = (component: PasswordResetFinishComponent): PasswordResetFinishInternals =>
+  component as unknown as PasswordResetFinishInternals
+
 describe('PasswordResetFinishComponent', () => {
   let component: PasswordResetFinishComponent
   let fixture: ComponentFixture<PasswordResetFinishComponent>
@@ -42,13 +50,13 @@ describe('PasswordResetFinishComponent', () => {
   it('password should save successfully', () => {
     service.savePassword.and.returnValue(of(true))
     component.finishReset()
-    expect((component as any).success()).toEqual('OK')
+    expect(internals(component).success()).toEqual('OK')
   })
 
   it('password save should fail', () => {
     service.savePassword.and.returnValue(throwError(() => new Error('error')))
     component.finishReset()
-    expect((component as any).error()).toEqual('ERROR')
-    expect((component as any).success()).toBeFalsy()
+    expect(internals(component).error()).toEqual('ERROR')
+    expect(internals(component).success()).toBeFalsy()
   })
 })

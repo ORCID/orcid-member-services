@@ -10,6 +10,13 @@ import { EventService } from '../shared/service/event.service'
 import { FileUploadService } from '../shared/service/file-upload.service'
 import { AffiliationImportDialogComponent } from './affiliation-import-dialog.component'
 
+type AffiliationImportDialogInternals = {
+  currentFile: { set: (value: FileList) => void }
+}
+
+const internals = (component: AffiliationImportDialogComponent): AffiliationImportDialogInternals =>
+  component as unknown as AffiliationImportDialogInternals
+
 describe('AffiliationImportDialogComponent', () => {
   let component: AffiliationImportDialogComponent
   let fixture: ComponentFixture<AffiliationImportDialogComponent>
@@ -46,7 +53,7 @@ describe('AffiliationImportDialogComponent', () => {
   })
 
   it('should call upload service', () => {
-    (component as any).currentFile.set(getFileList())
+    internals(component).currentFile.set(getFileList())
     uploadService.uploadFile.and.returnValue(EMPTY)
     component.upload()
     expect(uploadService.uploadFile).toHaveBeenCalled()

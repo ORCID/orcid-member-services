@@ -1,5 +1,6 @@
 /// <reference types="jasmine" />
 
+import { WritableSignal } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
@@ -9,9 +10,19 @@ import { RouterModule } from '@angular/router'
 import { of } from 'rxjs'
 import { AccountService } from 'src/app/account'
 import { AlertType } from 'src/app/app.constants'
+import { ISFMemberContact } from 'src/app/member/model/salesforce-member-contact.model'
+import { ISFMemberData } from 'src/app/member/model/salesforce-member-data.model'
 import { MemberService } from 'src/app/member/service/member.service'
 import { AlertService } from 'src/app/shared/service/alert.service'
 import { ContactUpdateComponent } from './contact-update.component'
+
+type ContactUpdateInternals = {
+  contactId: WritableSignal<string | undefined>
+  contact: WritableSignal<ISFMemberContact | undefined>
+  memberData: WritableSignal<ISFMemberData | undefined | null>
+}
+const internals = (component: ContactUpdateComponent): ContactUpdateInternals =>
+  component as unknown as ContactUpdateInternals
 
 describe('ContactUpdateComponent', () => {
   let component: ContactUpdateComponent
@@ -101,18 +112,18 @@ describe('ContactUpdateComponent', () => {
         ],
       })
     )
-    ;(component as any).contactId.set('contact1@orcid.org')
+    ;internals(component).contactId.set('contact1@orcid.org')
 
     component.ngOnInit()
 
     expect(accountServiceSpy.getAccountData).toHaveBeenCalled()
     expect(memberServiceSpy.getMemberData).toHaveBeenCalled()
-    expect((component as any).contact()).toBeTruthy()
+    expect(internals(component).contact()).toBeTruthy()
   })
 
   it('should call memberService.updateContact when saving', () => {
-    (component as any).memberData.set({ name: 'member' })
-    ;(component as any).contact.set({
+    internals(component).memberData.set({ name: 'member' })
+    ;internals(component).contact.set({
       memberId: 'some-id',
       votingContant: false,
       memberOrgRole: ['role'],
@@ -131,7 +142,7 @@ describe('ContactUpdateComponent', () => {
       component.editForm.controls[control].updateValueAndValidity({ onlySelf: true })
     }
     component.editForm.updateValueAndValidity()
-    ;(component as any).contactId.set('contact1@orcid.org')
+    ;internals(component).contactId.set('contact1@orcid.org')
 
     component.save()
 
@@ -145,8 +156,8 @@ describe('ContactUpdateComponent', () => {
   })
 
   it('should call memberService.updateContact when deleting', () => {
-    (component as any).memberData.set({ name: 'member' })
-    ;(component as any).contact.set({
+    internals(component).memberData.set({ name: 'member' })
+    ;internals(component).contact.set({
       memberId: 'some-id',
       votingContant: false,
       memberOrgRole: ['role'],
@@ -165,7 +176,7 @@ describe('ContactUpdateComponent', () => {
       component.editForm.controls[control].updateValueAndValidity({ onlySelf: true })
     }
     component.editForm.updateValueAndValidity()
-    ;(component as any).contactId.set('contact1@orcid.org')
+    ;internals(component).contactId.set('contact1@orcid.org')
 
     component.delete()
 

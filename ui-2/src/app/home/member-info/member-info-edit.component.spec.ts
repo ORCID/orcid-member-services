@@ -2,7 +2,7 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { CUSTOM_ELEMENTS_SCHEMA, WritableSignal } from '@angular/core'
 import { ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { RouterModule } from '@angular/router'
@@ -13,9 +13,16 @@ import { IAccount } from 'src/app/account/model/account.model'
 import { SFAddress } from 'src/app/member/model/salesforce-address.model'
 import { SFCountry } from 'src/app/member/model/salesforce-country.model'
 import { SFMemberContact } from 'src/app/member/model/salesforce-member-contact.model'
-import { SFConsortiumMemberData } from 'src/app/member/model/salesforce-member-data.model'
+import { ISFMemberData, SFConsortiumMemberData } from 'src/app/member/model/salesforce-member-data.model'
 import { MemberService } from 'src/app/member/service/member.service'
 import { MemberInfoEditComponent } from './member-info-edit.component'
+
+type MemberInfoEditInternals = {
+  memberData: WritableSignal<ISFMemberData | undefined | null>
+}
+
+const internals = (component: MemberInfoEditComponent): MemberInfoEditInternals =>
+  component as unknown as MemberInfoEditInternals
 
 describe('MemberInfoEditComponent', () => {
   let component: MemberInfoEditComponent
@@ -113,8 +120,15 @@ describe('MemberInfoEditComponent', () => {
     fixture.detectChanges()
     expect(memberService.setManagedMember).toHaveBeenCalledTimes(0)
     expect(memberService.getMemberData).toHaveBeenCalledOnceWith('test2')
-    expect((component as any).memberData()?.website).toEqual('http://website.com')
-    expect((component as any).orgIdsTransformed()).toEqual([
+
+    const websiteInput = fixture.nativeElement.querySelector('input[name="website"]') as HTMLInputElement
+    expect(websiteInput.value).toEqual('website.com')
+
+    const renderedOrgIds = Array.from(fixture.nativeElement.querySelectorAll('li.contact')).map((row) => ({
+      id: (row as HTMLElement).querySelector('.w-66')?.textContent?.trim(),
+      name: (row as HTMLElement).querySelector('.w-33')?.textContent?.trim(),
+    }))
+    expect(renderedOrgIds).toEqual([
       { id: '123', name: 'ROR' },
       { id: '456', name: 'ROR' },
       { id: '1213', name: 'GRID' },
@@ -138,20 +152,33 @@ describe('MemberInfoEditComponent', () => {
     memberService.getMemberData.and.returnValue(of({}))
     fixture.detectChanges()
 
-    expect((component as any).memberData()).toBeDefined()
-    expect((component as any).memberData()!.website).toBeUndefined()
+    const websiteInput = fixture.nativeElement.querySelector('input[name="website"]') as HTMLInputElement
+
+    expect(websiteInput.value).toBe('')
 
     component.validateUrl()
-    expect((component as any).memberData()!.website).toBeUndefined()
-    ;(component as any).memberData.set({ ...(component as any).memberData(), website: 'example' })
+    expect(websiteInput.value).toBe('')
+
+    websiteInput.value = 'example'
+    websiteInput.dispatchEvent(new Event('input'))
+    fixture.detectChanges()
     component.validateUrl()
-    expect((component as any).memberData()!.website).toEqual('http://example')
-    ;(component as any).memberData.set({ ...(component as any).memberData(), website: 'example.com' })
+    fixture.detectChanges()
+    expect(websiteInput.value).toEqual('http://example')
+
+    websiteInput.value = 'example.com'
+    websiteInput.dispatchEvent(new Event('input'))
+    fixture.detectChanges()
     component.validateUrl()
-    expect((component as any).memberData()!.website).toEqual('http://example.com')
-    ;(component as any).memberData.set({ ...(component as any).memberData(), website: 'https://example.com' })
+    fixture.detectChanges()
+    expect(websiteInput.value).toEqual('http://example.com')
+
+    websiteInput.value = 'https://example.com'
+    websiteInput.dispatchEvent(new Event('input'))
+    fixture.detectChanges()
     component.validateUrl()
-    expect((component as any).memberData()!.website).toEqual('https://example.com')
+    fixture.detectChanges()
+    expect(websiteInput.value).toEqual('https://example.com')
   })
 
   it('should update member data', () => {

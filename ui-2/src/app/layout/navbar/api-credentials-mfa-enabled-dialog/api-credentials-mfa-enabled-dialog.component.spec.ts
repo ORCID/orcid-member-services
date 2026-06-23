@@ -6,6 +6,12 @@ import { RouterModule } from '@angular/router'
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
 import { ApiCredentialsMfaEnabledDialogComponent } from './api-credentials-mfa-enabled-dialog.component'
 
+type ApiCredentialsMfaEnabledDialogInternals = {
+  dismiss: () => void
+}
+const internals = (component: ApiCredentialsMfaEnabledDialogComponent): ApiCredentialsMfaEnabledDialogInternals =>
+  component as unknown as ApiCredentialsMfaEnabledDialogInternals
+
 describe('ApiCredentialsMfaEnabledDialogComponent', () => {
   let component: ApiCredentialsMfaEnabledDialogComponent
   let fixture: ComponentFixture<ApiCredentialsMfaEnabledDialogComponent>
@@ -31,7 +37,7 @@ describe('ApiCredentialsMfaEnabledDialogComponent', () => {
   })
 
   it('should dismiss the modal when dismiss() is called', () => {
-    (component as any).dismiss()
+    internals(component).dismiss()
 
     expect(activeModal.dismiss).toHaveBeenCalled()
   })

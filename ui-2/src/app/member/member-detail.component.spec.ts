@@ -1,13 +1,19 @@
 /// <reference types="jasmine" />
 
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { CUSTOM_ELEMENTS_SCHEMA, WritableSignal } from '@angular/core'
 
 import { ActivatedRoute } from '@angular/router'
 import { RouterModule } from '@angular/router'
 import { of } from 'rxjs'
 import { MemberDetailComponent } from './member-detail.component'
 import { IMember } from './model/member.model'
+
+type MemberDetailInternals = {
+  member: WritableSignal<IMember | undefined>
+}
+const internals = (component: MemberDetailComponent): MemberDetailInternals =>
+  component as unknown as MemberDetailInternals
 
 describe('MemberDetailComponent', () => {
   let component: MemberDetailComponent
@@ -49,9 +55,9 @@ describe('MemberDetailComponent', () => {
 
     component.ngOnInit()
 
-    expect((component as any).member()).toBeTruthy()
-    expect((component as any).member()!.id).toEqual('id')
-    expect((component as any).member()!.clientId).toEqual('client-id')
-    expect((component as any).member()!.clientName).toEqual('client-name')
+    expect(internals(component).member()).toBeTruthy()
+    expect(internals(component).member()!.id).toEqual('id')
+    expect(internals(component).member()!.clientId).toEqual('client-id')
+    expect(internals(component).member()!.clientName).toEqual('client-name')
   })
 })

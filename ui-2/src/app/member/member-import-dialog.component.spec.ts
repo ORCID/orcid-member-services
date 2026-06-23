@@ -2,12 +2,18 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { CUSTOM_ELEMENTS_SCHEMA, WritableSignal } from '@angular/core'
 import { FormBuilder } from '@angular/forms'
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { EMPTY, of } from 'rxjs'
 import { FileUploadService } from '../shared/service/file-upload.service'
 import { MemberImportDialogComponent } from './member-import-dialog.component'
+
+type MemberImportDialogInternals = {
+  currentFile: WritableSignal<FileList | null>
+}
+const internals = (component: MemberImportDialogComponent): MemberImportDialogInternals =>
+  component as unknown as MemberImportDialogInternals
 
 describe('MemberImportDialogComponent', () => {
   let component: MemberImportDialogComponent
@@ -42,14 +48,14 @@ describe('MemberImportDialogComponent', () => {
   })
 
   it('should call upload service', () => {
-    (component as any).currentFile.set(getFileList())
+    internals(component).currentFile.set(getFileList())
     uploadServiceSpy.uploadFile.and.returnValue(EMPTY)
     component.upload()
     expect(uploadServiceSpy.uploadFile).toHaveBeenCalled()
   })
 
   it('errors should be parsed', () => {
-    (component as any).currentFile.set(getFileList())
+    internals(component).currentFile.set(getFileList())
     uploadServiceSpy.uploadFile.and.returnValue(of('[{"index":1,"message":"error"}]'))
     component.upload()
     expect(uploadServiceSpy.uploadFile).toHaveBeenCalled()

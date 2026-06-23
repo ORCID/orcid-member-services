@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { SettingsComponent } from './settings.component'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ReactiveFormsModule } from '@angular/forms'
-import { HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { LanguageService } from 'src/app/shared/service/language.service'
-import { AccountService } from '../service/account.service'
 import { of } from 'rxjs'
 import { FindLanguageFromKeyPipe } from 'src/app/shared/pipe/find-language-from-key'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { LanguageService } from 'src/app/shared/service/language.service'
+import { AccountService } from '../service/account.service'
+import { SettingsComponent } from './settings.component'
 
 describe('SettingsComponent', () => {
   let component: SettingsComponent
@@ -75,7 +75,7 @@ describe('SettingsComponent', () => {
         loggedAs: false,
         loginAs: 'sfid',
         mainContact: false,
-        mfaEnabled: true,
+        mfaEnabled: false,
         memberId: 'memberId',
         manageApiCredsEnabled: false,
       })
@@ -108,14 +108,14 @@ describe('SettingsComponent', () => {
     accountServiceSpy.getUsername.and.returnValue('test')
     fixture.detectChanges()
 
-    expect((component as any).showMfaSetup()).toBeFalsy()
-    expect((component as any).showMfaBackupCodes()).toBeFalsy()
+    expect(fixture.nativeElement.querySelector('img[alt="QR Code"]')).toBeNull()
 
     component.mfaForm.patchValue({ mfaEnabled: true })
     component.mfaEnabledStateChange()
+    fixture.detectChanges()
 
-    expect((component as any).showMfaSetup()).toBeTruthy()
-    expect((component as any).showMfaBackupCodes()).toBeFalsy()
+    expect(fixture.nativeElement.querySelector('img[alt="QR Code"]')).not.toBeNull()
+    expect(fixture.nativeElement.querySelector('#field_verificationCode')).not.toBeNull()
   })
 
   it('should flip mfa fields when mfa state changed', () => {
@@ -133,18 +133,27 @@ describe('SettingsComponent', () => {
         loggedAs: false,
         loginAs: 'sfid',
         mainContact: false,
-        mfaEnabled: true,
+        mfaEnabled: false,
         memberId: 'memberId',
         manageApiCredsEnabled: false,
       })
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: 'test' }))
+    accountServiceSpy.getUsername.and.returnValue('test')
+    fixture.detectChanges()
 
-    expect((component as any).showMfaTextCode()).toBeFalsy()
+    component.mfaForm.patchValue({ mfaEnabled: true })
+    component.mfaEnabledStateChange()
+    fixture.detectChanges()
+
+    expect(fixture.nativeElement.querySelector('.mfaSecret')).toBeNull()
 
     component.toggleMfaTextCode()
+    fixture.detectChanges()
 
-    expect((component as any).showMfaTextCode()).toBeTruthy()
+    const secret = fixture.nativeElement.querySelector('.mfaSecret')
+    expect(secret).not.toBeNull()
+    expect(secret?.textContent).toContain('test')
   })
 
   it('save mfa enabled should call account service enable', () => {
@@ -231,9 +240,10 @@ describe('SettingsComponent', () => {
       })
     )
     fixture.detectChanges()
-    expect((component as any).success()).toBeFalsy()
+    expect(fixture.nativeElement.querySelector('.alert-success')).toBeNull()
     component.save()
-    expect((component as any).success()).toBeTruthy()
+    fixture.detectChanges()
+    expect(fixture.nativeElement.querySelector('.alert-success')).not.toBeNull()
     expect(accountServiceSpy.save).toHaveBeenCalled()
   })
 
@@ -259,9 +269,10 @@ describe('SettingsComponent', () => {
       })
     )
     fixture.detectChanges()
-    expect((component as any).success()).toBeFalsy()
+    expect(fixture.nativeElement.querySelector('.alert-success')).toBeNull()
     component.save()
-    expect((component as any).success()).toBeFalsy()
+    fixture.detectChanges()
+    expect(fixture.nativeElement.querySelector('.alert-success')).toBeNull()
     expect(accountServiceSpy.save).toHaveBeenCalled()
   })
 })

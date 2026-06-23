@@ -19,6 +19,13 @@ import { EMPTY, of } from 'rxjs'
 import { By } from '@angular/platform-browser'
 import { FeatureToggleService } from '../shared/service/feature-toggle.service'
 
+type UserUpdateInternals = {
+  isExistentMember: () => boolean
+}
+
+const internals = (component: UserUpdateComponent): UserUpdateInternals =>
+  component as unknown as UserUpdateInternals
+
 describe('UserUpdateComponent', () => {
   let component: UserUpdateComponent
   let fixture: ComponentFixture<UserUpdateComponent>
@@ -113,7 +120,7 @@ describe('UserUpdateComponent', () => {
     accountService.hasAnyAuthority.and.returnValue(false)
     fixture.detectChanges()
 
-    expect((component as any).isExistentMember()).toBe(true)
+    expect(internals(component).isExistentMember()).toBe(true)
   })
 
   it('should display disable 2fa checkbox for admins when editing an existing user', () => {
@@ -197,7 +204,7 @@ describe('UserUpdateComponent', () => {
     accountService.hasAnyAuthority.and.returnValue(true)
     fixture.detectChanges()
 
-    expect((component as any).isExistentMember()).toBe(false)
+    expect(internals(component).isExistentMember()).toBe(false)
   })
 
   it('should validate non-owners', () => {
@@ -207,8 +214,8 @@ describe('UserUpdateComponent', () => {
 
     component.editForm.patchValue({ memberId: '123', mainContact: false })
     component.validateOrgOwners()
-    expect((component as any).hasOwner()).toBe(false)
-    expect((component as any).isExistentMember()).toBe(true)
+    expect(internals(component).hasOwner()).toBe(false)
+    expect(internals(component).isExistentMember()).toBe(true)
   })
 
   it('should validate org owners', () => {
@@ -217,7 +224,7 @@ describe('UserUpdateComponent', () => {
 
     component.editForm.patchValue({ memberId: '123', mainContact: true })
     component.validateOrgOwners()
-    expect((component as any).hasOwner()).toBe(true)
+    expect(internals(component).hasOwner()).toBe(true)
   })
 
   it('should create new user', () => {
@@ -370,12 +377,12 @@ describe('UserUpdateComponent', () => {
   })
 
   it('should display send activation option for existing user with inactive account', () => {
-    (component as any).existentUser.set({ email: 'test@example.com', activated: false } as IUser)
+    internals(component).existentUser.set({ email: 'test@example.com', activated: false } as IUser)
     expect(component.displaySendActivate()).toBe(true)
   })
 
   it('should not display send activation option for existing user with active account', () => {
-    (component as any).existentUser.set({ email: 'test@example.com', activated: true } as IUser)
+    internals(component).existentUser.set({ email: 'test@example.com', activated: true } as IUser)
     expect(component.displaySendActivate()).toBe(false)
   })
 })

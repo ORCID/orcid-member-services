@@ -10,6 +10,18 @@ import { AccountService } from '../service/account.service'
 import { of, throwError } from 'rxjs'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { OidcSecurityServiceMock } from 'src/app/shared/service/oidc-security-service-mock'
+import { FormGroup } from '@angular/forms'
+
+type LoginInternals = {
+  loginForm: FormGroup
+  login: () => void
+  showMfa: boolean
+  authenticationError: boolean
+  mfaError: boolean
+}
+
+const internals = (component: LoginComponent): LoginInternals =>
+  component as unknown as LoginInternals
 
 describe('LoginComponent', () => {
   let component: LoginComponent
@@ -67,16 +79,16 @@ describe('LoginComponent', () => {
       })
     )
 
-    ;(component as any).loginForm.patchValue({
+    internals(component).loginForm.patchValue({
       username: 'testuser',
       password: 'testpassword',
       mfaCode: '',
     })
 
-    ;(component as any).login()
+    internals(component).login()
 
-    expect((component as any).showMfa).toBe(false)
-    expect((component as any).authenticationError).toBe(false)
+    expect(internals(component).showMfa).toBe(false)
+    expect(internals(component).authenticationError).toBe(false)
   })
 
   it('should handle MFA required', fakeAsync(() => {
@@ -86,18 +98,18 @@ describe('LoginComponent', () => {
     }
     loginService.login.and.returnValue(throwError(() => mockError))
 
-    ;(component as any).loginForm.patchValue({
+    internals(component).loginForm.patchValue({
       username: 'testuser',
       password: 'testpassword',
       mfaCode: '',
     })
 
-    ;(component as any).login()
+    internals(component).login()
 
     tick()
 
-    expect((component as any).showMfa).toBe(true)
-    expect((component as any).authenticationError).toBe(false)
+    expect(internals(component).showMfa).toBe(true)
+    expect(internals(component).authenticationError).toBe(false)
   }))
 
   it('should set authenticationError when 401 is returned without mfa error', fakeAsync(() => {
@@ -107,18 +119,18 @@ describe('LoginComponent', () => {
     }
     loginService.login.and.returnValue(throwError(() => mockError))
 
-    ;(component as any).loginForm.patchValue({
+    internals(component).loginForm.patchValue({
       username: 'testuser',
       password: 'testpassword',
       mfaCode: '',
     })
 
-    ;(component as any).login()
+    internals(component).login()
 
     tick()
 
-    expect((component as any).showMfa).toBe(false)
-    expect((component as any).authenticationError).toBe(true)
+    expect(internals(component).showMfa).toBe(false)
+    expect(internals(component).authenticationError).toBe(true)
   }))
 
   it('should handle MFA code error', fakeAsync(() => {
@@ -128,18 +140,18 @@ describe('LoginComponent', () => {
     }
     loginService.login.and.returnValue(throwError(() => mockError))
 
-    ;(component as any).loginForm.patchValue({
+    internals(component).loginForm.patchValue({
       username: 'testuser',
       password: 'testpassword',
       mfaCode: '',
     })
 
-    ;(component as any).login()
+    internals(component).login()
 
     tick() // Wait for Observable to emit
 
-    expect((component as any).showMfa).toBe(true)
-    expect((component as any).mfaError).toBe(false)
+    expect(internals(component).showMfa).toBe(true)
+    expect(internals(component).mfaError).toBe(false)
   }))
 
   it('should handle MFA invalid code error', fakeAsync(() => {
@@ -149,33 +161,33 @@ describe('LoginComponent', () => {
     }
     loginService.login.and.returnValue(throwError(() => mockError))
 
-    ;(component as any).loginForm.patchValue({
+    internals(component).loginForm.patchValue({
       username: 'testuser',
       password: 'testpassword',
       mfaCode: 'invalidcode',
     })
 
-    ;(component as any).login()
+    internals(component).login()
 
     tick() // Wait for Observable to emit
 
-    expect((component as any).showMfa).toBe(true)
-    expect((component as any).mfaError).toBe(true)
+    expect(internals(component).showMfa).toBe(true)
+    expect(internals(component).mfaError).toBe(true)
   }))
 
   it('should handle login error', fakeAsync(() => {
     loginService.login.and.returnValue(throwError(() => new Error('error')))
 
-    ;(component as any).loginForm.patchValue({
+    internals(component).loginForm.patchValue({
       username: 'testuser',
       password: 'testpassword',
       mfaCode: '',
     })
 
-    ;(component as any).login()
+    internals(component).login()
 
     tick() // Wait for Observable to emit
 
-    expect((component as any).authenticationError).toBe(true)
+    expect(internals(component).authenticationError).toBe(true)
   }))
 })

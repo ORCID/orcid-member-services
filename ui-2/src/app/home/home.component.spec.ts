@@ -9,6 +9,13 @@ import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { IAccount } from '../account/model/account.model'
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 
+type HomeInternals = {
+  loggedInMessage: string | undefined
+}
+
+const internals = (component: HomeComponent): HomeInternals =>
+  component as unknown as HomeInternals
+
 describe('HomeComponent', () => {
   let component: HomeComponent
   let fixture: ComponentFixture<HomeComponent>
@@ -67,7 +74,7 @@ describe('HomeComponent', () => {
     component.ngOnInit()
 
     expect(accountServiceSpy.getAccountData).toHaveBeenCalled()
-    expect((component as any).loggedInMessage).toBeUndefined()
+    expect(internals(component).loggedInMessage).toBeUndefined()
   })
 
   it('should call getMemberData if account data is not null', () => {
@@ -96,6 +103,6 @@ describe('HomeComponent', () => {
     component.ngOnInit()
 
     expect(accountServiceSpy.getAccountData).toHaveBeenCalled()
-    expect((component as any).loggedInMessage).toEqual('You are logged in as user email@email.com')
+    expect(internals(component).loggedInMessage).toEqual('You are logged in as user email@email.com')
   })
 })

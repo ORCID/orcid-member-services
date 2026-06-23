@@ -1,6 +1,6 @@
 /// <reference types="jasmine" />
 
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { CUSTOM_ELEMENTS_SCHEMA, WritableSignal } from '@angular/core'
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing'
 import { By } from '@angular/platform-browser'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
@@ -15,6 +15,15 @@ import { User } from './model/user.model'
 import { UserService } from './service/user.service'
 import { UsersComponent } from './users.component'
 import { FeatureToggleService } from '../shared/service/feature-toggle.service'
+
+type UsersInternals = {
+  users: WritableSignal<User[] | null | undefined>
+  sortColumn: WritableSignal<string>
+}
+
+const internals = (component: UsersComponent): UsersInternals =>
+  component as unknown as UsersInternals
+
 describe('UsersComponent', () => {
   let component: UsersComponent
   let fixture: ComponentFixture<UsersComponent>
@@ -118,15 +127,15 @@ describe('UsersComponent', () => {
     component.ngOnInit()
 
     expect(userService.query).toHaveBeenCalled()
-    expect((component as any).users()![0]).toEqual(jasmine.objectContaining({ id: '123' }))
+    expect(internals(component).users()![0]).toEqual(jasmine.objectContaining({ id: '123' }))
   }))
 
   it('should load a page', () => {
-    (component as any).page.set(1)
+    internals(component).page.set(1)
     component.loadPage()
 
     expect(userService.query).toHaveBeenCalled()
-    expect((component as any).users()![0]).toEqual(jasmine.objectContaining({ id: '123' }))
+    expect(internals(component).users()![0]).toEqual(jasmine.objectContaining({ id: '123' }))
   })
 
   it('sort should be id,asc by default', () => {
@@ -135,13 +144,13 @@ describe('UsersComponent', () => {
   })
 
   it('direction should be asc and id should be secondary sort column by default', () => {
-    (component as any).sortColumn.set('name')
+    internals(component).sortColumn.set('name')
     const result = component.sort()
     expect(result).toEqual(['name,asc', 'id'])
   })
 
   it('updating sort column to different value should maintain sort direction', () => {
-    (component as any).sortColumn.set('name')
+    internals(component).sortColumn.set('name')
     let result = component.sort()
     expect(result).toEqual(['name,asc', 'id'])
 
@@ -151,7 +160,7 @@ describe('UsersComponent', () => {
   })
 
   it('updating sort column with same value should flip sort direction', () => {
-    (component as any).sortColumn.set('name')
+    internals(component).sortColumn.set('name')
     let result = component.sort()
     expect(result).toEqual(['name,asc', 'id'])
 
@@ -161,17 +170,17 @@ describe('UsersComponent', () => {
   })
 
   it('clear should reset page to zero', () => {
-    (component as any).page.set(10)
+    internals(component).page.set(10)
     component.clear()
-    expect((component as any).page()).toEqual(0)
+    expect(internals(component).page()).toEqual(0)
   })
 
   it('reset search should clear search term', () => {
-    (component as any).searchTerm.set('what the user typed')
-    ;(component as any).submittedSearchTerm.set('what the user typed')
+    internals(component).searchTerm.set('what the user typed')
+    ;internals(component).submittedSearchTerm.set('what the user typed')
     component.resetSearch()
-    expect((component as any).searchTerm()).toEqual('')
-    expect((component as any).submittedSearchTerm()).toEqual('')
+    expect(internals(component).searchTerm()).toEqual('')
+    expect(internals(component).submittedSearchTerm()).toEqual('')
   })
 
   it('2FA column should be visible for admin users', () => {

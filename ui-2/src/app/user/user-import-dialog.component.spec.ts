@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { CUSTOM_ELEMENTS_SCHEMA, WritableSignal } from '@angular/core'
 
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
@@ -11,6 +11,12 @@ import { EventService } from '../shared/service/event.service'
 import { FileUploadService } from '../shared/service/file-upload.service'
 import { UserService } from './service/user.service'
 import { UserImportDialogComponent } from './user-import-dialog.component'
+
+type UserImportDialogInternals = {
+  currentFile: WritableSignal<FileList | null>
+}
+const internals = (component: UserImportDialogComponent): UserImportDialogInternals =>
+  component as unknown as UserImportDialogInternals
 
 describe('UserImportDialogComponent', () => {
   let component: UserImportDialogComponent
@@ -61,14 +67,14 @@ describe('UserImportDialogComponent', () => {
   })
 
   it('should call upload service', () => {
-    (component as any).currentFile.set(getFileList())
+    internals(component).currentFile.set(getFileList())
     uploadService.uploadFile.and.returnValue(EMPTY)
     component.upload()
     expect(uploadService.uploadFile).toHaveBeenCalled()
   })
 
   it('errors should be parsed', () => {
-    (component as any).currentFile.set(getFileList())
+    internals(component).currentFile.set(getFileList())
     uploadService.uploadFile.and.returnValue(
       of('[{"index":1,"message":"A user with email g.nash+575@orcid.org already exists"}]')
     )

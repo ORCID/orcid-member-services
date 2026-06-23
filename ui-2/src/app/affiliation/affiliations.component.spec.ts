@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { CUSTOM_ELEMENTS_SCHEMA, WritableSignal } from '@angular/core'
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
@@ -13,6 +13,17 @@ import { EventService } from '../shared/service/event.service'
 import { AffiliationsComponent } from './affiliations.component'
 import { Affiliation } from './model/affiliation.model'
 import { AffiliationService } from './service/affiliation.service'
+
+type AffiliationsInternals = {
+  affiliations: WritableSignal<Affiliation[] | null | undefined>
+  page: WritableSignal<number>
+  sortColumn: WritableSignal<string>
+  searchTerm: WritableSignal<string>
+  submittedSearchTerm: WritableSignal<string>
+}
+
+const internals = (component: AffiliationsComponent): AffiliationsInternals =>
+  component as unknown as AffiliationsInternals
 
 describe('AffiliationsComponent', () => {
   let component: AffiliationsComponent
@@ -118,15 +129,15 @@ describe('AffiliationsComponent', () => {
     component.ngOnInit()
 
     expect(affiliationService.query).toHaveBeenCalled()
-    expect((component as any).affiliations()![0]).toEqual(jasmine.objectContaining({ id: '123' }))
+    expect(internals(component).affiliations()![0]).toEqual(jasmine.objectContaining({ id: '123' }))
   }))
 
   it('should load a page', () => {
-    (component as any).page.set(1)
+    internals(component).page.set(1)
     component.loadPage()
 
     expect(affiliationService.query).toHaveBeenCalled()
-    expect((component as any).affiliations()![0]).toEqual(jasmine.objectContaining({ id: '123' }))
+    expect(internals(component).affiliations()![0]).toEqual(jasmine.objectContaining({ id: '123' }))
   })
 
   it('sort should be id,desc by default', () => {
@@ -136,13 +147,13 @@ describe('AffiliationsComponent', () => {
   })
 
   it('direction should be desc and id should be secondary sort column by default', () => {
-    (component as any).sortColumn.set('name')
+    internals(component).sortColumn.set('name')
     const result = component.sort()
     expect(result).toEqual(['name,asc', 'id'])
   })
 
   it('updating sort column to different value should maintain sort direction', () => {
-    (component as any).sortColumn.set('name')
+    internals(component).sortColumn.set('name')
     let result = component.sort()
     expect(result).toEqual(['name,asc', 'id'])
 
@@ -152,7 +163,7 @@ describe('AffiliationsComponent', () => {
   })
 
   it('updating sort column with same value should flip sort direction', () => {
-    (component as any).sortColumn.set('name')
+    internals(component).sortColumn.set('name')
     let result = component.sort()
     expect(result).toEqual(['name,asc', 'id'])
 
@@ -162,17 +173,17 @@ describe('AffiliationsComponent', () => {
   })
 
   it('clear should reset page to zero', () => {
-    (component as any).page.set(10)
+    internals(component).page.set(10)
     component.clear()
-    expect((component as any).page()).toEqual(0)
+    expect(internals(component).page()).toEqual(0)
   })
 
   it('reset search should clear search term', () => {
-    (component as any).searchTerm.set('what the user typed')
-    ;(component as any).submittedSearchTerm.set('what the user typed')
+    internals(component).searchTerm.set('what the user typed')
+    ;internals(component).submittedSearchTerm.set('what the user typed')
     component.resetSearch()
-    expect((component as any).searchTerm()).toEqual('')
-    expect((component as any).submittedSearchTerm()).toEqual('')
+    expect(internals(component).searchTerm()).toEqual('')
+    expect(internals(component).submittedSearchTerm()).toEqual('')
   })
 
   it('should render affiliations list with email, org name, role title, and created date', fakeAsync(() => {
