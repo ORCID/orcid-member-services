@@ -1,14 +1,13 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
-import { IAffiliation } from './model/affiliation.model'
-import { AffiliationService } from './service/affiliation.service'
+import { ActivatedRoute, Router } from '@angular/router'
+import { faBan, faFolderOpen, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
-import { EventService } from '../shared/service/event.service'
-import { FileUploadService } from '../shared/service/file-upload.service'
-import { HttpResponse } from '@angular/common/http'
 import { EventType } from '../app.constants'
 import { Event } from '../shared/model/event.model'
-import { ActivatedRoute, Router } from '@angular/router'
-import { faBan, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { EventService } from '../shared/service/event.service'
+import { FileUploadService } from '../shared/service/file-upload.service'
+import { IAffiliation } from './model/affiliation.model'
+import { AffiliationService } from './service/affiliation.service'
 
 @Component({
   selector: 'app-affiliation-import-dialog',
@@ -29,8 +28,10 @@ export class AffiliationImportDialogComponent {
   success: boolean
   uploaded: boolean
   loading = false
+  selectedFileName = 'No file selected.'
   faBan = faBan
   faPlus = faPlus
+  faFolderOpen = faFolderOpen
 
   constructor() {
     this.isSaving = false
@@ -45,6 +46,13 @@ export class AffiliationImportDialogComponent {
 
   selectFile(event: any) {
     this.currentFile = event.target.files
+    this.selectedFileName = this.currentFile?.item(0)?.name ?? 'No file selected.'
+  }
+
+  clearFileInput(event: MouseEvent) {
+    ;(event.target as HTMLInputElement).value = ''
+    this.selectedFileName = 'No file selected.'
+    this.currentFile = undefined
   }
 
   upload() {

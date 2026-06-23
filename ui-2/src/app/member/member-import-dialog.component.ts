@@ -42,6 +42,11 @@ export class MemberImportDialogComponent {
     this.currentFile = event.target.files
   }
 
+  clearFileInput(event: MouseEvent) {
+    ;(event.target as HTMLInputElement).value = ''
+    this.currentFile = null
+  }
+
   upload() {
     if (this.currentFile) {
       this.loading = true

@@ -1,4 +1,6 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed, tick } from '@angular/core/testing'
+import { FormsModule } from '@angular/forms'
 
 import { MembersComponent } from './members.component'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
@@ -7,9 +9,8 @@ import { RouterTestingModule } from '@angular/router/testing'
 import { MemberService } from './service/member.service'
 import { of } from 'rxjs'
 import { Member } from './model/member.model'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler'
 import { Router } from '@angular/router'
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 
 describe('MembersComponent', () => {
   let component: MembersComponent
@@ -24,16 +25,16 @@ describe('MembersComponent', () => {
     routerSpy = jasmine.createSpyObj('Router', ['navigate'])
 
     TestBed.configureTestingModule({
-    declarations: [MembersComponent],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [RouterTestingModule],
-    providers: [
+      declarations: [MembersComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      imports: [FormsModule, RouterTestingModule],
+      providers: [
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-})
+      ],
+    })
 
     fixture = TestBed.createComponent(MembersComponent)
     component = fixture.componentInstance

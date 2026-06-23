@@ -5,17 +5,17 @@
         <ngb-alert [type]="'info'" [dismissible]="false" class="alert-success">
           <div class="d-flex">
             <div class="font-size-16 flex-grow-1">{{ alert.msg | localize }}</div>
-            <a
+            <button
+              type="button"
               (click)="close(alert)"
               (keyup.esc)="closeOldestAlert()"
               (keyup.enter)="closeOldestAlert()"
-              tabindex="0"
-              class="close"
-              >×</a
-              >
-            </div>
-          </ngb-alert>
-        }
-      </div>
-    }
-  </div>
+              class="btn-close"
+              aria-label="Close"
+            ></button>
+          </div>
+        </ngb-alert>
+      }
+    </div>
+  }
+</div>

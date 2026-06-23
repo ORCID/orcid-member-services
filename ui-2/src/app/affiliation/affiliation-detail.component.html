@@ -20,12 +20,9 @@
               {{ affiliation.prettyStatus || '' | localize }}
             </dd>
             @if (affiliation.permissionLink) {
-              <dt
-                class="col-md-3"
-                i18n="@@gatewayApp.assertionServiceAssertion.permissionLink.string"
-                >
-            Permission link
-          </dt>
+              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.permissionLink.string">
+                Permission link
+              </dt>
             }
             @if (affiliation.permissionLink) {
               <dd class="col-md-9">
@@ -37,254 +34,205 @@
                   (cbOnSuccess)="successMessage()"
                   data-cy="copyToClipboard"
                   i18n="@@gatewayApp.assertionServiceAssertion.copyClipboard.string"
-                  >
-              Copy to clipboard
-            </button>
+                >
+                  Copy to clipboard
+                </button>
               </dd>
             }
             @if (affiliation.orcidId) {
-              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.orcidId.string">
-            ORCID iD
-          </dt>
+              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.orcidId.string">ORCID iD</dt>
             }
             @if (affiliation.orcidId) {
               <dd class="col-md-9">
-                <a href="{{ orcidBaseUrl }}/{{ affiliation.orcidId }}" target="_blank"
+                <a href="{{ orcidBaseUrl }}/{{ affiliation.orcidId }}" target="_blank" rel="noopener noreferrer"
                   >{{ orcidBaseUrl }}/{{ affiliation.orcidId }}</a
-                  >
-                </dd>
-              }
-              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.affiliationSection.string">
-            Affiliation Section
-          </dt>
-              <dd class="col-md-9">
-                <span>{{ affiliation.affiliationSection! | localize }}</span>
+                >
               </dd>
-              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.detail.org.string">Organization</dt>
-              <dd class="col-md-9">
-                {{ affiliation.orgName }}: @if (affiliation.orgCity) {
-                <span>{{ affiliation.orgCity }}</span
-                  >
-                  }@if (affiliation.orgRegion) {
-                  <span>, {{ affiliation.orgRegion }}</span
-                    >
-                    }@if (affiliation.orgCountry) {
-                    <span>, {{ affiliation.orgCountry }}</span
-                      >
-                      }<br />
-                      {{ affiliation.disambiguationSource }} {{ affiliation.disambiguatedOrgId }}
-                    </dd>
-                    @if (affiliation.departmentName) {
-                      <dt
-                        class="col-md-3"
-                        i18n="@@gatewayApp.assertionServiceAssertion.departmentName.string"
-                        >
-            Department Name
-          </dt>
-                    }
-                    @if (affiliation.departmentName) {
-                      <dd class="col-md-9">
-                        {{ affiliation.departmentName }}
-                      </dd>
-                    }
-                    @if (affiliation.roleTitle) {
-                      <dt
-                        class="col-md-3"
-                        i18n="@@gatewayApp.assertionServiceAssertion.roleTitle.string"
-                        >
-            Role Title
-          </dt>
-                    }
-                    @if (affiliation.roleTitle) {
-                      <dd class="col-md-9">
-                        {{ affiliation.roleTitle }}
-                      </dd>
-                    }
-                    @if (affiliation.url) {
-                      <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.url.string">Url</dt>
-                    }
-                    @if (affiliation.url) {
-                      <dd class="col-md-9">
-                        <a href="{{ affiliation.url }}">{{ affiliation.url }}</a>
-                      </dd>
-                    }
-                    @if (affiliation.startYear) {
-                      <dt
-                        class="col-md-3"
-                        i18n="@@gatewayApp.assertionServiceAssertion.startDate.string"
-                        >
-            Start Date
-          </dt>
-                    }
-                    @if (affiliation.startYear) {
-                      <dd class="col-md-9">
-                        {{ startDate }}
-                      </dd>
-                    }
-                    @if (affiliation.endYear) {
-                      <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.endDate.string">
-            End Date
-          </dt>
-                    }
-                    @if (affiliation.endYear) {
-                      <dd class="col-md-9">
-                        {{ endDate }}
-                      </dd>
-                    }
-                    @if (affiliation.externalId) {
-                      <dt
-                        class="col-md-3"
-                        i18n="@@gatewayApp.assertionServiceAssertion.externalId.string"
-                        >
-            External Id
-          </dt>
-                    }
-                    @if (affiliation.externalId) {
-                      <dd class="col-md-9">
-                        {{ affiliation.externalIdType! }}
-                        @if (affiliation.externalIdUrl) {
-                          <a href="{{ affiliation.externalIdUrl }}">{{ affiliation.externalId }}</a>
-                        }
-                        @if (!affiliation.externalIdUrl) {
-                          <span>{{ affiliation.externalId }}</span>
-                        }
-                      </dd>
-                    }
-                    <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.created.string">Created</dt>
-                    <dd class="col-md-9">
-                      {{ affiliation.created!.toString() | date: 'medium' }}
-                    </dd>
-                    @if (affiliation.addedToORCID) {
-                      <dt
-                        class="col-md-3"
-                        i18n="@@gatewayApp.assertionServiceAssertion.addedToOrcid.string"
-                        >
-            Added To ORCID
-          </dt>
-                    }
-                    @if (affiliation.addedToORCID) {
-                      <dd class="col-md-9">
-                        {{ affiliation.addedToORCID!.toString() | date: 'medium' }}
-                      </dd>
-                    }
-                    @if (affiliation.updatedInORCID) {
-                      <dt
-                        class="col-md-3"
-                        i18n="@@gatewayApp.assertionServiceAssertion.updatedInOrcid.string"
-                        >
-            Updated In ORCID
-          </dt>
-                    }
-                    @if (affiliation.updatedInORCID) {
-                      <dd class="col-md-9">
-                        {{ affiliation.updatedInORCID!.toString() | date: 'medium' }}
-                      </dd>
-                    }
-                    <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.modified.string">Modified</dt>
-                    <dd class="col-md-9">
-                      {{ affiliation.modified!.toString() | date: 'medium' }}
-                      <i><span i18n="@@global.by.string">by</span> {{ affiliation.lastModifiedBy }}</i>
-                    </dd>
-                    <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.adminId.string">Admin Id</dt>
-                    <dd class="col-md-9">
-                      {{ ownerId }}
-                    </dd>
-                    @if (
-                      (!affiliation.invitationSent && affiliation.notificationSent) ||
-                      (affiliation.notificationSent && affiliation.notificationSent < affiliation.invitationSent!)
-                      ) {
-                      <dt
-                        class="col-md-3"
-                        i18n="@@gatewayApp.assertionServiceAssertion.notificationFirstSent.string"
-                        >
-            Notification First Sent
-          </dt>
-                    }
-                    @if (
-                      (!affiliation.invitationSent && affiliation.notificationSent) ||
-                      (affiliation.notificationSent && affiliation.notificationSent < affiliation.invitationSent!)
-                      ) {
-                      <dd
-                        class="col-md-9"
-                        >
-                        {{ affiliation.notificationSent.toString() | date: 'medium' }}
-                      </dd>
-                    }
-                    @if (
-                      (!affiliation.notificationSent && affiliation.invitationSent) ||
-                      (affiliation.invitationSent && affiliation.invitationSent < affiliation.notificationSent!)
-                      ) {
-                      <dt
-                        class="col-md-3"
-                        i18n="@@gatewayApp.assertionServiceAssertion.notificationFirstSent.string"
-                        >
-            Notification First Sent
-          </dt>
-                    }
-                    @if (
-                      (!affiliation.notificationSent && affiliation.invitationSent) ||
-                      (affiliation.invitationSent && affiliation.invitationSent < affiliation.notificationSent!)
-                      ) {
-                      <dd
-                        class="col-md-9"
-                        >
-                        {{ affiliation.invitationSent.toString() | date: 'medium' }}
-                      </dd>
-                    }
-                    @if (
-                      (!affiliation.invitationLastSent && affiliation.notificationLastSent) ||
-                      (affiliation.notificationLastSent && affiliation.notificationLastSent > affiliation.invitationLastSent!)
-                      ) {
-                      <dt
-                        class="col-md-3"
-                        i18n="@@gatewayApp.assertionServiceAssertion.notificationLastSent.string"
-                        >
-            Notification Last Sent
-          </dt>
-                    }
-                    @if (
-                      (!affiliation.invitationLastSent && affiliation.notificationLastSent) ||
-                      (affiliation.notificationLastSent && affiliation.notificationLastSent > affiliation.invitationLastSent!)
-                      ) {
-                      <dd
-                        class="col-md-9"
-                        >
-                        {{ affiliation.notificationLastSent.toString() | date: 'medium' }}
-                      </dd>
-                    }
-                    @if (
-                      (!affiliation.notificationLastSent && affiliation.invitationLastSent) ||
-                      (affiliation.invitationLastSent && affiliation.invitationLastSent > affiliation.notificationLastSent!)
-                      ) {
-                      <dt
-                        class="col-md-3"
-                        i18n="@@gatewayApp.assertionServiceAssertion.notificationLastSent.string"
-                        >
-            Notification Last Sent
-          </dt>
-                    }
-                    @if (
-                      (!affiliation.notificationLastSent && affiliation.invitationLastSent) ||
-                      (affiliation.invitationLastSent && affiliation.invitationLastSent > affiliation.notificationLastSent!)
-                      ) {
-                      <dd
-                        class="col-md-9"
-                        >
-                        {{ affiliation.invitationLastSent.toString() | date: 'medium' }}
-                      </dd>
-                    }
-                  </dl>
-                </div>
-                <hr />
-                <div class="mb-3">
-                  <button type="submit" (click)="previousState()" class="btn btn-outline-primary mr-2">
-                    <fa-icon [icon]="faArrowLeft"></fa-icon>&nbsp;<span i18n="@@entity.action.back.string"> Back</span>
-                  </button>
-                  <button type="button" [routerLink]="['/affiliations', affiliation!.id, 'edit']" class="btn btn-primary">
-                    <fa-icon [icon]="faPencilAlt"></fa-icon>&nbsp;<span i18n="@@entity.action.edit.string"> Edit</span>
-                  </button>
-                </div>
-              </div>
             }
-          </div>
+            <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.affiliationSection.string">
+              Affiliation Section
+            </dt>
+            <dd class="col-md-9">
+              <span>{{ affiliation.affiliationSection! | localize }}</span>
+            </dd>
+            <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.detail.org.string">Organization</dt>
+            <dd class="col-md-9">
+              {{ affiliation.orgName }}:
+              @if (affiliation.orgCity) {
+                <span>{{ affiliation.orgCity }}</span>
+              }
+              @if (affiliation.orgRegion) {
+                <span>, {{ affiliation.orgRegion }}</span>
+              }
+              @if (affiliation.orgCountry) {
+                <span>, {{ affiliation.orgCountry }}</span>
+              }
+              <br />
+              {{ affiliation.disambiguationSource }} {{ affiliation.disambiguatedOrgId }}
+            </dd>
+            @if (affiliation.departmentName) {
+              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.departmentName.string">
+                Department Name
+              </dt>
+            }
+            @if (affiliation.departmentName) {
+              <dd class="col-md-9">
+                {{ affiliation.departmentName }}
+              </dd>
+            }
+            @if (affiliation.roleTitle) {
+              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.roleTitle.string">Role Title</dt>
+            }
+            @if (affiliation.roleTitle) {
+              <dd class="col-md-9">
+                {{ affiliation.roleTitle }}
+              </dd>
+            }
+            @if (affiliation.url) {
+              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.url.string">Url</dt>
+            }
+            @if (affiliation.url) {
+              <dd class="col-md-9">
+                <a href="{{ affiliation.url }}">{{ affiliation.url }}</a>
+              </dd>
+            }
+            @if (affiliation.startYear) {
+              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.startDate.string">Start Date</dt>
+            }
+            @if (affiliation.startYear) {
+              <dd class="col-md-9">
+                {{ startDate }}
+              </dd>
+            }
+            @if (affiliation.endYear) {
+              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.endDate.string">End Date</dt>
+            }
+            @if (affiliation.endYear) {
+              <dd class="col-md-9">
+                {{ endDate }}
+              </dd>
+            }
+            @if (affiliation.externalId) {
+              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.externalId.string">External Id</dt>
+            }
+            @if (affiliation.externalId) {
+              <dd class="col-md-9">
+                {{ affiliation.externalIdType! }}
+                @if (affiliation.externalIdUrl) {
+                  <a href="{{ affiliation.externalIdUrl }}">{{ affiliation.externalId }}</a>
+                }
+                @if (!affiliation.externalIdUrl) {
+                  <span>{{ affiliation.externalId }}</span>
+                }
+              </dd>
+            }
+            <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.created.string">Created</dt>
+            <dd class="col-md-9">
+              {{ affiliation.created!.toString() | date: 'medium' }}
+            </dd>
+            @if (affiliation.addedToORCID) {
+              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.addedToOrcid.string">Added To ORCID</dt>
+            }
+            @if (affiliation.addedToORCID) {
+              <dd class="col-md-9">
+                {{ affiliation.addedToORCID!.toString() | date: 'medium' }}
+              </dd>
+            }
+            @if (affiliation.updatedInORCID) {
+              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.updatedInOrcid.string">
+                Updated In ORCID
+              </dt>
+            }
+            @if (affiliation.updatedInORCID) {
+              <dd class="col-md-9">
+                {{ affiliation.updatedInORCID!.toString() | date: 'medium' }}
+              </dd>
+            }
+            <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.modified.string">Modified</dt>
+            <dd class="col-md-9">
+              {{ affiliation.modified!.toString() | date: 'medium' }}
+              <i><span i18n="@@global.by.string">by</span> {{ affiliation.lastModifiedBy }}</i>
+            </dd>
+            <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.adminId.string">Admin Id</dt>
+            <dd class="col-md-9">
+              {{ ownerId }}
+            </dd>
+            @if (
+              (!affiliation.invitationSent && affiliation.notificationSent) ||
+              (affiliation.notificationSent && affiliation.notificationSent < affiliation.invitationSent!)
+            ) {
+              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.notificationFirstSent.string">
+                Notification First Sent
+              </dt>
+            }
+            @if (
+              (!affiliation.invitationSent && affiliation.notificationSent) ||
+              (affiliation.notificationSent && affiliation.notificationSent < affiliation.invitationSent!)
+            ) {
+              <dd class="col-md-9">
+                {{ affiliation.notificationSent.toString() | date: 'medium' }}
+              </dd>
+            }
+            @if (
+              (!affiliation.notificationSent && affiliation.invitationSent) ||
+              (affiliation.invitationSent && affiliation.invitationSent < affiliation.notificationSent!)
+            ) {
+              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.notificationFirstSent.string">
+                Notification First Sent
+              </dt>
+            }
+            @if (
+              (!affiliation.notificationSent && affiliation.invitationSent) ||
+              (affiliation.invitationSent && affiliation.invitationSent < affiliation.notificationSent!)
+            ) {
+              <dd class="col-md-9">
+                {{ affiliation.invitationSent.toString() | date: 'medium' }}
+              </dd>
+            }
+            @if (
+              (!affiliation.invitationLastSent && affiliation.notificationLastSent) ||
+              (affiliation.notificationLastSent && affiliation.notificationLastSent > affiliation.invitationLastSent!)
+            ) {
+              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.notificationLastSent.string">
+                Notification Last Sent
+              </dt>
+            }
+            @if (
+              (!affiliation.invitationLastSent && affiliation.notificationLastSent) ||
+              (affiliation.notificationLastSent && affiliation.notificationLastSent > affiliation.invitationLastSent!)
+            ) {
+              <dd class="col-md-9">
+                {{ affiliation.notificationLastSent.toString() | date: 'medium' }}
+              </dd>
+            }
+            @if (
+              (!affiliation.notificationLastSent && affiliation.invitationLastSent) ||
+              (affiliation.invitationLastSent && affiliation.invitationLastSent > affiliation.notificationLastSent!)
+            ) {
+              <dt class="col-md-3" i18n="@@gatewayApp.assertionServiceAssertion.notificationLastSent.string">
+                Notification Last Sent
+              </dt>
+            }
+            @if (
+              (!affiliation.notificationLastSent && affiliation.invitationLastSent) ||
+              (affiliation.invitationLastSent && affiliation.invitationLastSent > affiliation.notificationLastSent!)
+            ) {
+              <dd class="col-md-9">
+                {{ affiliation.invitationLastSent.toString() | date: 'medium' }}
+              </dd>
+            }
+          </dl>
         </div>
+        <hr />
+        <div class="mb-5">
+          <button type="submit" (click)="previousState()" class="btn btn-outline-primary me-2">
+            <fa-icon [icon]="faArrowLeft"></fa-icon>&nbsp;<span i18n="@@entity.action.back.string"> Back</span>
+          </button>
+          <button type="button" [routerLink]="['/affiliations', affiliation!.id, 'edit']" class="btn btn-primary">
+            <fa-icon [icon]="faPencilAlt"></fa-icon>&nbsp;<span i18n="@@entity.action.edit.string"> Edit</span>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

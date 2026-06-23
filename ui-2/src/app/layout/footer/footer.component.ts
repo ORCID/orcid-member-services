@@ -9,6 +9,7 @@ import { AccountService } from 'src/app/account/service/account.service'
 })
 export class FooterComponent {
   private accountService = inject(AccountService)
+  readonly currentYear = new Date().getFullYear()
 
   isAuthenticated() {
     return this.accountService.isAuthenticated()

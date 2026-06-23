@@ -1,8 +1,5 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core'
-import { IAffiliation } from './model/affiliation.model'
-import { AFFILIATION_STATUS } from '../shared/constants/orcid-api.constants'
-import { Subscription, delay, tap } from 'rxjs'
-import { AlertType, EventType, ITEMS_PER_PAGE, ORCID_BASE_URL } from '../app.constants'
+import { ActivatedRoute, Router } from '@angular/router'
 import {
   faChartBar,
   faFileDownload,
@@ -15,14 +12,17 @@ import {
   faSortUp,
   faTimes,
 } from '@fortawesome/free-solid-svg-icons'
-import { AffiliationService } from './service/affiliation.service'
-import { LanguageService } from '../shared/service/language.service'
+import { Subscription, delay, finalize, tap } from 'rxjs'
 import { AccountService } from '../account'
-import { AlertService } from '../shared/service/alert.service'
-import { ActivatedRoute, Router } from '@angular/router'
-import { EventService } from '../shared/service/event.service'
-import { DateUtilService } from '../shared/service/date-util.service'
+import { EventType, ITEMS_PER_PAGE, ORCID_BASE_URL } from '../app.constants'
+import { AFFILIATION_STATUS } from '../shared/constants/orcid-api.constants'
 import { Page } from '../shared/model/page.model'
+import { AlertService } from '../shared/service/alert.service'
+import { DateUtilService } from '../shared/service/date-util.service'
+import { EventService } from '../shared/service/event.service'
+import { LanguageService } from '../shared/service/language.service'
+import { IAffiliation } from './model/affiliation.model'
+import { AffiliationService } from './service/affiliation.service'
 
 @Component({
   selector: 'app-affiliations',
@@ -75,6 +75,7 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   showStatusReportPendingMessage: boolean | undefined
   showLinksReportPendingMessage: boolean | undefined
   paginationHeaderSubscription: Subscription | undefined
+  isLoading = false
 
   constructor() {
     this.itemsPerPage = ITEMS_PER_PAGE
@@ -104,6 +105,7 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
   }
 
   loadAll() {
+    this.isLoading = true
     this.affiliationService
       .query({
         page: this.page - 1,
@@ -111,6 +113,7 @@ export class AffiliationsComponent implements OnInit, OnDestroy {
         sort: this.sort(),
         filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
       })
+      .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
         next: (res) => {
           if (res) {

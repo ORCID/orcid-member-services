@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, NgZone, OnDestroy, Renderer2, inject } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, inject } from '@angular/core'
 import { FormBuilder } from '@angular/forms'
 import { Router } from '@angular/router'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
@@ -19,7 +19,7 @@ import { ILoginCredentials } from '../model/login.model'
 export class LoginComponent implements AfterViewInit, OnDestroy {
   private loginService = inject(LoginService)
   private stateStorageService = inject(StateStorageService)
-  private renderer = inject(Renderer2)
+  private elementRef = inject(ElementRef<HTMLElement>)
   private router = inject(Router)
   private oidcSecurityService = inject(OidcSecurityService)
   private fb = inject(FormBuilder)
@@ -58,7 +58,10 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => this.renderer.selectRootElement('#username').scrollIntoView())
+    setTimeout(() => {
+      const usernameField = (this.elementRef.nativeElement as HTMLElement).querySelector('#username') as HTMLElement | null
+      usernameField?.scrollIntoView()
+    })
   }
 
   cancel() {
@@ -112,9 +115,9 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
             this.authenticationError = true
           }
         } else {
-            this.authenticationError = true
-            this.loginService.logout()
-          }
+          this.authenticationError = true
+          this.loginService.logout()
+        }
       },
     })
   }

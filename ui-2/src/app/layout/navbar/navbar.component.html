@@ -14,22 +14,20 @@
       {{ this.organizationName }}
     </div>
   }
-  <a
+  <button
+    type="button"
     class="navbar-toggler d-lg-none"
-    href="javascript:void(0);"
-    data-toggle="collapse"
-    data-target="#navbarResponsive"
     aria-controls="navbarResponsive"
-    aria-expanded="false"
+    [attr.aria-expanded]="!isNavbarCollapsed"
     id="collapse-button"
     aria-label="Toggle navigation"
     (click)="toggleNavbar()"
-    >
+  >
     <fa-icon [icon]="faBars"></fa-icon>
-  </a>
+  </button>
 
-  <div class="navbar-collapse collapse" id="navbarResponsive">
-    <ul class="navbar-nav ml-auto">
+  <div class="navbar-collapse collapse" [class.show]="!isNavbarCollapsed" id="navbarResponsive">
+    <ul class="navbar-nav ms-auto">
       @if (isAuthenticated()) {
         <li
           *appHasAnyAuthority="'ROLE_USER'"
@@ -37,8 +35,8 @@
           class="nav-item dropdown pointer"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
-          >
-          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="tools-menu">
+        >
+          <a class="nav-link dropdown-toggle" ngbDropdownToggle role="button" tabindex="0" id="tools-menu">
             <span>
               <fa-icon [icon]="faWrench"></fa-icon>
               <span i18n="@@global.menu.tools.main.string">Tools</span>
@@ -54,7 +52,7 @@
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }"
                 (click)="collapseNavbar()"
-                >
+              >
                 <fa-icon [icon]="faAddressCard" [fixedWidth]="true"></fa-icon>
                 <span i18n="@@global.menu.tools.assertionServiceAffiliationManager.string">Affiliation Manager</span>
               </a>
@@ -84,7 +82,7 @@
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }"
                 (click)="collapseNavbar()"
-                >
+              >
                 <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
                 <span i18n="@@global.menu.report.member.string">Member report</span>
               </a>
@@ -97,7 +95,7 @@
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{ exact: true }"
                 (click)="collapseNavbar()"
-                >
+              >
                 <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
                 <span i18n="@@global.menu.report.integration.string">Integration report</span>
               </a>
@@ -111,7 +109,7 @@
                   routerLinkActive="active"
                   [routerLinkActiveOptions]="{ exact: true }"
                   (click)="collapseNavbar()"
-                  >
+                >
                   <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
                   <span i18n="@@global.menu.report.consortium.string">Consortium report</span>
                 </a>
@@ -123,7 +121,7 @@
                 class="dropdown-item"
                 routerLink="/report/affiliation"
                 (click)="collapseNavbar()"
-                >
+              >
                 <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
                 <span i18n="@@global.menu.report.affiliation.string">Affiliation report</span>
               </a>
@@ -137,157 +135,157 @@
                   routerLinkActive="active"
                   [routerLinkActiveOptions]="{ exact: true }"
                   (click)="collapseNavbar()"
-                  >
+                >
                   <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
                   <span i18n="@@global.menu.report.consortiumMemberAffiliations.string"
                     >Consortium member affiliations</span
-                    >
-                  </a>
-                </li>
-              }
-            </ul>
-          </li>
+                  >
+                </a>
+              </li>
+            }
+          </ul>
+        </li>
+        <li
+          *appHasAnyAuthority="'ROLE_USER'"
+          ngbDropdown
+          class="nav-item dropdown pointer"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <a class="nav-link dropdown-toggle" ngbDropdownToggle role="button" tabindex="0" id="entity-menu">
+            <span>
+              <fa-icon [icon]="faLightbulb"></fa-icon>
+              <span i18n="@@global.menu.resources.main.string">Resources</span>
+            </span>
+          </a>
+          <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+            <li>
+              <a
+                class="dropdown-item"
+                target="_blank"
+                href="https://info.orcid.org/documentation/member-portal/account-management/"
+                (click)="collapseNavbar()"
+              >
+                <span i18n="@@global.menu.resources.accountManagementGuide.string">Account Management Guide</span>
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                target="_blank"
+                href="https://info.orcid.org/documentation/member-portal/member-portal-organizational-admin-guide/"
+                (click)="collapseNavbar()"
+              >
+                <span i18n="@@global.menu.resources.affiliationManagerGuide.string">Affiliation Manager Guide</span>
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                target="_blank"
+                href="https://info.orcid.org/documentation/member-portal/member-reporting/"
+                (click)="collapseNavbar()"
+              >
+                <span i18n="@@global.menu.resources.memberReportingGuide.string">Member Reporting Guide</span>
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                target="_blank"
+                href="https://info.orcid.org/affiliation-manager-production-credentials-request-form/"
+                (click)="collapseNavbar()"
+              >
+                <span i18n="@@global.menu.resources.applyForAffiliationManagerCreds.string"
+                  >Apply for Affiliation Manager Credentials</span
+                >
+              </a>
+            </li>
+          </ul>
+        </li>
+        @if (isOrganizationOwner() || hasRoleAdmin()) {
           <li
-            *appHasAnyAuthority="'ROLE_USER'"
             ngbDropdown
             class="nav-item dropdown pointer"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
-            >
-            <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+          >
+            <a class="nav-link dropdown-toggle" ngbDropdownToggle role="button" tabindex="0" id="admin-menu">
               <span>
-                <fa-icon [icon]="faLightbulb"></fa-icon>
-                <span i18n="@@global.menu.resources.main.string">Resources</span>
+                <fa-icon [icon]="faUserPlus"></fa-icon>
+                <span i18n="@@global.menu.adminMenu.main.string">Admin</span>
               </span>
             </a>
-            <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+            <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="admin-menu">
               <li>
                 <a
                   class="dropdown-item"
-                  target="_blank"
-                  href="https://info.orcid.org/documentation/member-portal/account-management/"
+                  routerLink="/users"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
                   (click)="collapseNavbar()"
-                  >
-                  <span i18n="@@global.menu.resources.accountManagementGuide.string">Account Management Guide</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  class="dropdown-item"
-                  target="_blank"
-                  href="https://info.orcid.org/documentation/member-portal/member-portal-organizational-admin-guide/"
-                  (click)="collapseNavbar()"
-                  >
-                  <span i18n="@@global.menu.resources.affiliationManagerGuide.string">Affiliation Manager Guide</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  class="dropdown-item"
-                  target="_blank"
-                  href="https://info.orcid.org/documentation/member-portal/member-reporting/"
-                  (click)="collapseNavbar()"
-                  >
-                  <span i18n="@@global.menu.resources.memberReportingGuide.string">Member Reporting Guide</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  class="dropdown-item"
-                  target="_blank"
-                  href="https://info.orcid.org/affiliation-manager-production-credentials-request-form/"
-                  (click)="collapseNavbar()"
-                  >
-                  <span i18n="@@global.menu.resources.applyForAffiliationManagerCreds.string"
-                    >Apply for Affiliation Manager Credentials</span
-                    >
-                  </a>
-                </li>
-              </ul>
-            </li>
-            @if (isOrganizationOwner() || hasRoleAdmin()) {
-              <li
-                ngbDropdown
-                class="nav-item dropdown pointer"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
                 >
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
-                  <span>
-                    <fa-icon [icon]="faUserPlus"></fa-icon>
-                    <span i18n="@@global.menu.adminMenu.main.string">Admin</span>
-                  </span>
+                  <fa-icon [icon]="faUser" [fixedWidth]="true"></fa-icon>
+                  <span i18n="@@global.menu.adminMenu.manageUsers.string">Manage users</span>
                 </a>
-                <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="admin-menu">
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      routerLink="/users"
-                      routerLinkActive="active"
-                      [routerLinkActiveOptions]="{ exact: true }"
-                      (click)="collapseNavbar()"
-                      >
-                      <fa-icon [icon]="faUser" [fixedWidth]="true"></fa-icon>
-                      <span i18n="@@global.menu.adminMenu.manageUsers.string">Manage users</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      *appHasAnyAuthority="'ROLE_ADMIN'"
-                      class="dropdown-item"
-                      routerLink="/members"
-                      routerLinkActive="active"
-                      [routerLinkActiveOptions]="{ exact: true }"
-                      (click)="collapseNavbar()"
-                      >
-                      <fa-icon [icon]="faUniversity" [fixedWidth]="true"></fa-icon>
-                      <span i18n="@@global.menu.adminMenu.manageMembers.string">Manage members</span>
-                    </a>
-                  </li>
-                </ul>
               </li>
+              <li>
+                <a
+                  *appHasAnyAuthority="'ROLE_ADMIN'"
+                  class="dropdown-item"
+                  routerLink="/members"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="collapseNavbar()"
+                >
+                  <fa-icon [icon]="faUniversity" [fixedWidth]="true"></fa-icon>
+                  <span i18n="@@global.menu.adminMenu.manageMembers.string">Manage members</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+        }
+        <li
+          ngbDropdown
+          class="nav-item dropdown pointer"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <a class="nav-link dropdown-toggle" ngbDropdownToggle role="button" tabindex="0" id="account-menu">
+            @if (!getImageUrl()) {
+              <span>
+                <fa-icon [icon]="faUser"></fa-icon>
+                <span i18n="@@global.menu.account.main.string">Account</span>
+              </span>
             }
-            <li
-              ngbDropdown
-              class="nav-item dropdown pointer"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              >
-              <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
-                @if (!getImageUrl()) {
-                  <span>
-                    <fa-icon [icon]="faUser"></fa-icon>
-                    <span i18n="@@global.menu.account.main.string">Account</span>
-                  </span>
-                }
-                @if (getImageUrl()) {
-                  <span>
-                    <img [src]="getImageUrl()" class="profile-image rounded-circle" alt="Avatar" />
-                  </span>
-                }
+            @if (getImageUrl()) {
+              <span>
+                <img [src]="getImageUrl()" class="profile-image rounded-circle" alt="Avatar" />
+              </span>
+            }
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu aria-labelledby="account-menu">
+            <li>
+              <a class="dropdown-item" routerLink="/settings" routerLinkActive="active" (click)="collapseNavbar()">
+                <fa-icon [icon]="faWrench" [fixedWidth]="true"></fa-icon>
+                <span i18n="@@global.menu.account.settings.string">Settings</span>
               </a>
-              <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu aria-labelledby="account-menu">
-                <li>
-                  <a class="dropdown-item" routerLink="/settings" routerLinkActive="active" (click)="collapseNavbar()">
-                    <fa-icon [icon]="faWrench" [fixedWidth]="true"></fa-icon>
-                    <span i18n="@@global.menu.account.settings.string">Settings</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" routerLink="/password" routerLinkActive="active" (click)="collapseNavbar()">
-                    <fa-icon [icon]="faLock" [fixedWidth]="true"></fa-icon>
-                    <span i18n="@@global.menu.account.password.string">Password</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" tabindex="1" (click)="logout()" (keypress)="logout()" id="logout">
-                    <fa-icon [icon]="faSignOutAlt" [fixedWidth]="true"></fa-icon>
-                    <span i18n="@@global.menu.account.logout.string">Sign out</span>
-                  </a>
-                </li>
-              </ul>
             </li>
-          }
-        </ul>
-      </div>
-    </nav>
+            <li>
+              <a class="dropdown-item" routerLink="/password" routerLinkActive="active" (click)="collapseNavbar()">
+                <fa-icon [icon]="faLock" [fixedWidth]="true"></fa-icon>
+                <span i18n="@@global.menu.account.password.string">Password</span>
+              </a>
+            </li>
+            <li>
+              <button type="button" class="dropdown-item" (click)="logout()" id="logout">
+                <fa-icon [icon]="faSignOutAlt" [fixedWidth]="true"></fa-icon>
+                <span i18n="@@global.menu.account.logout.string">Sign out</span>
+              </button>
+            </li>
+          </ul>
+        </li>
+      }
+    </ul>
+  </div>
+</nav>

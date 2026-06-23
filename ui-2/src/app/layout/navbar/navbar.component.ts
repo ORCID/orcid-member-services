@@ -83,10 +83,8 @@ export class NavbarComponent implements OnInit {
           const memberId = this.accountService.getMemberId()
 
           if (memberId) {
-            console.log('Fetching member for ID:', memberId)
             this.memberService.find(memberId).subscribe({
               next: (res: IMember | null) => {
-                console.log('Member fetch successful', res)
                 if (res) {
                   this.organizationName = res.clientName
                   this.consortiumLead = res.isConsortiumLead

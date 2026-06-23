@@ -16,6 +16,12 @@ Navbar
 .navbar {
   padding: 0.2rem 1rem;
 
+  --bs-navbar-color: rgba(255, 255, 255, 0.65);
+  --bs-navbar-hover-color: rgba(255, 255, 255, 0.9);
+  --bs-navbar-active-color: #fff;
+  --bs-navbar-brand-color: #fff;
+  --bs-navbar-brand-hover-color: #fff;
+
   ul.navbar-nav {
     .nav-item {
       margin-left: 0.5em;
@@ -24,6 +30,18 @@ Navbar
 
   a.nav-link {
     font-weight: 400;
+    color: var(--bs-navbar-color);
+
+    &:hover,
+    &:focus {
+      color: var(--bs-navbar-hover-color);
+      text-decoration: none;
+    }
+  }
+
+  .nav-item.show > a.nav-link,
+  .nav-item > a.nav-link.active {
+    color: var(--bs-navbar-active-color);
   }
 }
 

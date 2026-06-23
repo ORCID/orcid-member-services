@@ -4,106 +4,66 @@ The ORCID Member Portal is a new suite of tools intended to help organizations m
 
 The first phase of development includes features that simplify the process of posting affiliation information (employment, education, etc) to researchers’ ORCID records.
 
-Project tasks are managed in Trello:
-- Current development tasks: https://trello.com/b/a8Cxpwqe/member-services-current-development
-- Release notes: https://trello.com/b/9Xugawlx/member-services-release-notes-2020
+The ORCID Member Portal is a suite of tools that help organizations make the most of their ORCID membership — in particular, posting affiliation information (employment, education, etc.) to researchers' ORCID records.
 
-## Development setup
+## Architecture
 
-### Prerequisites
+Three Spring Boot services (Spring Boot 3.5 / **Java 21**) plus an Angular 21 SPA. Each Java service owns its own MongoDB database and lives under the `org.orcid.mp.<service>` package.
 
-- [OpenJDK 11](https://openjdk.java.net/install/)
-- [Git](https://git-scm.com/downloads)
-- [NodeJS](https://nodejs.org/en/download)
-- [Yeoman](https://yeoman.io/learning/)
-- [Yarn](https://yarnpkg.com/lang/en/docs/install/#mac-stable)
-- [MongoDB](https://docs.mongodb.com/manual/installation/)
-- [MongoDB compass](https://www.mongodb.com/products/compass) also recommended
-- [Angular CLI](https://v16.angular.io/cli)
+| Service | Dir | Port | Role |
+|---|---|---|---|
+| user-service | `user-service-2` | 9000 | **OAuth2 Authorization Server** — issues JWTs, owns users/auth/MFA |
+| member-service | `member-service-2` | 9010 | Member orgs, Salesforce integration, reporting dashboards |
+| assertion-service | `assertion-service-2` | 9020 | Affiliations/assertions, ORCID API integration, CSV upload |
+| ui-2 | `ui-2` | 4200 (dev) | Angular 21 SPA |
 
-### Environment configuration
+`user-service` is the only authorization server; `member-service` and `assertion-service` are OAuth2 resource servers that validate JWTs against user-service's JWK set (`/oauth2/jwks`). See `AGENTS.md` for the detailed architecture and conventions.
 
-Use the provided `.env.example` as the starting point for local configuration.
+## Prerequisites
 
-Copy it to a local `.env` file and update the values for your environment. Keep secrets out of version control.
+- **JDK 21** (each service ships a Maven wrapper, `./mvnw` / `.\mvnw.cmd`)
+- **Node.js** + **npm** (Angular CLI 21; installed locally via `npm install`)
+- **MongoDB** (Community Edition) running on `localhost:27017`
+- [MongoDB Compass](https://www.mongodb.com/products/compass) recommended for inspecting data
 
-### Install and start MongoDB
+## Environment configuration
 
-Install and start [MongoDB Community Edition for your OS](https://docs.mongodb.com/manual/administration/install-community/)
+Copy `.env.example` to a local `.env` and fill in the values for your environment. Keep `.env` uncommitted; `.env.example` stays a safe template. Config is injected into the services via `APPLICATION_*` / `SPRING_*` env vars (see `docker-compose.yml`).
 
-### Clone the repository
+## Running locally
 
-Create a `git` directory in your home folder, and clone the orcid-member-services project there:
-
-```bash
-    mkdir ~/git
-    cd ~/git
-    git clone git@github.com:ORCID/orcid-member-services.git
-```
-
-### Set Java version to Open JDK 11
-
-Edit bash profile to set JAVA_HOME to your OpenJDK 11 path, ex:
+Start MongoDB, then run each service from its directory (Windows: use `.\mvnw.cmd`):
 
 ```bash
-    vim ~/.bash_profile
-    export JAVA_HOME=$(/usr/libexec/java_home -v 11)
+cd user-service-2      ; ./mvnw   # http://localhost:9000
+cd member-service-2    ; ./mvnw   # http://localhost:9010
+cd assertion-service-2 ; ./mvnw   # http://localhost:9020
 ```
-
-### Start the user service
 
 > **IMPORTANT!** For running locally without an email server connected, disable mail health check for oauth2-services before starting. Edit [oauth2-service/src/main/resources/config/application.yml](https://github.com/ORCID/orcid-member-services/blob/master/oauth2-service/src/main/resources/config/application.yml#L60) and set health - mail - enabled to false.
 
-```bash
-cd user-service-2
-./mvnw
-```
-
-### Start the Angular frontend
+Start the UI dev server (proxies to the services via `ui-2/src/proxy.conf.json`):
 
 ```bash
 cd ui-2
-ng serve
+npm install
+npm run start          # http://localhost:4200
 ```
 
-### Start the assertion service
+## Testing
 
-```bash
-cd assertion-service-2
-./mvnw
-```
-
-### Start the member service
-
-```bash
-cd member-service-2
-./mvnw
-```
+- Java: `cd <service>-2 ; ./mvnw test`
+- UI unit tests (Karma/Jasmine, single run): `cd ui-2 ; npm test`
+- UI e2e (Cypress): see `ui-2/cypress/`
+- UI lint + format: `npm run format`
 
 ## Docker-based setup
-
-The project can also be run with Docker.
-
-### 1. Prepare environment variables
-
-Start from `.env.example`, copy it to `.env`, and fill in the values required for your environment.
-
-### 2. Build and start the stack
-
-Use the provided script to build the Java services and start the containers:
 
 ```bash
 ./docker-build.sh
 ```
 
-This script:
-- builds the Java service JARs
-- runs `docker compose build`
-- starts the containers in detached mode
-
-### 3. Verify the services
-
-After startup, check that the services are available through your configured Docker setup.
+This builds all three service JARs (`-DskipTests`), runs `docker compose build`, and starts the containers detached. Requires a local `.env`. All Java services expose JVM debug on port 5005 in Docker.
 
 ## Notes
 

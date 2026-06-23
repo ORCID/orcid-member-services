@@ -3,7 +3,7 @@
     <h4 class="modal-title" i18n="@@gatewayApp.assertionServiceAssertion.import.title.string">
       Import affiliations from CSV
     </h4>
-    <button type="button" class="close" (click)="close()" aria-hidden="true">&times;</button>
+    <button type="button" class="btn-close" (click)="close()" aria-label="Close"></button>
   </div>
   <div class="modal-body">
     @if (uploaded && success) {
@@ -12,75 +12,89 @@
           <div class="col-md-12">
             <span i18n="@@gatewayApp.assertionServiceAssertion.import.successMessage.string"
               >Your CSV has been uploaded for processing. We will let you know via email once the file has been
-            processed.</span
-              >
-            </div>
+              processed.</span
+            >
           </div>
         </div>
-      }
-      <app-alert-error></app-alert-error>
-      @if (uploaded && !success) {
-        <div class="alerts top right" role="alert">
-          <ngb-alert
-            class="alert alert-danger alert-dismissible"
-            role="alert"
-            [dismissible]="false"
-            ng-reflect-type="danger"
-            >
-            <p i18n="@@gatewayApp.assertionServiceAssertion.import.failure.string">
-          There was a problem uploading your CSV for processing.
-        </p>
-          </ngb-alert>
-        </div>
-      }
-      <p id="jhi-delete-msUser-heading" i18n="@@gatewayApp.assertionServiceAssertion.import.label.string">
+      </div>
+    }
+    <app-alert-error></app-alert-error>
+    @if (uploaded && !success) {
+      <div class="alerts top right" role="alert">
+        <ngb-alert
+          class="alert alert-danger alert-dismissible"
+          role="alert"
+          [dismissible]="false"
+          ng-reflect-type="danger"
+        >
+          <p i18n="@@gatewayApp.assertionServiceAssertion.import.failure.string">
+            There was a problem uploading your CSV for processing.
+          </p>
+        </ngb-alert>
+      </div>
+    }
+    <p id="jhi-delete-msUser-heading" i18n="@@gatewayApp.assertionServiceAssertion.import.label.string">
       Please select the CSV file to upload
     </p>
-      <div class="form-group">
-        <label
-          class="form-control-label"
-          i18n="@@gatewayApp.assertionServiceAssertion.import.filePath.string"
-          for="field_filePath.string"
-          >File Path</label
-          >
-          <input
-            type="file"
-            class="form-control"
-            name="filePath"
-            id="field_filePath"
-            accept=".csv"
-            onclick="this.value=null"
-            (change)="selectFile($event)"
-            />
-          </div>
-          <p>
-            <em
-              ><span i18n="@@gatewayApp.assertionServiceAssertion.uploadNote.string"
-              >Please do not forget to download and send permission links to your researchers once the upload has
+    <div class="mb-3">
+      <label
+        class="form-label fw-semibold"
+        i18n="@@gatewayApp.assertionServiceAssertion.import.filePath.string"
+        >File Path</label
+      >
+      <div class="file-picker">
+        <input
+          #fileInput
+          type="file"
+          class="visually-hidden"
+          name="filePath"
+          id="field_filePath"
+          accept=".csv"
+          (click)="clearFileInput($event)"
+          (change)="selectFile($event)"
+        />
+        <label for="field_filePath" class="btn btn-outline-secondary file-picker__btn" role="button">
+          <fa-icon [icon]="faFolderOpen" aria-hidden="true"></fa-icon>
+          <span i18n="@@gatewayApp.assertionServiceAssertion.import.browse.string">Browse…</span>
+        </label>
+        <span class="file-picker__name">{{ selectedFileName }}</span>
+      </div>
+    </div>
+    <p>
+      <em
+        ><span i18n="@@gatewayApp.assertionServiceAssertion.uploadNote.string"
+          >Please do not forget to download and send permission links to your researchers once the upload has
           completed.</span
-              ></em
-              >
-            </p>
-          </div>
-          @if (loading) {
-            <div class="progress progress-striped">
-              <div class="progress-bar indeterminate" role="progressbar"></div>
-            </div>
-          }
+        ></em
+      >
+    </p>
+  </div>
+  @if (loading) {
+    <div class="progress">
+      <div
+        class="progress-bar progress-bar-striped progress-bar-animated"
+        role="progressbar"
+        style="width: 100%"
+        aria-valuenow="100"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      ></div>
+    </div>
+  }
 
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-primary" (click)="close()">
-              <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
-            </button>
-            @if (!uploaded) {
-              <button data-cy="confirmCsvUpload" type="submit" class="btn btn-primary">
-                <fa-icon [icon]="faPlus"></fa-icon>&nbsp;<span i18n="@@entity.action.upload.string">Upload</span>
-              </button>
-            }
-            @if (uploaded) {
-              <button id="close-dialog" type="button" class="btn btn-primary" (click)="close()">
-                <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.close.string">Close</span>
-              </button>
-            }
-          </div>
-        </form>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="close()">
+      <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
+    </button>
+    @if (!uploaded) {
+      <button data-cy="confirmCsvUpload" type="submit" class="btn btn-primary">
+        <fa-icon [icon]="faPlus"></fa-icon>&nbsp;<span i18n="@@entity.action.upload.string">Upload</span>
+      </button>
+    }
+    @if (uploaded) {
+      <button id="close-dialog" type="button" class="btn btn-primary" (click)="close()">
+        <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.close.string">Close</span>
+      </button>
+    }
+  </div>
+</form>

@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core'
 import { IMember } from './model/member.model'
-import { Subscription } from 'rxjs'
+import { Subscription, finalize } from 'rxjs'
 import {
   faCheckCircle,
   faPencilAlt,
@@ -21,6 +21,7 @@ import { Page } from '../shared/model/page.model'
 @Component({
   selector: 'app-members',
   templateUrl: './members.component.html',
+  styleUrls: ['./members.component.scss'],
   standalone: false,
 })
 export class MembersComponent implements OnInit {
@@ -54,6 +55,7 @@ export class MembersComponent implements OnInit {
   paginationHeaderSubscription: Subscription | undefined
   sortColumn = 'salesforceId'
   ascending: any
+  isLoading = false
 
   constructor() {
     this.itemsPerPage = ITEMS_PER_PAGE
@@ -84,6 +86,7 @@ export class MembersComponent implements OnInit {
       this.searchTerm = ''
     }
 
+    this.isLoading = true
     this.memberService
       .query({
         page: this.page - 1,
@@ -91,6 +94,7 @@ export class MembersComponent implements OnInit {
         sort: this.sort(),
         filter: this.submittedSearchTerm ? encodeURIComponent(this.submittedSearchTerm) : '',
       })
+      .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
         next: (res) => {
           if (res) {

@@ -1,6 +1,6 @@
 import { Component, NgZone, OnDestroy, OnInit, inject } from '@angular/core'
 import { IUser, User } from './model/user.model'
-import { Subscription } from 'rxjs'
+import { Subscription, finalize } from 'rxjs'
 import { UserService } from './service/user.service'
 import {
   faCheckCircle,
@@ -63,6 +63,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   faSortDown = faSortDown
   faSortUp = faSortUp
   DEFAULT_ADMIN = 'admin@orcid.org'
+  isLoading = false
 
   constructor() {
     this.itemsPerPage = ITEMS_PER_PAGE
@@ -96,6 +97,7 @@ export class UsersComponent implements OnInit, OnDestroy {
       this.searchTerm = ''
     }
 
+    this.isLoading = true
     if (this.hasRoleAdmin()) {
       this.userService
         .query({
@@ -104,6 +106,7 @@ export class UsersComponent implements OnInit, OnDestroy {
           sort: this.sort(),
           filter: this.submittedSearchTerm ? encodeURIComponent(this.submittedSearchTerm) : '',
         })
+        .pipe(finalize(() => (this.isLoading = false)))
         .subscribe({
           next: (res) => {
             if (res) {
@@ -119,6 +122,7 @@ export class UsersComponent implements OnInit, OnDestroy {
           sort: this.sort(),
           filter: this.submittedSearchTerm ? encodeURIComponent(this.submittedSearchTerm) : '',
         })
+        .pipe(finalize(() => (this.isLoading = false)))
         .subscribe({
           next: (res) => {
             if (res) {
