@@ -6,8 +6,6 @@ RUN apt-get update && \
     apt-get install -y iputils-ping python3 python3-pymongo curl && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install pymongo
-
 ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
 
 EXPOSE 9020
