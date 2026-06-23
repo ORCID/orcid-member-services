@@ -6,7 +6,7 @@
     <button type="button" class="btn-close" (click)="close()" aria-label="Close"></button>
   </div>
   <div class="modal-body">
-    @if (requestAlreadyInProgress) {
+    @if (requestAlreadyInProgress()) {
       <div
         class="alert alert-danger"
         i18n="@@gatewayApp.assertionServiceAssertion.notifications.alreadyInProgress.string"
@@ -24,8 +24,8 @@
     <p i18n="@@gatewayApp.assertionServiceAssertion.notifications.languageDescription.string">
       What language should the notification be sent in?
     </p>
-      <select class="form-select w-66" id="langKey" name="langKey" [(ngModel)]="language">
-      @for (lang of languages | keyvalue; track lang) {
+    <select class="form-select w-66" id="langKey" name="langKey" [ngModel]="language()" (ngModelChange)="language.set($event)">
+      @for (lang of languages() | keyvalue; track lang) {
         <option [ngValue]="lang.key">{{ lang.value.name }}</option>
       }
     </select>
@@ -33,10 +33,10 @@
 
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-primary" (click)="close()">
-      <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
+      <fa-icon [icon]="faBan" />&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
     </button>
     <button data-cy="confirmCsvUpload" type="submit" class="btn btn-primary">
-      <fa-icon [icon]="faPaperPlane"></fa-icon>&nbsp;<span
+      <fa-icon [icon]="faPaperPlane" />&nbsp;<span
         i18n="@@gatewayApp.assertionServiceAssertion.notifications.sendNotifications.string"
         >Send notifications</span
       >

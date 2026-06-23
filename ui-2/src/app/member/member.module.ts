@@ -20,8 +20,6 @@ import { AddConsortiumMemberComponent } from '../home/consortium/add-consortium-
     FontAwesomeModule,
     FormsModule,
     ReactiveFormsModule,
-  ],
-  declarations: [
     MembersComponent,
     MemberUpdateComponent,
     MemberDetailComponent,

@@ -1,14 +1,15 @@
 import { Moment } from 'moment'
 
-export const enum AffiliationSection {
-  EMPLOYMENT = 'EMPLOYMENT',
-  EDUCATION = 'EDUCATION',
-  QUALIFICATION = 'QUALIFICATION',
-  INVITED_POSITION = 'INVITED_POSITION',
-  DISTINCTION = 'DISTINCTION',
-  MEMBERSHIP = 'MEMBERSHIP',
-  SERVICE = 'SERVICE',
-}
+export const AffiliationSection = Object.freeze({
+  EMPLOYMENT: 'EMPLOYMENT',
+  EDUCATION: 'EDUCATION',
+  QUALIFICATION: 'QUALIFICATION',
+  INVITED_POSITION: 'INVITED_POSITION',
+  DISTINCTION: 'DISTINCTION',
+  MEMBERSHIP: 'MEMBERSHIP',
+  SERVICE: 'SERVICE',
+} as const)
+export type AffiliationSection = (typeof AffiliationSection)[keyof typeof AffiliationSection]
 
 export interface IAffiliation {
   addedToORCID?: Moment | null

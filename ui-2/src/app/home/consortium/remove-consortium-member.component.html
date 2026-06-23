@@ -1,11 +1,13 @@
-@if (memberData) {
+@if (memberData(); as member) {
   <div class="h-100 p-16 line-height-normal">
     <div class="font-size-14">
-      Back to <a routerLink="" class="fw-normal text-decoration-underline">{{ memberData.publicDisplayName }}</a>
+      Back to <a routerLink="" class="fw-normal text-decoration-underline">{{ member.publicDisplayName }}</a>
     </div>
     <hr class="mb-40" />
     <div class="edit-org-label mb-8 font-size-18 color-gray">Remove consortium member</div>
-    <h1 class="wide-text fw-bold mb-40">{{ consortiumMember!.orgName }}</h1>
+    @if (consortiumMember(); as consortiumMemberData) {
+      <h1 class="wide-text fw-bold mb-40">{{ consortiumMemberData.orgName }}</h1>
+    }
     <div class="d-flex">
       <form (ngSubmit)="save()" name="editForm" role="form" [formGroup]="editForm" class="w-66">
         <div class="form w-100">
@@ -18,13 +20,13 @@
                 class="form-select date-dropdown me-8 font-size-14"
                 name="terminationMonth"
                 formControlName="terminationMonth"
-                [ngClass]="{
-                  'text-danger': editForm.get('terminationMonth')?.invalid && editForm.get('terminationMonth')?.dirty,
-                  'input-field-default-border': !editForm.get('terminationMonth')?.dirty,
-                }"
+                [class.text-danger]="
+                  !!(editForm.get('terminationMonth')?.invalid && editForm.get('terminationMonth')?.dirty)
+                "
+                [class.input-field-default-border]="!editForm.get('terminationMonth')?.dirty"
               >
                 <option hidden selected [ngValue]="null">Month</option>
-                @for (month of monthList; track month) {
+                @for (month of monthList(); track month) {
                   <option [ngValue]="month[0]" class="form-field-text-color-default">
                     {{ month[0] }}
                   </option>
@@ -34,13 +36,13 @@
                 class="form-select date-dropdown font-size-14"
                 name="terminationYear"
                 formControlName="terminationYear"
-                [ngClass]="{
-                  'text-danger': editForm.get('terminationYear')?.invalid && editForm.get('terminationYear')?.dirty,
-                  'input-field-default-border': !editForm.get('terminationYear')?.dirty,
-                }"
+                [class.text-danger]="
+                  !!(editForm.get('terminationYear')?.invalid && editForm.get('terminationYear')?.dirty)
+                "
+                [class.input-field-default-border]="!editForm.get('terminationYear')?.dirty"
               >
                 <option hidden selected [ngValue]="null">Year</option>
-                @for (year of yearList; track year) {
+                @for (year of yearList(); track year) {
                   <option [ngValue]="year" class="form-field-text-color-default">
                     {{ year }}
                   </option>
@@ -82,7 +84,7 @@
               </div>
             </div>
           </div>
-          <button type="submit" [disabled]="isSaving" class="btn btn-danger font-size-14 me-2">
+          <button type="submit" [disabled]="isSaving()" class="btn btn-danger font-size-14 me-2">
             Remove member from consortium
           </button>
           <button type="button" class="btn btn-outline-primary font-size-14" routerLink="/">Cancel</button>

@@ -1,3 +1,5 @@
+/// <reference types="jasmine" />
+
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -12,8 +14,8 @@ import { Member } from '../member/model/member.model'
 import { UserValidation } from './model/user-validation.model'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { RouterTestingModule } from '@angular/router/testing'
-import { of } from 'rxjs'
+import { RouterModule } from '@angular/router'
+import { EMPTY, of } from 'rxjs'
 import { By } from '@angular/platform-browser'
 import { FeatureToggleService } from '../shared/service/feature-toggle.service'
 
@@ -45,19 +47,18 @@ describe('UserUpdateComponent', () => {
     const alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
     const memberServiceSpy = jasmine.createSpyObj('MemberService', ['find', 'getAllMembers'])
     const routerSpy = jasmine.createSpyObj('Router', ['navigate'])
-    const featureToggleSpy = jasmine.createSpyObj('FeatureToggleService', ['isEnabled', 'initFeatures']);
-    featureToggleSpy.initFeatures.and.returnValue(of(null));
+    const featureToggleSpy = jasmine.createSpyObj('FeatureToggleService', ['isEnabled', 'initFeatures'])
+    featureToggleSpy.initFeatures.and.returnValue(of(null))
 
     TestBed.configureTestingModule({
-      declarations: [UserUpdateComponent],
-      imports: [ReactiveFormsModule, RouterTestingModule.withRoutes([]), FontAwesomeModule],
+      imports: [ReactiveFormsModule, RouterModule.forRoot([]), FontAwesomeModule, UserUpdateComponent],
       providers: [
         FormBuilder,
         { provide: UserService, useValue: userServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },
-        { provide: ErrorService, useValue: {} },
+        { provide: ErrorService, useValue: { on: () => EMPTY } },
         { provide: FeatureToggleService, useValue: featureToggleSpy },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -112,7 +113,7 @@ describe('UserUpdateComponent', () => {
     accountService.hasAnyAuthority.and.returnValue(false)
     fixture.detectChanges()
 
-    expect(component.isExistentMember).toBe(true)
+    expect((component as any).isExistentMember()).toBe(true)
   })
 
   it('should display disable 2fa checkbox for admins when editing an existing user', () => {
@@ -196,7 +197,7 @@ describe('UserUpdateComponent', () => {
     accountService.hasAnyAuthority.and.returnValue(true)
     fixture.detectChanges()
 
-    expect(component.isExistentMember).toBe(false)
+    expect((component as any).isExistentMember()).toBe(false)
   })
 
   it('should validate non-owners', () => {
@@ -206,8 +207,8 @@ describe('UserUpdateComponent', () => {
 
     component.editForm.patchValue({ memberId: '123', mainContact: false })
     component.validateOrgOwners()
-    expect(component.hasOwner).toBe(false)
-    expect(component.isExistentMember).toBe(true)
+    expect((component as any).hasOwner()).toBe(false)
+    expect((component as any).isExistentMember()).toBe(true)
   })
 
   it('should validate org owners', () => {
@@ -216,7 +217,7 @@ describe('UserUpdateComponent', () => {
 
     component.editForm.patchValue({ memberId: '123', mainContact: true })
     component.validateOrgOwners()
-    expect(component.hasOwner).toBe(true)
+    expect((component as any).hasOwner()).toBe(true)
   })
 
   it('should create new user', () => {
@@ -369,12 +370,12 @@ describe('UserUpdateComponent', () => {
   })
 
   it('should display send activation option for existing user with inactive account', () => {
-    component.existentUser = { email: 'test@example.com', activated: false } as IUser
+    (component as any).existentUser.set({ email: 'test@example.com', activated: false } as IUser)
     expect(component.displaySendActivate()).toBe(true)
   })
 
   it('should not display send activation option for existing user with active account', () => {
-    component.existentUser = { email: 'test@example.com', activated: true } as IUser
+    (component as any).existentUser.set({ email: 'test@example.com', activated: true } as IUser)
     expect(component.displaySendActivate()).toBe(false)
   })
 })

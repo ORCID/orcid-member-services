@@ -31,15 +31,14 @@ describe('SettingsComponent', () => {
     ])
 
     TestBed.configureTestingModule({
-    declarations: [SettingsComponent, FindLanguageFromKeyPipe],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [ReactiveFormsModule],
-    providers: [
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      imports: [ReactiveFormsModule, SettingsComponent, FindLanguageFromKeyPipe],
+      providers: [
         { provide: LanguageService, useValue: languageServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
         provideHttpClient(withInterceptorsFromDi()),
-    ]
-}).compileComponents()
+      ],
+    }).compileComponents()
 
     fixture = TestBed.createComponent(SettingsComponent)
     component = fixture.componentInstance
@@ -109,14 +108,14 @@ describe('SettingsComponent', () => {
     accountServiceSpy.getUsername.and.returnValue('test')
     fixture.detectChanges()
 
-    expect(component.showMfaSetup).toBeFalsy()
-    expect(component.showMfaBackupCodes).toBeFalsy()
+    expect((component as any).showMfaSetup()).toBeFalsy()
+    expect((component as any).showMfaBackupCodes()).toBeFalsy()
 
     component.mfaForm.patchValue({ mfaEnabled: true })
     component.mfaEnabledStateChange()
 
-    expect(component.showMfaSetup).toBeTruthy()
-    expect(component.showMfaBackupCodes).toBeFalsy()
+    expect((component as any).showMfaSetup()).toBeTruthy()
+    expect((component as any).showMfaBackupCodes()).toBeFalsy()
   })
 
   it('should flip mfa fields when mfa state changed', () => {
@@ -141,11 +140,11 @@ describe('SettingsComponent', () => {
     )
     accountServiceSpy.getMfaSetup.and.returnValue(of({ secret: 'test', otp: 'test', qrCode: 'test' }))
 
-    expect(component.showMfaTextCode).toBeFalsy()
+    expect((component as any).showMfaTextCode()).toBeFalsy()
 
     component.toggleMfaTextCode()
 
-    expect(component.showMfaTextCode).toBeTruthy()
+    expect((component as any).showMfaTextCode()).toBeTruthy()
   })
 
   it('save mfa enabled should call account service enable', () => {
@@ -232,9 +231,9 @@ describe('SettingsComponent', () => {
       })
     )
     fixture.detectChanges()
-    expect(component.success).toBeFalsy()
+    expect((component as any).success()).toBeFalsy()
     component.save()
-    expect(component.success).toBeTruthy()
+    expect((component as any).success()).toBeTruthy()
     expect(accountServiceSpy.save).toHaveBeenCalled()
   })
 
@@ -260,9 +259,9 @@ describe('SettingsComponent', () => {
       })
     )
     fixture.detectChanges()
-    expect(component.success).toBeFalsy()
+    expect((component as any).success()).toBeFalsy()
     component.save()
-    expect(component.success).toBeFalsy()
+    expect((component as any).success()).toBeFalsy()
     expect(accountServiceSpy.save).toHaveBeenCalled()
   })
 })

@@ -21,10 +21,9 @@ describe('AffiliationImportDialogComponent', () => {
     const uploadServiceSpy = jasmine.createSpyObj('FileUploadService', ['uploadFile'])
 
     TestBed.configureTestingModule({
-    declarations: [AffiliationImportDialogComponent],
-    imports: [],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    providers: [
+      imports: [AffiliationImportDialogComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      providers: [
         FormBuilder,
         NgbModal,
         NgbActiveModal,
@@ -32,8 +31,8 @@ describe('AffiliationImportDialogComponent', () => {
         { provide: FileUploadService, useValue: uploadServiceSpy },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-}).compileComponents()
+      ],
+    }).compileComponents()
 
     fixture = TestBed.createComponent(AffiliationImportDialogComponent)
     component = fixture.componentInstance
@@ -47,7 +46,7 @@ describe('AffiliationImportDialogComponent', () => {
   })
 
   it('should call upload service', () => {
-    component.currentFile = getFileList()
+    (component as any).currentFile.set(getFileList())
     uploadService.uploadFile.and.returnValue(EMPTY)
     component.upload()
     expect(uploadService.uploadFile).toHaveBeenCalled()

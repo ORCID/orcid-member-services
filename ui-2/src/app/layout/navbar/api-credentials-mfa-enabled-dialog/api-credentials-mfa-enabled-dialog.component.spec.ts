@@ -1,6 +1,8 @@
+/// <reference types="jasmine" />
+
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
 import { ApiCredentialsMfaEnabledDialogComponent } from './api-credentials-mfa-enabled-dialog.component'
 
@@ -13,8 +15,7 @@ describe('ApiCredentialsMfaEnabledDialogComponent', () => {
     const activeModalSpy = jasmine.createSpyObj('NgbActiveModal', ['dismiss'])
 
     TestBed.configureTestingModule({
-      declarations: [ApiCredentialsMfaEnabledDialogComponent],
-      imports: [RouterTestingModule],
+      imports: [RouterModule.forRoot([]), ApiCredentialsMfaEnabledDialogComponent],
       providers: [{ provide: NgbActiveModal, useValue: activeModalSpy }],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
@@ -30,7 +31,7 @@ describe('ApiCredentialsMfaEnabledDialogComponent', () => {
   })
 
   it('should dismiss the modal when dismiss() is called', () => {
-    component.dismiss()
+    (component as any).dismiss()
 
     expect(activeModal.dismiss).toHaveBeenCalled()
   })

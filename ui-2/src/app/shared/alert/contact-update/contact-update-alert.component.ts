@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, HostListener, inject } from '@angular/core'
-import { Subscription, map } from 'rxjs'
+import { ChangeDetectionStrategy, Component, DestroyRef, HostListener, inject, signal, OnInit } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { map } from 'rxjs'
 import { AlertService } from '../../service/alert.service'
 import { AlertType } from 'src/app/app.constants'
 import { AppAlert } from '../model/alert.model'
@@ -8,40 +9,42 @@ import { AppAlert } from '../model/alert.model'
   selector: 'app-contact-update-alert',
   templateUrl: './contact-update-alert.component.html',
   styleUrls: ['../overlay-modal.scss'],
-  standalone: false,
+  imports: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContactUpdateAlertComponent {
-  private alertService = inject(AlertService)
-  private cdr = inject(ChangeDetectorRef)
+export class ContactUpdateAlertComponent implements OnInit {
+  private readonly alertService = inject(AlertService)
+  private readonly destroyRef = inject(DestroyRef)
 
-  alerts: AppAlert[] | undefined
-  sub: Subscription | undefined
-  message: any
+  protected readonly alertsState = signal<AppAlert[] | undefined>(undefined)
+  private readonly message = signal<any>(null)
 
-  ngOnInit(): void {
-    this.sub = this.alertService
-      .on()
-      .pipe(map((alerts) => alerts?.filter((alert) => alert.type === AlertType.CONTACT_UPDATED)))
-      .subscribe((alerts: AppAlert[] | undefined) => {
-        this.alerts = alerts
-        this.cdr.detectChanges()
-      })
+  protected get alerts(): AppAlert[] | undefined {
+    return this.alertsState()
   }
 
-  ngOnDestroy(): void {
-    this.sub?.unsubscribe()
+  ngOnInit(): void {
+    this.alertService
+      .on()
+      .pipe(
+        map((alerts) => alerts?.filter((alert) => alert.type === AlertType.CONTACT_UPDATED)),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((alerts: AppAlert[] | undefined) => {
+        this.alertsState.set(alerts)
+      })
   }
 
   @HostListener('document:keyup.escape')
   @HostListener('document:keyup.enter')
-  closeOldestAlert() {
+  protected closeOldestAlert() {
     this.close()
   }
 
-  close() {
-    if (this.alerts && this.alerts.length > 0) {
-      this.alertService.clear(this.alerts[0])
-      this.cdr.detectChanges()
+  protected close() {
+    const currentAlerts = this.alertsState()
+    if (currentAlerts && currentAlerts.length > 0) {
+      this.alertService.clear(currentAlerts[0])
     }
   }
 }

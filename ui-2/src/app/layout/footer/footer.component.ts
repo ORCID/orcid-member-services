@@ -1,15 +1,15 @@
-import { Component, inject } from '@angular/core'
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core'
 import { AccountService } from 'src/app/account/service/account.service'
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
-  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterComponent {
   private accountService = inject(AccountService)
-  readonly currentYear = new Date().getFullYear()
+  protected readonly currentYear = new Date().getFullYear()
 
   isAuthenticated() {
     return this.accountService.isAuthenticated()

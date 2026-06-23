@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, signal } from '@angular/core'
 import { MemberService } from './service/member.service'
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { EventService } from '../shared/service/event.service'
@@ -7,30 +7,33 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Event } from '../shared/model/event.model'
 import { EventType } from '../app.constants'
 import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
+import { ReactiveFormsModule, FormsModule } from '@angular/forms'
+import { ErrorAlertComponent } from '../error/error-alert.component'
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap'
+import { FaIconComponent } from '@fortawesome/angular-fontawesome'
 
 @Component({
   selector: 'app-member-import-dialog',
   templateUrl: './member-import-dialog.component.html',
   styleUrls: ['./member-import-dialog.component.scss'],
-  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [ReactiveFormsModule, FormsModule, ErrorAlertComponent, NgbAlertModule, FaIconComponent],
 })
 export class MemberImportDialogComponent {
   protected memberService = inject(MemberService)
-  activeModal = inject(NgbActiveModal)
+  protected activeModal = inject(NgbActiveModal)
   protected eventService = inject(EventService)
   private uploadService = inject(FileUploadService)
 
-  public resourceUrl
-  isSaving: boolean
-  currentFile: FileList | null
+  protected resourceUrl: string
+  protected isSaving = signal(false)
+  protected currentFile = signal<FileList | null>(null)
   csvErrors: any
-  loading = false
-  faBan = faBan
-  faSave = faSave
+  protected loading = signal(false)
+  protected faBan = faBan
+  protected faSave = faSave
 
   constructor() {
-    this.currentFile = null
-    this.isSaving = false
     this.resourceUrl = this.memberService.resourceUrl + '/members/upload'
   }
 
@@ -39,22 +42,22 @@ export class MemberImportDialogComponent {
   }
 
   selectFile(event: any) {
-    this.currentFile = event.target.files
+    this.currentFile.set(event.target.files)
   }
 
   clearFileInput(event: MouseEvent) {
-    ;(event.target as HTMLInputElement).value = ''
-    this.currentFile = null
+    (event.target as HTMLInputElement).value = ''
+    this.currentFile.set(null)
   }
 
   upload() {
-    if (this.currentFile) {
-      this.loading = true
-      const f = this.currentFile.item(0)
+    if (this.currentFile()) {
+      this.loading.set(true)
+      const f = this.currentFile()!.item(0)
       this.uploadService.uploadFile(this.resourceUrl, f!, 'text').subscribe((res: any) => {
         if (res) {
           this.csvErrors = JSON.parse(res)
-          this.loading = false
+          this.loading.set(false)
           if (this.csvErrors.length === 0) {
             this.eventService.broadcast(new Event(EventType.MEMBER_LIST_MODIFICATION))
             this.activeModal.dismiss(true)
@@ -72,7 +75,6 @@ export class MemberImportDialogComponent {
 @Component({
   selector: 'app-member-import-popup',
   template: '',
-  standalone: false,
 })
 export class MemberImportPopupComponent implements OnInit, OnDestroy {
   protected activatedRoute = inject(ActivatedRoute)

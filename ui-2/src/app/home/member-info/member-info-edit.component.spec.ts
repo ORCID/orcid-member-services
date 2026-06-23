@@ -1,9 +1,11 @@
+/// <reference types="jasmine" />
+
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
 import { QuillModule } from 'ngx-quill'
 import { of } from 'rxjs'
 import { AccountService } from 'src/app/account'
@@ -34,12 +36,11 @@ describe('MemberInfoEditComponent', () => {
       'setMemberData',
     ])
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, RouterTestingModule.withRoutes([]), QuillModule.forRoot()],
+      imports: [ReactiveFormsModule, RouterModule.forRoot([]), QuillModule.forRoot(), MemberInfoEditComponent],
       providers: [
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },
       ],
-      declarations: [MemberInfoEditComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     activatedRoute = TestBed.inject(ActivatedRoute) as jasmine.SpyObj<ActivatedRoute>
@@ -112,8 +113,8 @@ describe('MemberInfoEditComponent', () => {
     fixture.detectChanges()
     expect(memberService.setManagedMember).toHaveBeenCalledTimes(0)
     expect(memberService.getMemberData).toHaveBeenCalledOnceWith('test2')
-    expect(component.memberData?.website).toEqual('http://website.com')
-    expect(component.orgIdsTransformed).toEqual([
+    expect((component as any).memberData()?.website).toEqual('http://website.com')
+    expect((component as any).orgIdsTransformed()).toEqual([
       { id: '123', name: 'ROR' },
       { id: '456', name: 'ROR' },
       { id: '1213', name: 'GRID' },
@@ -137,23 +138,20 @@ describe('MemberInfoEditComponent', () => {
     memberService.getMemberData.and.returnValue(of({}))
     fixture.detectChanges()
 
-    expect(component.memberData).toBeDefined
-    expect(component.memberData!.website).toBeUndefined()
+    expect((component as any).memberData()).toBeDefined()
+    expect((component as any).memberData()!.website).toBeUndefined()
 
     component.validateUrl()
-    expect(component.memberData!.website).toBeUndefined()
-
-    component.memberData!.website = 'example'
+    expect((component as any).memberData()!.website).toBeUndefined()
+    ;(component as any).memberData.set({ ...(component as any).memberData(), website: 'example' })
     component.validateUrl()
-    expect(component.memberData!.website).toEqual('http://example')
-
-    component.memberData!.website = 'example.com'
+    expect((component as any).memberData()!.website).toEqual('http://example')
+    ;(component as any).memberData.set({ ...(component as any).memberData(), website: 'example.com' })
     component.validateUrl()
-    expect(component.memberData!.website).toEqual('http://example.com')
-
-    component.memberData!.website = 'https://example.com'
+    expect((component as any).memberData()!.website).toEqual('http://example.com')
+    ;(component as any).memberData.set({ ...(component as any).memberData(), website: 'https://example.com' })
     component.validateUrl()
-    expect(component.memberData!.website).toEqual('https://example.com')
+    expect((component as any).memberData()!.website).toEqual('https://example.com')
   })
 
   it('should update member data', () => {
@@ -199,6 +197,7 @@ describe('MemberInfoEditComponent', () => {
       })
     )
     fixture.detectChanges()
+    component.editForm.patchValue({ country: 'United Kingdom', website: 'http://website.com' })
     component.save()
     expect(memberService.updateMemberDetails).toHaveBeenCalled()
   })

@@ -15,17 +15,16 @@ describe('Component Tests', () => {
     let comp: PasswordResetInitComponent
     beforeEach(() => {
       fixture = TestBed.configureTestingModule({
-    declarations: [PasswordResetInitComponent],
-    imports: [ReactiveFormsModule],
-    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-}).createComponent(PasswordResetInitComponent)
+        imports: [ReactiveFormsModule, PasswordResetInitComponent],
+        providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+      }).createComponent(PasswordResetInitComponent)
       comp = fixture.componentInstance
     })
 
     it('should define its initial state', () => {
-      expect(comp.success).toBeUndefined()
-      expect(comp.error).toBeUndefined()
-      expect(comp.errorEmailNotExists).toBeUndefined()
+      expect((comp as any).success()).toBeUndefined()
+      expect((comp as any).error()).toBeUndefined()
+      expect((comp as any).errorEmailNotExists()).toBeUndefined()
     })
 
     it('notifies of success upon successful requestReset', inject([PasswordService], (service: PasswordService) => {
@@ -38,9 +37,9 @@ describe('Component Tests', () => {
       const emailControl = comp.resetRequestForm.get('email')!
       emailControl.setValue('valid@email.com')
       fixture.detectChanges()
-      expect(comp.success).toEqual('OK')
-      expect(comp.error).toBeUndefined()
-      expect(comp.errorEmailNotExists).toBeUndefined()
+      expect((comp as any).success()).toEqual('OK')
+      expect((comp as any).error()).toBeUndefined()
+      expect((comp as any).errorEmailNotExists()).toBeUndefined()
     }))
 
     it('notifies of unknown email upon email address not registered/400', inject(
@@ -53,9 +52,9 @@ describe('Component Tests', () => {
         comp.requestReset()
 
         expect(service.initPasswordReset).toHaveBeenCalledWith('user@domain.com')
-        expect(comp.success).toBeUndefined()
-        expect(comp.error).toBeUndefined()
-        expect(comp.errorEmailNotExists).toEqual('ERROR')
+        expect((comp as any).success()).toBeUndefined()
+        expect((comp as any).error()).toBeUndefined()
+        expect((comp as any).errorEmailNotExists()).toEqual('ERROR')
       }
     ))
 
@@ -67,9 +66,9 @@ describe('Component Tests', () => {
       comp.requestReset()
 
       expect(service.initPasswordReset).toHaveBeenCalledWith('user@domain.com')
-      expect(comp.success).toBeUndefined()
-      expect(comp.errorEmailNotExists).toBeUndefined()
-      expect(comp.error).toEqual('ERROR')
+      expect((comp as any).success()).toBeUndefined()
+      expect((comp as any).errorEmailNotExists()).toBeUndefined()
+      expect((comp as any).error()).toEqual('ERROR')
     }))
 
     it('should disable the submit button for invalid email address', () => {

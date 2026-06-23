@@ -1,5 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core'
-import { FormBuilder, FormControl, Validators } from '@angular/forms'
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { FormBuilder, FormControl, Validators, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Observable } from 'rxjs'
 import moment from 'moment'
@@ -8,12 +9,20 @@ import { AlertService } from '../shared/service/alert.service'
 import { AlertMessage, AlertType, BASE_URL, DATE_TIME_FORMAT, ORCID_BASE_URL } from '../app.constants'
 import { IMember, Member } from './model/member.model'
 import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
-import { clientIdValidator, parentSalesforceIdValidator, salesforceIdFormatValidator } from './validators/member.validators'
+import {
+  clientIdValidator,
+  parentSalesforceIdValidator,
+  salesforceIdFormatValidator,
+} from './validators/member.validators'
+import { ErrorAlertComponent } from '../error/error-alert.component'
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap'
+import { FaIconComponent } from '@fortawesome/angular-fontawesome'
 
 @Component({
   selector: 'app-member-update',
   templateUrl: './member-update.component.html',
-  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [ReactiveFormsModule, ErrorAlertComponent, NgbAlertModule, FaIconComponent],
 })
 export class MemberUpdateComponent implements OnInit {
   protected activatedRoute = inject(ActivatedRoute)
@@ -21,20 +30,24 @@ export class MemberUpdateComponent implements OnInit {
   protected memberService = inject(MemberService)
   private fb = inject(FormBuilder)
   private alertService = inject(AlertService)
+  private destroyRef = inject(DestroyRef)
 
-  orcidBaseUrl: string = ORCID_BASE_URL
-  baseUrl: string = BASE_URL
-  isSaving = false
-  validation: any
-  faBan = faBan
-  faSave = faSave
+  protected orcidBaseUrl: string = ORCID_BASE_URL
+  protected baseUrl: string = BASE_URL
+  protected isSaving = signal(false)
+  protected validation: any
+  protected faBan = faBan
+  protected faSave = faSave
 
   editForm = this.fb.group({
     id: new FormControl<string | null>(null),
     clientId: new FormControl<string | null>(null, [clientIdValidator()]),
     clientName: new FormControl<string | null>(null, [Validators.required]),
     salesforceId: new FormControl<string | null>(null, [Validators.required, salesforceIdFormatValidator()]),
-    parentSalesforceId: new FormControl<string | null>(null, [salesforceIdFormatValidator(), parentSalesforceIdValidator()]),
+    parentSalesforceId: new FormControl<string | null>(null, [
+      salesforceIdFormatValidator(),
+      parentSalesforceIdValidator(),
+    ]),
     isConsortiumLead: new FormControl<boolean | null>(null, [Validators.required]),
     assertionServiceEnabled: new FormControl<boolean | null>(false),
     createdBy: new FormControl<string | null>(null),
@@ -48,8 +61,8 @@ export class MemberUpdateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isSaving = false
-    this.activatedRoute.data.subscribe(({ member }) => {
+    this.isSaving.set(false)
+    this.activatedRoute.data.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ member }) => {
       this.updateForm(member)
     })
 
@@ -57,7 +70,7 @@ export class MemberUpdateComponent implements OnInit {
   }
 
   onChanges(): void {
-    this.editForm.get('isConsortiumLead')?.valueChanges.subscribe((value) => {
+    this.editForm.get('isConsortiumLead')?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       this.editForm.get('parentSalesforceId')?.updateValueAndValidity()
       this.editForm.get('clientId')?.markAsTouched()
       this.editForm.get('clientId')?.updateValueAndValidity()
@@ -112,7 +125,7 @@ export class MemberUpdateComponent implements OnInit {
   }
 
   save() {
-    this.isSaving = true
+    this.isSaving.set(true)
     const member = this.createFromForm()
     this.memberService.validate(member).subscribe((data) => {
       if (data.valid) {
@@ -122,7 +135,7 @@ export class MemberUpdateComponent implements OnInit {
           this.subscribeToSaveResponse(this.memberService.create(member))
         }
       } else {
-        this.isSaving = false
+        this.isSaving.set(false)
         this.validation = data
       }
     })
@@ -159,7 +172,7 @@ export class MemberUpdateComponent implements OnInit {
   }
 
   protected onSaveSuccess() {
-    this.isSaving = false
+    this.isSaving.set(false)
     this.navigateToMembersList()
     this.alertService.broadcast(AlertType.TOAST, AlertMessage.MEMBER_CREATED)
   }
@@ -172,12 +185,12 @@ export class MemberUpdateComponent implements OnInit {
   }
 
   protected onUpdateSuccess() {
-    this.isSaving = false
+    this.isSaving.set(false)
     this.navigateToMembersList()
     this.alertService.broadcast(AlertType.TOAST, AlertMessage.MEMBER_UPDATED)
   }
 
   protected onSaveError() {
-    this.isSaving = false
+    this.isSaving.set(false)
   }
 }

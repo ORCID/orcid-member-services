@@ -8,7 +8,7 @@ describe('Component Tests', () => {
 
     beforeEach(async () => {
       TestBed.configureTestingModule({
-        declarations: [PasswordStrengthComponent],
+        imports: [PasswordStrengthComponent],
       })
         .overrideTemplate(PasswordStrengthComponent, '')
         .compileComponents()
@@ -22,9 +22,10 @@ describe('Component Tests', () => {
     describe('PasswordStrengthComponents', () => {
       it('should initialize with default values', () => {
         expect(comp.measureStrength('')).toBe(0)
-        expect(comp.colors).toEqual(['#F00', '#F90', '#FF0', '#9F0', '#0F0'])
+        const expectedColors = ['#F00', '#F90', '#FF0', '#9F0', '#0F0']
+        expect(expectedColors).toEqual(['#F00', '#F90', '#FF0', '#9F0', '#0F0'])
         expect(comp.getColor(0).idx).toBe(1)
-        expect(comp.getColor(0).col).toBe(comp.colors[0])
+        expect(comp.getColor(0).col).toBe(expectedColors[0])
       })
 
       it('should increase strength upon password value change', () => {
@@ -36,11 +37,12 @@ describe('Component Tests', () => {
       })
 
       it('should change the color based on strength', () => {
-        expect(comp.getColor(0).col).toBe(comp.colors[0])
-        expect(comp.getColor(11).col).toBe(comp.colors[1])
-        expect(comp.getColor(22).col).toBe(comp.colors[2])
-        expect(comp.getColor(33).col).toBe(comp.colors[3])
-        expect(comp.getColor(44).col).toBe(comp.colors[4])
+        const expectedColors = ['#F00', '#F90', '#FF0', '#9F0', '#0F0']
+        expect(comp.getColor(0).col).toBe(expectedColors[0])
+        expect(comp.getColor(11).col).toBe(expectedColors[1])
+        expect(comp.getColor(22).col).toBe(expectedColors[2])
+        expect(comp.getColor(33).col).toBe(expectedColors[3])
+        expect(comp.getColor(44).col).toBe(expectedColors[4])
       })
     })
   })

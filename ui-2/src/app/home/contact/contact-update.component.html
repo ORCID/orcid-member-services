@@ -1,24 +1,24 @@
-@if (memberData) {
+@if (memberData(); as member) {
   <div class="h-100 p-16 line-height-normal">
     <div class="font-size-14">
-      Back to <a routerLink="" class="fw-normal text-decoration-underline">{{ memberData.publicDisplayName }}</a>
+      Back to <a routerLink="" class="fw-normal text-decoration-underline">{{ member.publicDisplayName }}</a>
     </div>
     <hr class="mb-40" />
-    @if (contactId) {
+    @if (contactId()) {
       <div class="edit-org-label mb-8 font-size-18 color-gray">Edit contact</div>
     }
-    @if (contactId && contact) {
-      <h1 class="mb-40 wide-text fw-bold">{{ contact.name }}</h1>
+    @if (contactId() && contact(); as contactData) {
+      <h1 class="mb-40 wide-text fw-bold">{{ contactData.name }}</h1>
     }
-    @if (!contactId) {
+    @if (!contactId()) {
       <div class="edit-org-label mb-8 font-size-18 color-gray">Add new contact</div>
     }
-    @if (!contactId) {
+    @if (!contactId()) {
       <h1 class="mb-40 wide-text fst-italic">New contact</h1>
     }
     <div class="d-flex">
       <form (ngSubmit)="save()" name="editForm" role="form" [formGroup]="editForm" class="w-66">
-        @if (invalidForm) {
+        @if (invalidForm()) {
           <div class="error-message d-flex p-16 mb-20 line-height-150">
             <img src="./content/images/error-sign.svg" alt="Warning sign" class="p-8" />
             <div>
@@ -35,10 +35,9 @@
             <label
               for="name"
               class="wide-text font-size-12 fw-bold mb-1"
-              [ngClass]="{
-                'text-danger':
-                  editForm.get('name')?.invalid && editForm.get('name')?.dirty && editForm.get('name')?.touched,
-              }"
+              [class.text-danger]="
+                !!(editForm.get('name')?.invalid && editForm.get('name')?.dirty && editForm.get('name')?.touched)
+              "
               >Name <span class="fw-normal">(Required)</span></label
             >
             <input
@@ -48,11 +47,10 @@
               id="name"
               formControlName="name"
               (input)="editForm.get('name')?.markAsUntouched()"
-              [ngClass]="{
-                'text-danger':
-                  editForm.get('name')?.invalid && editForm.get('name')?.dirty && editForm.get('name')?.touched,
-                'input-field-default-border': !editForm.get('name')?.dirty || !editForm.get('name')?.touched,
-              }"
+              [class.text-danger]="
+                !!(editForm.get('name')?.invalid && editForm.get('name')?.dirty && editForm.get('name')?.touched)
+              "
+              [class.input-field-default-border]="!editForm.get('name')?.dirty || !editForm.get('name')?.touched"
             />
             @if (editForm.get('name')?.invalid && editForm.get('name')?.dirty && editForm.get('name')?.touched) {
               <div>
@@ -73,7 +71,7 @@
             <label
               for="title"
               class="wide-text font-size-12 fw-bold mb-1"
-              [ngClass]="{ 'text-danger': editForm.get('title')?.invalid }"
+              [class.text-danger]="!!editForm.get('title')?.invalid"
               >Job title</label
             >
             <input
@@ -82,7 +80,7 @@
               name="title"
               id="title"
               formControlName="title"
-              [ngClass]="{ 'text-danger': editForm.get('title')?.invalid }"
+              [class.text-danger]="!!editForm.get('title')?.invalid"
             />
             @if (editForm.get('title')?.invalid) {
               <div>
@@ -97,10 +95,9 @@
           <div class="mb-20">
             <label
               for="email"
-              [ngClass]="{
-                'text-danger':
-                  editForm.get('email')?.invalid && editForm.get('email')?.dirty && editForm.get('email')?.touched,
-              }"
+              [class.text-danger]="
+                !!(editForm.get('email')?.invalid && editForm.get('email')?.dirty && editForm.get('email')?.touched)
+              "
               class="wide-text font-size-12 fw-bold mb-1"
               >Email address <span class="fw-normal">(Required)</span></label
             >
@@ -111,11 +108,10 @@
               id="email"
               formControlName="email"
               (input)="editForm.get('email')?.markAsUntouched()"
-              [ngClass]="{
-                'text-danger':
-                  editForm.get('email')?.invalid && editForm.get('email')?.dirty && editForm.get('email')?.touched,
-                'input-field-default-border': !editForm.get('email')?.dirty || !editForm.get('email')?.touched,
-              }"
+              [class.text-danger]="
+                !!(editForm.get('email')?.invalid && editForm.get('email')?.dirty && editForm.get('email')?.touched)
+              "
+              [class.input-field-default-border]="!editForm.get('email')?.dirty || !editForm.get('email')?.touched"
             />
             @if (editForm.get('email')?.invalid && editForm.get('email')?.dirty && editForm.get('email')?.touched) {
               <div>
@@ -145,7 +141,7 @@
             <label
               for="phone"
               class="wide-text font-size-12 fw-bold mb-1"
-              [ngClass]="{ 'text-danger': editForm.get('phone')?.invalid && editForm.get('phone')?.dirty }"
+              [class.text-danger]="!!(editForm.get('phone')?.invalid && editForm.get('phone')?.dirty)"
               >Phone</label
             >
             <input
@@ -154,7 +150,7 @@
               name="phone"
               id="phone"
               formControlName="phone"
-              [ngClass]="{ 'text-danger': editForm.get('phone')?.invalid && editForm.get('phone')?.dirty }"
+              [class.text-danger]="!!(editForm.get('phone')?.invalid && editForm.get('phone')?.dirty)"
             />
             @if (editForm.get('phone')?.invalid && editForm.get('phone')?.dirty) {
               @if ((editForm.get('phone')?.errors)!['maxlength']) {
@@ -169,7 +165,7 @@
           <h3 class="mb-16 me-8">Roles <span class="font-size-12 fw-normal">(Required)</span></h3>
           <small
             class="wide-text font-size-12 form-text mb-20 color-gray"
-            [ngClass]="{ 'text-danger': editForm.get('roles')?.invalid && editForm.get('roles')?.dirty }"
+            [class.text-danger]="!!(editForm.get('roles')?.invalid && editForm.get('roles')?.dirty)"
           >
             Please assign at least one role to this contact
           </small>
@@ -200,18 +196,18 @@
               </div>
             </div>
           </div>
-          <button type="submit" [disabled]="isSaving" class="btn btn-primary font-size-14 me-2">
-            {{ contactId ? 'Submit contact change request' : 'Submit new contact' }}
+          <button type="submit" [disabled]="isSaving()" class="btn btn-primary font-size-14 me-2">
+            {{ contactId() ? 'Submit contact change request' : 'Submit new contact' }}
           </button>
           <button type="button" class="btn btn-outline-primary font-size-14 me-2" routerLink="/">Cancel</button>
-          @if (contactId) {
+          @if (contactId()) {
             <button
               type="button"
               (click)="delete()"
-              [disabled]="isSaving"
+              [disabled]="isSaving()"
               class="btn btn-danger float-end font-size-14"
             >
-              <fa-icon [icon]="faTrashAlt" class="me-8"></fa-icon>Remove this contact
+              <fa-icon [icon]="faTrashAlt" class="me-8" />Remove this contact
             </button>
           }
         </div>

@@ -5,7 +5,7 @@
         Add or edit user
       </h1>
       <div>
-        <app-alert-error></app-alert-error>
+        <app-alert-error />
         @if (validation.errors && validation.errors.length > 0) {
           <div class="alerts top right" role="alert">
             <ngb-alert
@@ -85,7 +85,7 @@
               class="form-check-label fw-bold"
               i18n="@@gatewayApp.msUserServiceMSUser.manageApiCredentialsEnabled.string"
               for="field_manageApiCredentialsEnabled"
-            >Manage API credentials</label
+              >Manage API credentials</label
             >
           </div>
         }
@@ -96,7 +96,7 @@
             for="field_memberId.string"
             >Organization</label
           >
-          <fieldset [disabled]="isExistentMember">
+          <fieldset [disabled]="isExistentMember()">
             @if (memberList.length > 0) {
               <select class="form-select" name="memberId" id="field_memberId" formControlName="memberId">
                 @for (member of memberList; track member) {
@@ -122,7 +122,7 @@
               >
             </div>
           </fieldset>
-          @if (showIsAdminCheckbox) {
+          @if (showIsAdminCheckbox()) {
             <div class="form-check mb-3">
               <input
                 type="checkbox"
@@ -143,53 +143,53 @@
       </div>
       <div class="mb-3">
         <button type="button" id="cancel-save" class="btn btn-outline-primary me-2" (click)="navigateToUsersList()">
-          <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
+          <fa-icon [icon]="faBan" />&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
         </button>
 
-        @if (hasOwner) {
+        @if (hasOwner()) {
           <button
             (click)="confirmOwnershipChange()"
             type="submit"
             id="save-entity"
-            [disabled]="editForm.invalid || isSaving || memberList.length === 0"
+            [disabled]="editForm.invalid || isSaving() || memberList.length === 0"
             class="btn btn-primary"
           >
-            <fa-icon [icon]="faSave"></fa-icon>&nbsp;<span i18n="@@entity.action.save.string">Save</span>
+            <fa-icon [icon]="faSave" />&nbsp;<span i18n="@@entity.action.save.string">Save</span>
           </button>
         }
-        @if (!hasOwner) {
+        @if (!hasOwner()) {
           <button
             (click)="save()"
             type="submit"
             id="save-entity2"
-            [disabled]="editForm.invalid || isSaving || memberList.length === 0"
+            [disabled]="editForm.invalid || isSaving() || memberList.length === 0"
             class="btn btn-primary"
           >
-            <fa-icon [icon]="faSave"></fa-icon>&nbsp;<span i18n="@@entity.action.save.string">Save</span>
+            <fa-icon [icon]="faSave" />&nbsp;<span i18n="@@entity.action.save.string">Save</span>
           </button>
         }
         @if (displaySendActivate()) {
           <button type="button" (click)="sendActivate()" class="btn btn-primary btn-sm ms-1">
-            <fa-icon [icon]="faCheckCircle"></fa-icon>
+            <fa-icon [icon]="faCheckCircle" />
             <span class="d-none d-md-inline" i18n="@@entity.action.activate.string">Resend activation email</span>
           </button>
         }
       </div>
     </form>
-    @if (existentUser && existentUser.id && hasRoleAdmin()) {
+    @if (existentUser()?.id && hasRoleAdmin()) {
       <form name="mfaForm" role="form" novalidate [formGroup]="mfaForm">
         <hr class="mb-32 mt-32" />
         <h2 class="mb-8 font-size-18">
           <ng-container i18n="@@settings.security.mfa.string">Two-factor authentication</ng-container>&nbsp;
-          @if (existentUser.mfaEnabled) {
+          @if (existentUser()?.mfaEnabled) {
             <span class="mfaOn">(<ng-container i18n="@@settings.security.mfaOn.string">ON</ng-container>)</span>
           }
-          @if (!existentUser.mfaEnabled) {
+          @if (!existentUser()?.mfaEnabled) {
             <span class="mfaOff">(<ng-container i18n="@@settings.security.mfaOff.string">OFF</ng-container>)</span>
           }
         </h2>
         <div class="font-size-14">
-          @if (existentUser.mfaEnabled) {
+          @if (existentUser()?.mfaEnabled) {
             <p class="mb-8" i18n="@@settings.security.disableMfaDescription.string">
               Disable two-factor authentication (2FA) for this user if they are having difficulty signing in to the
               member portal.
@@ -213,7 +213,7 @@
               </div>
             </div>
           }
-          @if (!existentUser.mfaEnabled) {
+          @if (!existentUser()?.mfaEnabled) {
             <div class="warning-message d-flex p-16 mb-40 mt-16">
               <img src="./content/images/warning-sign.svg" alt="Warning sign" class="p-8" />
               <div class="font-size-14 wide-text line-height-150" i18n="@@settings.security.disabledMfaNotice.string">
@@ -224,15 +224,15 @@
         </div>
         <div class="mb-3">
           <button type="button" id="cancel-save" class="btn btn-outline-primary me-2" (click)="navigateToUsersList()">
-            <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
+            <fa-icon [icon]="faBan" />&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
           </button>
           <button
             (click)="saveMfa()"
             type="submit"
-            [disabled]="!disableMfa || isSaving || memberList.length === 0"
+            [disabled]="!disableMfa() || isSaving() || memberList.length === 0"
             class="btn btn-primary"
           >
-            <fa-icon [icon]="faSave"></fa-icon>&nbsp;<span i18n="@@entity.action.save.string">Save</span>
+            <fa-icon [icon]="faSave" />&nbsp;<span i18n="@@entity.action.save.string">Save</span>
           </button>
         </div>
       </form>

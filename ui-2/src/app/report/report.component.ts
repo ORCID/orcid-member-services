@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, ChangeDetectionStrategy, OnInit, signal, inject } from '@angular/core'
 import { ReportService } from './report.service'
 import { DomSanitizer } from '@angular/platform-browser'
 import { ActivatedRoute } from '@angular/router'
@@ -7,25 +7,26 @@ import { ActivatedRoute } from '@angular/router'
   selector: 'app-report',
   templateUrl: './report.component.html',
   styleUrls: ['report.scss'],
-  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReportComponent implements OnInit {
   private reportService = inject(ReportService)
   private sanitizer = inject(DomSanitizer)
   private activatedRoute = inject(ActivatedRoute)
 
-  reportSrc: any
-  reportType: string | undefined
+  protected reportSrc = signal<any>(null)
+  protected reportType = signal<string | undefined>(undefined)
 
   ngOnInit() {
     this.activatedRoute.data.subscribe((data) => {
-      this.reportType = data['reportType']
+      this.reportType.set(data['reportType'])
 
-      if (this.reportType) {
-        this.reportService.getDashboardInfo(this.reportType).subscribe((res) => {
+      const reportType = this.reportType()
+      if (reportType) {
+        this.reportService.getDashboardInfo(reportType).subscribe((res) => {
           const url = res.url
           const token = res.jwt
-          this.reportSrc = this.safeUrl(url + '?_token=' + token)
+          this.reportSrc.set(this.safeUrl(url + '?_token=' + token))
         })
       }
     })

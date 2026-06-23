@@ -1,15 +1,18 @@
-import { Component, OnInit, inject } from '@angular/core'
-import { FormBuilder, Validators } from '@angular/forms'
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core'
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms'
 import { AccountService } from '../service/account.service'
 import { DomSanitizer } from '@angular/platform-browser'
 import { LanguageService } from 'src/app/shared/service/language.service'
 import { IAccount } from '../model/account.model'
+import { ErrorAlertComponent } from '../../error/error-alert.component'
+import { FindLanguageFromKeyPipe } from '../../shared/pipe/find-language-from-key'
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss'],
-  standalone: false,
+  imports: [ErrorAlertComponent, ReactiveFormsModule, FindLanguageFromKeyPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsComponent implements OnInit {
   private accountService = inject(AccountService)
@@ -17,18 +20,18 @@ export class SettingsComponent implements OnInit {
   private languageService = inject(LanguageService)
   private sanitizer = inject(DomSanitizer)
 
-  account: IAccount | undefined
-  error: string | undefined
-  success: string | undefined
-  languages: any[] | undefined
-  username: string | null = null
-  mfaSetup: any
-  showMfaSetup: boolean | undefined
-  showMfaTextCode: boolean | undefined
-  mfaSetupFailure: boolean | undefined
-  mfaBackupCodes: string[] | undefined
-  showMfaBackupCodes: boolean | undefined
-  showMfaUpdated: boolean | undefined
+  protected account = signal<IAccount | undefined>(undefined)
+  protected error = signal<string | undefined>(undefined)
+  protected success = signal<string | undefined>(undefined)
+  protected languages = signal<any[] | undefined>(undefined)
+  private username = signal<string | null>(null)
+  protected mfaSetup = signal<any>(undefined)
+  protected showMfaSetup = signal<boolean | undefined>(undefined)
+  protected showMfaTextCode = signal<boolean | undefined>(undefined)
+  protected mfaSetupFailure = signal<boolean | undefined>(undefined)
+  protected mfaBackupCodes = signal<string[] | undefined>(undefined)
+  protected showMfaBackupCodes = signal<boolean | undefined>(undefined)
+  protected showMfaUpdated = signal<boolean | undefined>(undefined)
   settingsForm = this.fb.group({
     firstName: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
     lastName: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
@@ -45,47 +48,47 @@ export class SettingsComponent implements OnInit {
   })
 
   ngOnInit() {
-    this.showMfaSetup = false
-    this.showMfaTextCode = false
-    this.showMfaBackupCodes = false
+    this.showMfaSetup.set(false)
+    this.showMfaTextCode.set(false)
+    this.showMfaBackupCodes.set(false)
     this.accountService.getAccountData(true).subscribe((account) => {
       if (account) {
-        this.account = account
+        this.account.set(account)
         this.updateForm(account)
         this.updateMfaForm(account)
-        this.username = this.accountService.getUsername()
+        this.username.set(this.accountService.getUsername())
         if (account && !account.mfaEnabled) {
           this.accountService.getMfaSetup().subscribe((res) => {
-            this.mfaSetup = res
+            this.mfaSetup.set(res)
           })
         }
       }
     })
-    this.languages = Object.keys(this.languageService.getAllLanguages())
+    this.languages.set(Object.keys(this.languageService.getAllLanguages()))
   }
 
   mfaEnabledStateChange(): void {
-    this.showMfaUpdated = false
+    this.showMfaUpdated.set(false)
     const mfaEnabled = this.mfaForm.get('mfaEnabled')!.value
-    if (mfaEnabled && this.mfaSetup) {
-      this.showMfaSetup = true
-      this.showMfaBackupCodes = false
+    if (mfaEnabled && this.mfaSetup()) {
+      this.showMfaSetup.set(true)
+      this.showMfaBackupCodes.set(false)
     } else {
-      this.showMfaSetup = false
-      this.showMfaBackupCodes = false
+      this.showMfaSetup.set(false)
+      this.showMfaBackupCodes.set(false)
     }
   }
 
   toggleMfaTextCode(): void {
-    this.showMfaTextCode = true
+    this.showMfaTextCode.set(true)
   }
 
   save() {
     const settingsAccount = this.accountFromForm()
     this.accountService.save(settingsAccount).subscribe((success: boolean) => {
       if (success) {
-        this.error = undefined
-        this.success = 'OK'
+        this.error.set(undefined)
+        this.success.set('OK')
         this.accountService.getAccountData(true).subscribe((account) => {
           if (account) {
             if (settingsAccount.langKey !== account.langKey) {
@@ -96,8 +99,8 @@ export class SettingsComponent implements OnInit {
           }
         })
       } else {
-        this.success = undefined
-        this.error = 'ERROR'
+        this.success.set(undefined)
+        this.error.set('ERROR')
       }
     })
   }
@@ -106,23 +109,24 @@ export class SettingsComponent implements OnInit {
     const enabled = this.mfaForm.get('mfaEnabled')!.value
     if (enabled) {
       const otp = this.mfaForm.get('verificationCode')!.value
-      this.mfaSetup.otp = otp
-      this.accountService.enableMfa(this.mfaSetup).subscribe((codes: string[] | null) => {
+      const setup = { ...this.mfaSetup(), otp }
+      this.accountService.enableMfa(setup).subscribe((codes: string[] | null) => {
         if (codes) {
-          this.mfaBackupCodes = codes
-          this.showMfaBackupCodes = true
-          this.showMfaUpdated = true
+          this.mfaBackupCodes.set(codes)
+          this.showMfaBackupCodes.set(true)
+          this.showMfaUpdated.set(true)
         } else {
-          this.mfaSetupFailure = true
+          this.mfaSetupFailure.set(true)
         }
       })
     } else {
-      if (this.account && this.account.id) {
-        this.accountService.disableMfa(this.account.id).subscribe({
+      const account = this.account()
+      if (account && account.id) {
+        this.accountService.disableMfa(account.id).subscribe({
           next: () => {
-            this.showMfaUpdated = true
+            this.showMfaUpdated.set(true)
             this.accountService.getMfaSetup().subscribe((res) => {
-              this.mfaSetup = res
+              this.mfaSetup.set(res)
             })
           },
           error: (err) => console.error('error disabling mfa', err),
@@ -132,7 +136,7 @@ export class SettingsComponent implements OnInit {
   }
 
   safeQrCode() {
-    return this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.mfaSetup.qrCode)
+    return this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64, ' + this.mfaSetup().qrCode)
   }
 
   private accountFromForm(): any {

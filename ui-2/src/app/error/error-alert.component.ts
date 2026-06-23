@@ -1,44 +1,42 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit, inject } from '@angular/core'
-import { Subscription } from 'rxjs'
+import { ChangeDetectionStrategy, Component, DestroyRef, HostListener, OnInit, inject, signal } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AppError, ErrorAlert } from './model/error.model'
 import { ErrorService } from './service/error.service'
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'app-alert-error',
   templateUrl: './error-alert.component.html',
-  standalone: false,
+  imports: [NgbAlertModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ErrorAlertComponent implements OnInit {
-  private errorService = inject(ErrorService)
-  private cdr = inject(ChangeDetectorRef)
+  private readonly errorService = inject(ErrorService)
+  private readonly destroyRef = inject(DestroyRef)
 
-  alerts: any[] = []
-  sub: Subscription | undefined
+  protected readonly alertsState = signal<any[]>([])
+
+  protected get alerts(): any[] {
+    return this.alertsState()
+  }
 
   ngOnInit(): void {
-    this.sub = this.errorService.on().subscribe((err: AppError) => {
+    this.errorService.on().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((err: AppError) => {
       const alert: ErrorAlert = {
         type: 'danger',
         msg: err.message,
         toast: false,
       }
-      this.alerts.push(alert)
-      this.cdr.detectChanges()
+      this.alertsState.update((currentAlerts) => [...currentAlerts, alert])
     })
   }
 
-  ngOnDestroy(): void {
-    this.sub?.unsubscribe()
-  }
-
   @HostListener('document:keyup.escape')
-  closeOldestAlert() {
-    this.alerts.shift()
-    this.cdr.detectChanges()
+  protected closeOldestAlert() {
+    this.alertsState.update((currentAlerts) => currentAlerts.slice(1))
   }
 
-  close(alertToRemove: any) {
-    this.alerts = this.alerts.filter((alert: any) => alert !== alertToRemove)
-    this.cdr.detectChanges()
+  protected close(alertToRemove: any) {
+    this.alertsState.update((currentAlerts) => currentAlerts.filter((alert: any) => alert !== alertToRemove))
   }
 }

@@ -1,45 +1,48 @@
-import { ChangeDetectorRef, Component, ErrorHandler, HostListener, OnInit, inject } from '@angular/core'
-import { Subscription, filter, map } from 'rxjs'
+import { ChangeDetectionStrategy, Component, DestroyRef, HostListener, OnInit, inject, signal } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { map } from 'rxjs'
 import { AlertService } from '../service/alert.service'
 import { AppAlert } from './model/alert.model'
 import { AlertType } from 'src/app/app.constants'
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap'
+import { LocalizePipe } from '../pipe/localize'
 
 @Component({
   selector: 'app-alert-toast',
   templateUrl: './alert-toast.component.html',
-  standalone: false,
+  imports: [NgbAlertModule, LocalizePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlertComponent implements OnInit {
-  private alertService = inject(AlertService)
-  private cdr = inject(ChangeDetectorRef)
+  private readonly alertService = inject(AlertService)
+  private readonly destroyRef = inject(DestroyRef)
 
-  alerts: any[] = []
-  sub: Subscription | undefined
-  message: any
+  protected readonly alertsState = signal<any[]>([])
+  private readonly message = signal<any>(null)
 
-  ngOnInit(): void {
-    this.sub = this.alertService
-      .on()
-      .pipe(map((alerts) => alerts?.filter((alert) => alert.type === AlertType.TOAST) as AppAlert[]))
-      .subscribe((alerts: AppAlert[]) => {
-        this.alerts = alerts
-        this.cdr.detectChanges()
-      })
+  protected get alerts(): any[] {
+    return this.alertsState()
   }
 
-  ngOnDestroy(): void {
-    this.sub?.unsubscribe()
+  ngOnInit(): void {
+    this.alertService
+      .on()
+      .pipe(
+        map((alerts) => alerts?.filter((alert) => alert.type === AlertType.TOAST) as AppAlert[]),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((alerts: AppAlert[]) => {
+        this.alertsState.set(alerts)
+      })
   }
 
   @HostListener('document:keyup.escape')
   @HostListener('document:keyup.enter')
-  closeOldestAlert() {
-    this.alertService.clear(this.alerts[0])
-    this.cdr.detectChanges()
+  protected closeOldestAlert() {
+    this.alertService.clear(this.alertsState()[0])
   }
 
-  close(alertToRemove: any) {
+  protected close(alertToRemove: any) {
     this.alertService.clear(alertToRemove)
-    this.cdr.detectChanges()
   }
 }

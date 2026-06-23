@@ -7,7 +7,7 @@
         class="btn btn-primary jh-create-entity create-ms-member"
         [routerLink]="['/members/new']"
       >
-        <fa-icon [icon]="faPlus"></fa-icon>
+        <fa-icon [icon]="faPlus" />
         <span i18n="@@gatewayApp.msUserServiceMSMember.home.createLabel.string"> Add member </span>
       </button>
       <button
@@ -15,7 +15,7 @@
         class="btn btn-primary jh-create-entity create-ms-member"
         [routerLink]="['/' + 'members', { outlets: { popup: 'import' } }]"
       >
-        <fa-icon [icon]="faPlus"></fa-icon>
+        <fa-icon [icon]="faPlus" />
         <span i18n="@@gatewayApp.msUserServiceMSMember.home.uploadLabel.string"> Import members from CSV </span>
       </button>
     </div>
@@ -27,7 +27,7 @@
           <input
             type="text"
             (keyup.enter)="submitSearch()"
-            [(ngModel)]="searchTerm"
+            [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)"
             i18n-placeholder="@@global.form.search.string"
             placeholder="Search..."
             aria-label="Search..."
@@ -35,7 +35,7 @@
             class="form-control"
           />
         </div>
-        @if (submittedSearchTerm) {
+        @if (submittedSearchTerm()) {
           <button
             type="button"
             class="reset"
@@ -43,7 +43,7 @@
             aria-label="Clear search"
             i18n-aria-label="@@global.form.search.clear.string"
           >
-            <fa-icon aria-hidden="true" [icon]="faTimes" [style.color]="'#2e7f9f'"></fa-icon>
+            <fa-icon aria-hidden="true" [icon]="faTimes" [style.color]="'#2e7f9f'" />
           </button>
         }
         <button
@@ -53,100 +53,100 @@
           aria-label="Search..."
           i18n-aria-label="@@global.form.search.string"
         >
-          <fa-icon aria-hidden="true" [icon]="faSearch" [style.color]="'#2e7f9f'"></fa-icon>
+          <fa-icon aria-hidden="true" [icon]="faSearch" [style.color]="'#2e7f9f'" />
         </button>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-md-12">
-      <app-alert-error></app-alert-error>
-      <app-alert-toast></app-alert-toast>
-      @if (isLoading) {
+      <app-alert-error />
+      <app-alert-toast />
+      @if (isLoading()) {
         <div class="d-flex justify-content-center my-5">
           <div class="spinner-border text-secondary" role="status">
             <span class="visually-hidden" i18n="@@global.loading.string">Loading...</span>
           </div>
         </div>
       }
-      @if (!isLoading && members?.length === 0) {
+      @if (!isLoading() && members()?.length === 0) {
         <div class="text-center text-muted my-5">
-          <fa-icon [icon]="faSearch" size="2x" class="d-block mb-2"></fa-icon>
+          <fa-icon [icon]="faSearch" size="2x" class="d-block mb-2" />
           <p class="mb-0" i18n="@@gatewayApp.msUserServiceMSMember.home.notFound.string">No members to show</p>
         </div>
       }
     </div>
   </div>
-  @if (!isLoading && members && members.length > 0) {
+  @if (!isLoading() && (members()?.length ?? 0) > 0) {
     <div class="table-responsive">
       <table class="table table-striped">
         <thead>
           <tr>
             <th
               scope="col"
-              [attr.aria-sort]="sortColumn === 'salesforceId' ? (ascending ? 'ascending' : 'descending') : 'none'"
+              [attr.aria-sort]="sortColumn() === 'salesforceId' ? (ascending() ? 'ascending' : 'descending') : 'none'"
             >
               <button type="button" class="th-sort" (click)="updateSort('salesforceId')">
                 <span i18n="@@gatewayApp.msUserServiceMSMember.salesforceId.string">Salesforce Id</span>
-                @if (sortColumn === 'salesforceId') {
-                  <fa-icon class="ms-2" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+                @if (sortColumn() === 'salesforceId') {
+                  <fa-icon class="ms-2" [icon]="ascending() ? faSortDown : faSortUp" />
                 }
               </button>
             </th>
             <th
               scope="col"
-              [attr.aria-sort]="sortColumn === 'clientName' ? (ascending ? 'ascending' : 'descending') : 'none'"
+              [attr.aria-sort]="sortColumn() === 'clientName' ? (ascending() ? 'ascending' : 'descending') : 'none'"
             >
               <button type="button" class="th-sort" (click)="updateSort('clientName')">
                 <span i18n="@@gatewayApp.msUserServiceMSMember.clientName.string">Member Name</span>
-                @if (sortColumn === 'clientName') {
-                  <fa-icon class="ms-2" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+                @if (sortColumn() === 'clientName') {
+                  <fa-icon class="ms-2" [icon]="ascending() ? faSortDown : faSortUp" />
                 }
               </button>
             </th>
             <th
               scope="col"
-              [attr.aria-sort]="sortColumn === 'isConsortiumLead' ? (ascending ? 'ascending' : 'descending') : 'none'"
+              [attr.aria-sort]="sortColumn() === 'isConsortiumLead' ? (ascending() ? 'ascending' : 'descending') : 'none'"
             >
               <button type="button" class="th-sort" (click)="updateSort('isConsortiumLead')">
                 <span i18n="@@gatewayApp.msUserServiceMSMember.isConsortiumLead.string">Consortium Lead</span>
-                @if (sortColumn === 'isConsortiumLead') {
-                  <fa-icon class="ms-2" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+                @if (sortColumn() === 'isConsortiumLead') {
+                  <fa-icon class="ms-2" [icon]="ascending() ? faSortDown : faSortUp" />
                 }
               </button>
             </th>
             <th
               scope="col"
-              [attr.aria-sort]="sortColumn === 'parentSalesforceId' ? (ascending ? 'ascending' : 'descending') : 'none'"
+              [attr.aria-sort]="sortColumn() === 'parentSalesforceId' ? (ascending() ? 'ascending' : 'descending') : 'none'"
             >
               <button type="button" class="th-sort" (click)="updateSort('parentSalesforceId')">
                 <span i18n="@@gatewayApp.msUserServiceMSMember.parentSalesforceId.string">Parent Salesforce Id</span>
-                @if (sortColumn === 'parentSalesforceId') {
-                  <fa-icon class="ms-2" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+                @if (sortColumn() === 'parentSalesforceId') {
+                  <fa-icon class="ms-2" [icon]="ascending() ? faSortDown : faSortUp" />
                 }
               </button>
             </th>
             <th
               scope="col"
               [attr.aria-sort]="
-                sortColumn === 'assertionServiceEnabled' ? (ascending ? 'ascending' : 'descending') : 'none'
+                sortColumn() === 'assertionServiceEnabled' ? (ascending() ? 'ascending' : 'descending') : 'none'
               "
             >
               <button type="button" class="th-sort" (click)="updateSort('assertionServiceEnabled')">
                 <span i18n="@@gatewayApp.msUserServiceMSMember.assertionServiceEnabled.string">Assertions Enabled</span>
-                @if (sortColumn === 'assertionServiceEnabled') {
-                  <fa-icon class="ms-2" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+                @if (sortColumn() === 'assertionServiceEnabled') {
+                  <fa-icon class="ms-2" [icon]="ascending() ? faSortDown : faSortUp" />
                 }
               </button>
             </th>
             <th
               scope="col"
-              [attr.aria-sort]="sortColumn === 'lastModifiedDate' ? (ascending ? 'ascending' : 'descending') : 'none'"
+              [attr.aria-sort]="sortColumn() === 'lastModifiedDate' ? (ascending() ? 'ascending' : 'descending') : 'none'"
             >
               <button type="button" class="th-sort" (click)="updateSort('lastModifiedDate')">
                 <span i18n="@@gatewayApp.msUserServiceMSMember.lastModifiedDate.string">Last Modified</span>
-                @if (sortColumn === 'lastModifiedDate') {
-                  <fa-icon class="ms-2" [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+                @if (sortColumn() === 'lastModifiedDate') {
+                  <fa-icon class="ms-2" [icon]="ascending() ? faSortDown : faSortUp" />
                 }
               </button>
             </th>
@@ -154,7 +154,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (member of members; track trackId($index, member)) {
+          @for (member of members() ?? []; track trackId($index, member)) {
             <tr>
               <td>
                 <a [routerLink]="['/members', member.id, 'view']">{{ member.salesforceId }}</a>
@@ -163,20 +163,20 @@
               <td class="text-center">
                 <span class="visually-hidden">{{ member.isConsortiumLead }}</span>
                 @if (member.isConsortiumLead) {
-                  <fa-icon aria-hidden="true" [icon]="faCheckCircle" [style.color]="'#28a745'"></fa-icon>
+                  <fa-icon aria-hidden="true" [icon]="faCheckCircle" [style.color]="'#28a745'" />
                 }
                 @if (!member.isConsortiumLead) {
-                  <fa-icon aria-hidden="true" [icon]="faTimesCircle" [style.color]="'#f22112'"></fa-icon>
+                  <fa-icon aria-hidden="true" [icon]="faTimesCircle" [style.color]="'#f22112'" />
                 }
               </td>
               <td>{{ member.parentSalesforceId }}</td>
               <td class="text-center">
                 <span class="visually-hidden">{{ member.assertionServiceEnabled }}</span>
                 @if (member.assertionServiceEnabled) {
-                  <fa-icon aria-hidden="true" [icon]="faCheckCircle" [style.color]="'#28a745'"></fa-icon>
+                  <fa-icon aria-hidden="true" [icon]="faCheckCircle" [style.color]="'#28a745'" />
                 }
                 @if (!member.assertionServiceEnabled) {
-                  <fa-icon aria-hidden="true" [icon]="faTimesCircle" [style.color]="'#f22112'"></fa-icon>
+                  <fa-icon aria-hidden="true" [icon]="faTimesCircle" [style.color]="'#f22112'" />
                 }
               </td>
               <td>{{ member.lastModifiedDate?.toString() | date: 'medium' }}</td>
@@ -187,7 +187,7 @@
                     [routerLink]="['/members', member.id, 'edit']"
                     class="btn btn-primary btn-sm ms-1"
                   >
-                    <fa-icon [icon]="faPencilAlt"></fa-icon>
+                    <fa-icon [icon]="faPencilAlt" />
                     <span class="d-none d-md-inline" i18n="@@entity.action.edit.string">Edit</span>
                   </button>
                 </div>
@@ -198,21 +198,21 @@
       </table>
     </div>
   }
-  <div [hidden]="members?.length === 0">
+  <div [hidden]="members()?.length === 0">
     <div class="row justify-content-center">
-      <p class="text-center">{{ itemCount }}</p>
+      <p class="text-center">{{ itemCount() }}</p>
     </div>
     <div class="row justify-content-center">
       <ngb-pagination
-        [collectionSize]="totalItems"
-        [(page)]="page"
-        [pageSize]="itemsPerPage"
+        [collectionSize]="totalItems()"
+        [page]="page()"
+        [pageSize]="itemsPerPage()"
         [maxSize]="5"
         [rotate]="true"
         [boundaryLinks]="true"
-        (pageChange)="loadPage()"
-      ></ngb-pagination>
+        (pageChange)="page.set($event); loadPage()"
+      />
     </div>
   </div>
 </div>
-<router-outlet name="popup"></router-outlet>
+<router-outlet name="popup" />

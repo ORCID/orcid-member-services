@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, signal } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { faBan, faFolderOpen, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
@@ -8,36 +8,38 @@ import { EventService } from '../shared/service/event.service'
 import { FileUploadService } from '../shared/service/file-upload.service'
 import { IAffiliation } from './model/affiliation.model'
 import { AffiliationService } from './service/affiliation.service'
+import { ReactiveFormsModule, FormsModule } from '@angular/forms'
+import { ErrorAlertComponent } from '../error/error-alert.component'
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap'
+import { FaIconComponent } from '@fortawesome/angular-fontawesome'
 
 @Component({
   selector: 'app-affiliation-import-dialog',
   templateUrl: './affiliation-import-dialog.component.html',
   styleUrls: ['./affiliation-import-dialog.component.scss'],
-  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [ReactiveFormsModule, FormsModule, ErrorAlertComponent, NgbAlertModule, FaIconComponent],
 })
 export class AffiliationImportDialogComponent {
   protected affiliationService = inject(AffiliationService)
-  activeModal = inject(NgbActiveModal)
+  protected activeModal = inject(NgbActiveModal)
   protected eventService = inject(EventService)
   private uploadService = inject(FileUploadService)
 
-  public resourceUrl
-  affiliation: IAffiliation | undefined
-  isSaving: boolean
-  currentFile: FileList | undefined
-  success: boolean
-  uploaded: boolean
-  loading = false
-  selectedFileName = 'No file selected.'
-  faBan = faBan
-  faPlus = faPlus
-  faFolderOpen = faFolderOpen
+  protected resourceUrl: string
+  protected affiliation: IAffiliation | undefined
+  protected isSaving = signal(false)
+  protected currentFile = signal<FileList | undefined>(undefined)
+  protected success = signal(false)
+  protected uploaded = signal(false)
+  protected loading = signal(false)
+  protected selectedFileName = signal('No file selected.')
+  protected faBan = faBan
+  protected faPlus = faPlus
+  protected faFolderOpen = faFolderOpen
 
   constructor() {
-    this.isSaving = false
     this.resourceUrl = this.affiliationService.resourceUrl + '/upload'
-    this.success = false
-    this.uploaded = false
   }
 
   clear() {
@@ -45,24 +47,24 @@ export class AffiliationImportDialogComponent {
   }
 
   selectFile(event: any) {
-    this.currentFile = event.target.files
-    this.selectedFileName = this.currentFile?.item(0)?.name ?? 'No file selected.'
+    this.currentFile.set(event.target.files)
+    this.selectedFileName.set(this.currentFile()?.item(0)?.name ?? 'No file selected.')
   }
 
   clearFileInput(event: MouseEvent) {
-    ;(event.target as HTMLInputElement).value = ''
-    this.selectedFileName = 'No file selected.'
-    this.currentFile = undefined
+    (event.target as HTMLInputElement).value = ''
+    this.selectedFileName.set('No file selected.')
+    this.currentFile.set(undefined)
   }
 
   upload() {
-    if (this.currentFile) {
-      this.loading = true
-      const f = this.currentFile.item(0)
+    if (this.currentFile()) {
+      this.loading.set(true)
+      const f = this.currentFile()!.item(0)
       this.uploadService.uploadFile(this.resourceUrl, f!, 'json').subscribe((event: string) => {
-        this.success = true
-        this.uploaded = true
-        this.loading = false
+        this.success.set(true)
+        this.uploaded.set(true)
+        this.loading.set(false)
       })
     } else {
       alert(
@@ -80,7 +82,6 @@ export class AffiliationImportDialogComponent {
 @Component({
   selector: 'app-affiliations-import-popup',
   template: '',
-  standalone: false,
 })
 export class AffiliationImportPopupComponent implements OnInit, OnDestroy {
   protected activatedRoute = inject(ActivatedRoute)

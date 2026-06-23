@@ -6,7 +6,7 @@
     <button type="button" class="btn-close" (click)="close()" aria-label="Close"></button>
   </div>
   <div class="modal-body">
-    @if (uploaded && success) {
+    @if (uploaded() && success()) {
       <div class="alert alert-success">
         <div class="row">
           <div class="col-md-12">
@@ -18,8 +18,8 @@
         </div>
       </div>
     }
-    <app-alert-error></app-alert-error>
-    @if (uploaded && !success) {
+    <app-alert-error />
+    @if (uploaded() && !success()) {
       <div class="alerts top right" role="alert">
         <ngb-alert
           class="alert alert-danger alert-dismissible"
@@ -37,9 +37,7 @@
       Please select the CSV file to upload
     </p>
     <div class="mb-3">
-      <label
-        class="form-label fw-semibold"
-        i18n="@@gatewayApp.assertionServiceAssertion.import.filePath.string"
+      <label class="form-label fw-semibold" i18n="@@gatewayApp.assertionServiceAssertion.import.filePath.string"
         >File Path</label
       >
       <div class="file-picker">
@@ -54,10 +52,10 @@
           (change)="selectFile($event)"
         />
         <label for="field_filePath" class="btn btn-outline-secondary file-picker__btn" role="button">
-          <fa-icon [icon]="faFolderOpen" aria-hidden="true"></fa-icon>
+          <fa-icon [icon]="faFolderOpen" aria-hidden="true" />
           <span i18n="@@gatewayApp.assertionServiceAssertion.import.browse.string">Browse…</span>
         </label>
-        <span class="file-picker__name">{{ selectedFileName }}</span>
+        <span class="file-picker__name">{{ selectedFileName() }}</span>
       </div>
     </div>
     <p>
@@ -69,7 +67,7 @@
       >
     </p>
   </div>
-  @if (loading) {
+  @if (loading()) {
     <div class="progress">
       <div
         class="progress-bar progress-bar-striped progress-bar-animated"
@@ -84,16 +82,16 @@
 
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-primary" (click)="close()">
-      <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
+      <fa-icon [icon]="faBan" />&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
     </button>
-    @if (!uploaded) {
+    @if (!uploaded()) {
       <button data-cy="confirmCsvUpload" type="submit" class="btn btn-primary">
-        <fa-icon [icon]="faPlus"></fa-icon>&nbsp;<span i18n="@@entity.action.upload.string">Upload</span>
+        <fa-icon [icon]="faPlus" />&nbsp;<span i18n="@@entity.action.upload.string">Upload</span>
       </button>
     }
-    @if (uploaded) {
+    @if (uploaded()) {
       <button id="close-dialog" type="button" class="btn btn-primary" (click)="close()">
-        <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.close.string">Close</span>
+        <fa-icon [icon]="faBan" />&nbsp;<span i18n="@@entity.action.close.string">Close</span>
       </button>
     }
   </div>

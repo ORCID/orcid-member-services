@@ -4,13 +4,13 @@
       <h1 class="mt-3" i18n="@@settings.personalDetails.string">Personal details</h1>
       <hr />
 
-      @if (success) {
+      @if (success()) {
         <div class="alert alert-success" i18n="@@settings.messages.success.string">
           <strong>Settings saved!</strong>
         </div>
       }
 
-      <app-alert-error></app-alert-error>
+      <app-alert-error />
 
       @if (settingsForm.get('email')?.value) {
         <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" novalidate>
@@ -99,11 +99,11 @@
               readonly
             />
           </div>
-          @if (languages && languages.length > 0) {
+          @if (languages() && languages()!.length > 0) {
             <div class="mb-3">
               <label class="form-label fw-bold" for="langKey" i18n="@@settings.form.language.string">Language</label>
               <select class="form-select" id="langKey" name="langKey" formControlName="langKey">
-                @for (language of languages; track language) {
+                @for (language of languages()!; track language) {
                   <option [value]="language">{{ language | findLanguageFromKey }}</option>
                 }
               </select>
@@ -146,10 +146,10 @@
               >
             </div>
           </div>
-          @if (showMfaUpdated) {
+          @if (showMfaUpdated()) {
             <div i18n="@@settings.security.mfaUpdated.string">2FA settings updated</div>
           }
-          @if (showMfaSetup && !showMfaBackupCodes) {
+          @if (showMfaSetup() && !showMfaBackupCodes()) {
             <div class="row">
               <div class="col-md-8">
                 <ul>
@@ -169,23 +169,23 @@
               </div>
             </div>
           }
-          @if (showMfaSetup && !showMfaBackupCodes) {
+          @if (showMfaSetup() && !showMfaBackupCodes()) {
             <div class="row">
               <div class="col-md-8">
                 <img [src]="safeQrCode()" alt="QR Code" />
               </div>
             </div>
           }
-          @if (showMfaSetup && !showMfaBackupCodes && showMfaTextCode) {
+          @if (showMfaSetup() && !showMfaBackupCodes() && showMfaTextCode()) {
             <div class="row">
               <div class="col-md-8">
                 <p class="mfaSecret">
-                  <strong>{{ mfaSetup.secret }}</strong>
+                  <strong>{{ mfaSetup().secret }}</strong>
                 </p>
               </div>
             </div>
           }
-          @if (showMfaSetup && !showMfaBackupCodes) {
+          @if (showMfaSetup() && !showMfaBackupCodes()) {
             <div class="row">
               <div class="col-md-8">
                 <ul>
@@ -212,15 +212,18 @@
               </div>
             </div>
           }
-          @if (showMfaSetup && !showMfaBackupCodes) {
+          @if (showMfaSetup() && !showMfaBackupCodes()) {
             <div class="mb-3">
               <div class="col-md-8">
-                @if (mfaSetupFailure) {
+                @if (mfaSetupFailure()) {
                   <div class="alert alert-danger" i18n="@@settings.security.otpError.string">
                     Incorrect verification code
                   </div>
                 }
-                <label for="field_verificationCode" class="form-label fw-semibold" i18n="@@settings.security.verificationCode.string"
+                <label
+                  for="field_verificationCode"
+                  class="form-label fw-semibold"
+                  i18n="@@settings.security.verificationCode.string"
                   >Enter the six-digit code from the app</label
                 >
                 <input
@@ -237,14 +240,14 @@
               </div>
             </div>
           }
-          @if (showMfaBackupCodes && showMfaSetup) {
+          @if (showMfaBackupCodes() && showMfaSetup()) {
             <div class="row">
               <div class="col-md-8">
                 <p i18n="@@settings.security.backupCodes.string">
                   Make a note of the following backup codes, this is the only time they will be shown.
                 </p>
                 <table>
-                  @for (backupCode of mfaBackupCodes; track backupCode) {
+                  @for (backupCode of mfaBackupCodes()!; track backupCode) {
                     <tr>
                       <td>{{ backupCode }}</td>
                     </tr>
@@ -254,7 +257,7 @@
             </div>
           }
           <button
-            [disabled]="mfaForm.pristine || showMfaBackupCodes"
+            [disabled]="mfaForm.pristine || showMfaBackupCodes()"
             type="submit"
             class="btn btn-primary"
             i18n="@@settings.form.button.string"

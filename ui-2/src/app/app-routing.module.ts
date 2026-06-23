@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { navbarRoute } from './layout/navbar/navbar.route'
-import { errorRoutes } from './error/error.route'
-import { AppComponent } from './app.component'
 import { LoginComponent } from './account'
+import { errorRoutes } from './error/error.route'
+import { navbarRoute } from './layout/navbar/navbar.route'
 
 const routes: Routes = [
   {

@@ -7,7 +7,7 @@
         class="btn btn-primary send-notifications ms-1"
         [routerLink]="['/', 'affiliations', { outlets: { popup: 'notifications' } }]"
       >
-        <fa-icon [icon]="faPaperPlane"></fa-icon>
+        <fa-icon [icon]="faPaperPlane" />
         <span i18n="@@gatewayApp.assertionServiceAssertion.home.permissionNotificationsLabel.string">
           Send permission notifications
         </span>
@@ -17,7 +17,7 @@
         class="btn btn-primary jh-generate-links generate-links ms-1"
         (click)="generatePermissionLinks()"
       >
-        <fa-icon [icon]="faFileDownload"></fa-icon>
+        <fa-icon [icon]="faFileDownload" />
         <span i18n="@@gatewayApp.assertionServiceAssertion.reports.links.button.string">
           Request permission links
         </span>
@@ -27,7 +27,7 @@
         class="btn btn-primary jh-generate-reports generate-report ms-1"
         (click)="generateReport()"
       >
-        <fa-icon [icon]="faChartBar"></fa-icon>
+        <fa-icon [icon]="faChartBar" />
         <span i18n="@@gatewayApp.assertionServiceAssertion.reports.affiliationsReport.button.string">
           Request affiliation status report
         </span>
@@ -37,7 +37,7 @@
         class="btn btn-primary jh-generate-links generate-links ms-1"
         (click)="generateCSV()"
       >
-        <fa-icon [icon]="faFileDownload"></fa-icon>
+        <fa-icon [icon]="faFileDownload" />
         <span i18n="@@gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.button.string">
           Request affiliations for edit
         </span>
@@ -47,7 +47,7 @@
         class="btn btn-primary jh-upload-entities upload-assertions ms-1"
         [routerLink]="['/' + 'affiliations', { outlets: { popup: 'import' } }]"
       >
-        <fa-icon [icon]="faFileImport"></fa-icon>
+        <fa-icon [icon]="faFileImport" />
         <span i18n="@@gatewayApp.assertionServiceAssertion.home.uploadLabel.string">
           Import affiliations from CSV
         </span>
@@ -57,15 +57,15 @@
         class="btn btn-primary jh-create-entity create-assertion ms-1"
         [routerLink]="['/affiliations/new']"
       >
-        <fa-icon [icon]="faPlus"></fa-icon>
+        <fa-icon [icon]="faPlus" />
         <span i18n="@@gatewayApp.assertionServiceAssertion.home.createLabel.string"> Add affiliation </span>
       </button>
     </div>
   </div>
-  @if (showEditReportPendingMessage || showStatusReportPendingMessage || showLinksReportPendingMessage) {
+  @if (showEditReportPendingMessage() || showStatusReportPendingMessage() || showLinksReportPendingMessage()) {
     <div class="row success">
       <div class="col-md-12">
-        @if (showEditReportPendingMessage) {
+        @if (showEditReportPendingMessage()) {
           <span i18n="@@gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.confirmation.string">
             Your affiliations for edit file will be mailed to you shortly. If you do not receive your file then please
             contact us at membership&#64;orcid.org.
@@ -73,7 +73,7 @@
         }
       </div>
       <div class="col-md-12">
-        @if (showStatusReportPendingMessage) {
+        @if (showStatusReportPendingMessage()) {
           <span i18n="@@gatewayApp.assertionServiceAssertion.reports.affiliationsReport.confirmation.string">
             Your affiliation status report file will be mailed to you shortly. If you do not receive your file then
             please contact us at membership&#64;orcid.org.
@@ -81,7 +81,7 @@
         }
       </div>
       <div class="col-md-12">
-        @if (showLinksReportPendingMessage) {
+        @if (showLinksReportPendingMessage()) {
           <span i18n="@@gatewayApp.assertionServiceAssertion.reports.links.confirmation.string">
             Your permission links file will be mailed to you shortly. If you do not receive your file then please
             contact us at membership&#64;orcid.org.
@@ -100,12 +100,12 @@
             placeholder="Search..."
             aria-label="Search..."
             i18n-aria-label="@@global.form.search.string"
-            [(ngModel)]="searchTerm"
+            [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)"
             i18n-placeholder="@@global.form.search.string"
             class="form-control"
           />
         </div>
-        @if (submittedSearchTerm) {
+        @if (submittedSearchTerm()) {
           <button
             type="button"
             class="reset"
@@ -113,7 +113,7 @@
             aria-label="Clear search"
             i18n-aria-label="@@global.form.search.clear.string"
           >
-            <fa-icon aria-hidden="true" [icon]="faTimes" [style.color]="'#2e7f9f'"></fa-icon>
+            <fa-icon aria-hidden="true" [icon]="faTimes" [style.color]="'#2e7f9f'" />
           </button>
         }
         <button
@@ -123,81 +123,81 @@
           aria-label="Search..."
           i18n-aria-label="@@global.form.search.string"
         >
-          <fa-icon aria-hidden="true" [icon]="faSearch" [style.color]="'#2e7f9f'"></fa-icon>
+          <fa-icon aria-hidden="true" [icon]="faSearch" [style.color]="'#2e7f9f'" />
         </button>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-md-12">
-      <app-alert-error></app-alert-error>
-      <app-alert-toast></app-alert-toast>
+      <app-alert-error />
+      <app-alert-toast />
       <br />
-      @if (affiliations?.length === 0) {
+      @if (affiliations()?.length === 0) {
         <div class="alert alert-warning">
           <span i18n="@@gatewayApp.assertionServiceAssertion.home.notFound.string">No affiliations found</span>
         </div>
       }
     </div>
   </div>
-  @if (affiliations && affiliations.length && affiliations.length > 0) {
+  @if (affiliations() && affiliations()!.length > 0) {
     <div class="table-responsive">
       <table class="table table-striped">
         <thead>
           <tr>
             <th
               scope="col"
-              [attr.aria-sort]="sortColumn === 'email' ? (ascending ? 'ascending' : 'descending') : 'none'"
+              [attr.aria-sort]="sortColumn() === 'email' ? (ascending() ? 'ascending' : 'descending') : 'none'"
             >
               <button type="button" class="th-sort" (click)="updateSort('email')">
                 <span i18n="@@gatewayApp.assertionServiceAssertion.email.string">Email</span>
-                @if (sortColumn === 'email') {
-                  <fa-icon [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+                @if (sortColumn() === 'email') {
+                  <fa-icon [icon]="ascending() ? faSortDown : faSortUp" />
                 }
               </button>
             </th>
             <th
               scope="col"
-              [attr.aria-sort]="sortColumn === 'orcidId' ? (ascending ? 'ascending' : 'descending') : 'none'"
+              [attr.aria-sort]="sortColumn() === 'orcidId' ? (ascending() ? 'ascending' : 'descending') : 'none'"
             >
               <button type="button" class="th-sort" (click)="updateSort('orcidId')">
                 <span i18n="@@gatewayApp.assertionServiceAssertion.orcidId.string">ORCID iD</span>
-                @if (sortColumn === 'orcidId') {
-                  <fa-icon [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+                @if (sortColumn() === 'orcidId') {
+                  <fa-icon [icon]="ascending() ? faSortDown : faSortUp" />
                 }
               </button>
             </th>
             <th
               scope="col"
               style="width: 30%"
-              [attr.aria-sort]="sortColumn === 'affiliationSection' ? (ascending ? 'ascending' : 'descending') : 'none'"
+              [attr.aria-sort]="sortColumn() === 'affiliationSection' ? (ascending() ? 'ascending' : 'descending') : 'none'"
             >
               <button type="button" class="th-sort" (click)="updateSort('affiliationSection')">
                 <span i18n="@@gatewayApp.assertionServiceAssertion.affiliationData.string">Affiliation Data</span>
-                @if (sortColumn === 'affiliationSection') {
-                  <fa-icon [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+                @if (sortColumn() === 'affiliationSection') {
+                  <fa-icon [icon]="ascending() ? faSortDown : faSortUp" />
                 }
               </button>
             </th>
             <th
               scope="col"
-              [attr.aria-sort]="sortColumn === 'created' ? (ascending ? 'ascending' : 'descending') : 'none'"
+              [attr.aria-sort]="sortColumn() === 'created' ? (ascending() ? 'ascending' : 'descending') : 'none'"
             >
               <button type="button" class="th-sort" (click)="updateSort('created')">
                 <span i18n="@@gatewayApp.assertionServiceAssertion.dateCreated.string">Date created</span>
-                @if (sortColumn === 'created') {
-                  <fa-icon [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+                @if (sortColumn() === 'created') {
+                  <fa-icon [icon]="ascending() ? faSortDown : faSortUp" />
                 }
               </button>
             </th>
             <th
               scope="col"
-              [attr.aria-sort]="sortColumn === 'status' ? (ascending ? 'ascending' : 'descending') : 'none'"
+              [attr.aria-sort]="sortColumn() === 'status' ? (ascending() ? 'ascending' : 'descending') : 'none'"
             >
               <button type="button" class="th-sort" (click)="updateSort('status')">
                 <span i18n="@@gatewayApp.assertionServiceAssertion.status.string">Status</span>
-                @if (sortColumn === 'status') {
-                  <fa-icon [icon]="ascending ? faSortDown : faSortUp"></fa-icon>
+                @if (sortColumn() === 'status') {
+                  <fa-icon [icon]="ascending() ? faSortDown : faSortUp" />
                 }
               </button>
             </th>
@@ -205,7 +205,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (affiliation of affiliations; track trackId($index, affiliation)) {
+          @for (affiliation of affiliations(); track trackId($index, affiliation)) {
             <tr>
               <td>{{ affiliation.email }}</td>
               <td>
@@ -282,7 +282,7 @@
                     [routerLink]="['/affiliations', affiliation.id, 'edit']"
                     class="btn btn-primary btn-sm ms-1"
                   >
-                    <fa-icon [icon]="faPencilAlt"></fa-icon>
+                    <fa-icon [icon]="faPencilAlt" />
                     <span class="d-none d-md-inline" i18n="@@entity.action.edit.string">Edit</span>
                   </button>
                   <button
@@ -292,7 +292,7 @@
                     queryParamsHandling="merge"
                     class="btn btn-danger btn-sm ms-1"
                   >
-                    <fa-icon [icon]="faTimes"></fa-icon>
+                    <fa-icon [icon]="faTimes" />
                     <span class="d-none d-md-inline" i18n="@@entity.action.delete.string">Delete</span>
                   </button>
                 </div>
@@ -303,23 +303,23 @@
       </table>
     </div>
   }
-  <div [hidden]="affiliations?.length === 0">
+  <div [hidden]="!affiliations()?.length">
     <div class="row justify-content-center">
-      <p class="text-center">{{ itemCount }}</p>
+      <p class="text-center">{{ itemCount() }}</p>
     </div>
-    @if (totalItems !== null && totalItems > 0) {
+    @if (totalItems() !== null && totalItems() > 0) {
       <div class="row justify-content-center">
         <ngb-pagination
-          [collectionSize]="totalItems"
-          [pageSize]="itemsPerPage"
+          [collectionSize]="totalItems()"
+          [pageSize]="itemsPerPage()"
           [maxSize]="5"
           [rotate]="true"
-          [(page)]="page"
+          [page]="page()"
           [boundaryLinks]="true"
-          (pageChange)="loadPage()"
-        ></ngb-pagination>
+          (pageChange)="page.set($event); loadPage()"
+        />
       </div>
     }
   </div>
 </div>
-<router-outlet name="popup"></router-outlet>
+<router-outlet name="popup" />

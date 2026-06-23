@@ -20,9 +20,8 @@ describe('LandingPageComponent', () => {
     spyOn(console, 'error').and.stub()
 
     TestBed.configureTestingModule({
-    declarations: [LandingPageComponent],
-    imports: [],
-    providers: [
+      imports: [LandingPageComponent],
+      providers: [
         {
           provide: LandingPageService,
           useValue: jasmine.createSpyObj('LandingPageService', [
@@ -37,8 +36,8 @@ describe('LandingPageComponent', () => {
           ]),
         },
         {
-            provide: WindowLocationService,
-            useValue: jasmine.createSpyObj('WindowLocationService', ['updateWindowLocation', 'getWindowLocationHash']),
+          provide: WindowLocationService,
+          useValue: jasmine.createSpyObj('WindowLocationService', ['updateWindowLocation', 'getWindowLocationHash']),
         },
         {
           provide: ActivatedRoute,
@@ -52,8 +51,8 @@ describe('LandingPageComponent', () => {
           },
         },
         provideHttpClient(withInterceptorsFromDi()),
-    ]
-})
+      ],
+    })
     fixture = TestBed.createComponent(LandingPageComponent)
     component = fixture.componentInstance
     landingPageService = TestBed.inject(LandingPageService) as jasmine.SpyObj<LandingPageService>
@@ -72,9 +71,9 @@ describe('LandingPageComponent', () => {
     landingPageService.getMemberInfo.and.returnValue(
       of(new Member('id', 'name', 'email', 'orcid', 'memberId', 'clientId'))
     )
-    component.processRequest('someState', '', '')
+    ;(component as any).processRequest('someState', '', '')
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
-    expect(component.oauthUrl).toBe(
+    expect((component as any).oauthUrl).toBe(
       'https://qa.orcid.org/oauth/authorize?response_type=token&redirect_uri=http://localhost:9876/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
     )
     expect(landingPageService.getPublicKey).toHaveBeenCalledTimes(0)
@@ -90,16 +89,16 @@ describe('LandingPageComponent', () => {
       of(new Member('id', 'name', 'email', 'orcid', 'memberId', 'clientId'))
     )
     landingPageService.submitUserResponse.and.returnValue(of(''))
-    component.processRequest('someState', '', '')
+    ;(component as any).processRequest('someState', '', '')
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
-    expect(component.oauthUrl).toBe(
+    expect((component as any).oauthUrl).toBe(
       'https://qa.orcid.org/oauth/authorize?response_type=token&redirect_uri=http://localhost:9876/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
     )
     expect(landingPageService.getPublicKey).toHaveBeenCalledTimes(0)
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalledTimes(0)
     expect(landingPageService.submitUserResponse).toHaveBeenCalled()
-    expect(component.showError).toBeFalsy()
-    expect(component.showDenied).toBeTruthy()
+    expect((component as any).showError).toBeFalsy()
+    expect((component as any).showDenied).toBeTruthy()
   })
 
   it('New record connection should fail (generic error)', () => {
@@ -111,16 +110,16 @@ describe('LandingPageComponent', () => {
       of(new Member('id', 'name', 'email', 'orcid', 'memberId', 'clientId'))
     )
     landingPageService.submitUserResponse.and.returnValue(of(''))
-    component.processRequest('someState', '', '')
+    ;(component as any).processRequest('someState', '', '')
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
-    expect(component.oauthUrl).toBe(
+    expect((component as any).oauthUrl).toBe(
       'https://qa.orcid.org/oauth/authorize?response_type=token&redirect_uri=http://localhost:9876/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
     )
     expect(landingPageService.getPublicKey).toHaveBeenCalledTimes(0)
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalledTimes(0)
     expect(landingPageService.submitUserResponse).toHaveBeenCalledTimes(0)
-    expect(component.showError).toBeTruthy()
-    expect(component.showDenied).toBeFalsy()
+    expect((component as any).showError).toBeTruthy()
+    expect((component as any).showDenied).toBeFalsy()
   })
 
   it('Existing record connection should be identified', () => {
@@ -136,7 +135,7 @@ describe('LandingPageComponent', () => {
     spyOn(KEYUTIL.KEYUTIL, 'getKey').and.returnValue(new KEYUTIL.RSAKey())
     spyOn(KEYUTIL.KJUR.jws.JWS, 'verifyJWT').and.returnValue(true)
 
-    component.processRequest('someState', 'it_token', '')
+    ;(component as any).processRequest('someState', 'it_token', '')
 
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
     expect(landingPageService.getPublicKey).toHaveBeenCalled()
@@ -150,10 +149,10 @@ describe('LandingPageComponent', () => {
     landingPageService.getUserInfo.and.returnValue(of({ givenName: 'givenName', familyName: 'familyName' }))
     spyOn(KEYUTIL.KEYUTIL, 'getKey').and.returnValue(new KEYUTIL.RSAKey())
     spyOn(KEYUTIL.KJUR.jws.JWS, 'verifyJWT').and.returnValue(true)
-    component.checkSubmitToken('token', 'state', 'access_token')
+    ;(component as any).checkSubmitToken('token', 'state', 'access_token')
     expect(landingPageService.submitUserResponse).toHaveBeenCalled()
-    expect(component.showConnectionExists).toBeFalsy()
-    expect(component.showConnectionExistsDifferentUser).toBeTruthy()
+    expect((component as any).showConnectionExists).toBeFalsy()
+    expect((component as any).showConnectionExistsDifferentUser).toBeTruthy()
   })
 
   it('Check for existing connection', () => {
@@ -163,9 +162,9 @@ describe('LandingPageComponent', () => {
     landingPageService.getUserInfo.and.returnValue(of({ givenName: 'givenName', familyName: 'familyName' }))
     spyOn(KEYUTIL.KEYUTIL, 'getKey').and.returnValue(new KEYUTIL.RSAKey())
     spyOn(KEYUTIL.KJUR.jws.JWS, 'verifyJWT').and.returnValue(true)
-    component.checkSubmitToken('token', 'state', 'access_token')
+    ;(component as any).checkSubmitToken('token', 'state', 'access_token')
     expect(landingPageService.submitUserResponse).toHaveBeenCalled()
-    expect(component.showConnectionExists).toBeTruthy()
-    expect(component.showConnectionExistsDifferentUser).toBeFalsy()
+    expect((component as any).showConnectionExists).toBeTruthy()
+    expect((component as any).showConnectionExistsDifferentUser).toBeFalsy()
   })
 })

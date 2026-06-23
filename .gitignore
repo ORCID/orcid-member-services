@@ -15,6 +15,7 @@ discovery-service/maven_dep_tree.txt
 gateway/maven_dep_tree.txt
 .idea/
 .vscode/
+.angulardoc.json
 
 # AI coding agents — keep shared AGENTS.md/CLAUDE.md tracked, ignore local/secret artifacts
 # Claude Code / Anthropic

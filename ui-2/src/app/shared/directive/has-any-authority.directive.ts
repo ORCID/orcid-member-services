@@ -12,10 +12,7 @@ import { AccountService } from 'src/app/account/service/account.service'
  *     <some-element *hasAnyAuthority="['ROLE_ADMIN', 'ROLE_USER']">...</some-element>
  * ```
  */
-@Directive({
-  selector: '[appHasAnyAuthority]',
-  standalone: false,
-})
+@Directive({ selector: '[appHasAnyAuthority]' })
 export class HasAnyAuthorityDirective {
   private accountService = inject(AccountService)
   private templateRef = inject<TemplateRef<any>>(TemplateRef)

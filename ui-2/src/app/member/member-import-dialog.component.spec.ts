@@ -19,11 +19,17 @@ describe('MemberImportDialogComponent', () => {
     uploadServiceSpy = jasmine.createSpyObj('FileUploadService', ['uploadFile'])
 
     TestBed.configureTestingModule({
-    declarations: [MemberImportDialogComponent],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [],
-    providers: [FormBuilder, NgbModal, NgbActiveModal, { provide: FileUploadService, useValue: uploadServiceSpy }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-})
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      imports: [MemberImportDialogComponent],
+      providers: [
+        FormBuilder,
+        NgbModal,
+        NgbActiveModal,
+        { provide: FileUploadService, useValue: uploadServiceSpy },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
+    })
     fixture = TestBed.createComponent(MemberImportDialogComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
@@ -36,14 +42,14 @@ describe('MemberImportDialogComponent', () => {
   })
 
   it('should call upload service', () => {
-    component.currentFile = getFileList()
+    (component as any).currentFile.set(getFileList())
     uploadServiceSpy.uploadFile.and.returnValue(EMPTY)
     component.upload()
     expect(uploadServiceSpy.uploadFile).toHaveBeenCalled()
   })
 
   it('errors should be parsed', () => {
-    component.currentFile = getFileList()
+    (component as any).currentFile.set(getFileList())
     uploadServiceSpy.uploadFile.and.returnValue(of('[{"index":1,"message":"error"}]'))
     component.upload()
     expect(uploadServiceSpy.uploadFile).toHaveBeenCalled()

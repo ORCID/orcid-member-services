@@ -4,7 +4,7 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="clear()"></button>
   </div>
   <div class="modal-body">
-    <app-alert-error></app-alert-error>
+    <app-alert-error />
     @if (csvErrors && csvErrors.length > 0) {
       <div class="alerts top right" role="alert">
         <ngb-alert
@@ -54,7 +54,7 @@
       />
     </div>
   </div>
-  @if (loading) {
+  @if (loading()) {
     <div class="progress">
       <div
         class="progress-bar progress-bar-striped progress-bar-animated"
@@ -68,10 +68,10 @@
   }
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="clear()">
-      <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
+      <fa-icon [icon]="faBan" />&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
     </button>
     <button id="jhi-confirm-delete-msUser" type="submit" class="btn btn-primary">
-      <fa-icon [icon]="faSave"></fa-icon>&nbsp;<span i18n="@@entity.action.upload.string">Upload</span>
+      <fa-icon [icon]="faSave" />&nbsp;<span i18n="@@entity.action.upload.string">Upload</span>
     </button>
   </div>
 </form>

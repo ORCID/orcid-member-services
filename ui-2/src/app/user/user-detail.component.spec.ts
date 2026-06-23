@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { UserDetailComponent } from './user-detail.component'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { AlertService } from '../shared/service/alert.service'
 import { UserService } from './service/user.service'
@@ -22,15 +22,14 @@ describe('UserDetailComponent', () => {
     alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
 
     TestBed.configureTestingModule({
-    declarations: [UserDetailComponent],
-    imports: [RouterTestingModule],
-    providers: [
+      imports: [RouterModule.forRoot([]), UserDetailComponent],
+      providers: [
         { provide: UserService, useValue: userServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },
         provideHttpClient(withInterceptorsFromDi()),
-    ]
-}).compileComponents()
+      ],
+    }).compileComponents()
 
     fixture = TestBed.createComponent(UserDetailComponent)
     component = fixture.componentInstance
@@ -46,7 +45,7 @@ describe('UserDetailComponent', () => {
   })
 
   it('when user exists, sendActivate should call userService and alertService', () => {
-    component.user = new User()
+    (component as any).user.set(new User())
     userServiceSpy.sendActivate.and.returnValue(of(new User()))
 
     component.sendActivate()
@@ -56,7 +55,7 @@ describe('UserDetailComponent', () => {
   })
 
   it('when user does not exist, sendActivate should not call userService or alertService', () => {
-    component.user = null
+    (component as any).user.set(null)
     userServiceSpy.sendActivate.and.returnValue(of(new User()))
 
     component.sendActivate()

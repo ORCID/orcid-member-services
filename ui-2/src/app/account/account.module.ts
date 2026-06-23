@@ -13,7 +13,11 @@ import { PasswordResetFinishComponent } from './password/password-reset-finish.c
 import { ActivationComponent } from './activation/activation.component'
 
 @NgModule({
-  declarations: [
+  imports: [
+    SharedModule,
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
     LoginComponent,
     PasswordResetInitComponent,
     SettingsComponent,
@@ -22,6 +26,5 @@ import { ActivationComponent } from './activation/activation.component'
     PasswordResetFinishComponent,
     ActivationComponent,
   ],
-  imports: [SharedModule, CommonModule, ReactiveFormsModule, RouterModule.forChild(routes)],
 })
 export class AccountModule {}

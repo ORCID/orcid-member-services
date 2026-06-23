@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { AffiliationDetailComponent } from './affiliation-detail.component'
 import { UserService } from '../user/service/user.service'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
 import { ActivatedRoute } from '@angular/router'
 import { of } from 'rxjs'
 import { NO_ERRORS_SCHEMA } from '@angular/core'
@@ -30,8 +30,7 @@ describe('AffiliationDetailComponent', () => {
     userServiceSpy.find.and.returnValue(of({ email: 'test@test.com' }))
 
     TestBed.configureTestingModule({
-      declarations: [AffiliationDetailComponent, LocalizePipe],
-      imports: [RouterTestingModule],
+      imports: [RouterModule.forRoot([]), AffiliationDetailComponent, LocalizePipe],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: UserService, useValue: userServiceSpy },

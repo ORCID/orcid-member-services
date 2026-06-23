@@ -13,7 +13,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { FeatureToggleService } from 'src/app/shared/service/feature-toggle.service'
-import {RouterTestingModule} from "@angular/router/testing";
+import { RouterModule } from '@angular/router'
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent
@@ -27,8 +27,8 @@ describe('NavbarComponent', () => {
   beforeEach(() => {
     spyOn(console, 'warn').and.stub()
 
-    const featureToggleSpy = jasmine.createSpyObj('FeatureToggleService', ['isEnabled', 'initFeatures']);
-    featureToggleSpy.initFeatures.and.returnValue(of(null));
+    const featureToggleSpy = jasmine.createSpyObj('FeatureToggleService', ['isEnabled', 'initFeatures'])
+    featureToggleSpy.initFeatures.and.returnValue(of(null))
     const loginServiceSpy = jasmine.createSpyObj('LoginService', ['login', 'logout'])
     const memberServiceSpy = jasmine.createSpyObj('MemberService', ['find', 'setManagedMember'])
     const accountServiceSpy = jasmine.createSpyObj('AccountService', [
@@ -51,10 +51,14 @@ describe('NavbarComponent', () => {
     }
 
     TestBed.configureTestingModule({
-    declarations: [NavbarComponent, HasAnyAuthorityDirective],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [ReactiveFormsModule, RouterTestingModule.withRoutes([{ path: 'api-credentials', children: [] }])],
-    providers: [
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      imports: [
+        ReactiveFormsModule,
+        RouterModule.forRoot([{ path: 'api-credentials', children: [] }]),
+        NavbarComponent,
+        HasAnyAuthorityDirective,
+      ],
+      providers: [
         { provide: LoginService, useValue: loginServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
@@ -63,11 +67,9 @@ describe('NavbarComponent', () => {
         { provide: FeatureToggleService, useValue: featureToggleSpy },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-      ]
+      ],
     }).compileComponents()
 
-    fixture = TestBed.createComponent(NavbarComponent)
-    component = fixture.componentInstance
     loginService = TestBed.inject(LoginService) as jasmine.SpyObj<LoginService>
     memberService = TestBed.inject(MemberService) as jasmine.SpyObj<MemberService>
     accountService = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
@@ -75,7 +77,13 @@ describe('NavbarComponent', () => {
     featureToggleService = TestBed.inject(FeatureToggleService) as jasmine.SpyObj<FeatureToggleService>
   })
 
+  function createComponent() {
+    fixture = TestBed.createComponent(NavbarComponent)
+    component = fixture.componentInstance
+  }
+
   it('should create', () => {
+    createComponent()
     expect(component).toBeTruthy()
   })
 
@@ -108,6 +116,7 @@ describe('NavbarComponent', () => {
     )
     memberService.find.and.returnValue(of({ id: 'id', client_id: 'a', isConsortiumLead: false }))
 
+    createComponent()
     fixture.detectChanges()
     tick()
 
@@ -154,6 +163,7 @@ describe('NavbarComponent', () => {
       })
     )
     memberService.find.and.returnValue(of({ id: 'id', client_id: 'a', isConsortiumLead: true }))
+    createComponent()
     fixture.detectChanges()
     tick()
 
@@ -194,6 +204,7 @@ describe('NavbarComponent', () => {
       })
     )
     memberService.find.and.returnValue(of({ id: 'id', client_id: 'a', isConsortiumLead: true }))
+    createComponent()
     fixture.detectChanges()
     tick()
 
@@ -202,7 +213,7 @@ describe('NavbarComponent', () => {
   }))
 
   it('should display the manage API credentials link', fakeAsync(() => {
-    featureToggleService.isEnabled.withArgs('MANAGE_API_CREDENTIALS').and.returnValue(true);
+    featureToggleService.isEnabled.withArgs('MANAGE_API_CREDENTIALS').and.returnValue(true)
 
     accountService.isAuthenticated.and.returnValue(true)
     accountService.hasAnyAuthority.and.returnValue(false)
@@ -230,6 +241,7 @@ describe('NavbarComponent', () => {
       })
     )
     memberService.find.and.returnValue(of({ id: 'id', client_id: 'a', isConsortiumLead: false }))
+    createComponent()
     fixture.detectChanges()
     tick()
 
@@ -238,7 +250,7 @@ describe('NavbarComponent', () => {
   }))
 
   it('should open MFA dialog when manage API credentials is clicked and MFA is not enabled', fakeAsync(() => {
-    featureToggleService.isEnabled.withArgs('MANAGE_API_CREDENTIALS').and.returnValue(true);
+    featureToggleService.isEnabled.withArgs('MANAGE_API_CREDENTIALS').and.returnValue(true)
 
     accountService.isAuthenticated.and.returnValue(true)
     accountService.hasAnyAuthority.and.returnValue(false)
@@ -268,6 +280,7 @@ describe('NavbarComponent', () => {
       })
     )
     memberService.find.and.returnValue(of({ id: 'id', client_id: 'a', isConsortiumLead: false }))
+    createComponent()
     fixture.detectChanges()
     tick()
 

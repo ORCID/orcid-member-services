@@ -33,10 +33,9 @@ describe('UserImportDialogComponent', () => {
     const uploadServiceSpy = jasmine.createSpyObj('FileUploadService', ['uploadFile'])
 
     TestBed.configureTestingModule({
-    declarations: [UserImportDialogComponent],
-    imports: [],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    providers: [
+      imports: [UserImportDialogComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      providers: [
         FormBuilder,
         NgbModal,
         NgbActiveModal,
@@ -46,8 +45,8 @@ describe('UserImportDialogComponent', () => {
         { provide: ErrorService, useValue: {} },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-}).compileComponents()
+      ],
+    }).compileComponents()
 
     fixture = TestBed.createComponent(UserImportDialogComponent)
     component = fixture.componentInstance
@@ -62,14 +61,14 @@ describe('UserImportDialogComponent', () => {
   })
 
   it('should call upload service', () => {
-    component.currentFile = getFileList()
+    (component as any).currentFile.set(getFileList())
     uploadService.uploadFile.and.returnValue(EMPTY)
     component.upload()
     expect(uploadService.uploadFile).toHaveBeenCalled()
   })
 
   it('errors should be parsed', () => {
-    component.currentFile = getFileList()
+    (component as any).currentFile.set(getFileList())
     uploadService.uploadFile.and.returnValue(
       of('[{"index":1,"message":"A user with email g.nash+575@orcid.org already exists"}]')
     )

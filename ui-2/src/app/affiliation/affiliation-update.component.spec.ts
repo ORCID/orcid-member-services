@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { AffiliationUpdateComponent } from './affiliation-update.component'
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { LocalizePipe } from '../shared/pipe/localize'
 import { AffiliationService } from './service/affiliation.service'
@@ -26,15 +26,14 @@ describe('AffiliationUpdateComponent', () => {
     ])
 
     TestBed.configureTestingModule({
-    declarations: [AffiliationUpdateComponent, LocalizePipe],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [ReactiveFormsModule, RouterTestingModule.withRoutes([])],
-    providers: [
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      imports: [ReactiveFormsModule, RouterModule.forRoot([]), AffiliationUpdateComponent, LocalizePipe],
+      providers: [
         { provide: AffiliationService, useValue: affiliationServiceSpy },
         { provide: DateUtilService, useValue: dateUtilServiceSpy },
         provideHttpClient(withInterceptorsFromDi()),
-    ]
-}).compileComponents()
+      ],
+    }).compileComponents()
     affiliationService = TestBed.inject(AffiliationService) as jasmine.SpyObj<AffiliationService>
     dateUtilService = TestBed.inject(DateUtilService) as jasmine.SpyObj<DateUtilService>
     fixture = TestBed.createComponent(AffiliationUpdateComponent)

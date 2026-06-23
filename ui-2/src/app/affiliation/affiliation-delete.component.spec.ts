@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
 import { AffiliationDeleteDialogComponent, AffiliationDeletePopupComponent } from './affiliation-delete.component'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
 import { AffiliationService } from './service/affiliation.service'
 import { EventService } from '../shared/service/event.service'
 import { EventType } from '../app.constants'
@@ -22,8 +22,7 @@ describe('AffiliationDeleteComponent', () => {
     const eventServiceSpy = jasmine.createSpyObj('EventService', ['broadcast'])
 
     TestBed.configureTestingModule({
-      declarations: [AffiliationDeleteDialogComponent],
-      imports: [RouterTestingModule],
+      imports: [RouterModule.forRoot([]), AffiliationDeleteDialogComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         NgbModal,

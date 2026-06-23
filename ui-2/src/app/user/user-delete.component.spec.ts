@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { UserDeleteDialogComponent } from './user-delete.component'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { EventService } from '../shared/service/event.service'
 import { UserService } from './service/user.service'
@@ -20,15 +20,13 @@ describe('UserDeleteComponent', () => {
     userServiceSpy = jasmine.createSpyObj('UserService', ['delete'])
     eventServiceSpy = jasmine.createSpyObj('EventService', ['broadcast'])
     TestBed.configureTestingModule({
-      declarations: [UserDeleteDialogComponent],
-      imports: [RouterTestingModule],
+      imports: [RouterModule.forRoot([]), UserDeleteDialogComponent],
       providers: [
         NgbModal,
         NgbActiveModal,
         { provide: UserService, useValue: userServiceSpy },
         { provide: EventService, useValue: eventServiceSpy },
       ],
-
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
 

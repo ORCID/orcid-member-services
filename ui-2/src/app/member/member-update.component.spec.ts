@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
 import { of } from 'rxjs'
 import { AlertMessage, AlertType } from '../app.constants'
 import { AlertService } from '../shared/service/alert.service'
@@ -24,8 +24,7 @@ describe('MemberUpdateComponent', () => {
     const alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
 
     TestBed.configureTestingModule({
-      declarations: [MemberUpdateComponent],
-      imports: [RouterTestingModule.withRoutes([]), ReactiveFormsModule],
+      imports: [RouterModule.forRoot([]), ReactiveFormsModule, MemberUpdateComponent],
       providers: [
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },
@@ -59,51 +58,51 @@ describe('MemberUpdateComponent', () => {
   })
 
   describe('salesforceId validation messages', () => {
-      beforeEach(() => {
-        activatedRoute.data = of({ member: new Member() })
-        fixture.detectChanges()
-      })
-
-      it('should show "This field is required" when salesforceId is empty and touched', () => {
-        const input = fixture.nativeElement.querySelector('#field_salesforceId')
-        input.value = ''
-        input.dispatchEvent(new Event('input'))
-        component.editForm.get('salesforceId')?.markAsTouched()
-        component.editForm.get('salesforceId')?.updateValueAndValidity()
-        fixture.detectChanges()
-
-        const requiredMsg = fixture.nativeElement.querySelector('[data-cy="fieldIsRequired"]')
-        expect(requiredMsg).toBeTruthy()
-        expect(requiredMsg.textContent.trim()).toBe('This field is required.')
-      })
-
-      it('should show "Must be exactly 18 alphanumeric characters" when salesforceId format is invalid', () => {
-        const input = fixture.nativeElement.querySelector('#field_salesforceId')
-        input.value = 'short'
-        input.dispatchEvent(new Event('input'))
-        component.editForm.get('salesforceId')?.markAsTouched()
-        component.editForm.get('salesforceId')?.updateValueAndValidity()
-        fixture.detectChanges()
-
-        const patternMsg = fixture.nativeElement.querySelector('[data-cy="fieldPatternInvalid"]')
-        expect(patternMsg).toBeTruthy()
-        expect(patternMsg.textContent.trim()).toBe('Must be exactly 18 alphanumeric characters.')
-      })
-
-      it('should not show any error messages when salesforceId is valid', () => {
-        const input = fixture.nativeElement.querySelector('#field_salesforceId')
-        input.value = 'ABCDEFGHIJKLMNOPQR'
-        input.dispatchEvent(new Event('input'))
-        component.editForm.get('salesforceId')?.markAsTouched()
-        component.editForm.get('salesforceId')?.updateValueAndValidity()
-        fixture.detectChanges()
-
-        expect(fixture.nativeElement.querySelector('[data-cy="fieldIsRequired"]')).toBeNull()
-        expect(fixture.nativeElement.querySelector('[data-cy="fieldPatternInvalid"]')).toBeNull()
-      })
+    beforeEach(() => {
+      activatedRoute.data = of({ member: new Member() })
+      fixture.detectChanges()
     })
 
-    it('should create a new member', () => {
+    it('should show "This field is required" when salesforceId is empty and touched', () => {
+      const input = fixture.nativeElement.querySelector('#field_salesforceId')
+      input.value = ''
+      input.dispatchEvent(new Event('input'))
+      component.editForm.get('salesforceId')?.markAsTouched()
+      component.editForm.get('salesforceId')?.updateValueAndValidity()
+      fixture.detectChanges()
+
+      const requiredMsg = fixture.nativeElement.querySelector('[data-cy="fieldIsRequired"]')
+      expect(requiredMsg).toBeTruthy()
+      expect(requiredMsg.textContent.trim()).toBe('This field is required.')
+    })
+
+    it('should show "Must be exactly 18 alphanumeric characters" when salesforceId format is invalid', () => {
+      const input = fixture.nativeElement.querySelector('#field_salesforceId')
+      input.value = 'short'
+      input.dispatchEvent(new Event('input'))
+      component.editForm.get('salesforceId')?.markAsTouched()
+      component.editForm.get('salesforceId')?.updateValueAndValidity()
+      fixture.detectChanges()
+
+      const patternMsg = fixture.nativeElement.querySelector('[data-cy="fieldPatternInvalid"]')
+      expect(patternMsg).toBeTruthy()
+      expect(patternMsg.textContent.trim()).toBe('Must be exactly 18 alphanumeric characters.')
+    })
+
+    it('should not show any error messages when salesforceId is valid', () => {
+      const input = fixture.nativeElement.querySelector('#field_salesforceId')
+      input.value = 'ABCDEFGHIJKLMNOPQR'
+      input.dispatchEvent(new Event('input'))
+      component.editForm.get('salesforceId')?.markAsTouched()
+      component.editForm.get('salesforceId')?.updateValueAndValidity()
+      fixture.detectChanges()
+
+      expect(fixture.nativeElement.querySelector('[data-cy="fieldIsRequired"]')).toBeNull()
+      expect(fixture.nativeElement.querySelector('[data-cy="fieldPatternInvalid"]')).toBeNull()
+    })
+  })
+
+  it('should create a new member', () => {
     activatedRoute.data = of({ member: new Member() })
     memberService.create.and.returnValue(of({ id: 'test' } as IMember))
     component.save()
@@ -112,5 +111,4 @@ describe('MemberUpdateComponent', () => {
     expect(alertService.broadcast).toHaveBeenCalledWith(AlertType.TOAST, AlertMessage.MEMBER_CREATED)
     expect(router.navigate).toHaveBeenCalledWith(['/members'])
   })
-
 })

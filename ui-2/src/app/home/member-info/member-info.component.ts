@@ -1,37 +1,40 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
-import { EMPTY, Subject, Subscription, combineLatest } from 'rxjs'
-import { filter, switchMap, takeUntil } from 'rxjs/operators'
+import { EMPTY } from 'rxjs'
+import { filter, switchMap } from 'rxjs/operators'
 import { AccountService } from 'src/app/account'
 import { IAccount } from 'src/app/account/model/account.model'
 import { ISFMemberData } from 'src/app/member/model/salesforce-member-data.model'
 import { MemberService } from 'src/app/member/service/member.service'
+import { FaIconComponent } from '@fortawesome/angular-fontawesome'
 
 @Component({
   selector: 'app-member-info',
   templateUrl: './member-info.component.html',
   styleUrls: ['member-info.component.scss'],
-  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, FaIconComponent],
 })
-export class MemberInfoComponent implements OnInit, OnDestroy {
+export class MemberInfoComponent implements OnInit {
   private memberService = inject(MemberService)
   private accountService = inject(AccountService)
   protected activatedRoute = inject(ActivatedRoute)
   protected router = inject(Router)
   private oidcSecurityService = inject(OidcSecurityService)
+  private destroyRef = inject(DestroyRef)
 
-  account: IAccount | undefined
-  memberData: ISFMemberData | undefined | null
-  alertSubscription: Subscription | undefined
-  managedMember: string | undefined
-  destroy$ = new Subject()
-  faTrashAlt = faTrashAlt
-  faPencilAlt = faPencilAlt
+  protected account = signal<IAccount | undefined>(undefined)
+  protected memberData = signal<ISFMemberData | undefined | null>(null)
+  protected managedMember = signal<string | undefined>(undefined)
+  protected faTrashAlt = faTrashAlt
+  protected faPencilAlt = faPencilAlt
 
   isActive() {
-    return this.memberData?.membershipEndDateString && new Date(this.memberData.membershipEndDateString) > new Date()
+    const membershipEndDate = this.memberData()?.membershipEndDateString
+    return !!membershipEndDate && new Date(membershipEndDate) > new Date()
   }
 
   filterCRFID(id: string) {
@@ -39,8 +42,9 @@ export class MemberInfoComponent implements OnInit, OnDestroy {
   }
 
   validateUrl() {
-    if (this.memberData?.website && !/(http(s?)):\/\//i.test(this.memberData.website)) {
-      this.memberData.website = 'http://' + this.memberData.website
+    const memberData = this.memberData()
+    if (memberData?.website && !/(http(s?)):\/\//i.test(memberData.website)) {
+      this.memberData.set({ ...memberData, website: 'http://' + memberData.website })
     }
   }
 
@@ -55,38 +59,33 @@ export class MemberInfoComponent implements OnInit, OnDestroy {
             return EMPTY
           }
 
-          this.account = account
+          this.account.set(account)
 
           return this.activatedRoute.params.pipe(
             switchMap((params) => {
               const childId = params['id']
 
               if (childId) {
-                this.managedMember = childId
+                this.managedMember.set(childId)
                 this.memberService.setManagedMember(childId)
                 return this.memberService.getMemberData(childId)
               } else {
-                this.managedMember = undefined
+                this.managedMember.set(undefined)
                 this.memberService.setManagedMember(null)
                 return this.memberService.getMemberData(account.memberId)
               }
             })
           )
         }),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((data) => {
-        this.memberData = data
+        this.memberData.set(data)
       })
   }
 
   stopManagingMember() {
     this.memberService.setManagedMember(null)
-    this.memberService.getMemberData(this.account?.memberId, true)
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next(true)
-    this.destroy$.complete()
+    this.memberService.getMemberData(this.account()?.memberId, true)
   }
 }

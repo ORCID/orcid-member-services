@@ -13,7 +13,7 @@ describe('FooterComponent', () => {
     const accountServiceSpy = jasmine.createSpyObj('AccountService', ['isAuthenticated', 'getReleaseVersion'])
 
     TestBed.configureTestingModule({
-      declarations: [FooterComponent],
+      imports: [FooterComponent],
       providers: [{ provide: AccountService, useValue: accountServiceSpy }],
     }).compileComponents()
 
@@ -32,7 +32,7 @@ describe('FooterComponent', () => {
     fixture.detectChanges()
     const copyright = fixture.debugElement.query(By.css('.copyright'))
     expect(copyright).toBeTruthy()
-    expect(copyright.nativeElement.textContent).toContain(component.currentYear.toString())
+    expect(copyright.nativeElement.textContent).toContain((component as any).currentYear.toString())
   })
 
   it('should expose an accessible label on the ORCID home link', () => {

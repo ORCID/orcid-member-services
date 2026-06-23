@@ -1,3 +1,5 @@
+/// <reference types="jasmine" />
+
 import { HttpResponse, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormBuilder } from '@angular/forms'
@@ -22,10 +24,13 @@ describe('PasswordComponent', () => {
       'disableMfa',
     ])
     TestBed.configureTestingModule({
-    declarations: [PasswordComponent],
-    imports: [],
-    providers: [FormBuilder, { provide: AccountService, useValue: accountServiceSpy }, provideHttpClient(withInterceptorsFromDi())]
-})
+      imports: [PasswordComponent],
+      providers: [
+        FormBuilder,
+        { provide: AccountService, useValue: accountServiceSpy },
+        provideHttpClient(withInterceptorsFromDi()),
+      ],
+    })
       .overrideTemplate(PasswordComponent, '')
       .compileComponents()
 
@@ -44,9 +49,9 @@ describe('PasswordComponent', () => {
     // WHEN
     comp.changePassword()
     // THEN
-    expect(comp.doNotMatch).toBe('ERROR')
-    expect(comp.error).toBeUndefined()
-    expect(comp.success).toBeUndefined()
+    expect((comp as any).doNotMatch()).toBe('ERROR')
+    expect((comp as any).error()).toBeUndefined()
+    expect((comp as any).success()).toBeUndefined()
   })
 
   it('should call Auth.changePassword when passwords match', () => {
@@ -83,9 +88,9 @@ describe('PasswordComponent', () => {
     comp.changePassword()
 
     // THEN
-    expect(comp.doNotMatch).toBeUndefined()
-    expect(comp.error).toBeUndefined()
-    expect(comp.success).toBe('OK')
+    expect((comp as any).doNotMatch()).toBeUndefined()
+    expect((comp as any).error()).toBeUndefined()
+    expect((comp as any).success()).toBe('OK')
   })
 
   it('should notify of error if change password fails', function () {
@@ -100,8 +105,8 @@ describe('PasswordComponent', () => {
     comp.changePassword()
 
     // THEN
-    expect(comp.doNotMatch).toBeUndefined()
-    expect(comp.success).toBeUndefined()
-    expect(comp.error).toBe('ERROR')
+    expect((comp as any).doNotMatch()).toBeUndefined()
+    expect((comp as any).success()).toBeUndefined()
+    expect((comp as any).error()).toBe('ERROR')
   })
 })

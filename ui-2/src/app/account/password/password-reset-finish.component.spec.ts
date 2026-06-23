@@ -1,8 +1,10 @@
+/// <reference types="jasmine" />
+
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
 import { of, throwError } from 'rxjs'
 import { PasswordService } from '../service/password.service'
 import { PasswordResetFinishComponent } from './password-reset-finish.component'
@@ -13,12 +15,15 @@ describe('PasswordResetFinishComponent', () => {
   let service: jasmine.SpyObj<PasswordService>
 
   beforeEach(() => {
-    const passwordServiceSpy = jasmine.createSpyObj('PasswordService', ['validateKey', 'savePassword', 'resendActivationEmail'])
+    const passwordServiceSpy = jasmine.createSpyObj('PasswordService', [
+      'validateKey',
+      'savePassword',
+      'resendActivationEmail',
+    ])
     passwordServiceSpy.validateKey.and.returnValue(of({ invalidKey: false, expiredKey: false }))
 
     TestBed.configureTestingModule({
-      declarations: [PasswordResetFinishComponent],
-      imports: [ReactiveFormsModule, RouterTestingModule],
+      imports: [ReactiveFormsModule, RouterModule.forRoot([]), PasswordResetFinishComponent],
       providers: [
         { provide: PasswordService, useValue: passwordServiceSpy },
         { provide: ActivatedRoute, useValue: { queryParams: of({}) } },
@@ -37,13 +42,13 @@ describe('PasswordResetFinishComponent', () => {
   it('password should save successfully', () => {
     service.savePassword.and.returnValue(of(true))
     component.finishReset()
-    expect(component.success).toEqual('OK')
+    expect((component as any).success()).toEqual('OK')
   })
 
   it('password save should fail', () => {
     service.savePassword.and.returnValue(throwError(() => new Error('error')))
     component.finishReset()
-    expect(component.error).toEqual('ERROR')
-    expect(component.success).toBeFalsy()
+    expect((component as any).error()).toEqual('ERROR')
+    expect((component as any).success()).toBeFalsy()
   })
 })

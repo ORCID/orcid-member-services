@@ -1,7 +1,7 @@
-@if (memberData || memberData === null) {
+@if (memberData() || memberData() === null) {
   <div class="h-100 home-container">
     <!-- UNABLE TO RETRIEVE MEMBER DATA -->
-    @if (memberData === null) {
+    @if (memberData() === null) {
       <div class="p-4 d-flex">
         <div>
           <H1 class="mb-4">Something has gone wrong...</H1>
@@ -20,14 +20,14 @@
       </div>
     }
     <!-- MEMBER DATA -->
-    @if (memberData) {
+    @if (memberData()) {
       <div class="d-flex h-100">
-        @if (memberData) {
+        @if (memberData()) {
           <div class="side-bar">
             <!-- SIDEBAR -->
             <div class="logo-container mb-40">
               <img
-                src="{{ memberData.logoUrl }}"
+                src="{{ memberData()?.logoUrl }}"
                 onerror="this.src = './content/images/member-logo-placeholder.svg'"
                 alt="Member logo"
               />
@@ -40,66 +40,68 @@
                   <hr class="mt-0 mb-10" />
                   <div class="mb-20 side-bar-subsection">
                     <h3 class="font-size-14 wide-text-25">Website</h3>
-                    @if (memberData.website) {
+                    @if (memberData()?.website) {
                       <div>
-                        <a href="{{ memberData.website }}">{{ memberData.website }}</a>
+                        <a href="{{ memberData()?.website }}">{{ memberData()?.website }}</a>
                       </div>
                     }
-                    @if (!memberData.website) {
+                    @if (!memberData()?.website) {
                       <div class="color-gray">No website added</div>
                     }
                   </div>
                   <div class="mb-20 side-bar-subsection">
                     <h3 class="font-size-14 wide-text-25">Email</h3>
-                    @if (memberData.publicDisplayEmail) {
+                    @if (memberData()?.publicDisplayEmail) {
                       <div>
-                        <a href="mailto:{{ memberData.publicDisplayEmail }}">{{ memberData.publicDisplayEmail }}</a>
+                        <a href="mailto:{{ memberData()?.publicDisplayEmail }}">{{
+                          memberData()?.publicDisplayEmail
+                        }}</a>
                       </div>
                     }
-                    @if (!memberData.publicDisplayEmail) {
+                    @if (!memberData()?.publicDisplayEmail) {
                       <div class="color-gray">No email added</div>
                     }
                   </div>
                 </div>
                 <!-- IDENTIFIERS -->
-                @if (memberData.orgIds) {
+                @if (memberData()?.orgIds) {
                   <div>
                     <h2 class="mb-10 font-size-18">Identifiers</h2>
                     <hr class="mt-0 mb-10" />
-                    @if (memberData.orgIds['ROR'] && memberData.orgIds['ROR'].length > 0) {
+                    @if ((memberData()?.orgIds?.['ROR']?.length ?? 0) > 0) {
                       <div class="mb-20 side-bar-subsection">
                         <h3 class="font-size-14 wide-text-25">ROR</h3>
-                        @for (id of memberData.orgIds['ROR']; track id) {
+                        @for (id of memberData()?.orgIds?.['ROR'] ?? []; track id) {
                           <div>
                             <a href="{{ id }}">{{ id }}</a>
                           </div>
                         }
                       </div>
                     }
-                    @if (memberData.orgIds['GRID'] && memberData.orgIds['GRID'].length > 0) {
+                    @if ((memberData()?.orgIds?.['GRID']?.length ?? 0) > 0) {
                       <div class="mb-20 side-bar-subsection">
                         <h3 class="font-size-14 wide-text-25">GRID</h3>
-                        @for (id of memberData.orgIds['GRID']; track id) {
+                        @for (id of memberData()?.orgIds?.['GRID'] ?? []; track id) {
                           <div>
                             {{ id }}
                           </div>
                         }
                       </div>
                     }
-                    @if (memberData.orgIds['Ringgold'] && memberData.orgIds['Ringgold'].length > 0) {
+                    @if ((memberData()?.orgIds?.['Ringgold']?.length ?? 0) > 0) {
                       <div class="mb-20 side-bar-subsection">
                         <h3 class="font-size-14 wide-text-25">Ringgold ID</h3>
-                        @for (id of memberData.orgIds['Ringgold']; track id) {
+                        @for (id of memberData()?.orgIds?.['Ringgold'] ?? []; track id) {
                           <div>
                             {{ id }}
                           </div>
                         }
                       </div>
                     }
-                    @if (memberData.orgIds['Fundref'] && memberData.orgIds['Fundref'].length > 0) {
+                    @if ((memberData()?.orgIds?.['Fundref']?.length ?? 0) > 0) {
                       <div class="mb-20 side-bar-subsection">
                         <h3 class="font-size-14 wide-text-25">Crossref Funder ID</h3>
-                        @for (id of memberData.orgIds['Fundref']; track id) {
+                        @for (id of memberData()?.orgIds?.['Fundref'] ?? []; track id) {
                           <div>
                             <a href="{{ id }}">{{ filterCRFID(id) }}</a>
                           </div>
@@ -112,23 +114,23 @@
             }
           </div>
         }
-        @if (memberData) {
+        @if (memberData()) {
           <div class="main-section">
-            @if (!memberData.isConsortiumLead) {
+            @if (!memberData()?.isConsortiumLead) {
               <div>
-                @if (memberData.consortiumLeadName) {
+                @if (memberData()?.consortiumLeadName) {
                   <div>
                     <div class="row d-flex ms-0 font-size-14">
                       <div class="fw-bold me-1">Consortium/Parent organization:</div>
-                      @if (!managedMember) {
+                      @if (!managedMember()) {
                         <div>
-                          {{ memberData.consortiumLeadName }}
+                          {{ memberData()?.consortiumLeadName }}
                         </div>
                       }
-                      @if (managedMember) {
+                      @if (managedMember()) {
                         <div>
                           <a routerLink="/" class="fw-normal" (click)="stopManagingMember()">
-                            {{ memberData.consortiumLeadName }}
+                            {{ memberData()?.consortiumLeadName }}
                           </a>
                         </div>
                       }
@@ -147,7 +149,7 @@
                 </div>
               </div>
             }
-            @if (memberData.isConsortiumLead) {
+            @if (memberData()?.isConsortiumLead) {
               <div>
                 <div class="row d-flex ms-0">
                   <div class="fw-bold me-1">Consortium lead</div>
@@ -158,20 +160,18 @@
             <!-- ORG NAME & EDIT ORGANIZATION-->
             <div
               class="row ms-0 mt-3 d-flex align-items-center justify-content-between"
-              [ngClass]="{
-                'mb-8': memberData.publicDisplayEmail === memberData.name,
-                'mb-16': memberData.publicDisplayEmail !== memberData.name,
-              }"
+              [class.mb-8]="memberData()?.publicDisplayEmail === memberData()?.name"
+              [class.mb-16]="memberData()?.publicDisplayEmail !== memberData()?.name"
             >
-              <h1 class="mb-0 fw-bold wide-text">{{ memberData.name }}</h1>
+              <h1 class="mb-0 fw-bold wide-text">{{ memberData()?.name }}</h1>
               <button class="btn btn-primary edit-button me-3 wide-text-25 font-size-14" routerLink="/edit">
                 Edit Organization
               </button>
             </div>
-            @if (memberData.name !== memberData.publicDisplayName) {
+            @if (memberData()?.name !== memberData()?.publicDisplayName) {
               <div class="mb-16">
                 <div class="color-gray font-size-12 wide-text">Public display name</div>
-                <div class="fw-bold">{{ memberData.publicDisplayName }}</div>
+                <div class="fw-bold">{{ memberData()?.publicDisplayName }}</div>
               </div>
             }
             @if (!isActive()) {
@@ -184,33 +184,35 @@
               <div>
                 <!-- DESCRIPTION -->
                 <div class="row ms-0 mb-40">
-                  @if (memberData.publicDisplayDescriptionHtml) {
+                  @if (memberData()?.publicDisplayDescriptionHtml) {
                     <div
                       class="main-section-description wide-text-25 font-size-14"
-                      [innerHTML]="memberData.publicDisplayDescriptionHtml"
+                      [innerHTML]="memberData()?.publicDisplayDescriptionHtml"
                     ></div>
                   }
-                  @if (!memberData.publicDisplayDescriptionHtml) {
+                  @if (!memberData()?.publicDisplayDescriptionHtml) {
                     <div class="main-section-empty-description">No organisation description added</div>
                   }
                 </div>
                 <!-- BILLING ADDRESS -->
-                @if (memberData.billingAddress) {
+                @if (memberData()?.billingAddress) {
                   <div class="mb-40">
                     <h2 class="mb-10 font-size-18">Billing address</h2>
                     <div class="font-size-14 wide-text-25">
-                      {{ memberData.billingAddress.street ? memberData.billingAddress.street + ', ' : '' }}
-                      {{ memberData.billingAddress.city ? memberData.billingAddress.city + ', ' : '' }}
-                      {{ memberData.billingAddress.state ? memberData.billingAddress.state + ', ' : '' }}
-                      {{ memberData.billingAddress.postalCode ? memberData.billingAddress.postalCode + ', ' : '' }}
-                      {{ memberData.billingAddress.country }}
+                      {{ memberData()?.billingAddress?.street ? memberData()?.billingAddress?.street + ', ' : '' }}
+                      {{ memberData()?.billingAddress?.city ? memberData()?.billingAddress?.city + ', ' : '' }}
+                      {{ memberData()?.billingAddress?.state ? memberData()?.billingAddress?.state + ', ' : '' }}
+                      {{
+                        memberData()?.billingAddress?.postalCode ? memberData()?.billingAddress?.postalCode + ', ' : ''
+                      }}
+                      {{ memberData()?.billingAddress?.country }}
                     </div>
                   </div>
                 }
                 <!-- TRADEMARK LICENSE -->
                 <div class="mb-40">
                   <h2 class="mb-10 font-size-18">Trademark license</h2>
-                  @if (memberData.trademarkLicense && memberData.trademarkLicense === 'Yes') {
+                  @if (memberData()?.trademarkLicense && memberData()?.trademarkLicense === 'Yes') {
                     <div class="font-size-14 wide-text-25">
                       <svg
                         class="me-2 license-icon"
@@ -231,7 +233,7 @@
                       <span class="fw-bold">YES</span> - ORCID can use trademarked assets
                     </div>
                   }
-                  @if (!memberData.trademarkLicense || memberData.trademarkLicense === 'No') {
+                  @if (!memberData()?.trademarkLicense || memberData()?.trademarkLicense === 'No') {
                     <div class="font-size-14 wide-text-25">
                       <svg
                         class="me-2 license-icon"
@@ -257,7 +259,7 @@
                     <img src="./content/images/plus-circle.svg" class="add-new-contact-icon me-1" alt="Add new" />
                     <span>Add a new contact</span>
                   </a>
-                  @if (memberData.contacts && memberData.contacts.length > 0) {
+                  @if ((memberData()?.contacts?.length ?? 0) > 0) {
                     <div>
                       <div class="row ms-0 d-flex justify-content-between contact">
                         <h3 class="font-size-14 wide-text-25">Name</h3>
@@ -268,7 +270,7 @@
                         <div class="font-size-14 wide-text-25 contacts-edit-column"></div>
                       </div>
                       <hr class="green-hr mb-0" />
-                      @for (contact of memberData.contacts; track contact; let i = $index) {
+                      @for (contact of memberData()?.contacts ?? []; track contact; let i = $index) {
                         <ul class="ms-0 ps-0 mb-0">
                           <li class="row ms-0 pb-16 pt-16 d-flex justify-content-between contact">
                             <div>
@@ -291,12 +293,12 @@
                             }
                             <div class="contacts-edit-column">
                               <a routerLink="/contact/{{ contact.contactEmail }}/edit" class="fw-normal">
-                                <fa-icon [icon]="faPencilAlt"></fa-icon>
+                                <fa-icon [icon]="faPencilAlt" />
                                 Edit
                               </a>
                             </div>
                           </li>
-                          @if (i + 1 < memberData.contacts.length) {
+                          @if (i + 1 < (memberData()?.contacts?.length ?? 0)) {
                             <hr class="mt-0 mb-0" />
                           }
                         </ul>
@@ -305,11 +307,11 @@
                   }
                 </div>
                 <!-- CONSORTIUM MEMBERS -->
-                @if (memberData.isConsortiumLead) {
+                @if (memberData()?.isConsortiumLead) {
                   <div>
                     <h2 class="mb-16 font-size-18">
                       Consortium Members
-                      <span class="fw-normal">({{ memberData.consortiumMembers?.length }})</span>
+                      <span class="fw-normal">({{ memberData()?.consortiumMembers?.length }})</span>
                     </h2>
                     <a routerLink="/consortium-member/new" class="mb-20 fw-normal font-size-14 d-block">
                       <img src="./content/images/plus-circle.svg" class="add-new-contact-icon me-1" alt="Add new" />
@@ -317,17 +319,21 @@
                     </a>
                     <h3 class="font-size-14 wide-text-25">Member name</h3>
                     <hr class="green-hr mb-0" />
-                    @for (consortiumMember of memberData.consortiumMembers; track consortiumMember; let i = $index) {
+                    @for (
+                      consortiumMember of memberData()?.consortiumMembers ?? [];
+                      track consortiumMember;
+                      let i = $index
+                    ) {
                       <div>
                         <div class="pt-16 pb-16">
                           <a routerLink="/manage/{{ consortiumMember.salesforceId }}" class="font-size-14 fw-normal">{{
                             consortiumMember.orgName
                           }}</a>
                           <a routerLink="consortium-member/{{ consortiumMember.salesforceId }}/remove"
-                            ><fa-icon [icon]="faTrashAlt" class="float-end"></fa-icon
-                          ></a>
+                            ><fa-icon [icon]="faTrashAlt" class="float-end"
+                          /></a>
                         </div>
-                        @if (memberData.consortiumMembers && i + 1 < memberData.consortiumMembers.length) {
+                        @if (i + 1 < (memberData()?.consortiumMembers?.length ?? 0)) {
                           <hr class="mt-0 mb-0" />
                         }
                       </div>
