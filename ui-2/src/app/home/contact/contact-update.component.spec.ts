@@ -1,15 +1,28 @@
+/// <reference types="jasmine" />
+
+import { WritableSignal } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { ActivatedRoute, Router } from '@angular/router'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
 import { of } from 'rxjs'
 import { AccountService } from 'src/app/account'
 import { AlertType } from 'src/app/app.constants'
+import { ISFMemberContact } from 'src/app/member/model/salesforce-member-contact.model'
+import { ISFMemberData } from 'src/app/member/model/salesforce-member-data.model'
 import { MemberService } from 'src/app/member/service/member.service'
 import { AlertService } from 'src/app/shared/service/alert.service'
 import { ContactUpdateComponent } from './contact-update.component'
+
+type ContactUpdateInternals = {
+  contactId: WritableSignal<string | undefined>
+  contact: WritableSignal<ISFMemberContact | undefined>
+  memberData: WritableSignal<ISFMemberData | undefined | null>
+}
+const internals = (component: ContactUpdateComponent): ContactUpdateInternals =>
+  component as unknown as ContactUpdateInternals
 
 describe('ContactUpdateComponent', () => {
   let component: ContactUpdateComponent
@@ -21,7 +34,14 @@ describe('ContactUpdateComponent', () => {
   let router: jasmine.SpyObj<Router>
 
   beforeEach(() => {
-    memberServiceSpy = jasmine.createSpyObj('MemberService', ['find', 'getMemberData', 'updateContact', 'setManagedMember'])
+    spyOn(console, 'error').and.stub()
+
+    memberServiceSpy = jasmine.createSpyObj('MemberService', [
+      'find',
+      'getMemberData',
+      'updateContact',
+      'setManagedMember',
+    ])
     accountServiceSpy = jasmine.createSpyObj('AccountService', ['getAccountData'])
     alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
 
@@ -29,16 +49,15 @@ describe('ContactUpdateComponent', () => {
     memberServiceSpy.getMemberData.and.returnValue(of(null))
 
     TestBed.configureTestingModule({
-    declarations: [ContactUpdateComponent],
-    imports: [RouterTestingModule],
-    providers: [
+      imports: [RouterModule.forRoot([]), ContactUpdateComponent],
+      providers: [
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-})
+      ],
+    })
     accountServiceSpy = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
     memberServiceSpy = TestBed.inject(MemberService) as jasmine.SpyObj<MemberService>
     alertServiceSpy = TestBed.inject(AlertService) as jasmine.SpyObj<AlertService>
@@ -93,19 +112,18 @@ describe('ContactUpdateComponent', () => {
         ],
       })
     )
-
-    component.contactId = 'contact1@orcid.org'
+    ;internals(component).contactId.set('contact1@orcid.org')
 
     component.ngOnInit()
 
     expect(accountServiceSpy.getAccountData).toHaveBeenCalled()
     expect(memberServiceSpy.getMemberData).toHaveBeenCalled()
-    expect(component.contact).toBeTruthy()
+    expect(internals(component).contact()).toBeTruthy()
   })
 
   it('should call memberService.updateContact when saving', () => {
-    component.memberData = { name: 'member' }
-    component.contact = {
+    internals(component).memberData.set({ name: 'member' })
+    ;internals(component).contact.set({
       memberId: 'some-id',
       votingContant: false,
       memberOrgRole: ['role'],
@@ -113,7 +131,7 @@ describe('ContactUpdateComponent', () => {
       contactEmail: 'contact1@orcid.org',
       title: 'title',
       phone: '0123456789',
-    }
+    })
 
     memberServiceSpy.updateContact.and.returnValue(of(true))
 
@@ -124,8 +142,7 @@ describe('ContactUpdateComponent', () => {
       component.editForm.controls[control].updateValueAndValidity({ onlySelf: true })
     }
     component.editForm.updateValueAndValidity()
-
-    component.contactId = 'contact1@orcid.org'
+    ;internals(component).contactId.set('contact1@orcid.org')
 
     component.save()
 
@@ -139,8 +156,8 @@ describe('ContactUpdateComponent', () => {
   })
 
   it('should call memberService.updateContact when deleting', () => {
-    component.memberData = { name: 'member' }
-    component.contact = {
+    internals(component).memberData.set({ name: 'member' })
+    ;internals(component).contact.set({
       memberId: 'some-id',
       votingContant: false,
       memberOrgRole: ['role'],
@@ -148,7 +165,7 @@ describe('ContactUpdateComponent', () => {
       contactEmail: 'contact1@orcid.org',
       title: 'title',
       phone: '0123456789',
-    }
+    })
 
     memberServiceSpy.updateContact.and.returnValue(of(true))
 
@@ -159,8 +176,7 @@ describe('ContactUpdateComponent', () => {
       component.editForm.controls[control].updateValueAndValidity({ onlySelf: true })
     }
     component.editForm.updateValueAndValidity()
-
-    component.contactId = 'contact1@orcid.org'
+    ;internals(component).contactId.set('contact1@orcid.org')
 
     component.delete()
 

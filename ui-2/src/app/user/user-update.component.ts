@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core'
-import { FormBuilder, FormControl, Validators } from '@angular/forms'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, signal, OnInit } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { FormBuilder, FormControl, Validators, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { faBan, faCheckCircle, faSave } from '@fortawesome/free-solid-svg-icons'
 import moment from 'moment'
@@ -15,15 +16,18 @@ import { AlertService } from '../shared/service/alert.service'
 import { IUser, User } from './model/user.model'
 import { UserService } from './service/user.service'
 import { FeatureToggleService } from '../shared/service/feature-toggle.service'
-
+import { ErrorAlertComponent } from '../error/error-alert.component'
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap'
+import { FaIconComponent } from '@fortawesome/angular-fontawesome'
 
 @Component({
-    selector: 'app-user-update',
-    templateUrl: './user-update.component.html',
-    styleUrls: ['./user-update.component.scss'],
-    standalone: false
+  selector: 'app-user-update',
+  templateUrl: './user-update.component.html',
+  styleUrls: ['./user-update.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [ReactiveFormsModule, ErrorAlertComponent, NgbAlertModule, FaIconComponent],
 })
-export class UserUpdateComponent {
+export class UserUpdateComponent implements OnInit {
   protected alertService = inject(AlertService)
   protected userService = inject(UserService)
   protected memberService = inject(MemberService)
@@ -34,17 +38,18 @@ export class UserUpdateComponent {
   private fb = inject(FormBuilder)
   private cdref = inject(ChangeDetectorRef)
   protected featureService = inject(FeatureToggleService)
+  private destroyRef = inject(DestroyRef)
 
-  isSaving = false
-  isExistentMember = false
-  existentUser: IUser | null = null
-  faCheckCircle = faCheckCircle
-  faBan = faBan
-  faSave = faSave
-  showIsAdminCheckbox = false
-  currentAccount: any
+  protected isSaving = signal(false)
+  protected isExistentMember = signal(false)
+  protected existentUser = signal<IUser | null>(null)
+  protected faCheckCircle = faCheckCircle
+  protected faBan = faBan
+  protected faSave = faSave
+  protected showIsAdminCheckbox = signal(false)
+  protected currentAccount = signal<any>(null)
   validation: any = {}
-  disableMfa = false
+  protected disableMfa = signal(false)
 
   editForm = this.fb.group({
     id: new FormControl<string | null>(null),
@@ -74,27 +79,27 @@ export class UserUpdateComponent {
   })
 
   memberList = [] as IMember[]
-  hasOwner = false
+  protected hasOwner = signal(false)
 
   ngOnInit() {
-    this.featureService.initFeatures().subscribe();
-    this.isSaving = false
-    this.isExistentMember = false
-    this.existentUser = null
-    this.activatedRoute.data.subscribe(({ user }) => {
-      this.existentUser = user
+    this.featureService.initFeatures().subscribe()
+    this.isSaving.set(false)
+    this.isExistentMember.set(false)
+    this.existentUser.set(null)
+    this.activatedRoute.data.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ user }) => {
+      this.existentUser.set(user)
     })
     this.editForm.disable()
     this.accountService.getAccountData().subscribe((account) => {
-      this.currentAccount = account
+      this.currentAccount.set(account)
       this.getMemberList().subscribe((list: IMember[]) => {
         list.forEach((msMember: IMember) => {
           this.memberList.push(msMember)
         })
         this.editForm.enable()
-        if (this.existentUser) {
-          this.updateForm(this.existentUser)
-          this.updateMfaForm(this.existentUser)
+        if (this.existentUser()) {
+          this.updateForm(this.existentUser()!)
+          this.updateMfaForm(this.existentUser()!)
         } else {
           if (this.hasRoleOrgOwner() || this.hasRoleConsortiumLead()) {
             this.editForm.patchValue({
@@ -113,25 +118,25 @@ export class UserUpdateComponent {
       const selectedOrg = this.memberList.find((cm) => cm.salesforceId === this.editForm.get(['salesforceId'])?.value)
       if (this.hasRoleAdmin()) {
         if (selectedOrg) {
-          this.showIsAdminCheckbox = selectedOrg.superadminEnabled || false
+          this.showIsAdminCheckbox.set(selectedOrg.superadminEnabled || false)
         } else {
-          this.showIsAdminCheckbox = false
+          this.showIsAdminCheckbox.set(false)
         }
       } else {
-        this.showIsAdminCheckbox = false
+        this.showIsAdminCheckbox.set(false)
       }
     })
 
-    this.editForm.get('firstName')?.valueChanges.subscribe((val) => (this.isSaving = false))
-    this.editForm.get('lastName')?.valueChanges.subscribe((val) => (this.isSaving = false))
-    this.editForm.get('salesforceId')?.valueChanges.subscribe((val) => (this.isSaving = false))
-    this.editForm.get('mainContact')?.valueChanges.subscribe((val) => (this.isSaving = false))
-    this.editForm.get('assertionServiceEnabled')?.valueChanges.subscribe((val) => (this.isSaving = false))
+    this.editForm.get('firstName')?.valueChanges.subscribe(() => this.isSaving.set(false))
+    this.editForm.get('lastName')?.valueChanges.subscribe(() => this.isSaving.set(false))
+    this.editForm.get('salesforceId')?.valueChanges.subscribe(() => this.isSaving.set(false))
+    this.editForm.get('mainContact')?.valueChanges.subscribe(() => this.isSaving.set(false))
+    this.editForm.get('assertionServiceEnabled')?.valueChanges.subscribe(() => this.isSaving.set(false))
 
     // MFA
     this.mfaForm.get('twoFactorAuthentication')?.valueChanges.subscribe((val) => {
-      this.isSaving = false
-      if (val != null) this.disableMfa = !val
+      this.isSaving.set(false)
+      if (val != null) this.disableMfa.set(!val)
     })
   }
 
@@ -158,7 +163,7 @@ export class UserUpdateComponent {
     }
 
     if (user.memberId) {
-      this.isExistentMember = true
+      this.isExistentMember.set(true)
     }
     if (user.email) {
       this.editForm.get('email')?.disable()
@@ -183,7 +188,7 @@ export class UserUpdateComponent {
         })
       )
     } else {
-      return this.memberService.find(this.currentAccount.memberId).pipe(
+      return this.memberService.find(this.currentAccount()?.memberId).pipe(
         map((res) => {
           if (res) {
             return [res]
@@ -219,15 +224,15 @@ export class UserUpdateComponent {
   }
 
   validateOrgOwners(event?: Event) {
-    this.isSaving = true
+    this.isSaving.set(true)
     const memberId = this.editForm.get('memberId')?.value
     if (memberId) {
       this.userService.hasOwner(memberId).subscribe((value) => {
-        this.isSaving = false
+        this.isSaving.set(false)
         if (!this.editForm.get('mainContact')?.value) {
-          this.hasOwner = false
+          this.hasOwner.set(false)
         } else {
-          this.hasOwner = value
+          this.hasOwner.set(value)
         }
       })
     }
@@ -251,16 +256,16 @@ export class UserUpdateComponent {
 
   saveMfa() {
     if (this.mfaForm.valid) {
-      this.isSaving = true
+      this.isSaving.set(true)
       const userFromForm = this.createFromForm()
       this.userService.validate(userFromForm).subscribe((response) => {
         const data = response
         if (data.valid) {
-          if (userFromForm != null && this.hasRoleAdmin() && this.disableMfa && userFromForm.id) {
+          if (userFromForm != null && this.hasRoleAdmin() && this.disableMfa() && userFromForm.id) {
             this.subscribeToUpdateResponse(this.accountService.disableMfa(userFromForm.id))
           }
         } else {
-          this.isSaving = false
+          this.isSaving.set(false)
           this.validation = data
         }
       })
@@ -269,16 +274,16 @@ export class UserUpdateComponent {
 
   save() {
     if (this.editForm.valid) {
-      this.isSaving = true
+      this.isSaving.set(true)
       const userFromForm = this.createFromForm()
       this.userService.validate(userFromForm).subscribe((response) => {
         const data = response
         if (data.valid) {
           if (userFromForm.id !== null) {
-            if (this.currentAccount.id === userFromForm.id) {
+            if (this.currentAccount()?.id === userFromForm.id) {
               // ownership change functions redirect to homepage instead of redirecting to users list
               // as users who lose org owner status shouldn't have access to the users list
-              if (this.currentAccount.mainContact !== userFromForm.mainContact) {
+              if (this.currentAccount()?.mainContact !== userFromForm.mainContact) {
                 this.subscribeToUpdateResponseWithOwnershipChange(this.userService.update(userFromForm))
               } else {
                 this.subscribeToUpdateResponse(this.userService.update(userFromForm))
@@ -296,7 +301,7 @@ export class UserUpdateComponent {
             }
           }
         } else {
-          this.isSaving = false
+          this.isSaving.set(false)
           this.validation = data
         }
       })
@@ -304,8 +309,8 @@ export class UserUpdateComponent {
   }
 
   sendActivate() {
-    if (this.existentUser?.id) {
-      this.userService.sendActivate(this.existentUser).subscribe((res) => {
+    if (this.existentUser()?.id) {
+      this.userService.sendActivate(this.existentUser()!).subscribe((res) => {
         if (res) {
           this.alertService.broadcast(AlertType.TOAST, AlertMessage.SEND_ACTIVATION_SUCCESS)
         } else {
@@ -317,7 +322,7 @@ export class UserUpdateComponent {
   }
 
   displaySendActivate() {
-    if (this.existentUser && this.existentUser.email && !this.existentUser.activated) {
+    if (this.existentUser() && this.existentUser()!.email && !this.existentUser()!.activated) {
       return true
     }
     return false
@@ -373,30 +378,30 @@ export class UserUpdateComponent {
   }
 
   protected onSaveSuccess() {
-    this.isSaving = false
+    this.isSaving.set(false)
     this.navigateToUsersList()
     this.alertService.broadcast(AlertType.TOAST, AlertMessage.USER_CREATED)
   }
 
   protected onUpdateSuccess() {
-    this.isSaving = false
+    this.isSaving.set(false)
     this.navigateToUsersList()
     this.alertService.broadcast(AlertType.TOAST, AlertMessage.USER_UPDATED)
   }
 
   protected onSaveSuccessOwnershipChange() {
-    this.isSaving = false
+    this.isSaving.set(false)
     this.navigateToHomePage()
     this.alertService.broadcast(AlertType.TOAST, AlertMessage.USER_CREATED)
   }
 
   protected onUpdateSuccessOwnershipChange() {
-    this.isSaving = false
+    this.isSaving.set(false)
     this.navigateToHomePage()
     this.alertService.broadcast(AlertType.TOAST, AlertMessage.USER_UPDATED)
   }
 
   protected onSaveError() {
-    this.isSaving = false
+    this.isSaving.set(false)
   }
 }

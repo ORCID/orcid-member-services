@@ -19,8 +19,6 @@ import { UserDeleteDialogComponent, UserDeletePopupComponent } from './user-dele
     FontAwesomeModule,
     FormsModule,
     ReactiveFormsModule,
-  ],
-  declarations: [
     UsersComponent,
     UserUpdateComponent,
     UserDetailComponent,

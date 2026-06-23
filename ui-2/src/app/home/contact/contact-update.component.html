@@ -1,28 +1,28 @@
-@if (memberData) {
+@if (memberData(); as member) {
   <div class="h-100 p-16 line-height-normal">
     <div class="font-size-14">
-      Back to <a routerLink="" class="font-weight-normal text-decoration-underline">{{ memberData.publicDisplayName }}</a>
+      Back to <a routerLink="" class="fw-normal text-decoration-underline">{{ member.publicDisplayName }}</a>
     </div>
     <hr class="mb-40" />
-    @if (contactId) {
+    @if (contactId()) {
       <div class="edit-org-label mb-8 font-size-18 color-gray">Edit contact</div>
     }
-    @if (contactId && contact) {
-      <h1 class="mb-40 wide-text font-weight-bold">{{ contact.name }}</h1>
+    @if (contactId() && contact(); as contactData) {
+      <h1 class="mb-40 wide-text fw-bold">{{ contactData.name }}</h1>
     }
-    @if (!contactId) {
+    @if (!contactId()) {
       <div class="edit-org-label mb-8 font-size-18 color-gray">Add new contact</div>
     }
-    @if (!contactId) {
-      <h1 class="mb-40 wide-text font-italic">New contact</h1>
+    @if (!contactId()) {
+      <h1 class="mb-40 wide-text fst-italic">New contact</h1>
     }
     <div class="d-flex">
       <form (ngSubmit)="save()" name="editForm" role="form" [formGroup]="editForm" class="w-66">
-        @if (invalidForm) {
+        @if (invalidForm()) {
           <div class="error-message d-flex p-16 mb-20 line-height-150">
             <img src="./content/images/error-sign.svg" alt="Warning sign" class="p-8" />
             <div>
-              <div class="mb-8 font-size-14 wide-text font-weight-bold">Your changes cannot be saved</div>
+              <div class="mb-8 font-size-14 wide-text fw-bold">Your changes cannot be saved</div>
               <div class="font-size-14 wide-text">
                 Please fix the issues with the contact form before trying to save again
               </div>
@@ -31,207 +31,187 @@
         }
         <h3 class="mb-20 wide-text">Contact details</h3>
         <div class="form w-100">
-          <div class="form-group mb-20">
+          <div class="mb-20">
             <label
               for="name"
-              class="wide-text font-size-12 font-weight-bold mb-1"
-            [ngClass]="{
-              'text-danger':
-                editForm.get('name')?.invalid && editForm.get('name')?.dirty && editForm.get('name')?.touched
-            }"
-              >Name <span class="font-weight-normal">(Required)</span></label
-              >
-              <input
-                type="text"
-                class="form-control"
-                name="name"
-                id="name"
-                formControlName="name"
-                (input)="editForm.get('name')?.markAsUntouched()"
-            [ngClass]="{
-              'text-danger':
-                editForm.get('name')?.invalid && editForm.get('name')?.dirty && editForm.get('name')?.touched,
-              'input-field-default-border': !editForm.get('name')?.dirty || !editForm.get('name')?.touched
-            }"
-                />
-                @if (editForm.get('name')?.invalid && editForm.get('name')?.dirty && editForm.get('name')?.touched) {
-                  <div>
-                    @if ((editForm.get('name')?.errors)!['required']) {
-                      <small
-                        class="wide-text font-size-12 form-text text-danger"
-                        >
-                        Name cannot be empty
-                      </small>
-                    }
-                    <div>
-                      @if ((editForm.get('name')?.errors)!['maxlength']) {
-                        <small
-                          class="wide-text font-size-12 form-text text-danger"
-                          >
-                          Name is too long. Please use 80 characters or less.
-                        </small>
-                      }
-                    </div>
-                  </div>
+              class="wide-text font-size-12 fw-bold mb-1"
+              [class.text-danger]="
+                !!(editForm.get('name')?.invalid && editForm.get('name')?.dirty && editForm.get('name')?.touched)
+              "
+              >Name <span class="fw-normal">(Required)</span></label
+            >
+            <input
+              type="text"
+              class="form-control"
+              name="name"
+              id="name"
+              formControlName="name"
+              (input)="editForm.get('name')?.markAsUntouched()"
+              [class.text-danger]="
+                !!(editForm.get('name')?.invalid && editForm.get('name')?.dirty && editForm.get('name')?.touched)
+              "
+              [class.input-field-default-border]="!editForm.get('name')?.dirty || !editForm.get('name')?.touched"
+            />
+            @if (editForm.get('name')?.invalid && editForm.get('name')?.dirty && editForm.get('name')?.touched) {
+              <div>
+                @if ((editForm.get('name')?.errors)!['required']) {
+                  <small class="wide-text font-size-12 form-text text-danger"> Name cannot be empty </small>
+                }
+                <div>
+                  @if ((editForm.get('name')?.errors)!['maxlength']) {
+                    <small class="wide-text font-size-12 form-text text-danger">
+                      Name is too long. Please use 80 characters or less.
+                    </small>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+          <div class="mb-20">
+            <label
+              for="title"
+              class="wide-text font-size-12 fw-bold mb-1"
+              [class.text-danger]="!!editForm.get('title')?.invalid"
+              >Job title</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              name="title"
+              id="title"
+              formControlName="title"
+              [class.text-danger]="!!editForm.get('title')?.invalid"
+            />
+            @if (editForm.get('title')?.invalid) {
+              <div>
+                @if ((editForm.get('title')?.errors)!['maxlength']) {
+                  <small class="wide-text font-size-12 form-text text-danger">
+                    Job title is too long. Please use 128 characters or less.
+                  </small>
                 }
               </div>
-              <div class="form-group mb-20">
-                <label
-                  for="title"
-                  class="wide-text font-size-12 font-weight-bold mb-1"
-                  [ngClass]="{ 'text-danger': editForm.get('title')?.invalid }"
-                  >Job title</label
-                  >
+            }
+          </div>
+          <div class="mb-20">
+            <label
+              for="email"
+              [class.text-danger]="
+                !!(editForm.get('email')?.invalid && editForm.get('email')?.dirty && editForm.get('email')?.touched)
+              "
+              class="wide-text font-size-12 fw-bold mb-1"
+              >Email address <span class="fw-normal">(Required)</span></label
+            >
+            <input
+              type="text"
+              class="form-control"
+              name="email"
+              id="email"
+              formControlName="email"
+              (input)="editForm.get('email')?.markAsUntouched()"
+              [class.text-danger]="
+                !!(editForm.get('email')?.invalid && editForm.get('email')?.dirty && editForm.get('email')?.touched)
+              "
+              [class.input-field-default-border]="!editForm.get('email')?.dirty || !editForm.get('email')?.touched"
+            />
+            @if (editForm.get('email')?.invalid && editForm.get('email')?.dirty && editForm.get('email')?.touched) {
+              <div>
+                @if (
+                  (editForm.get('email')?.errors)!['pattern'] &&
+                  !(editForm.get('email')?.errors)!['maxlength'] &&
+                  editForm.get('email')?.touched
+                ) {
+                  <small class="wide-text font-size-12 text-danger">
+                    Please enter a valid email address, for example contactus&#64;website.com
+                  </small>
+                }
+                @if ((editForm.get('email')?.errors)!['maxlength']) {
+                  <small class="wide-text font-size-12 text-danger">
+                    Email is too long. Please use 80 characters or less.
+                  </small>
+                }
+                @if ((editForm.get('email')?.errors)!['required']) {
+                  <small class="wide-text font-size-12 text-danger"> Email cannot be empty </small>
+                }
+              </div>
+            } @else {
+              <small class="wide-text font-size-12 color-gray">The contact email for this person</small>
+            }
+          </div>
+          <div class="mb-30">
+            <label
+              for="phone"
+              class="wide-text font-size-12 fw-bold mb-1"
+              [class.text-danger]="!!(editForm.get('phone')?.invalid && editForm.get('phone')?.dirty)"
+              >Phone</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              name="phone"
+              id="phone"
+              formControlName="phone"
+              [class.text-danger]="!!(editForm.get('phone')?.invalid && editForm.get('phone')?.dirty)"
+            />
+            @if (editForm.get('phone')?.invalid && editForm.get('phone')?.dirty) {
+              @if ((editForm.get('phone')?.errors)!['maxlength']) {
+                <small class="wide-text font-size-12 form-text text-danger">
+                  Phone number is too long. Please use 40 characters or less.
+                </small>
+              }
+            } @else {
+              <small class="wide-text font-size-12 form-text color-gray">A direct contact phone for this person</small>
+            }
+          </div>
+          <h3 class="mb-16 me-8">Roles <span class="font-size-12 fw-normal">(Required)</span></h3>
+          <small
+            class="wide-text font-size-12 form-text mb-20 color-gray"
+            [class.text-danger]="!!(editForm.get('roles')?.invalid && editForm.get('roles')?.dirty)"
+          >
+            Please assign at least one role to this contact
+          </small>
+          <div formArrayName="roles" class="border-0 mb-32">
+            @for (myOption of roles.controls; track myOption; let i = $index) {
+              <div>
+                <div formGroupName="{{ i }}">
                   <input
-                    type="text"
-                    class="form-control"
-                    name="title"
-                    id="title"
-                    formControlName="title"
-                    [ngClass]="{ 'text-danger': editForm.get('title')?.invalid }"
-                    />
-                    @if (editForm.get('title')?.invalid) {
-                      <div>
-                        @if ((editForm.get('title')?.errors)!['maxlength']) {
-                          <small
-                            class="wide-text font-size-12 form-text text-danger"
-                            >
-                            Job title is too long. Please use 128 characters or less.
-                          </small>
-                        }
-                      </div>
-                    }
-                  </div>
-                  <div class="form-group mb-20">
-                    <label
-                      for="email"
-            [ngClass]="{
-              'text-danger':
-                editForm.get('email')?.invalid && editForm.get('email')?.dirty && editForm.get('email')?.touched
-            }"
-                      class="wide-text font-size-12 font-weight-bold mb-1"
-                      >Email address <span class="font-weight-normal">(Required)</span></label
-                      >
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="email"
-                        id="email"
-                        formControlName="email"
-                        (input)="editForm.get('email')?.markAsUntouched()"
-            [ngClass]="{
-              'text-danger':
-                editForm.get('email')?.invalid && editForm.get('email')?.dirty && editForm.get('email')?.touched,
-              'input-field-default-border': !editForm.get('email')?.dirty || !editForm.get('email')?.touched
-            }"
-                        />
-                        @if (
-                          editForm.get('email')?.invalid && editForm.get('email')?.dirty && editForm.get('email')?.touched) {
-                          <div
-                            >
-                            @if (
-                              (editForm.get('email')?.errors)!['pattern'] &&
-                              !(editForm.get('email')?.errors)!['maxlength'] &&
-                              editForm.get('email')?.touched
-                              ) {
-                              <small
-                                class="wide-text font-size-12 text-danger"
-                                >
-                                Please enter a valid email address, for example contactus&#64;website.com
-                              </small>
-                            }
-                            @if ((editForm.get('email')?.errors)!['maxlength']) {
-                              <small class="wide-text font-size-12 text-danger">
-                                Email is too long. Please use 80 characters or less.
-                              </small>
-                            }
-                            @if ((editForm.get('email')?.errors)!['required']) {
-                              <small class="wide-text font-size-12 text-danger">
-                                Email cannot be empty
-                              </small>
-                            }
-                          </div>
-                        } @else {
-                          <small class="wide-text font-size-12 color-gray">The contact email for this person</small>
-                        }
-                      </div>
-                      <div class="form-group mb-30">
-                        <label
-                          for="phone"
-                          class="wide-text font-size-12 font-weight-bold mb-1"
-                          [ngClass]="{ 'text-danger': editForm.get('phone')?.invalid && editForm.get('phone')?.dirty }"
-                          >Phone</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            name="phone"
-                            id="phone"
-                            formControlName="phone"
-                            [ngClass]="{ 'text-danger': editForm.get('phone')?.invalid && editForm.get('phone')?.dirty }"
-                            />
-                            @if (editForm.get('phone')?.invalid && editForm.get('phone')?.dirty) {
-                              @if ((editForm.get('phone')?.errors)!['maxlength']) {
-                                <small
-                                  class="wide-text font-size-12 form-text text-danger"
-                                  >
-                                  Phone number is too long. Please use 40 characters or less.
-                                </small>
-                              }
-                            } @else {
-                              <small class="wide-text font-size-12 form-text color-gray">A direct contact phone for this person</small>
-                            }
-                          </div>
-                          <h3 class="mb-16 mr-8">Roles <span class="font-size-12 font-weight-normal">(Required)</span></h3>
-                          <small
-                            class="wide-text font-size-12 form-text mb-20 color-gray"
-                            [ngClass]="{ 'text-danger': editForm.get('roles')?.invalid && editForm.get('roles')?.dirty }"
-                            >
-                            Please assign at least one role to this contact
-                          </small>
-                          <div formArrayName="roles" class="border-0 mb-32">
-                            @for (myOption of roles.controls; track myOption; let i = $index) {
-                              <div>
-                                <div formGroupName="{{ i }}">
-                                  <input
-                                    [id]="myOption.get('name')?.value + '-id'"
-                                    type="checkbox"
-                                    [formControl]="$any(myOption?.get('selected')!)"
-                                    class="role-checkbox"
-                                    />
-                                    <label [for]="myOption.get('name')?.value + '-id'" class="font-size-14 font-weight-normal mb-16">
-                                      {{ myOption.get('name')?.value }}
-                                    </label>
-                                  </div>
-                                </div>
-                              }
-                            </div>
-                            <div class="warning-message d-flex p-16 mb-40">
-                              <img src="./content/images/warning-sign.svg" alt="Warning sign" class="p-8" />
-                              <div>
-                                <div class="mb-8 font-size-14 wide-text font-weight-bold">Please note</div>
-                                <div class="font-size-14 wide-text line-height-150">
-                                  Changes made to organization contacts can take up to 48 hours to be reflected in the organization contact
-                                  list.
-                                </div>
-                              </div>
-                            </div>
-                            <button type="submit" [disabled]="isSaving" class="btn btn-primary font-size-14 mr-2">
-                              {{ contactId ? 'Submit contact change request' : 'Submit new contact' }}
-                            </button>
-                            <button type="button" class="btn btn-outline-primary font-size-14 mr" routerLink="/">Cancel</button>
-                            @if (contactId) {
-                              <button
-                                type="button"
-                                (click)="delete()"
-                                [disabled]="isSaving"
-                                class="btn btn-danger float-right font-size-14"
-                                >
-                                <fa-icon [icon]="faTrashAlt" class="mr-8"></fa-icon>Remove this contact
-                              </button>
-                            }
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  }
+                    [id]="myOption.get('name')?.value + '-id'"
+                    type="checkbox"
+                    [formControl]="$any(myOption?.get('selected')!)"
+                    class="role-checkbox"
+                  />
+                  <label [for]="myOption.get('name')?.value + '-id'" class="font-size-14 fw-normal mb-16">
+                    {{ myOption.get('name')?.value }}
+                  </label>
+                </div>
+              </div>
+            }
+          </div>
+          <div class="warning-message d-flex p-16 mb-40">
+            <img src="./content/images/warning-sign.svg" alt="Warning sign" class="p-8" />
+            <div>
+              <div class="mb-8 font-size-14 wide-text fw-bold">Please note</div>
+              <div class="font-size-14 wide-text line-height-150">
+                Changes made to organization contacts can take up to 48 hours to be reflected in the organization
+                contact list.
+              </div>
+            </div>
+          </div>
+          <button type="submit" [disabled]="isSaving()" class="btn btn-primary font-size-14 me-2">
+            {{ contactId() ? 'Submit contact change request' : 'Submit new contact' }}
+          </button>
+          <button type="button" class="btn btn-outline-primary font-size-14 me-2" routerLink="/">Cancel</button>
+          @if (contactId()) {
+            <button
+              type="button"
+              (click)="delete()"
+              [disabled]="isSaving()"
+              class="btn btn-danger float-end font-size-14"
+            >
+              <fa-icon [icon]="faTrashAlt" class="me-8" />Remove this contact
+            </button>
+          }
+        </div>
+      </form>
+    </div>
+  </div>
+}

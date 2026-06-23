@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { ActivatedRoute, Router } from '@angular/router'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
 import { of } from 'rxjs'
 import { AccountService } from 'src/app/account'
 import { AlertType } from 'src/app/app.constants'
@@ -22,21 +22,22 @@ describe('AddConsortiumMemberComponent', () => {
   let router: jasmine.SpyObj<Router>
 
   beforeEach(() => {
+    spyOn(console, 'error').and.stub()
+
     memberServiceSpy = jasmine.createSpyObj('MemberService', ['addConsortiumMember', 'getMemberData', 'getCountries'])
     accountServiceSpy = jasmine.createSpyObj('AccountService', ['getAccountData'])
     alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
 
     TestBed.configureTestingModule({
-    declarations: [AddConsortiumMemberComponent],
-    imports: [RouterTestingModule],
-    providers: [
+      imports: [RouterModule.forRoot([]), AddConsortiumMemberComponent],
+      providers: [
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-})
+      ],
+    })
 
     accountServiceSpy = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
     memberServiceSpy = TestBed.inject(MemberService) as jasmine.SpyObj<MemberService>

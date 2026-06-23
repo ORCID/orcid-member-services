@@ -1,10 +1,20 @@
+/// <reference types="jasmine" />
+
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { ActivatedRoute } from '@angular/router'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
 import { of, throwError } from 'rxjs'
 import { ActivationComponent } from './activation.component'
 import { ActivationService } from './activation.service'
+
+type ActivationInternals = {
+  success: boolean
+  error: boolean
+}
+
+const internals = (component: ActivationComponent): ActivationInternals =>
+  component as unknown as ActivationInternals
 
 describe('ActivationComponent', () => {
   let component: ActivationComponent
@@ -16,8 +26,7 @@ describe('ActivationComponent', () => {
     activationServiceSpy.get.and.returnValue(of({}))
 
     TestBed.configureTestingModule({
-      declarations: [ActivationComponent],
-      imports: [RouterTestingModule],
+      imports: [RouterModule.forRoot([]), ActivationComponent],
       providers: [
         { provide: ActivationService, useValue: activationServiceSpy },
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
@@ -36,16 +45,16 @@ describe('ActivationComponent', () => {
   it('non-error response from server when sending key should indicate success', () => {
     activationServiceSpy.get.and.returnValue(of({}))
     component.ngOnInit()
-    expect(component.success).toBeTruthy()
-    expect(component.error).toBeFalsy()
+    expect(internals(component).success).toBeTruthy()
+    expect(internals(component).error).toBeFalsy()
   })
 
   it('error response from server when sending key should indicate failure', () => {
     activationServiceSpy.get.and.returnValue(throwError(() => new Error('error')))
     component.ngOnInit()
 
-    expect(component.success).toBeFalsy()
-    expect(component.error).toBeTruthy()
+    expect(internals(component).success).toBeFalsy()
+    expect(internals(component).error).toBeTruthy()
   })
 })
 

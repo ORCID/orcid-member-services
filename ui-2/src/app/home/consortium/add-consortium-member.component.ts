@@ -1,6 +1,7 @@
-import { Component, OnInit, inject } from '@angular/core'
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { AbstractControl, FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { combineLatest, take } from 'rxjs'
 import { AccountService } from 'src/app/account'
 import { AlertType, EMAIL_REGEXP } from '../../app.constants'
@@ -20,7 +21,8 @@ import { DateUtilService } from '../../shared/service/date-util.service'
   selector: 'app-add-consortium-member',
   templateUrl: './add-consortium-member.component.html',
   styleUrls: ['./add-consortium-member.component.scss'],
-  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, ReactiveFormsModule],
 })
 export class AddConsortiumMemberComponent implements OnInit {
   private memberService = inject(MemberService)
@@ -30,17 +32,18 @@ export class AddConsortiumMemberComponent implements OnInit {
   private dateUtilService = inject(DateUtilService)
   private accountService = inject(AccountService)
   protected activatedRoute = inject(ActivatedRoute)
+  private destroyRef = inject(DestroyRef)
 
-  countries: ISFCountry[] | undefined
-  states: ISFState[] | undefined
-  memberData: ISFMemberData | undefined | null
-  isSaving = false
-  invalidForm = false
+  protected countries = signal<ISFCountry[] | undefined>(undefined)
+  protected states = signal<ISFState[] | undefined>(undefined)
+  protected memberData = signal<ISFMemberData | undefined | null>(null)
+  protected isSaving = signal(false)
+  protected invalidForm = signal(false)
   routeData: any
-  currentMonth: number | undefined
-  currentYear: number | undefined
-  monthList: [string, string][] | undefined
-  yearList: number[] | undefined
+  protected currentMonth = signal<number | undefined>(undefined)
+  protected currentYear = signal<number | undefined>(undefined)
+  protected monthList = signal<[string, string][] | undefined>(undefined)
+  protected yearList = signal<number[] | undefined>(undefined)
   editForm: FormGroup = this.fb.group({
     orgName: [null, [Validators.required, Validators.maxLength(41)]],
     emailDomain: [null, [Validators.maxLength(255)]],
@@ -60,7 +63,7 @@ export class AddConsortiumMemberComponent implements OnInit {
     integrationPlans: [null, [Validators.maxLength(1000)]],
   })
 
-  rolesData = [
+  protected rolesData = [
     { id: 1, selected: false, name: 'Agreement signatory (OFFICIAL)' },
     { id: 2, selected: false, name: 'Main relationship contact (OFFICIAL)' },
     { id: 3, selected: false, name: 'Voting contact' },
@@ -71,7 +74,7 @@ export class AddConsortiumMemberComponent implements OnInit {
     { id: 8, selected: false, name: 'Other contact' },
   ]
 
-  trademarkLicenseOptions: TrademarkLicenseOption[] = [
+  protected trademarkLicenseOptions: TrademarkLicenseOption[] = [
     {
       value: 'Yes',
       description: `ORCID can use this organization's trademarked name and logos`,
@@ -82,7 +85,7 @@ export class AddConsortiumMemberComponent implements OnInit {
     },
   ]
 
-  organizationTiers: OrganizationTierOption[] = [
+  protected organizationTiers: OrganizationTierOption[] = [
     {
       value: 'Small',
       description: `Legal entity's annual operating budget below 10 M USD`,
@@ -98,25 +101,25 @@ export class AddConsortiumMemberComponent implements OnInit {
   ]
 
   ngOnInit() {
-    this.currentMonth = this.dateUtilService.getCurrentMonthNumber()
-    this.currentYear = this.dateUtilService.getCurrentYear()
-    this.monthList = this.dateUtilService.getMonthsList()
-    this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(1)
+    this.currentMonth.set(this.dateUtilService.getCurrentMonthNumber())
+    this.currentYear.set(this.dateUtilService.getCurrentYear())
+    this.monthList.set(this.dateUtilService.getMonthsList())
+    this.yearList.set(this.dateUtilService.getFutureYearsIncludingCurrent(1))
 
     this.accountService.getAccountData().subscribe((account) => {
       if (account) {
         combineLatest([this.memberService.getMemberData(account.memberId), this.memberService.getCountries()])
           .pipe(take(1))
           .subscribe(([data, countries]) => {
-            this.memberData = data
-            this.countries = countries
+            this.memberData.set(data)
+            this.countries.set(countries)
           })
       }
     })
 
-    this.editForm.valueChanges.subscribe(() => {
+    this.editForm.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       if (this.editForm!.status === 'VALID') {
-        this.invalidForm = false
+        this.invalidForm.set(false)
       }
     })
   }
@@ -155,8 +158,14 @@ export class AddConsortiumMemberComponent implements OnInit {
     }
   }
 
-  onCountryChange(countryName: string) {
-    this.states = this.countries!.find((country) => country.name === countryName)?.states
+  onCountryChange(countryName: string | null | undefined) {
+    const availableCountries = this.countries()
+    if (!countryName || !availableCountries) {
+      this.states.set(undefined)
+      return
+    }
+
+    this.states.set(availableCountries.find((country) => country.name === countryName)?.states)
   }
 
   save() {
@@ -165,10 +174,10 @@ export class AddConsortiumMemberComponent implements OnInit {
         this.editForm!.get(key)?.markAsDirty()
       })
       this.editForm!.markAllAsTouched()
-      this.invalidForm = true
+      this.invalidForm.set(true)
     } else {
-      this.invalidForm = false
-      this.isSaving = true
+      this.invalidForm.set(false)
+      this.isSaving.set(true)
       const newConsortiumMember = this.createNewConsortiumMemberFromForm()
 
       this.memberService.addConsortiumMember(newConsortiumMember).subscribe(
@@ -189,12 +198,12 @@ export class AddConsortiumMemberComponent implements OnInit {
   }
 
   onSaveSuccess(orgName: string) {
-    this.isSaving = false
+    this.isSaving.set(false)
     this.alertService.broadcast(AlertType.CONSORTIUM_MEMBER_ADDED, orgName)
     this.router.navigate([''])
   }
 
   onSaveError() {
-    this.isSaving = false
+    this.isSaving.set(false)
   }
 }

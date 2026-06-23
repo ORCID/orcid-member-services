@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { ISFMemberData } from '../../member/model/salesforce-member-data.model'
 import {
   ISFMemberContact,
@@ -14,40 +15,43 @@ import {
   ValidationErrors,
   ValidatorFn,
   Validators,
+  ReactiveFormsModule,
 } from '@angular/forms'
 import { MemberService } from '../../member/service/member.service'
 import { AccountService } from '../../account/service/account.service'
 import { AlertService } from '../../shared/service/alert.service'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AlertType, EMAIL_REGEXP } from '../../app.constants'
-import { EMPTY, Subject, combineLatest, switchMap, takeUntil } from 'rxjs'
+import { EMPTY, combineLatest, switchMap } from 'rxjs'
 import { IAccount } from '../../account/model/account.model'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { FaIconComponent } from '@fortawesome/angular-fontawesome'
 
 @Component({
   selector: 'app-contact-update',
   templateUrl: './contact-update.component.html',
   styleUrls: ['./contact-update.component.scss'],
-  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, ReactiveFormsModule, FaIconComponent],
 })
-export class ContactUpdateComponent implements OnInit, OnDestroy {
+export class ContactUpdateComponent implements OnInit {
   private memberService = inject(MemberService)
   private accountService = inject(AccountService)
   private fb = inject(FormBuilder)
   private alertService = inject(AlertService)
   private router = inject(Router)
   protected activatedRoute = inject(ActivatedRoute)
+  private destroyRef = inject(DestroyRef)
 
-  account: IAccount | undefined | null
-  memberData: ISFMemberData | undefined | null
-  contact: ISFMemberContact | undefined
-  isSaving = false
-  invalidForm = false
+  protected account = signal<IAccount | undefined | null>(null)
+  protected memberData = signal<ISFMemberData | undefined | null>(null)
+  protected contact = signal<ISFMemberContact | undefined>(undefined)
+  protected isSaving = signal(false)
+  protected invalidForm = signal(false)
   routeData: any
-  contactId: string | undefined
-  managedMember: string | undefined
-  destroy$ = new Subject()
-  faTrashAlt = faTrashAlt
+  protected contactId = signal<string | undefined>(undefined)
+  protected managedMember = signal<string | undefined>(undefined)
+  protected faTrashAlt = faTrashAlt
 
   rolesData = [
     new SFMemberContactRole(1, false, 'Agreement signatory (OFFICIAL)'),
@@ -85,10 +89,10 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.activatedRoute.params.subscribe((params) => {
       if (params['contactId']) {
-        this.contactId = params['contactId']
+        this.contactId.set(params['contactId'])
       }
       if (params['id']) {
-        this.managedMember = params['id']
+        this.managedMember.set(params['id'])
         this.memberService.setManagedMember(params['id'])
       }
     })
@@ -97,38 +101,38 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
       .pipe(
         switchMap(([params, account]) => {
           if (params['contactId']) {
-            this.contactId = params['contactId']
+            this.contactId.set(params['contactId'])
           }
           if (params['id']) {
-            this.managedMember = params['id']
+            this.managedMember.set(params['id'])
           }
           if (account) {
-            this.account = account
-            if (this.managedMember) {
+            this.account.set(account)
+            if (this.managedMember()) {
               this.memberService.setManagedMember(params['id'])
-              return this.memberService.getMemberData(this.managedMember)
+              return this.memberService.getMemberData(this.managedMember())
             } else {
-              return this.memberService.getMemberData(this.account?.memberId)
+              return this.memberService.getMemberData(this.account()?.memberId)
             }
           } else {
             return EMPTY
           }
         }),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((data) => {
-        this.memberData = data
-        if (data?.contacts && this.contactId) {
-          this.contact = Object.values(data.contacts).find((contact) => contact.contactEmail == this.contactId)
-          if (this.contact) {
-            this.updateForm(this.contact)
+        this.memberData.set(data)
+        if (data?.contacts && this.contactId()) {
+          this.contact.set(Object.values(data.contacts).find((contact) => contact.contactEmail == this.contactId()))
+          if (this.contact()) {
+            this.updateForm(this.contact()!)
           }
         }
       })
 
-    this.editForm.valueChanges.subscribe(() => {
+    this.editForm.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       if (this.editForm!.status === 'VALID') {
-        this.invalidForm = false
+        this.invalidForm.set(false)
       }
     })
   }
@@ -147,11 +151,6 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
         }
       }),
     })
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true)
-    this.destroy$.complete()
   }
 
   get roles(): FormArray {
@@ -173,24 +172,22 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
 
   save() {
     if (this.editForm!.status === 'INVALID') {
-      this.invalidForm = true
+      this.invalidForm.set(true)
       Object.keys(this.editForm!.controls).forEach((key) => {
         this.editForm!.get(key)?.markAsDirty()
       })
       this.editForm!.markAllAsTouched()
     } else {
-      console.log('form valid')
-
-      this.invalidForm = false
-      this.isSaving = true
+      this.invalidForm.set(false)
+      this.isSaving.set(true)
       const contact = this.createContactFromForm()
-      contact.contactMember = this.memberData!.name
-      if (this.contactId) {
-        contact.contactEmail = this.contact!.contactEmail
-        contact.contactName = this.contact!.name
+      contact.contactMember = this.memberData()!.name
+      if (this.contactId()) {
+        contact.contactEmail = this.contact()!.contactEmail
+        contact.contactName = this.contact()!.name
       }
       this.onSaveSuccess()
-      this.memberService.updateContact(contact, this.memberData!.memberId!).subscribe({
+      this.memberService.updateContact(contact, this.memberData()!.memberId!).subscribe({
         next: (res) => {
           if (res) {
             this.onSaveSuccess()
@@ -208,14 +205,14 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-    this.isSaving = true
+    this.isSaving.set(true)
     const contact = new SFMemberContactUpdate()
-    if (this.contactId) {
-      contact.contactEmail = this.contact!.contactEmail
-      contact.contactName = this.contact!.name
-      contact.contactMember = this.memberData!.name
+    if (this.contactId()) {
+      contact.contactEmail = this.contact()!.contactEmail
+      contact.contactName = this.contact()!.name
+      contact.contactMember = this.memberData()!.name
     }
-    this.memberService.updateContact(contact, this.memberData!.id!).subscribe({
+    this.memberService.updateContact(contact, this.memberData()!.id!).subscribe({
       next: (res) => {
         if (res) {
           this.onSaveSuccess()
@@ -232,12 +229,12 @@ export class ContactUpdateComponent implements OnInit, OnDestroy {
   }
 
   onSaveSuccess() {
-    this.isSaving = false
+    this.isSaving.set(false)
     this.alertService.broadcast(AlertType.CONTACT_UPDATED)
     this.router.navigate([''])
   }
 
   onSaveError() {
-    this.isSaving = false
+    this.isSaving.set(false)
   }
 }

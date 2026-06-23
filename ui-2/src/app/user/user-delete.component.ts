@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, DestroyRef, OnDestroy, OnInit, inject, signal } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { UserService } from './service/user.service'
 import { AlertService } from '../shared/service/alert.service'
 import { IUser } from './model/user.model'
@@ -8,22 +9,26 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Event } from '../shared/model/event.model'
 import { AlertMessage, AlertType, EventType } from '../app.constants'
 import { faBan, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { ReactiveFormsModule, FormsModule } from '@angular/forms'
+import { ErrorAlertComponent } from '../error/error-alert.component'
+import { FaIconComponent } from '@fortawesome/angular-fontawesome'
 
 @Component({
   selector: 'app-user-delete-dialog',
   templateUrl: './user-delete.component.html',
-  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [ReactiveFormsModule, FormsModule, ErrorAlertComponent, FaIconComponent],
 })
 export class UserDeleteDialogComponent implements OnInit {
   protected userService = inject(UserService)
-  activeModal = inject(NgbActiveModal)
+  protected activeModal = inject(NgbActiveModal)
   protected eventService = inject(EventService)
   private alertService = inject(AlertService)
 
-  user: IUser | undefined
-  message = ''
-  faBan = faBan
-  faTimes = faTimes
+  protected user: IUser | undefined
+  protected message = signal('')
+  protected faBan = faBan
+  protected faTimes = faTimes
 
   clear() {
     this.activeModal.dismiss('cancel')
@@ -40,23 +45,25 @@ export class UserDeleteDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.message = $localize`:@@gatewayApp.msUserServiceMSUser.delete.question.string:Are you sure you want to delete user ${this.user?.email}?`
+    this.message.set(
+      $localize`:@@gatewayApp.msUserServiceMSUser.delete.question.string:Are you sure you want to delete user ${this.user?.email}?`
+    )
   }
 }
 
 @Component({
   selector: 'app-user-delete-popup',
   template: '',
-  standalone: false,
 })
 export class UserDeletePopupComponent implements OnInit, OnDestroy {
   protected activatedRoute = inject(ActivatedRoute)
   protected router = inject(Router)
   protected modalService = inject(NgbModal)
+  private destroyRef = inject(DestroyRef)
 
   protected ngbModalRef: NgbModalRef | undefined
   ngOnInit() {
-    this.activatedRoute.data.subscribe(({ user }) => {
+    this.activatedRoute.data.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ user }) => {
       setTimeout(() => {
         this.ngbModalRef = this.modalService.open(UserDeleteDialogComponent as Component, {
           size: 'lg',

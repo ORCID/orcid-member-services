@@ -1,15 +1,28 @@
+/// <reference types="jasmine" />
+
+import { CUSTOM_ELEMENTS_SCHEMA, WritableSignal } from '@angular/core'
 import { ComponentFixture, TestBed, tick } from '@angular/core/testing'
+import { FormsModule } from '@angular/forms'
 
 import { MembersComponent } from './members.component'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { AccountService } from '../account'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
 import { MemberService } from './service/member.service'
 import { of } from 'rxjs'
 import { Member } from './model/member.model'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler'
 import { Router } from '@angular/router'
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+
+type MembersInternals = {
+  page: WritableSignal<number>
+  searchTerm: WritableSignal<string>
+  submittedSearchTerm: WritableSignal<string>
+  sortColumn: WritableSignal<string>
+}
+
+const internals = (component: MembersComponent): MembersInternals =>
+  component as unknown as MembersInternals
 
 describe('MembersComponent', () => {
   let component: MembersComponent
@@ -24,16 +37,15 @@ describe('MembersComponent', () => {
     routerSpy = jasmine.createSpyObj('Router', ['navigate'])
 
     TestBed.configureTestingModule({
-    declarations: [MembersComponent],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [RouterTestingModule],
-    providers: [
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      imports: [FormsModule, RouterModule.forRoot([]), MembersComponent],
+      providers: [
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-})
+      ],
+    })
 
     fixture = TestBed.createComponent(MembersComponent)
     component = fixture.componentInstance
@@ -70,7 +82,7 @@ describe('MembersComponent', () => {
         mainContact: false,
         mfaEnabled: false,
         memberId: 'memberId',
-        manageApiCredsEnabled: false
+        manageApiCredsEnabled: false,
       })
     )
     spyOn(routerSpy, 'navigate').and.returnValue(Promise.resolve(true))
@@ -87,46 +99,46 @@ describe('MembersComponent', () => {
 
   it('clear should navigate with router and call member service query', () => {
     component.clear()
-    expect(component.page).toEqual(0)
+    expect(internals(component).page()).toEqual(0)
     expect(routerSpy.navigate).toHaveBeenCalledWith([
       '/members',
-      Object({ page: 0, sort: 'undefined,desc', filter: '' }),
+      Object({ page: 0, sort: 'salesforceId,asc', filter: '' }),
     ])
     expect(memberServiceSpy.query).toHaveBeenCalled()
   })
 
   it('resetSearch should reset search fields', () => {
-    component.page = 50
-    component.searchTerm = 'test'
-    component.submittedSearchTerm = 'testing'
+    internals(component).page.set(50)
+    internals(component).searchTerm.set('test')
+    internals(component).submittedSearchTerm.set('testing')
 
     component.resetSearch()
 
-    expect(component.page).toEqual(1)
-    expect(component.searchTerm).toEqual('')
-    expect(component.submittedSearchTerm).toEqual('')
+    expect(internals(component).page()).toEqual(1)
+    expect(internals(component).searchTerm()).toEqual('')
+    expect(internals(component).submittedSearchTerm()).toEqual('')
   })
 
   it('submitSearch should set submittedSearchTerm to value of searchTerm and then call member service query', () => {
-    component.page = 50
-    component.searchTerm = 'new search'
-    component.submittedSearchTerm = 'previously submitted search'
+    internals(component).page.set(50)
+    internals(component).searchTerm.set('new search')
+    internals(component).submittedSearchTerm.set('previously submitted search')
 
     component.submitSearch()
 
-    expect(component.page).toEqual(1)
-    expect(component.searchTerm).toEqual('new search')
-    expect(component.submittedSearchTerm).toEqual('new search')
+    expect(internals(component).page()).toEqual(1)
+    expect(internals(component).searchTerm()).toEqual('new search')
+    expect(internals(component).submittedSearchTerm()).toEqual('new search')
 
     expect(memberServiceSpy.query).toHaveBeenCalled()
   })
 
   it('updateSort should set sortColumn and then call member service query', () => {
-    component.sortColumn = 'some sort column'
+    internals(component).sortColumn.set('some sort column')
 
     component.updateSort('different column')
 
-    expect(component.sortColumn).toEqual('different column')
+    expect(internals(component).sortColumn()).toEqual('different column')
     expect(memberServiceSpy.query).toHaveBeenCalled()
   })
 })

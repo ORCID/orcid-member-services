@@ -1,8 +1,9 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
-import { FormBuilder, FormControl, Validators } from '@angular/forms'
-import { ActivatedRoute, Router } from '@angular/router'
-import { EMPTY, Subject, combineLatest } from 'rxjs'
-import { switchMap, take, takeUntil } from 'rxjs/operators'
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { FormBuilder, FormControl, Validators, ReactiveFormsModule } from '@angular/forms'
+import { ActivatedRoute, Router, RouterLink } from '@angular/router'
+import { EMPTY, combineLatest } from 'rxjs'
+import { switchMap, take } from 'rxjs/operators'
 import { AccountService } from 'src/app/account'
 import { IAccount } from 'src/app/account/model/account.model'
 import { EMAIL_REGEXP, URL_REGEXP, ORCID_BASE_URL } from 'src/app/app.constants'
@@ -12,37 +13,39 @@ import { ISFState } from 'src/app/member/model/salesforce-country.model copy'
 import { ISFMemberData } from 'src/app/member/model/salesforce-member-data.model'
 import { ISFMemberUpdate, SFMemberUpdate } from 'src/app/member/model/salesforce-member-update.model'
 import { MemberService } from 'src/app/member/service/member.service'
+import { QuillEditorComponent } from 'ngx-quill'
 
 @Component({
   selector: 'app-member-info-edit',
   templateUrl: './member-info-edit.component.html',
   styleUrls: ['./member-info-edit.component.scss'],
-  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, ReactiveFormsModule, QuillEditorComponent],
 })
-export class MemberInfoEditComponent implements OnInit, OnDestroy {
+export class MemberInfoEditComponent implements OnInit {
   private memberService = inject(MemberService)
   private accountService = inject(AccountService)
   private fb = inject(FormBuilder)
   protected activatedRoute = inject(ActivatedRoute)
   private router = inject(Router)
+  private destroyRef = inject(DestroyRef)
 
-  countries: ISFCountry[] | undefined
-  country: ISFCountry | undefined
-  states: ISFState[] | undefined
-  account: IAccount | undefined | null
-  memberData: ISFMemberData | undefined | null
-  objectKeys = Object.keys
-  orgIdsTransformed: { id: string; name: string }[] = []
-  ORCID_BASE_URL = ORCID_BASE_URL
+  protected countries = signal<ISFCountry[] | undefined>(undefined)
+  protected country = signal<ISFCountry | undefined>(undefined)
+  protected states = signal<ISFState[] | undefined>(undefined)
+  protected account = signal<IAccount | undefined | null>(null)
+  protected memberData = signal<ISFMemberData | undefined | null>(null)
+  protected objectKeys = Object.keys
+  protected orgIdsTransformed = signal<{ id: string; name: string }[]>([])
+  protected ORCID_BASE_URL = ORCID_BASE_URL
 
-  isSaving = false
-  invalidForm: boolean | undefined
-  managedMember: string | undefined
-  destroy$ = new Subject()
-  quillConfig = {
+  protected isSaving = signal(false)
+  protected invalidForm = signal(false)
+  protected managedMember = signal<string | undefined>(undefined)
+  protected quillConfig = {
     toolbar: [['bold', 'italic'], [{ list: 'ordered' }, { list: 'bullet' }], ['link']],
   }
-  quillStyles = {
+  protected quillStyles = {
     fontFamily: 'inherit',
     fontSize: '14px',
     letterSpacing: '0.25px',
@@ -67,15 +70,15 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
     combineLatest([this.activatedRoute.params, this.accountService.getAccountData(), this.memberService.getCountries()])
       .pipe(
         switchMap(([params, account, countries]) => {
-          this.countries = countries
+          this.countries.set(countries)
           if (params['id']) {
-            this.managedMember = params['id']
+            this.managedMember.set(params['id'])
           }
           if (account) {
-            this.account = account
-            if (this.managedMember) {
+            this.account.set(account)
+            if (this.managedMember()) {
               this.memberService.setManagedMember(params['id'])
-              return this.memberService.getMemberData(this.managedMember)
+              return this.memberService.getMemberData(this.managedMember())
             } else {
               return this.memberService.getMemberData(account?.memberId)
             }
@@ -83,29 +86,39 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
             return EMPTY
           }
         }),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((data) => {
-        this.memberData = data
-        this.orgIdsTransformed = Object.entries(this.memberData?.orgIds || {}).flatMap(([name, ids]) =>
-          ids.map((id: string) => ({ id, name }))
+        this.memberData.set(data)
+        this.orgIdsTransformed.set(
+          Object.entries(this.memberData()?.orgIds || {}).flatMap(([name, ids]) =>
+            ids.map((id: string) => ({ id, name }))
+          )
         )
-        this.validateUrl()
         if (data) {
           this.updateForm(data)
         }
+        this.validateUrl()
       })
 
-    this.editForm.valueChanges.subscribe(() => {
+    this.editForm.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       if (this.editForm.status === 'VALID') {
-        this.invalidForm = false
+        this.invalidForm.set(false)
       }
     })
   }
 
   validateUrl() {
-    if (this.memberData?.website && !/(http(s?)):\/\//i.test(this.memberData.website)) {
-      this.memberData.website = 'http://' + this.memberData.website
+    const websiteControl = this.editForm.get('website')
+    const website = websiteControl?.value
+    if (website && !/(http(s?)):\/\//i.test(website)) {
+      const normalizedWebsite = 'http://' + website
+      websiteControl?.setValue(normalizedWebsite, { emitEvent: false })
+
+      const memberData = this.memberData()
+      if (memberData) {
+        this.memberData.set({ ...memberData, website: normalizedWebsite })
+      }
     }
   }
 
@@ -120,10 +133,10 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
         email: data.publicDisplayEmail,
       })
       if (data.billingAddress) {
-        if (this.countries) {
-          this.country = this.countries.find((country) => country.name === data.billingAddress?.country)
-          if (this.country) {
-            this.states = this.country.states
+        if (this.countries()) {
+          this.country.set(this.countries()!.find((country) => country.name === data.billingAddress?.country))
+          if (this.country()) {
+            this.states.set(this.country()!.states)
           } else {
             console.error('Unable to find country: ', data.billingAddress.country)
           }
@@ -152,7 +165,7 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
           ? undefined
           : this.editForm.get(['state'])?.value,
       country: this.editForm.get(['country'])?.value,
-      countryCode: this.country?.code,
+      countryCode: this.country()?.code,
       postalCode: this.editForm.get(['postcode'])?.value,
     }
     return {
@@ -169,21 +182,22 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
 
   save() {
     if (this.editForm.status === 'INVALID') {
-      this.invalidForm = true
+      this.invalidForm.set(true)
       this.editForm.markAllAsTouched()
       Object.keys(this.editForm.controls).forEach((key) => {
         this.editForm.get(key)?.markAsDirty()
       })
     } else {
-      this.invalidForm = false
-      this.isSaving = true
+      this.invalidForm.set(false)
+      this.isSaving.set(true)
       const details: ISFMemberUpdate = this.createDetailsFromForm()
 
-      if (this.memberData?.memberId) {
-        this.memberService.updateMemberDetails(details, this.memberData?.memberId).subscribe({
+      const memberId = this.memberData()?.memberId
+      if (memberId) {
+        this.memberService.updateMemberDetails(details, memberId).subscribe({
           next: () => {
             this.memberService.setMemberData({
-              ...this.memberData,
+              ...this.memberData(),
               publicDisplayDescriptionHtml: details.description,
               publicDisplayName: details.publicName,
               name: details.orgName,
@@ -203,17 +217,12 @@ export class MemberInfoEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-    this.destroy$.next(true)
-    this.destroy$.complete()
-  }
-
   onSaveSuccess() {
-    this.isSaving = false
+    this.isSaving.set(false)
     this.router.navigate([''])
   }
 
   onSaveError() {
-    this.isSaving = false
+    this.isSaving.set(false)
   }
 }

@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, OnDestroy, Renderer2, inject } from '@angular/core'
-import { FormBuilder, Validators } from '@angular/forms'
+import { AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, Renderer2, inject, signal } from '@angular/core'
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms'
 
 import { PasswordResetInitResult } from '../model/password-reset-init-result.model'
 import { PasswordService } from '../service/password.service'
@@ -7,16 +7,17 @@ import { PasswordService } from '../service/password.service'
 @Component({
   selector: 'app-password-reset-init',
   templateUrl: './password-reset-init.component.html',
-  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [ReactiveFormsModule],
 })
 export class PasswordResetInitComponent implements AfterViewInit, OnDestroy {
   private passwordResetInitService = inject(PasswordService)
   private renderer = inject(Renderer2)
   private fb = inject(FormBuilder)
 
-  error: string | undefined
-  errorEmailNotExists: string | undefined
-  success: string | undefined
+  protected error = signal<string | undefined>(undefined)
+  protected errorEmailNotExists = signal<string | undefined>(undefined)
+  protected success = signal<string | undefined>(undefined)
   resetRequestForm = this.fb.group({
     email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(100), Validators.email]],
   })
@@ -34,21 +35,21 @@ export class PasswordResetInitComponent implements AfterViewInit, OnDestroy {
   }
 
   requestReset() {
-    this.error = undefined
-    this.errorEmailNotExists = undefined
+    this.error.set(undefined)
+    this.errorEmailNotExists.set(undefined)
 
     if (this.resetRequestForm.get(['email'])) {
       this.passwordResetInitService
         .initPasswordReset(this.resetRequestForm.get(['email'])!.value)
         .subscribe((result: PasswordResetInitResult | null) => {
           if (result && result.success) {
-            this.success = 'OK'
+            this.success.set('OK')
           } else {
-            this.success = undefined
+            this.success.set(undefined)
             if (result && result.emailNotFound) {
-              this.errorEmailNotExists = 'ERROR'
+              this.errorEmailNotExists.set('ERROR')
             } else {
-              this.error = 'ERROR'
+              this.error.set('ERROR')
             }
           }
         })

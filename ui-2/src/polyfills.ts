@@ -15,6 +15,13 @@
  */
 
 /***************************************************************************************************
+ * LOCALIZATION
+ * @angular/localize/init must be imported before zone.js to ensure $localize is available globally.
+ * This is required for i18n string interpolation in components and services.
+ */
+import '@angular/localize/init'
+
+/***************************************************************************************************
  * BROWSER POLYFILLS
  */
 

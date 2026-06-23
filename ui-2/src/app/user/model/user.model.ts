@@ -1,11 +1,12 @@
 import { Moment } from 'moment'
 
-export const enum UserAuthorities {
-  ROLE_USER = 'ROLE_USER',
-  ROLE_ADMIN = 'ROLE_ADMIN',
-  CONSORTIUM_LEAD = 'CONSORTIUM_LEAD',
-  ASSERTION_SERVICE_ENABLED = 'ASSERTION_SERVICE_ENABLED',
-}
+export const UserAuthorities = Object.freeze({
+  ROLE_USER: 'ROLE_USER',
+  ROLE_ADMIN: 'ROLE_ADMIN',
+  CONSORTIUM_LEAD: 'CONSORTIUM_LEAD',
+  ASSERTION_SERVICE_ENABLED: 'ASSERTION_SERVICE_ENABLED',
+} as const)
+export type UserAuthorities = (typeof UserAuthorities)[keyof typeof UserAuthorities]
 
 export interface IUser {
   id?: string

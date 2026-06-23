@@ -1,10 +1,7 @@
 import { Pipe, PipeTransform, inject } from '@angular/core'
 import { LanguageService } from '../service/language.service'
 
-@Pipe({
-  name: 'findLanguageFromKey',
-  standalone: false,
-})
+@Pipe({ name: 'findLanguageFromKey' })
 export class FindLanguageFromKeyPipe implements PipeTransform {
   private languageService = inject(LanguageService)
 

@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
 import { HomeComponent } from './home.component'
 import { AccountService } from '../account'
@@ -6,7 +7,14 @@ import { of } from 'rxjs'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { IAccount } from '../account/model/account.model'
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+
+type HomeInternals = {
+  loggedInMessage: string | undefined
+}
+
+const internals = (component: HomeComponent): HomeInternals =>
+  component as unknown as HomeInternals
 
 describe('HomeComponent', () => {
   let component: HomeComponent
@@ -43,15 +51,15 @@ describe('HomeComponent', () => {
     }
 
     TestBed.configureTestingModule({
-    declarations: [HomeComponent],
-    imports: [],
-    providers: [
+      imports: [HomeComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      providers: [
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: OidcSecurityService, useValue: mockOidcSecurityService },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-})
+      ],
+    })
     fixture = TestBed.createComponent(HomeComponent)
     component = fixture.componentInstance
 
@@ -66,7 +74,7 @@ describe('HomeComponent', () => {
     component.ngOnInit()
 
     expect(accountServiceSpy.getAccountData).toHaveBeenCalled()
-    expect(component.loggedInMessage).toBeUndefined()
+    expect(internals(component).loggedInMessage).toBeUndefined()
   })
 
   it('should call getMemberData if account data is not null', () => {
@@ -86,7 +94,7 @@ describe('HomeComponent', () => {
         mainContact: false,
         mfaEnabled: false,
         memberId: 'memberId',
-        manageApiCredsEnabled: false
+        manageApiCredsEnabled: false,
       })
     )
 
@@ -95,6 +103,6 @@ describe('HomeComponent', () => {
     component.ngOnInit()
 
     expect(accountServiceSpy.getAccountData).toHaveBeenCalled()
-    expect(component.loggedInMessage).toEqual('You are logged in as user email@email.com')
+    expect(internals(component).loggedInMessage).toEqual('You are logged in as user email@email.com')
   })
 })

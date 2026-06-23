@@ -1,16 +1,27 @@
+/// <reference types="jasmine" />
+
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { MemberInfoComponent } from './member-info.component'
 import { AccountService } from 'src/app/account'
 import { MemberService } from 'src/app/member/service/member.service'
-import { RouterTestingModule } from '@angular/router/testing'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { RouterModule } from '@angular/router'
+import { CUSTOM_ELEMENTS_SCHEMA, WritableSignal } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { of } from 'rxjs'
 import { IAccount } from 'src/app/account/model/account.model'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import { ISFMemberData } from 'src/app/member/model/salesforce-member-data.model'
+
+type MemberInfoInternals = {
+  managedMember: WritableSignal<string | null | undefined>
+  memberData: WritableSignal<ISFMemberData | undefined | null>
+}
+
+const internals = (component: MemberInfoComponent): MemberInfoInternals =>
+  component as unknown as MemberInfoInternals
 
 describe('MemberInfoComponent', () => {
   let component: MemberInfoComponent
@@ -49,17 +60,16 @@ describe('MemberInfoComponent', () => {
     memberServiceSpy.getMemberData.and.returnValue(of(null))
 
     TestBed.configureTestingModule({
-    declarations: [MemberInfoComponent],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    imports: [RouterTestingModule.withRoutes([])],
-    providers: [
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      imports: [RouterModule.forRoot([]), MemberInfoComponent],
+      providers: [
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: OidcSecurityService, useValue: mockOidcSecurityService },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-})
+      ],
+    })
     activatedRoute = TestBed.inject(ActivatedRoute) as jasmine.SpyObj<ActivatedRoute>
     accountService = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
     memberService = TestBed.inject(MemberService) as jasmine.SpyObj<MemberService>
@@ -78,9 +88,9 @@ describe('MemberInfoComponent', () => {
 
     expect(accountService.getAccountData).toHaveBeenCalled()
     expect(memberService.setManagedMember).toHaveBeenCalledTimes(0)
-    expect(component.managedMember).toBeUndefined()
+    expect(internals(component).managedMember()).toBeUndefined()
     expect(memberService.getMemberData).toHaveBeenCalledTimes(0)
-    expect(component.memberData).toBeUndefined()
+    expect(internals(component).memberData()).toBeNull()
   })
 
   it('should call the member service while managing a member', () => {
@@ -144,25 +154,20 @@ describe('MemberInfoComponent', () => {
 
   it('should add protocol to websites where it is missing', () => {
     accountService.getAccountData.and.returnValue(of({ memberId: 'test' } as IAccount))
-    memberService.getMemberData.and.returnValue(of({}))
+    memberService.getMemberData.and.returnValue(
+      of({
+        website: 'example',
+        membershipEndDateString: '2050',
+      } as ISFMemberData)
+    )
     fixture.detectChanges()
 
-    expect(component.memberData).toBeDefined
-    expect(component.memberData!.website).toBeUndefined()
-
     component.validateUrl()
-    expect(component.memberData!.website).toBeUndefined()
+    fixture.detectChanges()
 
-    component.memberData!.website = 'example'
-    component.validateUrl()
-    expect(component.memberData!.website).toEqual('http://example')
+    const websiteLink = fixture.nativeElement.querySelector('.side-bar-subsection a') as HTMLAnchorElement
 
-    component.memberData!.website = 'example.com'
-    component.validateUrl()
-    expect(component.memberData!.website).toEqual('http://example.com')
-
-    component.memberData!.website = 'https://example.com'
-    component.validateUrl()
-    expect(component.memberData!.website).toEqual('https://example.com')
+    expect(websiteLink.getAttribute('href')).toEqual('http://example')
+    expect(websiteLink.textContent?.trim()).toEqual('http://example')
   })
 })

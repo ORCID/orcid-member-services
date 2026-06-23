@@ -9,7 +9,6 @@ import { provideNgxWebstorage, withLocalStorage, withNgxWebstorageConfig, withSe
 import { environment } from '../environments/environment'
 import { AccountModule } from './account/account.module'
 import { AppRoutingModule } from './app-routing.module'
-import { AppComponent } from './app.component'
 import { ErrorComponent } from './error/error.component'
 import { ErrorService } from './error/service/error.service'
 import { HomeModule } from './home/home.module'
@@ -21,8 +20,6 @@ import { SharedModule } from './shared/shared.module'
 import { ApiCredentialsMfaEnabledDialogComponent } from './layout/navbar/api-credentials-mfa-enabled-dialog/api-credentials-mfa-enabled-dialog.component'
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, FooterComponent, ErrorComponent, ApiCredentialsMfaEnabledDialogComponent],
-  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     HomeModule,
@@ -45,33 +42,38 @@ import { ApiCredentialsMfaEnabledDialogComponent } from './layout/navbar/api-cre
         secureRoutes: ['/userservice', '/memberservice', '/assertionservice'],
         autoUserInfo: false,
       },
-    })],
+    }),
+    NavbarComponent,
+    FooterComponent,
+    ErrorComponent,
+    ApiCredentialsMfaEnabledDialogComponent,
+  ],
   providers: [
-      {
-        provide: HTTP_INTERCEPTORS,
-        useClass: AuthInterceptor,
-        multi: true,
-      },
-      {
-        provide: HTTP_INTERCEPTORS,
-        useClass: HeaderInterceptor,
-        multi: true,
-      },
-      {
-        provide: HTTP_INTERCEPTORS,
-        useClass: AuthExpiredInterceptor,
-        multi: true,
-      },
-      {
-        provide: ErrorHandler,
-        useClass: ErrorService,
-      },
-      provideHttpClient(withInterceptorsFromDi()),
-      provideNgxWebstorage(
-        withNgxWebstorageConfig({ separator: ':', caseSensitive: true }),
-        withLocalStorage(),
-        withSessionStorage()
-      ),
-    ]
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HeaderInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthExpiredInterceptor,
+      multi: true,
+    },
+    {
+      provide: ErrorHandler,
+      useClass: ErrorService,
+    },
+    provideHttpClient(withInterceptorsFromDi()),
+    provideNgxWebstorage(
+      withNgxWebstorageConfig({ separator: ':', caseSensitive: true }),
+      withLocalStorage(),
+      withSessionStorage()
+    ),
+  ],
 })
-export class AppModule { }
+export class AppModule {}

@@ -23,8 +23,6 @@ import { AffiliationDeleteDialogComponent, AffiliationDeletePopupComponent } fro
     SharedModule,
     RouterModule.forChild(affiliationRoutes),
     ClipboardModule,
-  ],
-  declarations: [
     AffiliationsComponent,
     AffiliationDetailComponent,
     AffiliationImportDialogComponent,

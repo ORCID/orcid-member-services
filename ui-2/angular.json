@@ -82,8 +82,7 @@
             },
             "index": "src/index.html",
             "polyfills": [
-              "src/polyfills.ts",
-              "@angular/localize/init"
+              "src/polyfills.ts"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -91,9 +90,11 @@
               "src/favicon.ico",
               "src/assets",
               "src/content/images",
-              "src/content/css"
+              "src/content/css",
+              "src/content/fonts"
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/content/scss/global.scss",
               "node_modules/quill/dist/quill.snow.css"
             ],
@@ -155,7 +156,7 @@
           "builder": "ng-extract-i18n-merge:ng-extract-i18n-merge",
           "options": {
             "includeContext": true,
-            "browserTarget": "ui:build",
+            "buildTarget": "ui:build",
             "format": "xlf",
             "newTranslationTargetsBlank": true,
             "outputPath": "src/i18n",

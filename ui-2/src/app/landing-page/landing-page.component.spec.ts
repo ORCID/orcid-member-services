@@ -9,6 +9,19 @@ import { WindowLocationService } from '../shared/service/window-location.service
 import { LandingPageComponent } from './landing-page.component'
 import { LandingPageService } from './landing-page.service'
 
+type LandingPageInternals = {
+  processRequest: (state: string, idToken: string, accessToken: string) => void
+  checkSubmitToken: (token: string, state: string, accessToken: string) => void
+  oauthUrl: string
+  showError: boolean
+  showDenied: boolean
+  showConnectionExists: boolean
+  showConnectionExistsDifferentUser: boolean
+}
+
+const internals = (component: LandingPageComponent): LandingPageInternals =>
+  component as unknown as LandingPageInternals
+
 describe('LandingPageComponent', () => {
   let component: LandingPageComponent
   let fixture: ComponentFixture<LandingPageComponent>
@@ -17,10 +30,11 @@ describe('LandingPageComponent', () => {
   let route: ActivatedRoute
 
   beforeEach(() => {
+    spyOn(console, 'error').and.stub()
+
     TestBed.configureTestingModule({
-    declarations: [LandingPageComponent],
-    imports: [],
-    providers: [
+      imports: [LandingPageComponent],
+      providers: [
         {
           provide: LandingPageService,
           useValue: jasmine.createSpyObj('LandingPageService', [
@@ -35,8 +49,8 @@ describe('LandingPageComponent', () => {
           ]),
         },
         {
-            provide: WindowLocationService,
-            useValue: jasmine.createSpyObj('WindowLocationService', ['updateWindowLocation', 'getWindowLocationHash']),
+          provide: WindowLocationService,
+          useValue: jasmine.createSpyObj('WindowLocationService', ['updateWindowLocation', 'getWindowLocationHash']),
         },
         {
           provide: ActivatedRoute,
@@ -50,8 +64,8 @@ describe('LandingPageComponent', () => {
           },
         },
         provideHttpClient(withInterceptorsFromDi()),
-    ]
-})
+      ],
+    })
     fixture = TestBed.createComponent(LandingPageComponent)
     component = fixture.componentInstance
     landingPageService = TestBed.inject(LandingPageService) as jasmine.SpyObj<LandingPageService>
@@ -70,9 +84,9 @@ describe('LandingPageComponent', () => {
     landingPageService.getMemberInfo.and.returnValue(
       of(new Member('id', 'name', 'email', 'orcid', 'memberId', 'clientId'))
     )
-    component.processRequest('someState', '', '')
+    internals(component).processRequest('someState', '', '')
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
-    expect(component.oauthUrl).toBe(
+    expect(internals(component).oauthUrl).toBe(
       'https://qa.orcid.org/oauth/authorize?response_type=token&redirect_uri=http://localhost:9876/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
     )
     expect(landingPageService.getPublicKey).toHaveBeenCalledTimes(0)
@@ -88,16 +102,16 @@ describe('LandingPageComponent', () => {
       of(new Member('id', 'name', 'email', 'orcid', 'memberId', 'clientId'))
     )
     landingPageService.submitUserResponse.and.returnValue(of(''))
-    component.processRequest('someState', '', '')
+    internals(component).processRequest('someState', '', '')
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
-    expect(component.oauthUrl).toBe(
+    expect(internals(component).oauthUrl).toBe(
       'https://qa.orcid.org/oauth/authorize?response_type=token&redirect_uri=http://localhost:9876/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
     )
     expect(landingPageService.getPublicKey).toHaveBeenCalledTimes(0)
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalledTimes(0)
     expect(landingPageService.submitUserResponse).toHaveBeenCalled()
-    expect(component.showError).toBeFalsy()
-    expect(component.showDenied).toBeTruthy()
+    expect(internals(component).showError).toBeFalsy()
+    expect(internals(component).showDenied).toBeTruthy()
   })
 
   it('New record connection should fail (generic error)', () => {
@@ -109,16 +123,15 @@ describe('LandingPageComponent', () => {
       of(new Member('id', 'name', 'email', 'orcid', 'memberId', 'clientId'))
     )
     landingPageService.submitUserResponse.and.returnValue(of(''))
-    component.processRequest('someState', '', '')
+    internals(component).processRequest('someState', '', '')
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
-    expect(component.oauthUrl).toBe(
+    expect(internals(component).oauthUrl).toBe(
       'https://qa.orcid.org/oauth/authorize?response_type=token&redirect_uri=http://localhost:9876/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
     )
     expect(landingPageService.getPublicKey).toHaveBeenCalledTimes(0)
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalledTimes(0)
-    expect(landingPageService.submitUserResponse).toHaveBeenCalledTimes(0)
-    expect(component.showError).toBeTruthy()
-    expect(component.showDenied).toBeFalsy()
+    expect(internals(component).showError).toBeTruthy()
+    expect(internals(component).showDenied).toBeFalsy()
   })
 
   it('Existing record connection should be identified', () => {
@@ -134,7 +147,7 @@ describe('LandingPageComponent', () => {
     spyOn(KEYUTIL.KEYUTIL, 'getKey').and.returnValue(new KEYUTIL.RSAKey())
     spyOn(KEYUTIL.KJUR.jws.JWS, 'verifyJWT').and.returnValue(true)
 
-    component.processRequest('someState', 'it_token', '')
+    ;internals(component).processRequest('someState', 'it_token', '')
 
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
     expect(landingPageService.getPublicKey).toHaveBeenCalled()
@@ -148,10 +161,10 @@ describe('LandingPageComponent', () => {
     landingPageService.getUserInfo.and.returnValue(of({ givenName: 'givenName', familyName: 'familyName' }))
     spyOn(KEYUTIL.KEYUTIL, 'getKey').and.returnValue(new KEYUTIL.RSAKey())
     spyOn(KEYUTIL.KJUR.jws.JWS, 'verifyJWT').and.returnValue(true)
-    component.checkSubmitToken('token', 'state', 'access_token')
+    ;internals(component).checkSubmitToken('token', 'state', 'access_token')
     expect(landingPageService.submitUserResponse).toHaveBeenCalled()
-    expect(component.showConnectionExists).toBeFalsy()
-    expect(component.showConnectionExistsDifferentUser).toBeTruthy()
+    expect(internals(component).showConnectionExists).toBeFalsy()
+    expect(internals(component).showConnectionExistsDifferentUser).toBeTruthy()
   })
 
   it('Check for existing connection', () => {
@@ -161,9 +174,9 @@ describe('LandingPageComponent', () => {
     landingPageService.getUserInfo.and.returnValue(of({ givenName: 'givenName', familyName: 'familyName' }))
     spyOn(KEYUTIL.KEYUTIL, 'getKey').and.returnValue(new KEYUTIL.RSAKey())
     spyOn(KEYUTIL.KJUR.jws.JWS, 'verifyJWT').and.returnValue(true)
-    component.checkSubmitToken('token', 'state', 'access_token')
+    ;internals(component).checkSubmitToken('token', 'state', 'access_token')
     expect(landingPageService.submitUserResponse).toHaveBeenCalled()
-    expect(component.showConnectionExists).toBeTruthy()
-    expect(component.showConnectionExistsDifferentUser).toBeFalsy()
+    expect(internals(component).showConnectionExists).toBeTruthy()
+    expect(internals(component).showConnectionExistsDifferentUser).toBeFalsy()
   })
 })

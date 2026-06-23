@@ -4,7 +4,7 @@
       @if (loading) {
         <div class="app-loading">
           <div class="spinner-border text-secondary" style="width: 5rem; height: 5rem" role="status">
-            <span class="sr-only">Loading...</span>
+            <span class="visually-hidden">Loading...</span>
           </div>
         </div>
       }
@@ -14,72 +14,73 @@
             @if (showConnectionExists) {
               <div>
                 <h2>
-                  <span i18n="@@landingPage.connectionExists.youHaveAlready.string">You have already granted</span><br />
+                  <span i18n="@@landingPage.connectionExists.youHaveAlready.string">You have already granted</span
+                  ><br />
                   {{ clientName }}<br />
                   <span i18n="@@landingPage.connectionExists.permissionToUpdate.string"
                     >permission to update your ORCID record</span
-                    >
-                  </h2>
-                  <p class="mt-4">
-                    <img class="id-icon" src="./content/images/orcid-icon.svg" alt="orcid-logo" width="16" height="16" />
-                    <a target="_orcidRecord" href="{{ issuer }}/my-orcid">{{ issuer }}/{{ orcidRecord?.orcid }}</a>
-                  </p>
-                  <p>
-                    {{ incorrectDataMessage }}
-                  </p>
-                </div>
-              }
-              @if (showConnectionExistsDifferentUser) {
-                <div>
-                  <h2>
-                    {{ linkAlreadyUsedMessage }}
-                  </h2>
-                </div>
-              }
-              @if (showError) {
-                <div>
-                  <h2 i18n="@@landingPage.error.somethingWentWrong.string">
-              Oops, something went wrong and we were not able to fetch your ORCID iD
-            </h2>
-                </div>
-              }
-              @if (showDenied) {
-                <div>
-                  <h2>
-                    <span i18n="@@landingPage.denied.youHaveDenied.string">Oops, you have denied access.</span><br />
-                    {{ clientName }}<br />
-                    <span i18n="@@landingPage.denied.willNotBeAble.string"
-                      >will not be able to update your ORCID record.</span
-                      >
-                    </h2>
-                    <p i18n="@@landingPage.denied.ifThisWas.string">
-              If this was a mistake, click the button below to grant access.
-            </p>
-                    <a href="{{ oauthUrl }}" class="btn btn-primary">
-                      {{ allowToUpdateRecordMessage }}
-                    </a>
-                  </div>
-                }
-                @if (showSuccess) {
-                  <div>
-                    <h2 data-cy="thanksMessage">
-                      {{ thanksMessage }}
-                    </h2>
-                    <p>
-                      {{ successfullyGrantedMessage }}
-                    </p>
-                    <p>
-                      <img class="id-icon" src="./content/images/orcid-icon.svg" alt="orcid-logo" width="16" height="16" />
-                      <a target="_orcidRecord" href="{{ issuer }}/my-orcid">{{ issuer }}/{{ signedInIdToken.sub }}</a>
-                    </p>
-                    <p>
-                      <em>{{ incorrectDataMessage }}</em>
-                    </p>
-                  </div>
-                }
+                  >
+                </h2>
+                <p class="mt-4">
+                  <img class="id-icon" src="./content/images/orcid-icon.svg" alt="orcid-logo" width="16" height="16" />
+                  <a target="_orcidRecord" href="{{ issuer }}/my-orcid">{{ issuer }}/{{ orcidRecord?.orcid }}</a>
+                </p>
+                <p>
+                  {{ incorrectDataMessage }}
+                </p>
               </div>
-            </div>
-          }
+            }
+            @if (showConnectionExistsDifferentUser) {
+              <div>
+                <h2>
+                  {{ linkAlreadyUsedMessage }}
+                </h2>
+              </div>
+            }
+            @if (showError) {
+              <div>
+                <h2 i18n="@@landingPage.error.somethingWentWrong.string">
+                  Oops, something went wrong and we were not able to fetch your ORCID iD
+                </h2>
+              </div>
+            }
+            @if (showDenied) {
+              <div>
+                <h2>
+                  <span i18n="@@landingPage.denied.youHaveDenied.string">Oops, you have denied access.</span><br />
+                  {{ clientName }}<br />
+                  <span i18n="@@landingPage.denied.willNotBeAble.string"
+                    >will not be able to update your ORCID record.</span
+                  >
+                </h2>
+                <p i18n="@@landingPage.denied.ifThisWas.string">
+                  If this was a mistake, click the button below to grant access.
+                </p>
+                <a href="{{ oauthUrl }}" class="btn btn-primary">
+                  {{ allowToUpdateRecordMessage }}
+                </a>
+              </div>
+            }
+            @if (showSuccess) {
+              <div>
+                <h2 data-cy="thanksMessage">
+                  {{ thanksMessage }}
+                </h2>
+                <p>
+                  {{ successfullyGrantedMessage }}
+                </p>
+                <p>
+                  <img class="id-icon" src="./content/images/orcid-icon.svg" alt="orcid-logo" width="16" height="16" />
+                  <a target="_orcidRecord" href="{{ issuer }}/my-orcid">{{ issuer }}/{{ signedInIdToken.sub }}</a>
+                </p>
+                <p>
+                  <em>{{ incorrectDataMessage }}</em>
+                </p>
+              </div>
+            }
+          </div>
         </div>
-      </div>
+      }
     </div>
+  </div>
+</div>

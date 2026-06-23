@@ -1,5 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core'
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms'
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import moment from 'moment'
 import { DateUtilService } from '../shared/service/date-util.service'
@@ -19,6 +20,10 @@ import {
 } from '../app.constants'
 import { ErrorService } from '../error/service/error.service'
 import { AlertService } from '../shared/service/alert.service'
+import { ErrorAlertComponent } from '../error/error-alert.component'
+import { FaIconComponent } from '@fortawesome/angular-fontawesome'
+import { KeyValuePipe } from '@angular/common'
+import { LocalizePipe } from '../shared/pipe/localize'
 
 function dateValidator() {
   return (formGroup: FormGroup) => {
@@ -116,7 +121,9 @@ function isValidDate(y: string, m: string, d: string) {
 @Component({
   selector: 'app-affiliation-update',
   templateUrl: './affiliation-update.component.html',
-  standalone: false,
+  styleUrls: ['./affiliation-update.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [ReactiveFormsModule, ErrorAlertComponent, FaIconComponent, KeyValuePipe, LocalizePipe],
 })
 export class AffiliationUpdateComponent implements OnInit {
   protected affiliationService = inject(AffiliationService)
@@ -125,21 +132,22 @@ export class AffiliationUpdateComponent implements OnInit {
   private alertService = inject(AlertService)
   private fb = inject(FormBuilder)
   private errorService = inject(ErrorService)
+  private destroyRef = inject(DestroyRef)
 
-  AFFILIATION_TYPES = AFFILIATION_TYPES
-  COUNTRIES = COUNTRIES
-  ORG_ID_TYPES = ORG_ID_TYPES
-  startYearsList: any
-  endYearsList: any
-  monthsList: any
-  startDaysList: any
-  endDaysList: any
-  isSaving = false
+  protected AFFILIATION_TYPES = AFFILIATION_TYPES
+  protected COUNTRIES = COUNTRIES
+  protected ORG_ID_TYPES = ORG_ID_TYPES
+  protected startYearsList: any
+  protected endYearsList: any
+  protected monthsList: any
+  protected startDaysList: any
+  protected endDaysList: any
+  protected isSaving = signal(false)
   ngbDate: any
-  faBan = faBan
-  faSave = faSave
-  maxChars4000 = ''
-  maxChars8000 = ''
+  protected faBan = faBan
+  protected faSave = faSave
+  protected maxChars4000 = signal('')
+  protected maxChars8000 = signal('')
 
   editForm = this.fb.group(
     {
@@ -182,8 +190,8 @@ export class AffiliationUpdateComponent implements OnInit {
     this.monthsList = this.dateUtilService.getMonthsList()
     this.startDaysList = this.dateUtilService.getDaysList()
     this.endDaysList = this.dateUtilService.getDaysList()
-    this.isSaving = false
-    this.activatedRoute.data.subscribe(({ affiliation }) => {
+    this.isSaving.set(false)
+    this.activatedRoute.data.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ affiliation }) => {
       this.updateForm(affiliation)
     })
 
@@ -192,25 +200,29 @@ export class AffiliationUpdateComponent implements OnInit {
 
   localizeString() {
     let maxCharLimit = 4000
-    this.maxChars4000 = $localize`:@@entity.validation.maxlength.string:This field cannot be longer than ${maxCharLimit} characters.`
+    this.maxChars4000.set(
+      $localize`:@@entity.validation.maxlength.string:This field cannot be longer than ${maxCharLimit} characters.`
+    )
     maxCharLimit = 8000
-    this.maxChars8000 = $localize`:@@entity.validation.maxlength.string:This field cannot be longer than ${maxCharLimit} characters.`
+    this.maxChars8000.set(
+      $localize`:@@entity.validation.maxlength.string:This field cannot be longer than ${maxCharLimit} characters.`
+    )
   }
 
   onChanges(): void {
-    this.editForm.get('startMonth')?.valueChanges.subscribe((val) => {
+    this.editForm.get('startMonth')?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((val) => {
       this.startDaysList = this.dateUtilService.getDaysList(
         this.editForm.get('startYear')?.value || null,
         this.editForm.get('startMonth')?.value || null
       )
     })
-    this.editForm.get('endMonth')?.valueChanges.subscribe((val) => {
+    this.editForm.get('endMonth')?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((val) => {
       this.endDaysList = this.dateUtilService.getDaysList(
         this.editForm.get('endYear')?.value || null,
         this.editForm.get('endMonth')?.value || null
       )
     })
-    this.editForm.get('disambiguationSource')?.valueChanges.subscribe((value) => {
+    this.editForm.get('disambiguationSource')?.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
       this.editForm.get('disambiguatedOrgId')?.markAsTouched()
       this.editForm.get('disambiguatedOrgId')?.updateValueAndValidity()
     })
@@ -259,7 +271,7 @@ export class AffiliationUpdateComponent implements OnInit {
   }
 
   save() {
-    this.isSaving = true
+    this.isSaving.set(true)
     const assertion = this.createFromForm()
     if (assertion.id !== null && assertion.id !== undefined) {
       this.affiliationService.update(assertion).subscribe({
@@ -323,14 +335,14 @@ export class AffiliationUpdateComponent implements OnInit {
   }
 
   protected onSaveSuccess() {
-    this.isSaving = false
+    this.isSaving.set(false)
     this.previousState()
   }
 
   protected onSaveError(err: any) {
     this.errorService.handleError(err)
     console.error(err)
-    this.isSaving = false
+    this.isSaving.set(false)
   }
 
   public onStartDateSelected(resetValue: boolean) {

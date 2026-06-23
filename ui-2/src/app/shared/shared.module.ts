@@ -12,8 +12,10 @@ import { RemoveConsortiumMemberAlertComponent } from './alert/consortium-member/
 import { ContactUpdateAlertComponent } from './alert/contact-update/contact-update-alert.component'
 
 @NgModule({
-  imports: [NgbModule, FontAwesomeModule, CommonModule],
-  declarations: [
+  imports: [
+    NgbModule,
+    FontAwesomeModule,
+    CommonModule,
     FindLanguageFromKeyPipe,
     LocalizePipe,
     ErrorAlertComponent,

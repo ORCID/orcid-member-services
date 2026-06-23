@@ -1,13 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { UserDetailComponent } from './user-detail.component'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import { WritableSignal } from '@angular/core'
 import { AlertService } from '../shared/service/alert.service'
 import { UserService } from './service/user.service'
 import { MemberService } from '../member/service/member.service'
-import { User } from './model/user.model'
+import { IUser, User } from './model/user.model'
 import { of } from 'rxjs'
+
+type UserDetailInternals = {
+  user: WritableSignal<IUser | null>
+}
+const internals = (component: UserDetailComponent): UserDetailInternals =>
+  component as unknown as UserDetailInternals
 
 describe('UserDetailComponent', () => {
   let component: UserDetailComponent
@@ -22,15 +29,14 @@ describe('UserDetailComponent', () => {
     alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
 
     TestBed.configureTestingModule({
-    declarations: [UserDetailComponent],
-    imports: [RouterTestingModule],
-    providers: [
+      imports: [RouterModule.forRoot([]), UserDetailComponent],
+      providers: [
         { provide: UserService, useValue: userServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AlertService, useValue: alertServiceSpy },
         provideHttpClient(withInterceptorsFromDi()),
-    ]
-}).compileComponents()
+      ],
+    }).compileComponents()
 
     fixture = TestBed.createComponent(UserDetailComponent)
     component = fixture.componentInstance
@@ -46,7 +52,7 @@ describe('UserDetailComponent', () => {
   })
 
   it('when user exists, sendActivate should call userService and alertService', () => {
-    component.user = new User()
+    internals(component).user.set(new User())
     userServiceSpy.sendActivate.and.returnValue(of(new User()))
 
     component.sendActivate()
@@ -56,7 +62,7 @@ describe('UserDetailComponent', () => {
   })
 
   it('when user does not exist, sendActivate should not call userService or alertService', () => {
-    component.user = null
+    internals(component).user.set(null)
     userServiceSpy.sendActivate.and.returnValue(of(new User()))
 
     component.sendActivate()

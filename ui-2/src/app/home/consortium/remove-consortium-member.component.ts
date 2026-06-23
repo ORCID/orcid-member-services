@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
-import { FormGroup, FormBuilder, Validators } from '@angular/forms'
-import { Router, ActivatedRoute } from '@angular/router'
-import { Subscription } from 'rxjs'
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms'
+import { Router, ActivatedRoute, RouterLink } from '@angular/router'
 import { AccountService } from 'src/app/account'
 import { AlertType } from 'src/app/app.constants'
 import {
@@ -17,9 +17,10 @@ import { DateUtilService } from 'src/app/shared/service/date-util.service'
   selector: 'app-remove-consortium-member',
   templateUrl: './remove-consortium-member.component.html',
   styleUrls: ['./remove-consortium-member.component.scss'],
-  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, ReactiveFormsModule],
 })
-export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
+export class RemoveConsortiumMemberComponent implements OnInit {
   private memberService = inject(MemberService)
   private accountService = inject(AccountService)
   private fb = inject(FormBuilder)
@@ -27,44 +28,46 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
   private router = inject(Router)
   private dateUtilService = inject(DateUtilService)
   protected activatedRoute = inject(ActivatedRoute)
+  private destroyRef = inject(DestroyRef)
 
-  memberDataSubscription: Subscription | undefined
-  memberData: ISFMemberData | undefined | null
-  consortiumMember: SFConsortiumMemberData | undefined
-  isSaving = false
-  invalidForm = false
+  protected memberData = signal<ISFMemberData | undefined | null>(null)
+  protected consortiumMember = signal<SFConsortiumMemberData | undefined>(undefined)
+  protected isSaving = signal(false)
+  protected invalidForm = signal(false)
   routeData: any
-  consortiumMemberId: string | undefined
-  currentMonth: number | undefined
-  currentYear: number | undefined
-  monthList: [string, string][] | undefined
-  yearList: number[] | undefined
+  protected consortiumMemberId = signal<string | undefined>(undefined)
+  protected currentMonth = signal<number | undefined>(undefined)
+  protected currentYear = signal<number | undefined>(undefined)
+  protected monthList = signal<[string, string][] | undefined>(undefined)
+  protected yearList = signal<number[] | undefined>(undefined)
   editForm: FormGroup = this.fb.group({
     terminationMonth: [null, [Validators.required]],
     terminationYear: [null, [Validators.required]],
   })
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe((params) => {
+    this.activatedRoute.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       if (params['id']) {
-        this.consortiumMemberId = params['id']
+        this.consortiumMemberId.set(params['id'])
       }
     })
 
-    this.currentMonth = this.dateUtilService.getCurrentMonthNumber()
-    this.currentYear = this.dateUtilService.getCurrentYear()
-    this.monthList = this.dateUtilService.getMonthsList()
+    this.currentMonth.set(this.dateUtilService.getCurrentMonthNumber())
+    this.currentYear.set(this.dateUtilService.getCurrentYear())
+    this.monthList.set(this.dateUtilService.getMonthsList())
 
-    this.yearList = this.dateUtilService.getFutureYearsIncludingCurrent(1)
+    this.yearList.set(this.dateUtilService.getFutureYearsIncludingCurrent(1))
 
     this.accountService.getAccountData().subscribe((account) => {
       if (account) {
         this.memberService.getMemberData(account.memberId).subscribe((data) => {
           if (data) {
-            this.memberData = data
+            this.memberData.set(data)
             if (data.consortiumMembers) {
-              this.consortiumMember = Object.values(data.consortiumMembers!).find(
-                (member: ISFConsortiumMemberData) => member.salesforceId === this.consortiumMemberId
+              this.consortiumMember.set(
+                Object.values(data.consortiumMembers!).find(
+                  (member: ISFConsortiumMemberData) => member.salesforceId === this.consortiumMemberId()
+                )
               )
             }
           }
@@ -72,17 +75,11 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
       }
     })
 
-    this.editForm.valueChanges.subscribe(() => {
+    this.editForm.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       if (this.editForm.status === 'VALID') {
-        this.invalidForm = false
+        this.invalidForm.set(false)
       }
     })
-  }
-
-  ngOnDestroy(): void {
-    if (this.memberDataSubscription) {
-      this.memberDataSubscription.unsubscribe()
-    }
   }
 
   createConsortiumMemberFromForm(): ISFConsortiumMemberData {
@@ -90,7 +87,7 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
       ...new SFConsortiumMemberData(),
       terminationMonth: this.editForm.get('terminationMonth')?.value,
       terminationYear: this.editForm.get('terminationYear')?.value,
-      orgName: this.consortiumMember?.orgName,
+      orgName: this.consortiumMember()?.orgName,
     }
   }
 
@@ -100,10 +97,10 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
       Object.keys(this.editForm.controls).forEach((key) => {
         this.editForm.get(key)?.markAsDirty()
       })
-      this.invalidForm = true
+      this.invalidForm.set(true)
     } else {
-      this.invalidForm = false
-      this.isSaving = true
+      this.invalidForm.set(false)
+      this.isSaving.set(true)
       const consortiumMember = this.createConsortiumMemberFromForm()
 
       this.memberService.removeConsortiumMember(consortiumMember).subscribe({
@@ -124,12 +121,12 @@ export class RemoveConsortiumMemberComponent implements OnInit, OnDestroy {
   }
 
   onSaveSuccess(orgName: string | undefined) {
-    this.isSaving = false
+    this.isSaving.set(false)
     this.alertService.broadcast(AlertType.CONSORTIUM_MEMBER_REMOVED, orgName)
     this.router.navigate([''])
   }
 
   onSaveError() {
-    this.isSaving = false
+    this.isSaving.set(false)
   }
 }

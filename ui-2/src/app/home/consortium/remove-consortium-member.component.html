@@ -1,46 +1,48 @@
-@if (memberData) {
+@if (memberData(); as member) {
   <div class="h-100 p-16 line-height-normal">
     <div class="font-size-14">
-      Back to <a routerLink="" class="font-weight-normal text-decoration-underline">{{ memberData.publicDisplayName }}</a>
+      Back to <a routerLink="" class="fw-normal text-decoration-underline">{{ member.publicDisplayName }}</a>
     </div>
     <hr class="mb-40" />
     <div class="edit-org-label mb-8 font-size-18 color-gray">Remove consortium member</div>
-    <h1 class="wide-text font-weight-bold mb-40">{{ consortiumMember!.orgName }}</h1>
+    @if (consortiumMember(); as consortiumMemberData) {
+      <h1 class="wide-text fw-bold mb-40">{{ consortiumMemberData.orgName }}</h1>
+    }
     <div class="d-flex">
       <form (ngSubmit)="save()" name="editForm" role="form" [formGroup]="editForm" class="w-66">
         <div class="form w-100">
           <!-- Membership start date -->
-          <h2 class="font-weight-bold font-size-16">Membership termination date</h2>
+          <h2 class="fw-bold font-size-16">Membership termination date</h2>
           <div class="font-size-14 wide-text mb-20">When does this organization's ORCID membership end?</div>
-          <div class="form-group mb-40">
+          <div class="mb-40">
             <div class="d-flex">
               <select
-                class="form-control date-dropdown mr-8 font-size-14"
+                class="form-select date-dropdown me-8 font-size-14"
                 name="terminationMonth"
                 formControlName="terminationMonth"
-              [ngClass]="{
-                'text-danger': editForm.get('terminationMonth')?.invalid && editForm.get('terminationMonth')?.dirty,
-                'input-field-default-border': !editForm.get('terminationMonth')?.dirty
-              }"
-                >
+                [class.text-danger]="
+                  !!(editForm.get('terminationMonth')?.invalid && editForm.get('terminationMonth')?.dirty)
+                "
+                [class.input-field-default-border]="!editForm.get('terminationMonth')?.dirty"
+              >
                 <option hidden selected [ngValue]="null">Month</option>
-                @for (month of monthList; track month) {
+                @for (month of monthList(); track month) {
                   <option [ngValue]="month[0]" class="form-field-text-color-default">
                     {{ month[0] }}
                   </option>
                 }
               </select>
               <select
-                class="form-control date-dropdown font-size-14"
+                class="form-select date-dropdown font-size-14"
                 name="terminationYear"
                 formControlName="terminationYear"
-              [ngClass]="{
-                'text-danger': editForm.get('terminationYear')?.invalid && editForm.get('terminationYear')?.dirty,
-                'input-field-default-border': !editForm.get('terminationYear')?.dirty
-              }"
-                >
+                [class.text-danger]="
+                  !!(editForm.get('terminationYear')?.invalid && editForm.get('terminationYear')?.dirty)
+                "
+                [class.input-field-default-border]="!editForm.get('terminationYear')?.dirty"
+              >
                 <option hidden selected [ngValue]="null">Year</option>
-                @for (year of yearList; track year) {
+                @for (year of yearList(); track year) {
                   <option [ngValue]="year" class="form-field-text-color-default">
                     {{ year }}
                   </option>
@@ -52,49 +54,37 @@
               editForm.get('terminationYear')?.invalid &&
               editForm.get('terminationMonth')?.dirty &&
               editForm.get('terminationYear')?.dirty
-              ) {
-              <small
-                class="form-text text-danger"
-                >
-                Please select the membership termination date
-              </small>
+            ) {
+              <small class="form-text text-danger"> Please select the membership termination date </small>
             }
             @if (
               editForm.get('terminationMonth')?.invalid &&
               editForm.get('terminationYear')?.valid &&
               editForm.get('terminationMonth')?.dirty &&
               editForm.get('terminationYear')?.dirty
-              ) {
-              <small
-                class="form-text text-danger"
-                >
-                Please select the membership termination month
-              </small>
+            ) {
+              <small class="form-text text-danger"> Please select the membership termination month </small>
             }
             @if (
               editForm.get('terminationMonth')?.valid &&
               editForm.get('terminationYear')?.invalid &&
               editForm.get('terminationMonth')?.dirty &&
               editForm.get('terminationYear')?.dirty
-              ) {
-              <small
-                class="form-text text-danger"
-                >
-                Please select the membership termination year
-              </small>
+            ) {
+              <small class="form-text text-danger"> Please select the membership termination year </small>
             }
           </div>
           <div class="warning-message d-flex p-16 mb-40">
             <img src="./content/images/warning-sign.svg" alt="Warning sign" class="p-8" />
             <div>
-              <div class="mb-8 font-size-14 wide-text font-weight-bold">Please note</div>
+              <div class="mb-8 font-size-14 wide-text fw-bold">Please note</div>
               <div class="font-size-14 wide-text line-height-150">
                 It may take up to 24 hours before this organization is updated in the Member Portal. Please contact your
                 ORCID engagement lead for more information.
               </div>
             </div>
           </div>
-          <button type="submit" [disabled]="isSaving" class="btn btn-danger font-size-14 mr-2">
+          <button type="submit" [disabled]="isSaving()" class="btn btn-danger font-size-14 me-2">
             Remove member from consortium
           </button>
           <button type="button" class="btn btn-outline-primary font-size-14" routerLink="/">Cancel</button>

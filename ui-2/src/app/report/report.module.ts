@@ -5,8 +5,7 @@ import { REPORT_ROUTE } from './report.route'
 import { CommonModule } from '@angular/common'
 
 @NgModule({
-  imports: [CommonModule, RouterModule.forChild([REPORT_ROUTE])],
-  declarations: [ReportComponent],
+  imports: [CommonModule, RouterModule.forChild([REPORT_ROUTE]), ReportComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ReportModule {}

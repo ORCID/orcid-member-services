@@ -3,7 +3,7 @@ import { ReportComponent } from './report.component'
 import { ReportService } from './report.service'
 import { ActivatedRoute } from '@angular/router'
 import { of } from 'rxjs'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
 
 describe('ReportComponent', () => {
   let component: ReportComponent
@@ -15,8 +15,7 @@ describe('ReportComponent', () => {
     const reportServiceSpy = jasmine.createSpyObj('ReportService', ['getDashboardInfo'])
 
     await TestBed.configureTestingModule({
-      declarations: [ReportComponent],
-      imports: [RouterTestingModule],
+      imports: [RouterModule.forRoot([]), ReportComponent],
       providers: [{ provide: ReportService, useValue: reportServiceSpy }],
     }).compileComponents()
 

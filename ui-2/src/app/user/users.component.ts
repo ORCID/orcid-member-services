@@ -1,6 +1,7 @@
-import { Component, NgZone, OnDestroy, OnInit, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, NgZone, DestroyRef, OnInit, inject, signal } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { IUser, User } from './model/user.model'
-import { Subscription } from 'rxjs'
+import { finalize } from 'rxjs'
 import { UserService } from './service/user.service'
 import {
   faCheckCircle,
@@ -14,21 +15,40 @@ import {
   faSortUp,
 } from '@fortawesome/free-solid-svg-icons'
 import { AlertMessage, AlertType, EventType, ITEMS_PER_PAGE } from '../app.constants'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router'
 import { AccountService } from '../account/service/account.service'
 import { EventService } from '../shared/service/event.service'
 import { IAccount } from '../account/model/account.model'
 import { AlertService } from '../shared/service/alert.service'
 import { Page } from '../shared/model/page.model'
 import { FeatureToggleService } from '../shared/service/feature-toggle.service'
+import { FaIconComponent } from '@fortawesome/angular-fontawesome'
+import { HasAnyAuthorityDirective } from '../shared/directive/has-any-authority.directive'
+import { ReactiveFormsModule, FormsModule } from '@angular/forms'
+import { ErrorAlertComponent } from '../error/error-alert.component'
+import { AlertComponent } from '../shared/alert/alert-toast.component'
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap'
+import { DatePipe } from '@angular/common'
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
-  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    RouterLink,
+    FaIconComponent,
+    HasAnyAuthorityDirective,
+    ReactiveFormsModule,
+    FormsModule,
+    ErrorAlertComponent,
+    AlertComponent,
+    NgbPaginationModule,
+    RouterOutlet,
+    DatePipe,
+  ],
 })
-export class UsersComponent implements OnInit, OnDestroy {
+export class UsersComponent implements OnInit {
   protected userService = inject(UserService)
   protected alertService = inject(AlertService)
   protected accountService = inject(AccountService)
@@ -37,73 +57,71 @@ export class UsersComponent implements OnInit, OnDestroy {
   protected eventService = inject(EventService)
   private ngZone = inject(NgZone)
   protected featureService = inject(FeatureToggleService)
+  private destroyRef = inject(DestroyRef)
 
-  currentAccount: IAccount | undefined
-  users: IUser[] | null | undefined
-  eventSubscriber: Subscription | null = null
-  routeData: any
-  links: any
-  totalItems: any
-  itemsPerPage: any
-  page = 1
-  sortColumn = 'id'
-  ascending: any
-  itemCount: string | null | undefined = null
-  searchTerm: string | null = null
-  submittedSearchTerm: string | null = null
-  paginationHeaderSubscription: Subscription | null = null
+  protected currentAccount = signal<IAccount | undefined>(undefined)
+  protected users = signal<IUser[] | null | undefined>(null)
+  protected totalItems = signal<number>(0)
+  protected itemsPerPage = signal<number>(ITEMS_PER_PAGE)
+  protected page = signal(1)
+  protected sortColumn = signal('id')
+  protected ascending = signal(true)
+  protected itemCount = signal<string | null>(null)
+  protected searchTerm = signal<string>('')
+  protected submittedSearchTerm = signal<string>('')
 
-  faTimesCircle = faTimesCircle
-  faCheckCircle = faCheckCircle
-  faTimes = faTimes
-  faSearch = faSearch
-  faPlus = faPlus
-  faPencilAlt = faPencilAlt
-  faSignInAlt = faSignInAlt
-  faSortDown = faSortDown
-  faSortUp = faSortUp
-  DEFAULT_ADMIN = 'admin@orcid.org'
-
-  constructor() {
-    this.itemsPerPage = ITEMS_PER_PAGE
-    this.routeData = this.activatedRoute.data.subscribe((data) => {
-      this.page = data['queryParams'] ? data['queryParams'].page : 1
-      this.ascending = data['queryParams'] ? data['queryParams'].page.sort.split(',')[1] : true
-      this.sortColumn = data['queryParams'] ? data['queryParams'].page.sort.split(',')[0] : 'id'
-    })
-  }
+  protected faTimesCircle = faTimesCircle
+  protected faCheckCircle = faCheckCircle
+  protected faTimes = faTimes
+  protected faSearch = faSearch
+  protected faPlus = faPlus
+  protected faPencilAlt = faPencilAlt
+  protected faSignInAlt = faSignInAlt
+  protected faSortDown = faSortDown
+  protected faSortUp = faSortUp
+  protected readonly DEFAULT_ADMIN = 'admin@orcid.org'
+  protected isLoading = signal(false)
 
   ngOnInit() {
-    this.featureService.initFeatures().subscribe();
+    this.activatedRoute.data.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
+      this.page.set(data['queryParams'] ? data['queryParams'].page : 1)
+      this.ascending.set(data['queryParams'] ? data['queryParams'].page.sort.split(',')[1] === 'asc' : true)
+      this.sortColumn.set(data['queryParams'] ? data['queryParams'].page.sort.split(',')[0] : 'id')
+    })
+    this.featureService.initFeatures().subscribe()
     this.accountService.getAccountData().subscribe((account) => {
       if (account) {
-        this.currentAccount = account
+        this.currentAccount.set(account)
       }
     })
     this.loadAll()
 
-    this.eventSubscriber = this.eventService.on(EventType.USER_LIST_MODIFIED).subscribe(() => {
-      this.searchTerm = ''
-      this.submittedSearchTerm = ''
-      this.loadAll()
-    })
+    this.eventService.on(EventType.USER_LIST_MODIFIED)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.searchTerm.set('')
+        this.submittedSearchTerm.set('')
+        this.loadAll()
+      })
   }
 
   loadAll() {
-    if (this.submittedSearchTerm) {
-      this.searchTerm = this.submittedSearchTerm
+    if (this.submittedSearchTerm()) {
+      this.searchTerm.set(this.submittedSearchTerm())
     } else {
-      this.searchTerm = ''
+      this.searchTerm.set('')
     }
 
+    this.isLoading.set(true)
     if (this.hasRoleAdmin()) {
       this.userService
         .query({
-          page: this.page - 1,
-          size: this.itemsPerPage,
+          page: this.page() - 1,
+          size: this.itemsPerPage(),
           sort: this.sort(),
-          filter: this.submittedSearchTerm ? encodeURIComponent(this.submittedSearchTerm) : '',
+          filter: this.submittedSearchTerm() ? encodeURIComponent(this.submittedSearchTerm()) : '',
         })
+        .pipe(finalize(() => this.isLoading.set(false)))
         .subscribe({
           next: (res) => {
             if (res) {
@@ -114,11 +132,12 @@ export class UsersComponent implements OnInit, OnDestroy {
     } else {
       this.userService
         .findByMemberId(this.accountService.getMemberId(), {
-          page: this.page - 1,
-          size: this.itemsPerPage,
+          page: this.page() - 1,
+          size: this.itemsPerPage(),
           sort: this.sort(),
-          filter: this.submittedSearchTerm ? encodeURIComponent(this.submittedSearchTerm) : '',
+          filter: this.submittedSearchTerm() ? encodeURIComponent(this.submittedSearchTerm()) : '',
         })
+        .pipe(finalize(() => this.isLoading.set(false)))
         .subscribe({
           next: (res) => {
             if (res) {
@@ -130,10 +149,10 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   updateSort(columnName: string) {
-    if (this.sortColumn && this.sortColumn == columnName) {
-      this.ascending = !this.ascending
+    if (this.sortColumn() && this.sortColumn() == columnName) {
+      this.ascending.set(!this.ascending())
     } else {
-      this.sortColumn = columnName
+      this.sortColumn.set(columnName)
     }
     this.loadPage()
   }
@@ -142,10 +161,10 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.ngZone.run(() => {
       this.router.navigate(['/users'], {
         queryParams: {
-          page: this.page,
-          size: this.itemsPerPage,
-          sort: this.sortColumn + ',' + (this.ascending ? 'asc' : 'desc'),
-          filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
+          page: this.page(),
+          size: this.itemsPerPage(),
+          sort: this.sortColumn() + ',' + (this.ascending() ? 'asc' : 'desc'),
+          filter: this.submittedSearchTerm() ? this.submittedSearchTerm() : '',
         },
       })
       this.loadAll()
@@ -153,14 +172,14 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   clear() {
-    this.page = 0
+    this.page.set(0)
     this.ngZone.run(() => {
       this.router.navigate([
         '/users',
         {
-          page: this.page,
-          sort: this.sortColumn + ',' + (this.ascending ? 'asc' : 'desc'),
-          filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
+          page: this.page(),
+          sort: this.sortColumn() + ',' + (this.ascending() ? 'asc' : 'desc'),
+          filter: this.submittedSearchTerm() ? this.submittedSearchTerm() : '',
         },
       ])
       this.loadAll()
@@ -168,8 +187,8 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   sort() {
-    const result = [this.sortColumn + ',' + (this.ascending ? 'asc' : 'desc')]
-    if (this.sortColumn !== 'id') {
+    const result = [this.sortColumn() + ',' + (this.ascending() ? 'asc' : 'desc')]
+    if (this.sortColumn() !== 'id') {
       result.push('id')
     }
     return result
@@ -192,7 +211,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     if (msUser.mainContact) {
       return true
     }
-    return msUser.email === this.currentAccount?.email
+    return msUser.email === this.currentAccount()?.email
   }
 
   isDefaultAdmin(msUser: IUser) {
@@ -200,7 +219,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   isUserLoggedIn(msUser: IUser) {
-    return msUser.email === this.currentAccount?.email
+    return msUser.email === this.currentAccount()?.email
   }
 
   hasRoleAdmin() {
@@ -212,25 +231,25 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   resetSearch() {
-    this.page = 1
-    this.searchTerm = ''
-    this.submittedSearchTerm = ''
+    this.page.set(1)
+    this.searchTerm.set('')
+    this.submittedSearchTerm.set('')
     this.loadAll()
   }
 
   submitSearch() {
-    this.page = 1
-    this.submittedSearchTerm = this.searchTerm
+    this.page.set(1)
+    this.submittedSearchTerm.set(this.searchTerm())
     this.loadAll()
   }
 
   protected paginate(data: Page<User>) {
-    this.totalItems = data.page.totalElements
-    this.users = data.content
+    this.totalItems.set(data.page.totalElements)
+    this.users.set(data.content)
 
     // 1. Handle the "0 items" edge case
-    if (this.totalItems === 0) {
-      this.itemCount = $localize`:@@global.zero-item-count.string:Showing 0 - 0 of 0 items.`
+    if (this.totalItems() === 0) {
+      this.itemCount.set($localize`:@@global.zero-item-count.string:Showing 0 - 0 of 0 items.`)
       return
     }
 
@@ -245,10 +264,6 @@ export class UsersComponent implements OnInit, OnDestroy {
     const calculatedEnd = (data.page.number + 1) * data.page.size
     const second = Math.min(calculatedEnd, data.page.totalElements)
 
-    this.itemCount = $localize`:@@global.item-count.string:Showing ${first} - ${second} of ${this.totalItems} items.`
-  }
-
-  ngOnDestroy() {
-    this.eventSubscriber?.unsubscribe()
+    this.itemCount.set($localize`:@@global.item-count.string:Showing ${first} - ${second} of ${this.totalItems()} items.`)
   }
 }

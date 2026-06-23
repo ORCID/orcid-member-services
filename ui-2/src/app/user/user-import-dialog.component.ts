@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, signal } from '@angular/core'
 import { FileUploadService } from '../shared/service/file-upload.service'
 import { IUser } from './model/user.model'
 import { UserService } from './service/user.service'
@@ -8,30 +8,33 @@ import { Event } from '../shared/model/event.model'
 import { EventType } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { faSave, faBan } from '@fortawesome/free-solid-svg-icons'
+import { ReactiveFormsModule, FormsModule } from '@angular/forms'
+import { ErrorAlertComponent } from '../error/error-alert.component'
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap'
+import { FaIconComponent } from '@fortawesome/angular-fontawesome'
 
 @Component({
   selector: 'app-user-import-dialog',
   templateUrl: './user-import-dialog.component.html',
   styleUrls: ['./user-import-dialog.component.scss'],
-  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [ReactiveFormsModule, FormsModule, ErrorAlertComponent, NgbAlertModule, FaIconComponent],
 })
 export class UserImportDialogComponent {
   protected userService = inject(UserService)
-  activeModal = inject(NgbActiveModal)
+  protected activeModal = inject(NgbActiveModal)
   protected eventService = inject(EventService)
   private fileUploadService = inject(FileUploadService)
 
-  resourceUrl: string
-  isSaving: boolean
-  currentFile: FileList | null
+  protected resourceUrl: string
+  protected isSaving = signal(false)
+  protected currentFile = signal<FileList | null>(null)
   csvErrors: any
-  loading = false
-  faBan = faBan
-  faSave = faSave
+  protected loading = signal(false)
+  protected faBan = faBan
+  protected faSave = faSave
 
   constructor() {
-    this.isSaving = false
-    this.currentFile = null
     this.resourceUrl = this.userService.resourceUrl + '/upload'
   }
 
@@ -40,18 +43,23 @@ export class UserImportDialogComponent {
   }
 
   selectFile(event: any) {
-    this.currentFile = event.target.files
+    this.currentFile.set(event.target.files)
+  }
+
+  clearFileInput(event: MouseEvent) {
+    (event.target as HTMLInputElement).value = ''
+    this.currentFile.set(null)
   }
 
   upload() {
-    if (this.currentFile) {
-      this.loading = true
-      const f = this.currentFile.item(0)
+    if (this.currentFile()) {
+      this.loading.set(true)
+      const f = this.currentFile()!.item(0)
 
       this.fileUploadService.uploadFile(this.resourceUrl, f!, 'text').subscribe((res: string) => {
         if (res) {
           this.csvErrors = JSON.parse(res)
-          this.loading = false
+          this.loading.set(false)
           if (this.csvErrors.length === 0) {
             this.eventService.broadcast(new Event(EventType.USER_LIST_MODIFIED))
             this.activeModal.dismiss(true)
@@ -69,7 +77,6 @@ export class UserImportDialogComponent {
 @Component({
   selector: 'app-user-import-popup',
   template: '',
-  standalone: false,
 })
 export class UserImportPopupComponent implements OnInit, OnDestroy {
   protected activatedRoute = inject(ActivatedRoute)

@@ -1,37 +1,40 @@
 import { FormControl } from '@angular/forms'
 
-export enum EventType {
-  LOG_IN_SUCCESS,
-  AFFILIATION_CREATED,
-  AFFILIATION_UPDATED,
-  USER_LIST_MODIFIED,
-  AFFILIATION_LIST_MODIFICATION,
-  IMPORT_AFFILIATIONS,
-  SEND_NOTIFICATIONS,
-  MEMBER_LIST_MODIFICATION,
-}
+export const EventType = Object.freeze({
+  LOG_IN_SUCCESS: 0,
+  AFFILIATION_CREATED: 1,
+  AFFILIATION_UPDATED: 2,
+  USER_LIST_MODIFIED: 3,
+  AFFILIATION_LIST_MODIFICATION: 4,
+  IMPORT_AFFILIATIONS: 5,
+  SEND_NOTIFICATIONS: 6,
+  MEMBER_LIST_MODIFICATION: 7,
+} as const)
+export type EventType = (typeof EventType)[keyof typeof EventType]
 
-export enum AlertMessage {
-  SEND_ACTIVATION_SUCCESS = 'Invite sent.',
-  SEND_ACTIVATION_FAILURE = 'Invite email couldn`t be sent.',
-  USER_CREATED = 'User created. Invite sent.',
-  USER_UPDATED = 'User updated successfully',
-  USER_DELETED = 'User deleted successfully',
-  MEMBER_CREATED = 'Member created',
-  MEMBER_UPDATED = 'Member updated successfully',
-  NOTIFICATION_IN_PROGRESS = 'Notification in progress',
-  AFFILIATION_CREATED = 'Affiliation created',
-  AFFILIATION_UPDATED = 'Affiliation updated',
-  AFFILIATION_DELETED = 'Affiliation deleted',
-  AFFILIATION_DELETE_FAILURE = 'There was a problem deleting the affiliation',
-}
+export const AlertMessage = Object.freeze({
+  SEND_ACTIVATION_SUCCESS: 'Invite sent.',
+  SEND_ACTIVATION_FAILURE: 'Invite email couldn`t be sent.',
+  USER_CREATED: 'User created. Invite sent.',
+  USER_UPDATED: 'User updated successfully',
+  USER_DELETED: 'User deleted successfully',
+  MEMBER_CREATED: 'Member created',
+  MEMBER_UPDATED: 'Member updated successfully',
+  NOTIFICATION_IN_PROGRESS: 'Notification in progress',
+  AFFILIATION_CREATED: 'Affiliation created',
+  AFFILIATION_UPDATED: 'Affiliation updated',
+  AFFILIATION_DELETED: 'Affiliation deleted',
+  AFFILIATION_DELETE_FAILURE: 'There was a problem deleting the affiliation',
+} as const)
+export type AlertMessage = (typeof AlertMessage)[keyof typeof AlertMessage]
 
-export enum AlertType {
-  CONTACT_UPDATED,
-  CONSORTIUM_MEMBER_ADDED,
-  CONSORTIUM_MEMBER_REMOVED,
-  TOAST,
-}
+export const AlertType = Object.freeze({
+  CONTACT_UPDATED: 0,
+  CONSORTIUM_MEMBER_ADDED: 1,
+  CONSORTIUM_MEMBER_REMOVED: 2,
+  TOAST: 3,
+} as const)
+export type AlertType = (typeof AlertType)[keyof typeof AlertType]
 
 export const EMAIL_NOT_FOUND_TYPE = 'https://www.jhipster.tech/problem/email-not-found'
 
@@ -51,7 +54,6 @@ export function emailValidator(control: FormControl): { [key: string]: any } | n
 }
 
 let environment = ''
-console.log('window.location.hostname:', window.location.hostname)
 if (window.location.hostname == 'member-portal.qa.orcid.org') {
   environment = 'qa.'
 } else if (window.location.hostname == 'member-portal.sandbox.orcid.org') {

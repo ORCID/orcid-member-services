@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
@@ -8,6 +9,13 @@ import { EMPTY } from 'rxjs'
 import { EventService } from '../shared/service/event.service'
 import { FileUploadService } from '../shared/service/file-upload.service'
 import { AffiliationImportDialogComponent } from './affiliation-import-dialog.component'
+
+type AffiliationImportDialogInternals = {
+  currentFile: { set: (value: FileList) => void }
+}
+
+const internals = (component: AffiliationImportDialogComponent): AffiliationImportDialogInternals =>
+  component as unknown as AffiliationImportDialogInternals
 
 describe('AffiliationImportDialogComponent', () => {
   let component: AffiliationImportDialogComponent
@@ -20,9 +28,9 @@ describe('AffiliationImportDialogComponent', () => {
     const uploadServiceSpy = jasmine.createSpyObj('FileUploadService', ['uploadFile'])
 
     TestBed.configureTestingModule({
-    declarations: [AffiliationImportDialogComponent],
-    imports: [],
-    providers: [
+      imports: [AffiliationImportDialogComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      providers: [
         FormBuilder,
         NgbModal,
         NgbActiveModal,
@@ -30,8 +38,8 @@ describe('AffiliationImportDialogComponent', () => {
         { provide: FileUploadService, useValue: uploadServiceSpy },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-}).compileComponents()
+      ],
+    }).compileComponents()
 
     fixture = TestBed.createComponent(AffiliationImportDialogComponent)
     component = fixture.componentInstance
@@ -45,7 +53,7 @@ describe('AffiliationImportDialogComponent', () => {
   })
 
   it('should call upload service', () => {
-    component.currentFile = getFileList()
+    internals(component).currentFile.set(getFileList())
     uploadService.uploadFile.and.returnValue(EMPTY)
     component.upload()
     expect(uploadService.uploadFile).toHaveBeenCalled()

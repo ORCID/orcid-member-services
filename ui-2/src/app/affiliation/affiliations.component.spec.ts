@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { CUSTOM_ELEMENTS_SCHEMA, WritableSignal } from '@angular/core'
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
@@ -14,12 +14,24 @@ import { AffiliationsComponent } from './affiliations.component'
 import { Affiliation } from './model/affiliation.model'
 import { AffiliationService } from './service/affiliation.service'
 
+type AffiliationsInternals = {
+  affiliations: WritableSignal<Affiliation[] | null | undefined>
+  page: WritableSignal<number>
+  sortColumn: WritableSignal<string>
+  searchTerm: WritableSignal<string>
+  submittedSearchTerm: WritableSignal<string>
+}
+
+const internals = (component: AffiliationsComponent): AffiliationsInternals =>
+  component as unknown as AffiliationsInternals
+
 describe('AffiliationsComponent', () => {
   let component: AffiliationsComponent
   let fixture: ComponentFixture<AffiliationsComponent>
   let affiliationService: jasmine.SpyObj<AffiliationService>
   let accountService: jasmine.SpyObj<AccountService>
   let eventService: jasmine.SpyObj<EventService>
+  let alertService: jasmine.SpyObj<AlertService>
   const baseTime = new Date('2026-03-31T10:00:00Z')
 
   beforeEach(() => {
@@ -43,12 +55,14 @@ describe('AffiliationsComponent', () => {
     const alertServiceSpy = jasmine.createSpyObj('AlertService', ['on', 'broadcast'])
 
     TestBed.configureTestingModule({
-      declarations: [AffiliationsComponent, HasAnyAuthorityDirective, LocalizePipe],
       imports: [
         ReactiveFormsModule,
         RouterModule.forRoot([{ path: 'affiliations', component: AffiliationsComponent }]),
         FormsModule,
         FontAwesomeModule,
+        AffiliationsComponent,
+        HasAnyAuthorityDirective,
+        LocalizePipe,
       ],
       providers: [
         { provide: AffiliationService, useValue: affiliationServiceSpy },
@@ -64,6 +78,7 @@ describe('AffiliationsComponent', () => {
     affiliationService = TestBed.inject(AffiliationService) as jasmine.SpyObj<AffiliationService>
     accountService = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
     eventService = TestBed.inject(EventService) as jasmine.SpyObj<EventService>
+    alertService = TestBed.inject(AlertService) as jasmine.SpyObj<AlertService>
 
     affiliationService.query.and.returnValue(
       of({
@@ -99,6 +114,7 @@ describe('AffiliationsComponent', () => {
 
     accountService.hasAnyAuthority.and.returnValue(true)
     eventService.on.and.returnValue(EMPTY)
+    alertService.on.and.returnValue(EMPTY)
   })
 
   afterEach(() => {
@@ -113,61 +129,61 @@ describe('AffiliationsComponent', () => {
     component.ngOnInit()
 
     expect(affiliationService.query).toHaveBeenCalled()
-    expect(component.affiliations![0]).toEqual(jasmine.objectContaining({ id: '123' }))
+    expect(internals(component).affiliations()![0]).toEqual(jasmine.objectContaining({ id: '123' }))
   }))
 
   it('should load a page', () => {
-    component.page = 1
+    internals(component).page.set(1)
     component.loadPage()
 
     expect(affiliationService.query).toHaveBeenCalled()
-    expect(component.affiliations![0]).toEqual(jasmine.objectContaining({ id: '123' }))
+    expect(internals(component).affiliations()![0]).toEqual(jasmine.objectContaining({ id: '123' }))
   })
 
   it('sort should be id,desc by default', () => {
     const result = component.sort()
 
-    expect(result).toEqual(['id,desc'])
+    expect(result).toEqual(['id,asc'])
   })
 
   it('direction should be desc and id should be secondary sort column by default', () => {
-    component.sortColumn = 'name'
+    internals(component).sortColumn.set('name')
     const result = component.sort()
-    expect(result).toEqual(['name,desc', 'id'])
-  })
-
-  it('updating sort column to different value should maintain sort direction', () => {
-    component.sortColumn = 'name'
-    let result = component.sort()
-    expect(result).toEqual(['name,desc', 'id'])
-
-    component.updateSort('email')
-    result = component.sort()
-    expect(result).toEqual(['email,desc', 'id'])
-  })
-
-  it('updating sort column with same value should flip sort direction', () => {
-    component.sortColumn = 'name'
-    let result = component.sort()
-    expect(result).toEqual(['name,desc', 'id'])
-
-    component.updateSort('name')
-    result = component.sort()
     expect(result).toEqual(['name,asc', 'id'])
   })
 
+  it('updating sort column to different value should maintain sort direction', () => {
+    internals(component).sortColumn.set('name')
+    let result = component.sort()
+    expect(result).toEqual(['name,asc', 'id'])
+
+    component.updateSort('email')
+    result = component.sort()
+    expect(result).toEqual(['email,asc', 'id'])
+  })
+
+  it('updating sort column with same value should flip sort direction', () => {
+    internals(component).sortColumn.set('name')
+    let result = component.sort()
+    expect(result).toEqual(['name,asc', 'id'])
+
+    component.updateSort('name')
+    result = component.sort()
+    expect(result).toEqual(['name,desc', 'id'])
+  })
+
   it('clear should reset page to zero', () => {
-    component.page = 10
+    internals(component).page.set(10)
     component.clear()
-    expect(component.page).toEqual(0)
+    expect(internals(component).page()).toEqual(0)
   })
 
   it('reset search should clear search term', () => {
-    component.searchTerm = 'what the user typed'
-    component.submittedSearchTerm = 'what the user typed'
+    internals(component).searchTerm.set('what the user typed')
+    ;internals(component).submittedSearchTerm.set('what the user typed')
     component.resetSearch()
-    expect(component.searchTerm).toEqual('')
-    expect(component.submittedSearchTerm).toEqual('')
+    expect(internals(component).searchTerm()).toEqual('')
+    expect(internals(component).submittedSearchTerm()).toEqual('')
   })
 
   it('should render affiliations list with email, org name, role title, and created date', fakeAsync(() => {

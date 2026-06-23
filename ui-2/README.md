@@ -1,6 +1,6 @@
 # UI
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.8.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) and currently runs on Angular 21.
 
 ## Development server
 
@@ -22,11 +22,15 @@ Nginx has been configured to employ a fall-back route to the index.html file for
 
 ## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `npm test` to execute the unit tests once via [Karma](https://karma-runner.github.io)/Jasmine, or `npm run test:watch` to run them in watch mode.
 
 ## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+End-to-end tests use [Cypress](https://www.cypress.io). Specs live in `cypress/e2e/` with fixtures in `cypress/fixtures/`.
+
+## Linting and formatting
+
+Run `npm run format` to apply ESLint fixes and Prettier formatting before committing (`npm run lint` to check only).
 
 ## Further help
 

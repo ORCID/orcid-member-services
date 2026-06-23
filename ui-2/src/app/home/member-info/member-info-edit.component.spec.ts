@@ -1,17 +1,28 @@
+/// <reference types="jasmine" />
+
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { CUSTOM_ELEMENTS_SCHEMA, WritableSignal } from '@angular/core'
+import { ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
+import { QuillModule } from 'ngx-quill'
 import { of } from 'rxjs'
 import { AccountService } from 'src/app/account'
 import { IAccount } from 'src/app/account/model/account.model'
 import { SFAddress } from 'src/app/member/model/salesforce-address.model'
 import { SFCountry } from 'src/app/member/model/salesforce-country.model'
 import { SFMemberContact } from 'src/app/member/model/salesforce-member-contact.model'
-import { SFConsortiumMemberData } from 'src/app/member/model/salesforce-member-data.model'
+import { ISFMemberData, SFConsortiumMemberData } from 'src/app/member/model/salesforce-member-data.model'
 import { MemberService } from 'src/app/member/service/member.service'
 import { MemberInfoEditComponent } from './member-info-edit.component'
+
+type MemberInfoEditInternals = {
+  memberData: WritableSignal<ISFMemberData | undefined | null>
+}
+
+const internals = (component: MemberInfoEditComponent): MemberInfoEditInternals =>
+  component as unknown as MemberInfoEditInternals
 
 describe('MemberInfoEditComponent', () => {
   let component: MemberInfoEditComponent
@@ -21,6 +32,8 @@ describe('MemberInfoEditComponent', () => {
   let activatedRoute: jasmine.SpyObj<ActivatedRoute>
 
   beforeEach(() => {
+    spyOn(console, 'error').and.stub()
+
     const accountServiceSpy = jasmine.createSpyObj('AccountService', ['getAccountData'])
     const memberServiceSpy = jasmine.createSpyObj('MemberService', [
       'getMemberData',
@@ -30,12 +43,11 @@ describe('MemberInfoEditComponent', () => {
       'setMemberData',
     ])
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
+      imports: [ReactiveFormsModule, RouterModule.forRoot([]), QuillModule.forRoot(), MemberInfoEditComponent],
       providers: [
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: MemberService, useValue: memberServiceSpy },
       ],
-      declarations: [MemberInfoEditComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     activatedRoute = TestBed.inject(ActivatedRoute) as jasmine.SpyObj<ActivatedRoute>
@@ -108,8 +120,15 @@ describe('MemberInfoEditComponent', () => {
     fixture.detectChanges()
     expect(memberService.setManagedMember).toHaveBeenCalledTimes(0)
     expect(memberService.getMemberData).toHaveBeenCalledOnceWith('test2')
-    expect(component.memberData?.website).toEqual('http://website.com')
-    expect(component.orgIdsTransformed).toEqual([
+
+    const websiteInput = fixture.nativeElement.querySelector('input[name="website"]') as HTMLInputElement
+    expect(websiteInput.value).toEqual('http://website.com')
+
+    const renderedOrgIds = Array.from(fixture.nativeElement.querySelectorAll('li.contact')).map((row) => ({
+      id: (row as HTMLElement).querySelector('.w-66')?.textContent?.trim(),
+      name: (row as HTMLElement).querySelector('.w-33')?.textContent?.trim(),
+    }))
+    expect(renderedOrgIds).toEqual([
       { id: '123', name: 'ROR' },
       { id: '456', name: 'ROR' },
       { id: '1213', name: 'GRID' },
@@ -133,23 +152,33 @@ describe('MemberInfoEditComponent', () => {
     memberService.getMemberData.and.returnValue(of({}))
     fixture.detectChanges()
 
-    expect(component.memberData).toBeDefined
-    expect(component.memberData!.website).toBeUndefined()
+    const websiteInput = fixture.nativeElement.querySelector('input[name="website"]') as HTMLInputElement
+
+    expect(websiteInput.value).toBe('')
 
     component.validateUrl()
-    expect(component.memberData!.website).toBeUndefined()
+    expect(websiteInput.value).toBe('')
 
-    component.memberData!.website = 'example'
+    websiteInput.value = 'example'
+    websiteInput.dispatchEvent(new Event('input'))
+    fixture.detectChanges()
     component.validateUrl()
-    expect(component.memberData!.website).toEqual('http://example')
+    fixture.detectChanges()
+    expect(websiteInput.value).toEqual('http://example')
 
-    component.memberData!.website = 'example.com'
+    websiteInput.value = 'example.com'
+    websiteInput.dispatchEvent(new Event('input'))
+    fixture.detectChanges()
     component.validateUrl()
-    expect(component.memberData!.website).toEqual('http://example.com')
+    fixture.detectChanges()
+    expect(websiteInput.value).toEqual('http://example.com')
 
-    component.memberData!.website = 'https://example.com'
+    websiteInput.value = 'https://example.com'
+    websiteInput.dispatchEvent(new Event('input'))
+    fixture.detectChanges()
     component.validateUrl()
-    expect(component.memberData!.website).toEqual('https://example.com')
+    fixture.detectChanges()
+    expect(websiteInput.value).toEqual('https://example.com')
   })
 
   it('should update member data', () => {
@@ -195,6 +224,7 @@ describe('MemberInfoEditComponent', () => {
       })
     )
     fixture.detectChanges()
+    component.editForm.patchValue({ country: 'United Kingdom', website: 'http://website.com' })
     component.save()
     expect(memberService.updateMemberDetails).toHaveBeenCalled()
   })

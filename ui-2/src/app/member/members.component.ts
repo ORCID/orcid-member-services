@@ -1,6 +1,7 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { IMember } from './model/member.model'
-import { Subscription } from 'rxjs'
+import { finalize } from 'rxjs'
 import {
   faCheckCircle,
   faPencilAlt,
@@ -12,16 +13,34 @@ import {
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons'
 import { MemberService } from './service/member.service'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router'
 import { EventType, ITEMS_PER_PAGE } from '../app.constants'
 import { AccountService } from '../account/service/account.service'
 import { EventService } from '../shared/service/event.service'
 import { Page } from '../shared/model/page.model'
+import { FaIconComponent } from '@fortawesome/angular-fontawesome'
+import { ReactiveFormsModule, FormsModule } from '@angular/forms'
+import { ErrorAlertComponent } from '../error/error-alert.component'
+import { AlertComponent } from '../shared/alert/alert-toast.component'
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap'
+import { DatePipe } from '@angular/common'
 
 @Component({
   selector: 'app-members',
   templateUrl: './members.component.html',
-  standalone: false,
+  styleUrls: ['./members.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    RouterLink,
+    FaIconComponent,
+    ReactiveFormsModule,
+    FormsModule,
+    ErrorAlertComponent,
+    AlertComponent,
+    NgbPaginationModule,
+    RouterOutlet,
+    DatePipe,
+  ],
 })
 export class MembersComponent implements OnInit {
   protected memberService = inject(MemberService)
@@ -29,68 +48,64 @@ export class MembersComponent implements OnInit {
   protected activatedRoute = inject(ActivatedRoute)
   protected router = inject(Router)
   protected eventService = inject(EventService)
+  private destroyRef = inject(DestroyRef)
 
-  currentAccount: any
-  members: IMember[] | undefined | null
-  eventSubscriber: Subscription | undefined
-  routeData: any
-  links: any
-  totalItems: any
-  itemsPerPage: any
-  page = 1
-  predicate: any
-  reverse: any
-  faTimesCircle = faTimesCircle
-  faCheckCircle = faCheckCircle
-  faTimes = faTimes
-  faSearch = faSearch
-  faSortDown = faSortDown
-  faSortUp = faSortUp
-  faPencilAlt = faPencilAlt
-  faPlus = faPlus
-  itemCount: string | undefined
-  searchTerm: string | undefined
-  submittedSearchTerm: string | undefined
-  paginationHeaderSubscription: Subscription | undefined
-  sortColumn = 'salesforceId'
-  ascending: any
-
-  constructor() {
-    this.itemsPerPage = ITEMS_PER_PAGE
-    this.routeData = this.activatedRoute.data.subscribe((data: any) => {
-      this.page = data['queryParams'] ? data['queryParams'].page : 1
-      this.ascending = data['queryParams'] ? data['queryParams'].page.sort.split(',')[1] : true
-      this.sortColumn = data['queryParams'] ? data['queryParams'].page.sort.split(',')[0] : 'salesforceId'
-    })
-  }
+  protected currentAccount = signal<any>(undefined)
+  protected members = signal<IMember[] | undefined | null>(null)
+  protected totalItems = signal<number>(0)
+  protected itemsPerPage = signal<number>(ITEMS_PER_PAGE)
+  protected page = signal(1)
+  protected faTimesCircle = faTimesCircle
+  protected faCheckCircle = faCheckCircle
+  protected faTimes = faTimes
+  protected faSearch = faSearch
+  protected faSortDown = faSortDown
+  protected faSortUp = faSortUp
+  protected faPencilAlt = faPencilAlt
+  protected faPlus = faPlus
+  protected itemCount = signal<string | undefined>(undefined)
+  protected searchTerm = signal<string>('')
+  protected submittedSearchTerm = signal<string>('')
+  protected sortColumn = signal('salesforceId')
+  protected ascending = signal(true)
+  protected isLoading = signal(false)
 
   ngOnInit() {
+    this.activatedRoute.data.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data: any) => {
+      this.page.set(data['queryParams'] ? data['queryParams'].page : 1)
+      this.ascending.set(data['queryParams'] ? data['queryParams'].page.sort.split(',')[1] === 'asc' : true)
+      this.sortColumn.set(data['queryParams'] ? data['queryParams'].page.sort.split(',')[0] : 'salesforceId')
+    })
     this.loadAll()
     this.accountService.getAccountData().subscribe((account) => {
-      this.currentAccount = account
+      this.currentAccount.set(account)
     })
 
-    this.eventSubscriber = this.eventService.on(EventType.MEMBER_LIST_MODIFICATION).subscribe(() => {
-      this.searchTerm = ''
-      this.submittedSearchTerm = ''
-      this.loadAll()
-    })
+    this.eventService.on(EventType.MEMBER_LIST_MODIFICATION)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.searchTerm.set('')
+        this.submittedSearchTerm.set('')
+        this.loadAll()
+      })
   }
 
   loadAll() {
-    if (this.submittedSearchTerm) {
-      this.searchTerm = this.submittedSearchTerm
+    if (this.submittedSearchTerm()) {
+      this.searchTerm.set(this.submittedSearchTerm())
     } else {
-      this.searchTerm = ''
+      this.searchTerm.set('')
     }
 
+    this.isLoading.set(true)
     this.memberService
       .query({
-        page: this.page - 1,
-        size: this.itemsPerPage,
+        page: this.page() - 1,
+        size: this.itemsPerPage(),
         sort: this.sort(),
-        filter: this.submittedSearchTerm ? encodeURIComponent(this.submittedSearchTerm) : '',
+        filter: this.submittedSearchTerm() ? encodeURIComponent(this.submittedSearchTerm()) : '',
       })
+      .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
         next: (res) => {
           if (res) {
@@ -103,23 +118,23 @@ export class MembersComponent implements OnInit {
   loadPage() {
     this.router.navigate(['/members'], {
       queryParams: {
-        page: this.page,
-        size: this.itemsPerPage,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
-        filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
+        page: this.page(),
+        size: this.itemsPerPage(),
+        sort: this.sortColumn() + ',' + (this.ascending() ? 'asc' : 'desc'),
+        filter: this.submittedSearchTerm() ? this.submittedSearchTerm() : '',
       },
     })
     this.loadAll()
   }
 
   clear() {
-    this.page = 0
+    this.page.set(0)
     this.router.navigate([
       '/members',
       {
-        page: this.page,
-        sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc'),
-        filter: this.submittedSearchTerm ? this.submittedSearchTerm : '',
+        page: this.page(),
+        sort: this.sortColumn() + ',' + (this.ascending() ? 'asc' : 'desc'),
+        filter: this.submittedSearchTerm() ? this.submittedSearchTerm() : '',
       },
     ])
     this.loadAll()
@@ -130,32 +145,32 @@ export class MembersComponent implements OnInit {
   }
 
   sort() {
-    const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')]
-    if (this.predicate !== 'id') {
+    const result = [this.sortColumn() + ',' + (this.ascending() ? 'asc' : 'desc')]
+    if (this.sortColumn() !== 'id') {
       result.push('id')
     }
     return result
   }
 
   resetSearch() {
-    this.page = 1
-    this.searchTerm = ''
-    this.submittedSearchTerm = ''
+    this.page.set(1)
+    this.searchTerm.set('')
+    this.submittedSearchTerm.set('')
     this.loadAll()
   }
 
   submitSearch() {
-    this.page = 1
-    this.submittedSearchTerm = this.searchTerm
+    this.page.set(1)
+    this.submittedSearchTerm.set(this.searchTerm())
     this.loadAll()
   }
 
   protected paginate(data: Page<IMember>) {
-    this.totalItems = data.page.totalElements
-    this.members = data.content
+    this.totalItems.set(data.page.totalElements)
+    this.members.set(data.content)
 
-    if (this.totalItems === 0) {
-      this.itemCount = $localize`:@@global.zero-item-count.string:Showing 0 - 0 of 0 items.`
+    if (this.totalItems() === 0) {
+      this.itemCount.set($localize`:@@global.zero-item-count.string:Showing 0 - 0 of 0 items.`)
       return
     }
 
@@ -170,14 +185,14 @@ export class MembersComponent implements OnInit {
     const calculatedEnd = (data.page.number + 1) * data.page.size
     const second = Math.min(calculatedEnd, data.page.totalElements)
 
-    this.itemCount = $localize`:@@global.item-count.string:Showing ${first} - ${second} of ${this.totalItems} items.`
+    this.itemCount.set($localize`:@@global.item-count.string:Showing ${first} - ${second} of ${this.totalItems()} items.`)
   }
 
   updateSort(columnName: string) {
-    if (this.sortColumn && this.sortColumn == columnName) {
-      this.ascending = !this.ascending
+    if (this.sortColumn() && this.sortColumn() == columnName) {
+      this.ascending.set(!this.ascending())
     } else {
-      this.sortColumn = columnName
+      this.sortColumn.set(columnName)
     }
     this.loadPage()
   }

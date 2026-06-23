@@ -1,16 +1,16 @@
-import { Component, ElementRef, Input, Renderer2, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, Input, Renderer2, inject, signal } from '@angular/core'
 
 @Component({
   selector: 'app-password-strength',
   templateUrl: './password-strength.component.html',
   styleUrls: ['./password-strength.component.scss'],
-  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PasswordStrengthComponent {
-  private renderer = inject(Renderer2)
-  private elementRef = inject(ElementRef)
+  private readonly renderer = inject(Renderer2)
+  private readonly elementRef = inject(ElementRef)
 
-  colors = ['#F00', '#F90', '#FF0', '#9F0', '#0F0']
+  private readonly colors = signal<string[]>(['#F00', '#F90', '#FF0', '#9F0', '#0F0'])
 
   measureStrength(p: string): number {
     let force = 0
@@ -52,7 +52,7 @@ export class PasswordStrengthComponent {
     } else {
       idx = 4
     }
-    return { idx: idx + 1, col: this.colors[idx] }
+    return { idx: idx + 1, col: this.colors()[idx] }
   }
 
   @Input()

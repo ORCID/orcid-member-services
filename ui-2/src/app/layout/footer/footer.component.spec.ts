@@ -13,7 +13,7 @@ describe('FooterComponent', () => {
     const accountServiceSpy = jasmine.createSpyObj('AccountService', ['isAuthenticated', 'getReleaseVersion'])
 
     TestBed.configureTestingModule({
-      declarations: [FooterComponent],
+      imports: [FooterComponent],
       providers: [{ provide: AccountService, useValue: accountServiceSpy }],
     }).compileComponents()
 
@@ -32,6 +32,15 @@ describe('FooterComponent', () => {
     fixture.detectChanges()
     const copyright = fixture.debugElement.query(By.css('.copyright'))
     expect(copyright).toBeTruthy()
+    expect(copyright.nativeElement.textContent).toContain(new Date().getFullYear().toString())
+  })
+
+  it('should expose an accessible label on the ORCID home link', () => {
+    fixture.detectChanges()
+    const logoLink = fixture.debugElement.query(By.css('.copyright a'))
+    const logoImage = fixture.debugElement.query(By.css('.copyright img'))
+    expect(logoLink.attributes['aria-label']).toBe('ORCID')
+    expect(logoImage.attributes['alt']).toBe('')
   })
 
   it('if not authenticated, should not contain help link', () => {

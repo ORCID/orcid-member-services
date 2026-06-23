@@ -10,8 +10,13 @@ import { LANDING_PAGE_ROUTE } from './landing-page.route'
 import { CommonModule } from '@angular/common'
 
 @NgModule({
-  imports: [CommonModule, MatProgressSpinnerModule, MatProgressBarModule, RouterModule.forChild(LANDING_PAGE_ROUTE)],
-  declarations: [LandingPageComponent],
+  imports: [
+    CommonModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+    RouterModule.forChild(LANDING_PAGE_ROUTE),
+    LandingPageComponent,
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class LandingPageModule {}

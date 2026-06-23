@@ -1,10 +1,10 @@
 <form name="uploadForm" (ngSubmit)="upload()">
   <div class="modal-header">
     <h4 class="modal-title" i18n="@@gatewayApp.msUserServiceMSUser.import.title.string">Import users</h4>
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="clear()"></button>
   </div>
   <div class="modal-body">
-    <app-alert-error></app-alert-error>
+    <app-alert-error />
     @if (csvErrors && csvErrors.length > 0) {
       <div class="alerts top right" role="alert">
         <ngb-alert
@@ -13,10 +13,10 @@
           ng-reflect-type="danger"
           (close)="csvErrors = null"
           [dismissible]="false"
-          >
+        >
           <p i18n="@@gatewayApp.msUserServiceMSUser.import.errors.label.string">
-          Oops! There was a problem processing your data. Pleases fix the errors below and try again
-        </p>
+            Oops! There was a problem processing your data. Pleases fix the errors below and try again
+          </p>
           <table>
             <thead>
               <th>Errors</th>
@@ -30,50 +30,57 @@
               }
             </tbody>
           </table>
-          <a
+          <button
+            type="button"
             (click)="csvErrors = null"
             (keyup.esc)="csvErrors = null"
             (keyup.enter)="csvErrors = null"
-            tabindex="0"
-            class="close"
-            >×</a
-            >
-          </ngb-alert>
-        </div>
-      }
-      <p id="jhi-delete-msUser-heading" i18n="@@gatewayApp.msUserServiceMSUser.import.label.string">
+            class="btn-close"
+            aria-label="Close"
+          ></button>
+        </ngb-alert>
+      </div>
+    }
+    <p id="jhi-delete-msUser-heading" i18n="@@gatewayApp.msUserServiceMSUser.import.label.string">
       Please select a CSV file to upload
     </p>
 
-      <div class="form-group">
-        <label
-          class="form-control-label sr-only"
-          i18n="@@gatewayApp.msUserServiceMSUser.import.filePath.string"
-          for="field_filePath.string"
-          >File Path</label
-          >
-          <input
-            type="file"
-            class="form-control"
-            name="filePath"
-            id="field_filePath"
-            accept=".csv"
-            onclick="this.value=null"
-            (change)="selectFile($event)"
-            />
-          </div>
-        </div>
-        @if (loading) {
-          <div class="progress progress-striped">
-            <div class="progress-bar indeterminate" role="progressbar"></div>
-          </div>
-        }
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-primary" data-dismiss="modal" (click)="clear()">
-            <fa-icon [icon]="faBan"></fa-icon>&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
-          </button>
-          <button id="jhi-confirm-delete-msUser" type="submit" class="btn btn-primary">
-            <fa-icon [icon]="faSave"></fa-icon>&nbsp;<span i18n="@@entity.action.upload.string">Upload</span>
-          </button>
-        </div>
-      </form>
+    <div class="mb-3">
+      <label
+        class="form-label fw-bold visually-hidden"
+        i18n="@@gatewayApp.msUserServiceMSUser.import.filePath.string"
+        for="field_filePath.string"
+        >File Path</label
+      >
+      <input
+        type="file"
+        class="form-control"
+        name="filePath"
+        id="field_filePath"
+        accept=".csv"
+        (click)="clearFileInput($event)"
+        (change)="selectFile($event)"
+      />
+    </div>
+  </div>
+  @if (loading()) {
+    <div class="progress">
+      <div
+        class="progress-bar progress-bar-striped progress-bar-animated"
+        role="progressbar"
+        style="width: 100%"
+        aria-valuenow="100"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      ></div>
+    </div>
+  }
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="clear()">
+      <fa-icon [icon]="faBan" />&nbsp;<span i18n="@@entity.action.cancel.string">Cancel</span>
+    </button>
+    <button id="jhi-confirm-delete-msUser" type="submit" class="btn btn-primary">
+      <fa-icon [icon]="faSave" />&nbsp;<span i18n="@@entity.action.upload.string">Upload</span>
+    </button>
+  </div>
+</form>

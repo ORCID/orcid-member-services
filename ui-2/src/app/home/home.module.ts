@@ -19,7 +19,10 @@ import { RemoveConsortiumMemberComponent } from './consortium/remove-consortium-
     FontAwesomeModule,
     QuillModule.forRoot(),
     ReactiveFormsModule,
+    HomeComponent,
+    MemberInfoComponent,
+    MemberInfoEditComponent,
+    RemoveConsortiumMemberComponent,
   ],
-  declarations: [HomeComponent, MemberInfoComponent, MemberInfoEditComponent, RemoveConsortiumMemberComponent],
 })
 export class HomeModule {}

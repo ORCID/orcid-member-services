@@ -1,0 +1,26 @@
+:host {
+	display: block;
+}
+
+.login-page {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: calc(100vh - 60px - 80px); /* subtract navbar and footer heights */
+	padding: 2rem 1rem;
+}
+
+.login-panel {
+	width: min(100%, 36rem);
+}
+
+.forgot-password-btn {
+	background: none;
+	border: none;
+	padding: 0;
+	font: inherit;
+	font-weight: 700;
+	color: inherit;
+	cursor: pointer;
+	text-decoration: underline;
+}

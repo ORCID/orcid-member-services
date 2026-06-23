@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { CUSTOM_ELEMENTS_SCHEMA, WritableSignal } from '@angular/core'
 
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
@@ -10,6 +11,12 @@ import { EventService } from '../shared/service/event.service'
 import { FileUploadService } from '../shared/service/file-upload.service'
 import { UserService } from './service/user.service'
 import { UserImportDialogComponent } from './user-import-dialog.component'
+
+type UserImportDialogInternals = {
+  currentFile: WritableSignal<FileList | null>
+}
+const internals = (component: UserImportDialogComponent): UserImportDialogInternals =>
+  component as unknown as UserImportDialogInternals
 
 describe('UserImportDialogComponent', () => {
   let component: UserImportDialogComponent
@@ -32,9 +39,9 @@ describe('UserImportDialogComponent', () => {
     const uploadServiceSpy = jasmine.createSpyObj('FileUploadService', ['uploadFile'])
 
     TestBed.configureTestingModule({
-    declarations: [UserImportDialogComponent],
-    imports: [],
-    providers: [
+      imports: [UserImportDialogComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      providers: [
         FormBuilder,
         NgbModal,
         NgbActiveModal,
@@ -44,8 +51,8 @@ describe('UserImportDialogComponent', () => {
         { provide: ErrorService, useValue: {} },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-}).compileComponents()
+      ],
+    }).compileComponents()
 
     fixture = TestBed.createComponent(UserImportDialogComponent)
     component = fixture.componentInstance
@@ -60,14 +67,14 @@ describe('UserImportDialogComponent', () => {
   })
 
   it('should call upload service', () => {
-    component.currentFile = getFileList()
+    internals(component).currentFile.set(getFileList())
     uploadService.uploadFile.and.returnValue(EMPTY)
     component.upload()
     expect(uploadService.uploadFile).toHaveBeenCalled()
   })
 
   it('errors should be parsed', () => {
-    component.currentFile = getFileList()
+    internals(component).currentFile.set(getFileList())
     uploadService.uploadFile.and.returnValue(
       of('[{"index":1,"message":"A user with email g.nash+575@orcid.org already exists"}]')
     )

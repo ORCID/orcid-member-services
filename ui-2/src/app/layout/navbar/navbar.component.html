@@ -5,169 +5,171 @@
     </span>
   </a>
   <span i18n="@@global.menu.memberPortal.string" class="navbar-title navbar-brand logo">Member Portal</span>&nbsp;
-  @if (this.organizationName) {
+  @if (organizationName()) {
     <div class="navbar-title navbar-brand pipe">|</div>
   }
   &nbsp;
-  @if (isAuthenticated()) {
+  @if (isUserAuthenticated()) {
     <div class="navbar-brand navbar-title logo org-name truncate-text" routerLink="/">
-      {{ this.organizationName }}
+      {{ organizationName() }}
     </div>
   }
-  <a
+  <button
+    type="button"
     class="navbar-toggler d-lg-none"
-    href="javascript:void(0);"
-    data-toggle="collapse"
-    data-target="#navbarResponsive"
     aria-controls="navbarResponsive"
-    aria-expanded="false"
+    [attr.aria-expanded]="!isNavbarCollapsed()"
     id="collapse-button"
     aria-label="Toggle navigation"
     (click)="toggleNavbar()"
-    >
-    <fa-icon [icon]="faBars"></fa-icon>
-  </a>
+  >
+    <fa-icon [icon]="faBars" />
+  </button>
 
-  <div class="navbar-collapse collapse" id="navbarResponsive">
-    <ul class="navbar-nav ml-auto">
-      @if (isAuthenticated()) {
-        <li
-          *appHasAnyAuthority="'ROLE_USER'"
-          ngbDropdown
-          class="nav-item dropdown pointer"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
+  <div class="navbar-collapse collapse" [class.show]="!isNavbarCollapsed()" id="navbarResponsive">
+    <ul class="navbar-nav ms-auto">
+      @if (isUserAuthenticated()) {
+        @if (userHasRoleUser()) {
+          <li
+            ngbDropdown
+            class="nav-item dropdown pointer"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
           >
-          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="tools-menu">
-            <span>
-              <fa-icon [icon]="faWrench"></fa-icon>
-              <span i18n="@@global.menu.tools.main.string">Tools</span>
-            </span>
-          </a>
-          <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
-            <h6 class="dropdown-header" i18n="@@global.menu.tools.main.string">Tools</h6>
-            <li *appHasAnyAuthority="'ASSERTION_SERVICE_ENABLED'">
-              <a
-                id="affiliationManagerLink"
-                class="dropdown-item"
-                routerLink="/affiliations"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
-                >
-                <fa-icon [icon]="faAddressCard" [fixedWidth]="true"></fa-icon>
-                <span i18n="@@global.menu.tools.assertionServiceAffiliationManager.string">Affiliation Manager</span>
-              </a>
-            </li>
-            @if (featureService.isEnabled('MANAGE_API_CREDENTIALS') && (isOrganizationOwner() || isManageApiCredentialsEnabled())) {
+            <a class="nav-link dropdown-toggle" ngbDropdownToggle role="button" tabindex="0" id="tools-menu">
+              <span>
+                <fa-icon [icon]="faWrench" />
+                <span i18n="@@global.menu.tools.main.string">Tools</span>
+              </span>
+            </a>
+            <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="tools-menu">
+              <h6 class="dropdown-header" i18n="@@global.menu.tools.main.string">Tools</h6>
+              @if (userHasAssertionService()) {
+                <li>
+                  <a
+                    id="affiliationManagerLink"
+                    class="dropdown-item"
+                    routerLink="/affiliations"
+                    routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    (click)="collapseNavbar()"
+                  >
+                    <fa-icon [icon]="faAddressCard" [fixedWidth]="true" />
+                    <span i18n="@@global.menu.tools.assertionServiceAffiliationManager.string">Affiliation Manager</span>
+                  </a>
+                </li>
+              }
+              @if (
+                featureService.isEnabled('MANAGE_API_CREDENTIALS') &&
+                (userIsOrgOwner() || userCanManageApiCreds())
+              ) {
+                <li>
+                  <a
+                    id="manageApiCredentialsLink"
+                    class="dropdown-item"
+                    routerLink="/api-credentials"
+                    routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    (click)="manageApiCredentials(); $event.preventDefault()"
+                  >
+                    <fa-icon [icon]="faKey" [fixedWidth]="true" />
+                    <span i18n="@@global.menu.tools.manageApiCredentials.string">Manage API credentials</span>
+                  </a>
+                </li>
+              }
+              <div class="dropdown-divider"></div>
+              <h6 class="dropdown-header" i18n="@@global.menu.reports.main.string">Reports</h6>
               <li>
                 <a
-                  id="manageApiCredentialsLink"
+                  id="memberReportLink"
                   class="dropdown-item"
-                  routerLink="/api-credentials"
-                  routerLinkActive="active"
-                  [routerLinkActiveOptions]="{ exact: true }"
-                  (click)="manageApiCredentials(); $event.preventDefault()"
-                >
-                  <fa-icon [icon]="faKey" [fixedWidth]="true"></fa-icon>
-                  <span i18n="@@global.menu.tools.manageApiCredentials.string">Manage API credentials</span>
-                </a>
-              </li>
-            }
-            <div class="dropdown-divider"></div>
-            <h6 class="dropdown-header" i18n="@@global.menu.reports.main.string">Reports</h6>
-            <li>
-              <a
-                id="memberReportLink"
-                class="dropdown-item"
-                routerLink="/report/member"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
-                >
-                <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
-                <span i18n="@@global.menu.report.member.string">Member report</span>
-              </a>
-            </li>
-            <li>
-              <a
-                id="integrationReportLink"
-                class="dropdown-item"
-                routerLink="/report/integration"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
-                >
-                <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
-                <span i18n="@@global.menu.report.integration.string">Integration report</span>
-              </a>
-            </li>
-            @if (consortiumLead) {
-              <li>
-                <a
-                  id="consortiaReportLink"
-                  class="dropdown-item"
-                  routerLink="/report/consortia"
+                  routerLink="/report/member"
                   routerLinkActive="active"
                   [routerLinkActiveOptions]="{ exact: true }"
                   (click)="collapseNavbar()"
-                  >
-                  <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
-                  <span i18n="@@global.menu.report.consortium.string">Consortium report</span>
+                >
+                  <fa-icon [icon]="faChartPie" [fixedWidth]="true" />
+                  <span i18n="@@global.menu.report.member.string">Member report</span>
                 </a>
               </li>
-            }
-            <li>
-              <a
-                id="affiliationReportLink"
-                class="dropdown-item"
-                routerLink="/report/affiliation"
-                (click)="collapseNavbar()"
-                >
-                <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
-                <span i18n="@@global.menu.report.affiliation.string">Affiliation report</span>
-              </a>
-            </li>
-            @if (consortiumLead) {
               <li>
                 <a
-                  id="consortiumMemberAffiliationsReportLink"
+                  id="integrationReportLink"
                   class="dropdown-item"
-                  routerLink="/report/consortia-member-affiliations"
+                  routerLink="/report/integration"
                   routerLinkActive="active"
                   [routerLinkActiveOptions]="{ exact: true }"
                   (click)="collapseNavbar()"
+                >
+                  <fa-icon [icon]="faChartPie" [fixedWidth]="true" />
+                  <span i18n="@@global.menu.report.integration.string">Integration report</span>
+                </a>
+              </li>
+              @if (consortiumLead()) {
+                <li>
+                  <a
+                    id="consortiaReportLink"
+                    class="dropdown-item"
+                    routerLink="/report/consortia"
+                    routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    (click)="collapseNavbar()"
                   >
-                  <fa-icon [icon]="faChartPie" [fixedWidth]="true"></fa-icon>
-                  <span i18n="@@global.menu.report.consortiumMemberAffiliations.string"
-                    >Consortium member affiliations</span
-                    >
+                    <fa-icon [icon]="faChartPie" [fixedWidth]="true" />
+                    <span i18n="@@global.menu.report.consortium.string">Consortium report</span>
+                  </a>
+                </li>
+              }
+              <li>
+                <a
+                  id="affiliationReportLink"
+                  class="dropdown-item"
+                  routerLink="/report/affiliation"
+                  (click)="collapseNavbar()"
+                >
+                  <fa-icon [icon]="faChartPie" [fixedWidth]="true" />
+                  <span i18n="@@global.menu.report.affiliation.string">Affiliation report</span>
+                </a>
+              </li>
+              @if (consortiumLead()) {
+                <li>
+                  <a
+                    id="consortiumMemberAffiliationsReportLink"
+                    class="dropdown-item"
+                    routerLink="/report/consortia-member-affiliations"
+                    routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    (click)="collapseNavbar()"
+                  >
+                    <fa-icon [icon]="faChartPie" [fixedWidth]="true" />
+                    <span i18n="@@global.menu.report.consortiumMemberAffiliations.string">Consortium member affiliations</span>
                   </a>
                 </li>
               }
             </ul>
           </li>
+        }
+        @if (userHasRoleUser()) {
           <li
-            *appHasAnyAuthority="'ROLE_USER'"
             ngbDropdown
             class="nav-item dropdown pointer"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
-            >
-            <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+          >
+            <a class="nav-link dropdown-toggle" ngbDropdownToggle role="button" tabindex="0" id="resources-menu">
               <span>
-                <fa-icon [icon]="faLightbulb"></fa-icon>
+                <fa-icon [icon]="faLightbulb" />
                 <span i18n="@@global.menu.resources.main.string">Resources</span>
               </span>
             </a>
-            <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+            <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="resources-menu">
               <li>
                 <a
                   class="dropdown-item"
                   target="_blank"
                   href="https://info.orcid.org/documentation/member-portal/account-management/"
                   (click)="collapseNavbar()"
-                  >
+                >
                   <span i18n="@@global.menu.resources.accountManagementGuide.string">Account Management Guide</span>
                 </a>
               </li>
@@ -177,7 +179,7 @@
                   target="_blank"
                   href="https://info.orcid.org/documentation/member-portal/member-portal-organizational-admin-guide/"
                   (click)="collapseNavbar()"
-                  >
+                >
                   <span i18n="@@global.menu.resources.affiliationManagerGuide.string">Affiliation Manager Guide</span>
                 </a>
               </li>
@@ -187,7 +189,7 @@
                   target="_blank"
                   href="https://info.orcid.org/documentation/member-portal/member-reporting/"
                   (click)="collapseNavbar()"
-                  >
+                >
                   <span i18n="@@global.menu.resources.memberReportingGuide.string">Member Reporting Guide</span>
                 </a>
               </li>
@@ -197,97 +199,97 @@
                   target="_blank"
                   href="https://info.orcid.org/affiliation-manager-production-credentials-request-form/"
                   (click)="collapseNavbar()"
-                  >
-                  <span i18n="@@global.menu.resources.applyForAffiliationManagerCreds.string"
-                    >Apply for Affiliation Manager Credentials</span
-                    >
-                  </a>
-                </li>
-              </ul>
-            </li>
-            @if (isOrganizationOwner() || hasRoleAdmin()) {
-              <li
-                ngbDropdown
-                class="nav-item dropdown pointer"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
                 >
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
-                  <span>
-                    <fa-icon [icon]="faUserPlus"></fa-icon>
-                    <span i18n="@@global.menu.adminMenu.main.string">Admin</span>
-                  </span>
+                  <span i18n="@@global.menu.resources.applyForAffiliationManagerCreds.string">Apply for Affiliation Manager Credentials</span>
                 </a>
-                <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="admin-menu">
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      routerLink="/users"
-                      routerLinkActive="active"
-                      [routerLinkActiveOptions]="{ exact: true }"
-                      (click)="collapseNavbar()"
-                      >
-                      <fa-icon [icon]="faUser" [fixedWidth]="true"></fa-icon>
-                      <span i18n="@@global.menu.adminMenu.manageUsers.string">Manage users</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      *appHasAnyAuthority="'ROLE_ADMIN'"
-                      class="dropdown-item"
-                      routerLink="/members"
-                      routerLinkActive="active"
-                      [routerLinkActiveOptions]="{ exact: true }"
-                      (click)="collapseNavbar()"
-                      >
-                      <fa-icon [icon]="faUniversity" [fixedWidth]="true"></fa-icon>
-                      <span i18n="@@global.menu.adminMenu.manageMembers.string">Manage members</span>
-                    </a>
-                  </li>
-                </ul>
               </li>
+            </ul>
+          </li>
+        }
+        @if (canShowAdmin()) {
+          <li
+            ngbDropdown
+            class="nav-item dropdown pointer"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <a class="nav-link dropdown-toggle" ngbDropdownToggle role="button" tabindex="0" id="admin-menu">
+              <span>
+                <fa-icon [icon]="faUserPlus" />
+                <span i18n="@@global.menu.adminMenu.main.string">Admin</span>
+              </span>
+            </a>
+            <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="admin-menu">
+              <li>
+                <a
+                  class="dropdown-item"
+                  routerLink="/users"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="collapseNavbar()"
+                >
+                  <fa-icon [icon]="faUser" [fixedWidth]="true" />
+                  <span i18n="@@global.menu.adminMenu.manageUsers.string">Manage users</span>
+                </a>
+              </li>
+              @if (userHasRoleAdmin()) {
+                <li>
+                  <a
+                    class="dropdown-item"
+                    routerLink="/members"
+                    routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    (click)="collapseNavbar()"
+                  >
+                    <fa-icon [icon]="faUniversity" [fixedWidth]="true" />
+                    <span i18n="@@global.menu.adminMenu.manageMembers.string">Manage members</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          </li>
+        }
+        <li
+          ngbDropdown
+          class="nav-item dropdown pointer"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <a class="nav-link dropdown-toggle" ngbDropdownToggle role="button" tabindex="0" id="account-menu">
+            @if (!hasUserImage()) {
+              <span>
+                <fa-icon [icon]="faUser" />
+                <span i18n="@@global.menu.account.main.string">Account</span>
+              </span>
             }
-            <li
-              ngbDropdown
-              class="nav-item dropdown pointer"
-              routerLinkActive="active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              >
-              <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
-                @if (!getImageUrl()) {
-                  <span>
-                    <fa-icon [icon]="faUser"></fa-icon>
-                    <span i18n="@@global.menu.account.main.string">Account</span>
-                  </span>
-                }
-                @if (getImageUrl()) {
-                  <span>
-                    <img [src]="getImageUrl()" class="profile-image rounded-circle" alt="Avatar" />
-                  </span>
-                }
+            @if (hasUserImage()) {
+              <span>
+                <img [src]="userImageUrl()" class="profile-image rounded-circle" alt="Avatar" />
+              </span>
+            }
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu aria-labelledby="account-menu">
+            <li>
+              <a class="dropdown-item" routerLink="/settings" routerLinkActive="active" (click)="collapseNavbar()">
+                <fa-icon [icon]="faWrench" [fixedWidth]="true" />
+                <span i18n="@@global.menu.account.settings.string">Settings</span>
               </a>
-              <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu aria-labelledby="account-menu">
-                <li>
-                  <a class="dropdown-item" routerLink="/settings" routerLinkActive="active" (click)="collapseNavbar()">
-                    <fa-icon [icon]="faWrench" [fixedWidth]="true"></fa-icon>
-                    <span i18n="@@global.menu.account.settings.string">Settings</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" routerLink="/password" routerLinkActive="active" (click)="collapseNavbar()">
-                    <fa-icon [icon]="faLock" [fixedWidth]="true"></fa-icon>
-                    <span i18n="@@global.menu.account.password.string">Password</span>
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item" tabindex="1" (click)="logout()" (keypress)="logout()" id="logout">
-                    <fa-icon [icon]="faSignOutAlt" [fixedWidth]="true"></fa-icon>
-                    <span i18n="@@global.menu.account.logout.string">Sign out</span>
-                  </a>
-                </li>
-              </ul>
             </li>
-          }
-        </ul>
-      </div>
-    </nav>
+            <li>
+              <a class="dropdown-item" routerLink="/password" routerLinkActive="active" (click)="collapseNavbar()">
+                <fa-icon [icon]="faLock" [fixedWidth]="true" />
+                <span i18n="@@global.menu.account.password.string">Password</span>
+              </a>
+            </li>
+            <li>
+              <button type="button" class="dropdown-item" (click)="logout()" id="logout">
+                <fa-icon [icon]="faSignOutAlt" [fixedWidth]="true" />
+                <span i18n="@@global.menu.account.logout.string">Sign out</span>
+              </button>
+            </li>
+          </ul>
+        </li>
+      }
+    </ul>
+  </div>
+</nav>

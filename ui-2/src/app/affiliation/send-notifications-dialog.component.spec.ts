@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 
 import { SendNotificationsDialogComponent } from './send-notifications-dialog.component'
 import { NotificationService } from './service/notification.service'
@@ -14,7 +15,7 @@ import { ErrorService } from '../error/service/error.service'
 import { FileUploadService } from '../shared/service/file-upload.service'
 import { UserService } from '../user/service/user.service'
 import { of } from 'rxjs'
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 
 describe('SendNotificationsDialogComponent', () => {
   let component: SendNotificationsDialogComponent
@@ -40,9 +41,9 @@ describe('SendNotificationsDialogComponent', () => {
     ])
 
     TestBed.configureTestingModule({
-    declarations: [SendNotificationsDialogComponent],
-    imports: [],
-    providers: [
+      imports: [SendNotificationsDialogComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      providers: [
         FormBuilder,
         NgbModal,
         NgbActiveModal,
@@ -55,8 +56,8 @@ describe('SendNotificationsDialogComponent', () => {
         { provide: ErrorService, useValue: {} },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-}).compileComponents()
+      ],
+    }).compileComponents()
 
     fixture = TestBed.createComponent(SendNotificationsDialogComponent)
     component = fixture.componentInstance

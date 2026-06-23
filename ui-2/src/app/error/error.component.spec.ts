@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { ActivatedRoute } from '@angular/router'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterModule } from '@angular/router'
 import { of } from 'rxjs'
 import { AccountService } from '../account'
 import { ErrorComponent } from './error.component'
@@ -15,8 +15,7 @@ describe('ErrorComponent', () => {
     accountServiceSpy = jasmine.createSpyObj('AccountService', ['isAuthenticated'])
 
     TestBed.configureTestingModule({
-      declarations: [ErrorComponent],
-      imports: [RouterTestingModule],
+      imports: [RouterModule.forRoot([]), ErrorComponent],
       providers: [
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: ActivatedRoute, useValue: { data: of({}) } },
