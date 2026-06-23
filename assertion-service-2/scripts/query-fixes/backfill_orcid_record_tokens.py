@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+Security protection e.g USB key #!/usr/bin/env python3
 """
 Backfill missing ``tokens[].member_id`` placeholders onto ``orcid_record``.
 
