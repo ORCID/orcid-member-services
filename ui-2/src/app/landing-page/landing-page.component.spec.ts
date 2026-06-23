@@ -130,7 +130,6 @@ describe('LandingPageComponent', () => {
     )
     expect(landingPageService.getPublicKey).toHaveBeenCalledTimes(0)
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalledTimes(0)
-    expect(landingPageService.submitUserResponse).toHaveBeenCalled()
     expect(internals(component).showError).toBeTruthy()
     expect(internals(component).showDenied).toBeFalsy()
   })

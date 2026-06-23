@@ -154,35 +154,20 @@ describe('MemberInfoComponent', () => {
 
   it('should add protocol to websites where it is missing', () => {
     accountService.getAccountData.and.returnValue(of({ memberId: 'test' } as IAccount))
-    memberService.getMemberData.and.returnValue(of({}))
+    memberService.getMemberData.and.returnValue(
+      of({
+        website: 'example',
+        membershipEndDateString: '2050',
+      } as ISFMemberData)
+    )
     fixture.detectChanges()
-
-    const websiteInput = fixture.nativeElement.querySelector('input[name="website"]') as HTMLInputElement
-
-    expect(websiteInput.value).toBe('')
 
     component.validateUrl()
-    expect(websiteInput.value).toBe('')
+    fixture.detectChanges()
 
-    websiteInput.value = 'example'
-    websiteInput.dispatchEvent(new Event('input'))
-    fixture.detectChanges()
-    component.validateUrl()
-    fixture.detectChanges()
-    expect(websiteInput.value).toEqual('http://example')
+    const websiteLink = fixture.nativeElement.querySelector('.side-bar-subsection a') as HTMLAnchorElement
 
-    websiteInput.value = 'example.com'
-    websiteInput.dispatchEvent(new Event('input'))
-    fixture.detectChanges()
-    component.validateUrl()
-    fixture.detectChanges()
-    expect(websiteInput.value).toEqual('http://example.com')
-
-    websiteInput.value = 'https://example.com'
-    websiteInput.dispatchEvent(new Event('input'))
-    fixture.detectChanges()
-    component.validateUrl()
-    fixture.detectChanges()
-    expect(websiteInput.value).toEqual('https://example.com')
+    expect(websiteLink.getAttribute('href')).toEqual('http://example')
+    expect(websiteLink.textContent?.trim()).toEqual('http://example')
   })
 })

@@ -95,10 +95,10 @@ export class MemberInfoEditComponent implements OnInit {
             ids.map((id: string) => ({ id, name }))
           )
         )
-        this.validateUrl()
         if (data) {
           this.updateForm(data)
         }
+        this.validateUrl()
       })
 
     this.editForm.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
@@ -109,9 +109,16 @@ export class MemberInfoEditComponent implements OnInit {
   }
 
   validateUrl() {
-    const memberData = this.memberData()
-    if (memberData?.website && !/(http(s?)):\/\//i.test(memberData.website)) {
-      this.memberData.set({ ...memberData, website: 'http://' + memberData.website })
+    const websiteControl = this.editForm.get('website')
+    const website = websiteControl?.value
+    if (website && !/(http(s?)):\/\//i.test(website)) {
+      const normalizedWebsite = 'http://' + website
+      websiteControl?.setValue(normalizedWebsite, { emitEvent: false })
+
+      const memberData = this.memberData()
+      if (memberData) {
+        this.memberData.set({ ...memberData, website: normalizedWebsite })
+      }
     }
   }
 

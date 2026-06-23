@@ -122,7 +122,7 @@ describe('MemberInfoEditComponent', () => {
     expect(memberService.getMemberData).toHaveBeenCalledOnceWith('test2')
 
     const websiteInput = fixture.nativeElement.querySelector('input[name="website"]') as HTMLInputElement
-    expect(websiteInput.value).toEqual('website.com')
+    expect(websiteInput.value).toEqual('http://website.com')
 
     const renderedOrgIds = Array.from(fixture.nativeElement.querySelectorAll('li.contact')).map((row) => ({
       id: (row as HTMLElement).querySelector('.w-66')?.textContent?.trim(),

@@ -13,7 +13,7 @@ import { IUser, User } from './model/user.model'
 import { Member } from '../member/model/member.model'
 import { UserValidation } from './model/user-validation.model'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { CUSTOM_ELEMENTS_SCHEMA, WritableSignal } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { EMPTY, of } from 'rxjs'
 import { By } from '@angular/platform-browser'
@@ -21,6 +21,8 @@ import { FeatureToggleService } from '../shared/service/feature-toggle.service'
 
 type UserUpdateInternals = {
   isExistentMember: () => boolean
+  hasOwner: () => boolean
+  existentUser: WritableSignal<IUser | null>
 }
 
 const internals = (component: UserUpdateComponent): UserUpdateInternals =>

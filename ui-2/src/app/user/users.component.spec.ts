@@ -19,6 +19,9 @@ import { FeatureToggleService } from '../shared/service/feature-toggle.service'
 type UsersInternals = {
   users: WritableSignal<User[] | null | undefined>
   sortColumn: WritableSignal<string>
+  page: WritableSignal<number>
+  searchTerm: WritableSignal<string>
+  submittedSearchTerm: WritableSignal<string>
 }
 
 const internals = (component: UsersComponent): UsersInternals =>
