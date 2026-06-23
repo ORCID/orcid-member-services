@@ -237,7 +237,7 @@ def main():
     logger.info("Backfill missing orcid_record placeholders")
     logger.info("=" * 80)
     logger.info("Database:      %s", database)
-    logger.info("Collections:   assertion, send_notifications_request → orcid_record")
+    logger.info("Collections:   assertion, send_notifications_request -> orcid_record")
     logger.info(
         "MongoDB URI:   %s...",
         mongo_uri[:20] if len(mongo_uri) > 20 else mongo_uri,
