@@ -15,10 +15,10 @@ public interface OrcidRecordRepository extends MongoRepository<OrcidRecord, Stri
 
     Optional<OrcidRecord> findOneByEmail(String email);
 
-    @Query(value = "{tokens: {member_id: ?0}}")
+    @Query(value = "{ tokens: { $elemMatch: { 'member_id': ?0, 'token_id': { $exists: false }, 'denied_date': { $exists: false }, 'revoked_date': { $exists: false } } } }")
     List<OrcidRecord> findAllToInvite(String memberId);
 
-    @Query("{tokens: {member_id: ?0}}")
+    @Query("{ 'tokens.member_id': ?0 }")
     Page<OrcidRecord> findByMemberId(String memberId, Pageable pageable);
 
 }
