@@ -15,3 +15,34 @@ discovery-service/maven_dep_tree.txt
 gateway/maven_dep_tree.txt
 .idea/
 .vscode/
+
+# AI coding agents — keep shared AGENTS.md/CLAUDE.md tracked, ignore local/secret artifacts
+# Claude Code / Anthropic
+.claude/settings.local.json
+.claude/**/local*
+.anthropic/
+
+# Cursor / Windsurf / Cline / Continue (local state & caches)
+.cursor/
+.windsurf/
+.cline/
+.continue/
+
+# Aider
+.aider*
+.aider.chat.history.md
+.aider.input.history
+.aider.tags.cache.v*/
+
+# GitHub Copilot / generic agent scratch & logs
+.copilot/
+.github/copilot-instructions.local.md
+.agent/
+.agents/
+agent-scratch/
+*.agent.local.*
+
+# Model context / MCP local config that may carry secrets
+.mcp.json
+mcp.local.json
+
