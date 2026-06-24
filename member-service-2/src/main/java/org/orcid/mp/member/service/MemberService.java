@@ -201,7 +201,7 @@ public class MemberService {
             member.setDefaultLanguage(language);
             memberRepository.save(member);
         } else {
-            throw new RuntimeException("Member not found");
+            throw new RuntimeException("Member " + memberId + " not found");
         }
     }
 }

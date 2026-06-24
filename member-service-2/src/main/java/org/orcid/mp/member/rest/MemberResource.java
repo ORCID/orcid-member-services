@@ -164,7 +164,7 @@ public class MemberResource {
     @PutMapping("/{memberId}/member-details")
     public ResponseEntity<Boolean> updatePublicMemberDetails(@RequestBody MemberUpdateData memberUpdateData,
             @PathVariable String memberId) {
-        LOG.info("REST request to update member public details for salesforce id {}", memberId);
+        LOG.info("REST request to update member public details for member id {}", memberId);
         try {
             validateUserAccess(memberId);
             if (!memberDetailsUpdateValid(memberUpdateData)) {
@@ -225,7 +225,7 @@ public class MemberResource {
      */
     @GetMapping("/{memberId}/member-contacts")
     public ResponseEntity<MemberContacts> getMemberContacts(@PathVariable String memberId) {
-        LOG.debug("REST request to get member contacts for member {}", memberId);
+        LOG.info("REST request to get member contacts for member {}", memberId);
         try {
             validateUserAccess(memberId);
             String salesforceId = getSalesforceId(memberId);
@@ -244,7 +244,7 @@ public class MemberResource {
      */
     @GetMapping("/{memberId}/member-org-ids")
     public ResponseEntity<MemberOrgIds> getMemberOrgIds(@PathVariable String memberId) {
-        LOG.debug("REST request to get member org ids for member {}", memberId);
+        LOG.info("REST request to get member org ids for member {}", memberId);
         try {
             validateUserAccess(memberId);
             String salesforceId = getSalesforceId(memberId);
@@ -339,7 +339,7 @@ public class MemberResource {
             @RequestBody MemberContactUpdate memberContactUpdate,
             @PathVariable String memberId) {
 
-        LOG.debug("REST request to create new member contact update for member {}", memberId);
+        LOG.info("REST request to create new member contact update for member {}", memberId);
         try {
             validateUserAccess(memberId);
             String salesforceId = getSalesforceId(memberId);
@@ -415,8 +415,12 @@ public class MemberResource {
 
     private void populateConsortiumMemberIds(ConsortiumLeadDetails clDetails) {
         clDetails.getConsortiumMembers().forEach(memberDetails -> {
-            Member consortiumMember = memberService.getMember(memberDetails.getSalesforceId()).orElseThrow();
-            memberDetails.setMemberId(consortiumMember.getId());
+            Optional<Member> consortiumMember = memberService.getMember(memberDetails.getSalesforceId());
+            if (consortiumMember.isPresent()) {
+                memberDetails.setMemberId(consortiumMember.get().getId());
+            } else {
+                LOG.warn("Cannot find member of consortium {}: salesforce ID {} not in the member portal", clDetails.getId(), memberDetails.getSalesforceId());
+            }
         });
     }
 }
