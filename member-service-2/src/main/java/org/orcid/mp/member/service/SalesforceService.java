@@ -88,6 +88,7 @@ public class SalesforceService {
 
     public void requestRemoveConsortiumMember(RemoveConsortiumMember removeConsortiumMember) {
         User user = userService.getLoggedInUser();
+        LOG.info("Requesting remove consortium member {} by user {}", removeConsortiumMember.getOrgName(), user.getEmail());
 
         Optional<Member> optionalMember = memberRepository.findById(user.getMemberId());
         Member member = optionalMember.get();
@@ -98,8 +99,6 @@ public class SalesforceService {
         removeConsortiumMember.setRequestedByEmail(user.getEmail());
         removeConsortiumMember.setRequestedByName(user.getFirstName() + " " + user.getLastName());
         removeConsortiumMember.setConsortium(user.getMemberName());
-
-
         mailService.sendRemoveConsortiumMemberEmail(removeConsortiumMember);
     }
 
@@ -109,7 +108,7 @@ public class SalesforceService {
             try {
                 return objectMapper.treeToValue(memberElement, MemberDetails.class);
             } catch (JsonProcessingException e) {
-                LOG.warn("Error writing member JSON to MemberDetails", e);
+                LOG.warn("Error writing member JSON to MemberDetails for salesforce id {}", salesforceId, e);
                 return null;
             }
         }
@@ -127,7 +126,7 @@ public class SalesforceService {
                 consortiumLeadDetails.setConsortiumMembers(members);
                 return consortiumLeadDetails;
             } catch (JsonProcessingException e) {
-                LOG.warn("Error writing member JSON to ConsortiumLeadDetails", e);
+                LOG.warn("Error writing member JSON to ConsortiumLeadDetails for salesforce id {}", salesforceId, e);
                 return null;
             }
         }
@@ -145,10 +144,9 @@ public class SalesforceService {
         ObjectNode contactsJson = getMemberContactsJson(salesforceId);
         if (contactsJson != null) {
             try {
-                MemberContacts contacts = objectMapper.treeToValue(contactsJson, MemberContacts.class);
-                return contacts;
+                return objectMapper.treeToValue(contactsJson, MemberContacts.class);
             } catch (JsonProcessingException e) {
-                LOG.warn("Error writing member JSON to MemberContacts", e);
+                LOG.warn("Error writing member JSON to MemberContacts for salesforce id {}", salesforceId, e);
             }
         }
         return null;
@@ -160,7 +158,7 @@ public class SalesforceService {
             try {
                 return objectMapper.readValue(memberOrgIdsJson, MemberOrgIds.class);
             } catch (JsonProcessingException e) {
-                LOG.warn("Error writing member JSON to MemberOrgIds", e);
+                LOG.warn("Error writing member JSON to MemberOrgIds for salesforce id {}", salesforceId, e);
             }
         }
         return null;
@@ -301,10 +299,14 @@ public class SalesforceService {
                         }
                     }
                     return publicOpportunitiesArray;
+                } else {
+                    LOG.warn("Consortium opportunities JSON is not an array for salesforce id {}", salesforceId);
                 }
+            } else {
+                LOG.warn("No consortium opportunities found for salesforce id {}", salesforceId);
             }
         } catch (JsonProcessingException e) {
-            LOG.warn("Error processing consortium JSON from Salesforce", e);
+            LOG.warn("Error processing consortium JSON from Salesforce for salesforce id {}", salesforceId, e);
         }
         return null;
     }
