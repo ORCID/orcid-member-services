@@ -15,8 +15,9 @@ export const UserResolver: ResolveFn<User | null> = (
   state: RouterStateSnapshot,
   userService: UserService = inject(UserService)
 ): Observable<User | null> => {
-  if (route.paramMap.get('id')) {
-    return userService.find(route.paramMap.get('id')!).pipe(
+  const id = route.paramMap.get('id')
+  if (id) {
+    return userService.find(id).pipe(
       filter<User>((user: User) => !!user),
       take(1)
     )

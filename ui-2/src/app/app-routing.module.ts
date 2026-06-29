@@ -1,6 +1,9 @@
-import { NgModule } from '@angular/core'
+import { importProvidersFrom, NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { LoginComponent } from './account'
+import { routes as accountRoutes } from './account/account.route'
+import { routes as homeRoutes } from './home/home.route'
 import { errorRoutes } from './error/error.route'
 import { navbarRoute } from './layout/navbar/navbar.route'
 
@@ -9,37 +12,32 @@ const routes: Routes = [
     path: 'auth/callback',
     children: [],
   },
-  {
-    path: '',
-    loadChildren: () => import('./account/account.module').then((m) => m.AccountModule),
-  },
-  {
-    path: '',
-    loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
-  },
+  ...accountRoutes,
+  ...homeRoutes,
   {
     path: 'users',
-    loadChildren: () => import('./user/user.module').then((m) => m.UserModule),
+    loadChildren: () => import('./user/user.route').then((m) => m.routes),
   },
   {
     path: 'affiliations',
-    loadChildren: () => import('./affiliation/affiliation.module').then((m) => m.AffiliationModule),
+    loadChildren: () => import('./affiliation/affiliation.route').then((m) => m.affiliationRoutes),
   },
   {
     path: 'landing-page',
-    loadChildren: () => import('./landing-page/landing-page.module').then((m) => m.LandingPageModule),
+    loadChildren: () => import('./landing-page/landing-page.route').then((m) => m.LANDING_PAGE_ROUTE),
+    providers: [importProvidersFrom(BrowserAnimationsModule)],
   },
   {
     path: 'members',
-    loadChildren: () => import('./member/member.module').then((m) => m.MemberModule),
+    loadChildren: () => import('./member/member.route').then((m) => m.memberRoutes),
   },
   {
     path: 'report',
-    loadChildren: () => import('./report/report.module').then((m) => m.ReportModule),
+    loadChildren: () => import('./report/report.route').then((m) => [m.REPORT_ROUTE]),
   },
   {
     path: 'api-credentials',
-    loadChildren: () => import('./api-credentials/api-credentials.module').then((m) => m.ApiCredentialsModule),
+    loadChildren: () => import('./api-credentials/api-credentials.route').then((m) => m.routes),
   },
   { path: 'login', component: LoginComponent },
 ]

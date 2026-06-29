@@ -209,4 +209,28 @@ describe('UsersComponent', () => {
       .filter((el) => el.nativeElement.textContent.includes('2FA'))
     expect(twoFaHeaders.length).toEqual(0)
   })
+
+  it('API credentials column should be visible for admin users', () => {
+    featureToggleService.isEnabled.withArgs('MANAGE_API_CREDENTIALS').and.returnValue(true)
+
+    accountService.hasAnyAuthority.and.returnValue(true)
+    component.ngOnInit()
+    fixture.detectChanges()
+
+    const apiCredentialsHeaders = fixture.debugElement
+      .queryAll(By.css('th'))
+      .filter((el) => el.nativeElement.textContent.includes('API credentials'))
+    expect(apiCredentialsHeaders.length).toEqual(1)
+  })
+
+  it('API credentials column should not be visible for non-admin users', () => {
+    accountService.hasAnyAuthority.and.returnValue(false)
+    component.ngOnInit()
+    fixture.detectChanges()
+
+    const apiCredentialsHeaders = fixture.debugElement
+      .queryAll(By.css('th'))
+      .filter((el) => el.nativeElement.textContent.includes('API credentials'))
+    expect(apiCredentialsHeaders.length).toEqual(0)
+  })
 })

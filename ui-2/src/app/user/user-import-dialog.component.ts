@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, signal } from '@angular/core'
 import { FileUploadService } from '../shared/service/file-upload.service'
-import { IUser } from './model/user.model'
 import { UserService } from './service/user.service'
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { EventService } from '../shared/service/event.service'
-import { Event } from '../shared/model/event.model'
+import { Event as AppEvent } from '../shared/model/event.model'
 import { EventType } from '../app.constants'
 import { ActivatedRoute, Router } from '@angular/router'
 import { faSave, faBan } from '@fortawesome/free-solid-svg-icons'
@@ -26,24 +25,20 @@ export class UserImportDialogComponent {
   protected eventService = inject(EventService)
   private fileUploadService = inject(FileUploadService)
 
-  protected resourceUrl: string
+  protected resourceUrl = this.userService.resourceUrl + '/upload'
   protected isSaving = signal(false)
   protected currentFile = signal<FileList | null>(null)
-  csvErrors: any
+  protected csvErrors = signal<{ index: number; message: string }[] | null>(null)
   protected loading = signal(false)
   protected faBan = faBan
   protected faSave = faSave
-
-  constructor() {
-    this.resourceUrl = this.userService.resourceUrl + '/upload'
-  }
 
   clear() {
     this.activeModal.dismiss('cancel')
   }
 
-  selectFile(event: any) {
-    this.currentFile.set(event.target.files)
+  selectFile(event: Event) {
+    this.currentFile.set((event.target as HTMLInputElement).files)
   }
 
   clearFileInput(event: MouseEvent) {
@@ -52,16 +47,23 @@ export class UserImportDialogComponent {
   }
 
   upload() {
-    if (this.currentFile()) {
+    const currentFile = this.currentFile()
+    if (currentFile) {
       this.loading.set(true)
-      const f = this.currentFile()!.item(0)
+      const f = currentFile.item(0)
 
-      this.fileUploadService.uploadFile(this.resourceUrl, f!, 'text').subscribe((res: string) => {
+      if (!f) {
+        this.loading.set(false)
+        return
+      }
+
+      this.fileUploadService.uploadFile(this.resourceUrl, f, 'text').subscribe((res: string) => {
         if (res) {
-          this.csvErrors = JSON.parse(res)
+          const errors = JSON.parse(res) as { index: number; message: string }[]
+          this.csvErrors.set(errors)
           this.loading.set(false)
-          if (this.csvErrors.length === 0) {
-            this.eventService.broadcast(new Event(EventType.USER_LIST_MODIFIED))
+          if (errors.length === 0) {
+            this.eventService.broadcast(new AppEvent(EventType.USER_LIST_MODIFIED))
             this.activeModal.dismiss(true)
           }
         }
@@ -77,6 +79,7 @@ export class UserImportDialogComponent {
 @Component({
   selector: 'app-user-import-popup',
   template: '',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserImportPopupComponent implements OnInit, OnDestroy {
   protected activatedRoute = inject(ActivatedRoute)
@@ -92,11 +95,11 @@ export class UserImportPopupComponent implements OnInit, OnDestroy {
         backdrop: 'static',
       })
       this.ngbModalRef.result.then(
-        (result) => {
+        () => {
           this.router.navigate(['/users', { outlets: { popup: null } }])
           this.ngbModalRef = null
         },
-        (reason) => {
+        () => {
           this.router.navigate(['/users', { outlets: { popup: null } }])
           this.ngbModalRef = null
         }

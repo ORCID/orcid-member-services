@@ -152,6 +152,11 @@
               <th class="text-center">
                 <span i18n="@@gatewayApp.msUserServiceMSUser.mfa.string">2FA</span>
               </th>
+              <th class="text-center">
+                <span i18n="@@gatewayApp.msUserServiceMSUser.manageApiCredentialsEnabled.string"
+                  >Manage API credentials</span
+                >
+              </th>
             }
             <th></th>
           </tr>
@@ -198,6 +203,15 @@
                     <fa-icon aria-hidden="true" [icon]="faCheckCircle" [style.color]="'#28a745'" />
                   }
                   @if (!user.mfaEnabled) {
+                    <fa-icon aria-hidden="true" [icon]="faTimesCircle" [style.color]="'#f22112'" />
+                  }
+                </td>
+                <td class="text-center">
+                  <span class="visually-hidden">{{ user.manageApiCredsEnabled }}</span>
+                  @if (user.manageApiCredsEnabled) {
+                    <fa-icon aria-hidden="true" [icon]="faCheckCircle" [style.color]="'#28a745'" />
+                  }
+                  @if (!user.manageApiCredsEnabled) {
                     <fa-icon aria-hidden="true" [icon]="faTimesCircle" [style.color]="'#f22112'" />
                   }
                 </td>

@@ -3,7 +3,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { IUser } from './model/user.model'
 import { faCheckCircle, faTimesCircle, faPencilAlt, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { ActivatedRoute, RouterLink } from '@angular/router'
-import { map, switchMap, tap } from 'rxjs'
 import { UserService } from './service/user.service'
 import { AlertService } from '../shared/service/alert.service'
 import { MemberService } from '../member/service/member.service'
@@ -43,7 +42,7 @@ export class UserDetailComponent implements OnInit {
   sendActivate() {
     const user = this.user()
     if (user) {
-      this.userService.sendActivate(user).subscribe((res) => {
+      this.userService.sendActivate(user).subscribe(() => {
         this.alertService.broadcast(AlertType.TOAST, AlertMessage.SEND_ACTIVATION_SUCCESS)
         this.previousState()
       })

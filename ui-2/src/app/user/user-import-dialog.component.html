@@ -5,13 +5,13 @@
   </div>
   <div class="modal-body">
     <app-alert-error />
-    @if (csvErrors && csvErrors.length > 0) {
+    @if ((csvErrors()?.length ?? 0) > 0) {
       <div class="alerts top right" role="alert">
         <ngb-alert
           class="alert alert-danger alert-dismissible"
           role="alert"
           ng-reflect-type="danger"
-          (close)="csvErrors = null"
+          (close)="csvErrors.set(null)"
           [dismissible]="false"
         >
           <p i18n="@@gatewayApp.msUserServiceMSUser.import.errors.label.string">
@@ -22,7 +22,7 @@
               <th>Errors</th>
             </thead>
             <tbody>
-              @for (error of csvErrors; track error) {
+              @for (error of csvErrors() ?? []; track error) {
                 <tr>
                   <td>Row {{ error['index'] }}</td>
                   <td>{{ error['message'] }}</td>
@@ -32,9 +32,9 @@
           </table>
           <button
             type="button"
-            (click)="csvErrors = null"
-            (keyup.esc)="csvErrors = null"
-            (keyup.enter)="csvErrors = null"
+            (click)="csvErrors.set(null)"
+            (keyup.esc)="csvErrors.set(null)"
+            (keyup.enter)="csvErrors.set(null)"
             class="btn-close"
             aria-label="Close"
           ></button>
