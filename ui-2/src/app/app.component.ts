@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     if (!window.location.pathname.includes('/landing-page')) {
       this.authCheckStarted.set(true)
-      this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, accessToken, errorMessage }) => {
+      this.oidcSecurityService.checkAuth().subscribe(({ isAuthenticated, errorMessage }) => {
         if (isAuthenticated) {
           this.accountService.getAccountData(true).subscribe(() => {
             this.eventService.broadcast(new Event(EventType.LOG_IN_SUCCESS))
@@ -39,9 +39,8 @@ export class AppComponent implements OnInit {
               this.router.navigate(['/'])
             }
           })
-        } else {
-          console.error('OIDC Authentication FAILED or NOT LOGGED IN')
-          console.error('Error Message:', errorMessage)
+        } else if (errorMessage) {
+          console.error('OIDC Authentication failed:', errorMessage)
         }
       })
     }

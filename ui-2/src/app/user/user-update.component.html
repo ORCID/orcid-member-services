@@ -6,7 +6,7 @@
       </h1>
       <div>
         <app-alert-error />
-        @if (validation.errors && validation.errors.length > 0) {
+        @if ((validation().errors?.length ?? 0) > 0) {
           <div class="alerts top right" role="alert">
             <ngb-alert
               class="alert alert-danger alert-dismissible"
@@ -15,7 +15,7 @@
               [dismissible]="false"
             >
               <ul class="validation-errors">
-                @for (error of validation.errors; track error) {
+                @for (error of validation().errors ?? []; track error) {
                   <li>
                     {{ error }}
                   </li>
@@ -23,9 +23,9 @@
               </ul>
               <button
                 type="button"
-                (click)="validation.errors = null"
-                (keyup.esc)="validation.errors = null"
-                (keyup.enter)="validation.errors = null"
+                (click)="validation.set({})"
+                (keyup.esc)="validation.set({})"
+                (keyup.enter)="validation.set({})"
                 class="btn-close"
                 aria-label="Close"
               ></button>
@@ -97,9 +97,9 @@
             >Organization</label
           >
           <fieldset [disabled]="isExistentMember()">
-            @if (memberList.length > 0) {
+            @if (memberList().length > 0) {
               <select class="form-select" name="memberId" id="field_memberId" formControlName="memberId">
-                @for (member of memberList; track member) {
+                @for (member of memberList(); track member) {
                   <option [ngValue]="member.id">{{ member.clientName }}</option>
                 }
               </select>
@@ -151,7 +151,7 @@
             (click)="confirmOwnershipChange()"
             type="submit"
             id="save-entity"
-            [disabled]="editForm.invalid || isSaving() || memberList.length === 0"
+            [disabled]="editForm.invalid || isSaving() || memberList().length === 0"
             class="btn btn-primary"
           >
             <fa-icon [icon]="faSave" />&nbsp;<span i18n="@@entity.action.save.string">Save</span>
@@ -162,7 +162,7 @@
             (click)="save()"
             type="submit"
             id="save-entity2"
-            [disabled]="editForm.invalid || isSaving() || memberList.length === 0"
+            [disabled]="editForm.invalid || isSaving() || memberList().length === 0"
             class="btn btn-primary"
           >
             <fa-icon [icon]="faSave" />&nbsp;<span i18n="@@entity.action.save.string">Save</span>
@@ -229,7 +229,7 @@
           <button
             (click)="saveMfa()"
             type="submit"
-            [disabled]="!disableMfa() || isSaving() || memberList.length === 0"
+            [disabled]="!disableMfa() || isSaving() || memberList().length === 0"
             class="btn btn-primary"
           >
             <fa-icon [icon]="faSave" />&nbsp;<span i18n="@@entity.action.save.string">Save</span>

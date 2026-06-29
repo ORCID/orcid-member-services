@@ -8,12 +8,14 @@ import { Observable } from 'rxjs'
 
 import { map } from 'rxjs/operators'
 import { AccountService } from '../account'
+import { IAccount } from '../account/model/account.model'
 import { AlertMessage, AlertType, DATE_TIME_FORMAT, emailValidator } from '../app.constants'
 import { ErrorService } from '../error/service/error.service'
 import { IMember } from '../member/model/member.model'
 import { MemberService } from '../member/service/member.service'
 import { AlertService } from '../shared/service/alert.service'
 import { IUser, User } from './model/user.model'
+import { IUserValidation } from './model/user-validation.model'
 import { UserService } from './service/user.service'
 import { FeatureToggleService } from '../shared/service/feature-toggle.service'
 import { ErrorAlertComponent } from '../error/error-alert.component'
@@ -47,8 +49,8 @@ export class UserUpdateComponent implements OnInit {
   protected faBan = faBan
   protected faSave = faSave
   protected showIsAdminCheckbox = signal(false)
-  protected currentAccount = signal<any>(null)
-  validation: any = {}
+  protected currentAccount = signal<IAccount | null>(null)
+  protected validation = signal<Partial<IUserValidation>>({})
   protected disableMfa = signal(false)
 
   editForm = this.fb.group({
@@ -78,7 +80,7 @@ export class UserUpdateComponent implements OnInit {
     twoFactorAuthentication: new FormControl<boolean | null>(null),
   })
 
-  memberList = [] as IMember[]
+  memberList = signal<IMember[]>([])
   protected hasOwner = signal(false)
 
   ngOnInit() {
@@ -91,15 +93,14 @@ export class UserUpdateComponent implements OnInit {
     })
     this.editForm.disable()
     this.accountService.getAccountData().subscribe((account) => {
-      this.currentAccount.set(account)
+      this.currentAccount.set(account ?? null)
       this.getMemberList().subscribe((list: IMember[]) => {
-        list.forEach((msMember: IMember) => {
-          this.memberList.push(msMember)
-        })
+        this.memberList.set(list)
         this.editForm.enable()
-        if (this.existentUser()) {
-          this.updateForm(this.existentUser()!)
-          this.updateMfaForm(this.existentUser()!)
+        const existentUser = this.existentUser()
+        if (existentUser) {
+          this.updateForm(existentUser)
+          this.updateMfaForm(existentUser)
         } else {
           if (this.hasRoleOrgOwner() || this.hasRoleConsortiumLead()) {
             this.editForm.patchValue({
@@ -114,8 +115,8 @@ export class UserUpdateComponent implements OnInit {
   }
 
   onChanges(): void {
-    this.editForm.get('salesforceId')?.valueChanges.subscribe((val) => {
-      const selectedOrg = this.memberList.find((cm) => cm.salesforceId === this.editForm.get(['salesforceId'])?.value)
+    this.editForm.get('salesforceId')?.valueChanges.subscribe(() => {
+      const selectedOrg = this.memberList().find((cm) => cm.salesforceId === this.editForm.get(['salesforceId'])?.value)
       if (this.hasRoleAdmin()) {
         if (selectedOrg) {
           this.showIsAdminCheckbox.set(selectedOrg.superadminEnabled || false)
@@ -148,7 +149,7 @@ export class UserUpdateComponent implements OnInit {
       lastName: user.lastName,
       mainContact: user.mainContact,
       memberId: user.memberId,
-      manageApiCredentialsEnabled: user.manageApiCredsEnabled,
+      manageApiCredentialsEnabled: user.mainContact || user.manageApiCredsEnabled,
       activated: user.activated,
       isAdmin: user.isAdmin,
       createdBy: user.createdBy,
@@ -188,7 +189,7 @@ export class UserUpdateComponent implements OnInit {
         })
       )
     } else {
-      return this.memberService.find(this.currentAccount()?.memberId).pipe(
+      return this.memberService.find(this.currentAccount()?.memberId ?? '').pipe(
         map((res) => {
           if (res) {
             return [res]
@@ -266,7 +267,7 @@ export class UserUpdateComponent implements OnInit {
           }
         } else {
           this.isSaving.set(false)
-          this.validation = data
+          this.validation.set(data)
         }
       })
     }
@@ -302,15 +303,16 @@ export class UserUpdateComponent implements OnInit {
           }
         } else {
           this.isSaving.set(false)
-          this.validation = data
+          this.validation.set(data)
         }
       })
     }
   }
 
   sendActivate() {
-    if (this.existentUser()?.id) {
-      this.userService.sendActivate(this.existentUser()!).subscribe((res) => {
+    const existentUser = this.existentUser()
+    if (existentUser?.id) {
+      this.userService.sendActivate(existentUser).subscribe((res) => {
         if (res) {
           this.alertService.broadcast(AlertType.TOAST, AlertMessage.SEND_ACTIVATION_SUCCESS)
         } else {
@@ -322,10 +324,8 @@ export class UserUpdateComponent implements OnInit {
   }
 
   displaySendActivate() {
-    if (this.existentUser() && this.existentUser()!.email && !this.existentUser()!.activated) {
-      return true
-    }
-    return false
+    const existentUser = this.existentUser()
+    return !!(existentUser && existentUser.email && !existentUser.activated)
   }
 
   private createFromForm(): IUser {

@@ -1,17 +1,16 @@
-import { ErrorHandler, NgModule } from '@angular/core'
+import { ErrorHandler, importProvidersFrom, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 
 import { CommonModule } from '@angular/common'
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { FormsModule } from '@angular/forms'
 import { AuthInterceptor, AuthModule, LogLevel } from 'angular-auth-oidc-client'
+import { QuillModule } from 'ngx-quill'
 import { provideNgxWebstorage, withLocalStorage, withNgxWebstorageConfig, withSessionStorage } from 'ngx-webstorage'
 import { environment } from '../environments/environment'
-import { AccountModule } from './account/account.module'
 import { AppRoutingModule } from './app-routing.module'
 import { ErrorComponent } from './error/error.component'
 import { ErrorService } from './error/service/error.service'
-import { HomeModule } from './home/home.module'
 import { FooterComponent } from './layout/footer/footer.component'
 import { NavbarComponent } from './layout/navbar/navbar.component'
 import { AuthExpiredInterceptor } from './shared/interceptor/auth-expired.interceptor'
@@ -22,8 +21,6 @@ import { ApiCredentialsMfaEnabledDialogComponent } from './layout/navbar/api-cre
 @NgModule({
   imports: [
     BrowserModule,
-    HomeModule,
-    AccountModule,
     AppRoutingModule,
     CommonModule,
     FormsModule,
@@ -74,6 +71,7 @@ import { ApiCredentialsMfaEnabledDialogComponent } from './layout/navbar/api-cre
       withLocalStorage(),
       withSessionStorage()
     ),
+    importProvidersFrom(QuillModule.forRoot()),
   ],
 })
 export class AppModule {}

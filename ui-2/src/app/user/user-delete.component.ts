@@ -54,6 +54,7 @@ export class UserDeleteDialogComponent implements OnInit {
 @Component({
   selector: 'app-user-delete-popup',
   template: '',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserDeletePopupComponent implements OnInit, OnDestroy {
   protected activatedRoute = inject(ActivatedRoute)

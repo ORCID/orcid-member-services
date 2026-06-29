@@ -14,6 +14,7 @@ import { UserImportDialogComponent } from './user-import-dialog.component'
 
 type UserImportDialogInternals = {
   currentFile: WritableSignal<FileList | null>
+  csvErrors: WritableSignal<{ index: number; message: string }[] | null>
 }
 const internals = (component: UserImportDialogComponent): UserImportDialogInternals =>
   component as unknown as UserImportDialogInternals
@@ -80,7 +81,7 @@ describe('UserImportDialogComponent', () => {
     )
     component.upload()
     expect(uploadService.uploadFile).toHaveBeenCalled()
-    expect(component.csvErrors.length).toEqual(1)
+    expect(internals(component).csvErrors()?.length).toEqual(1)
   })
 
   const getFileList = () => {
