@@ -29,7 +29,7 @@
   </div>
   @if (releaseVersion) {
     <div class="release-version">
-      {{ releaseVersion }}
+      {{ releaseVersion | async }}
     </div>
   }
 </footer>
