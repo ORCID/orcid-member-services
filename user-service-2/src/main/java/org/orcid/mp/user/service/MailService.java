@@ -2,6 +2,7 @@ package org.orcid.mp.user.service;
 
 import java.util.Locale;
 
+import org.orcid.mp.user.config.togglz.PortalFeatures;
 import org.orcid.mp.user.domain.User;
 import org.orcid.mp.user.client.MailgunClient;
 import org.orcid.mp.user.util.LocaleUtil;
@@ -66,7 +67,11 @@ public class MailService {
 
     public void sendOrganizationOwnerChangedMail(User user, String member) {
         LOGGER.debug("Sending organization owner changed email to '{}'", user.getEmail());
-        sendEmailFromTemplateMemberInfo(user, member, "mail/organizationOwnerChanged", "email.organization.title");
+        if (PortalFeatures.MANAGE_API_CREDENTIALS.isActive()) {
+            sendEmailFromTemplateMemberInfo(user, member, "mail/organizationOwnerChangedv2", "email.orgOwner.title");
+        } else {
+            sendEmailFromTemplateMemberInfo(user, member, "mail/organizationOwnerChanged", "email.organization.title");
+        }
     }
 
     private void sendEmailFromTemplate(User user, String templateName, String titleKey) {
