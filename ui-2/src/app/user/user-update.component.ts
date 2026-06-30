@@ -124,7 +124,6 @@ export class UserUpdateComponent implements OnInit {
 
   onChanges(): void {
     this.editForm.get('memberId')?.valueChanges.subscribe(() => {
-      console.log('UserUpdateComponent: memberId value changed, checking if selected org is superadminEnabled')
       const selectedOrg = this.memberList().find((cm) => cm.id === this.editForm.get(['memberId'])?.value)
       if (this.hasRoleAdmin()) {
         if (selectedOrg) {
