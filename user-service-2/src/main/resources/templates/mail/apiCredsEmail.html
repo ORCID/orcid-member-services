@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.apiCreds.title}">
+        ORCID Member Portal - Access to Manage your organization's Member API Credentials
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body
+    style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
+<div style="padding: 20px; padding-top: 10px; margin: auto;">
+    <div th:insert="~{mail/common :: emailHeader}"></div>
+    <p th:text="#{email.apiCreds.para1}">
+        You have been granted permission to manage your organization's Member API credentials. To use this feature you need to have 2FA enabled on your member portal account.
+    </p>
+    <p th:text="#{email.apiCreds.para2}">
+        If you have any problems accessing this feature then please contact our Member Support Team.
+    </p>
+</div>
+</body>
+</html>

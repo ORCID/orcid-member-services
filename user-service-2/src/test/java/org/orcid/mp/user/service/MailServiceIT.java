@@ -85,4 +85,17 @@ public class MailServiceIT {
         assertThat(contentCaptor.getValue()).isNotNull();
 
     }
+
+    @Test
+    public void testSendApiCredsEnabledEmail() throws MailException {
+        User user = new User();
+        user.setLangKey(Constants.DEFAULT_LANGUAGE);
+        user.setEmail("john.doe@example.com");
+        user.setManageApiCredsEnabled(true);
+        mailService.sendApiCredsEnabledEmail(user);
+        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
+        assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
+        assertThat(subjectCaptor.getValue()).isEqualTo("ORCID Member Portal - Access to Manage your organization's Member API Credentials");
+        assertThat(contentCaptor.getValue()).isNotNull();
+    }
 }

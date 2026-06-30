@@ -46,6 +46,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class UserServiceTest {
@@ -94,8 +95,8 @@ public class UserServiceTest {
         userService.resendActivationEmail("key");
 
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
-        Mockito.verify(userRepository, Mockito.times(1)).save(captor.capture());
-        Mockito.verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
+        verify(userRepository, Mockito.times(1)).save(captor.capture());
+        verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
 
         User updated = captor.getValue();
         assertThat(updated.getResetKey()).isNotNull();
@@ -117,7 +118,7 @@ public class UserServiceTest {
         userService.clearUser("some-id");
 
         ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
-        Mockito.verify(userRepository).save(captor.capture());
+        verify(userRepository).save(captor.capture());
         User cleared = captor.getValue();
         assertNull(cleared.getFirstName());
         assertNull(cleared.getLastName());
@@ -139,9 +140,35 @@ public class UserServiceTest {
         UserDTO userDTO = getUserDTO();
         userService.createUser(userDTO);
 
-        Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
-        Mockito.verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
-        Mockito.verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
+        verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
+        verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
+        verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
+    }
+
+    @Test
+    void testCreateUserForMemberApiCredsEnabled() {
+        when(memberServiceClient.getMember(Mockito.anyString())).thenReturn(memberWithAMEnabled());
+        when(userRepository.save(Mockito.any(User.class))).thenAnswer(new Answer<User>() {
+            @Override
+            public User answer(InvocationOnMock invocation) throws Throwable {
+                return (User) invocation.getArgument(0);
+            }
+        });
+        Mockito.doNothing().when(mailService).sendActivationEmail(Mockito.any(User.class));
+        Mockito.doNothing().when(mailService).sendApiCredsEnabledEmail(Mockito.any(User.class));
+
+        User mappedUser = new User();
+        mappedUser.setManageApiCredsEnabled(true);
+        when(userMapper.toUser(Mockito.any(UserDTO.class))).thenReturn(mappedUser);
+
+        UserDTO userDTO = getUserDTO();
+        userDTO.setManageApiCredsEnabled(true);
+        userService.createUser(userDTO);
+
+        verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
+        verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
+        verify(mailService, Mockito.times(1)).sendApiCredsEnabledEmail(Mockito.any(User.class));
+        verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
     }
 
     @Test
@@ -159,8 +186,8 @@ public class UserServiceTest {
         UserDTO userDTO = getUserDTO();
         userService.createUser(userDTO);
 
-        Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
-        Mockito.verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
+        verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
+        verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
     }
 
     @Test
@@ -187,7 +214,7 @@ public class UserServiceTest {
         userDTO.setIsAdmin(false);
         userService.updateUser(userDTO);
 
-        Mockito.verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
+        verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
 
         User user = userCaptor.getValue();
         assertEquals(userDTO.getFirstName(), user.getFirstName());
@@ -222,7 +249,8 @@ public class UserServiceTest {
         userDTO.setManageApiCredsEnabled(true);
         userService.updateUser(userDTO);
 
-        Mockito.verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
+        verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
+        verify(mailService, Mockito.times(1)).sendApiCredsEnabledEmail(userCaptor.capture());
 
         User user = userCaptor.getValue();
         assertEquals(userDTO.getFirstName(), user.getFirstName());
@@ -258,7 +286,7 @@ public class UserServiceTest {
         userDTO.setManageApiCredsEnabled(false);
         userService.updateUser(userDTO);
 
-        Mockito.verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
+        verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
 
         User user = userCaptor.getValue();
         assertEquals(userDTO.getFirstName(), user.getFirstName());
@@ -294,7 +322,7 @@ public class UserServiceTest {
         userDTO.setIsAdmin(true);
         userService.updateUser(userDTO);
 
-        Mockito.verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
+        verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
 
         User user = userCaptor.getValue();
         assertEquals(userDTO.getFirstName(), user.getFirstName());
@@ -326,7 +354,7 @@ public class UserServiceTest {
 
         userService.updateUser(toUpdate);
 
-        Mockito.verify(mailService, Mockito.never()).sendOrganizationOwnerChangedMail(Mockito.any(User.class), Mockito.anyString());
+        verify(mailService, Mockito.never()).sendOrganizationOwnerChangedMail(Mockito.any(User.class), Mockito.anyString());
     }
 
     @Test
@@ -352,7 +380,7 @@ public class UserServiceTest {
 
         userService.updateUser(toUpdate);
 
-        Mockito.verify(mailService, Mockito.times(1)).sendOrganizationOwnerChangedMail(Mockito.any(User.class), Mockito.anyString());
+        verify(mailService, Mockito.times(1)).sendOrganizationOwnerChangedMail(Mockito.any(User.class), Mockito.anyString());
     }
 
     @Test
@@ -372,7 +400,7 @@ public class UserServiceTest {
         userService.updateAccount("new first name", "new last name", "no@change.com", "en", "hmmmm");
 
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-        Mockito.verify(userRepository).save(userCaptor.capture());
+        verify(userRepository).save(userCaptor.capture());
         User updatedUser = userCaptor.getValue();
         assertEquals("new first name", updatedUser.getFirstName());
         assertEquals("new last name", updatedUser.getLastName());
@@ -394,8 +422,8 @@ public class UserServiceTest {
         userService.uploadUserCSV(inputStream, getUser("some-user@orcid.org"));
 
         // check only new users saved
-        Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
-        Mockito.verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
+        verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
+        verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
     }
 
     @Test
@@ -425,8 +453,8 @@ public class UserServiceTest {
 
         userService.updateMemberNames();
 
-        Mockito.verify(userRepository, Mockito.times(1)).findByMemberName(Mockito.any(Pageable.class), Mockito.isNull());
-        Mockito.verify(memberServiceClient, Mockito.times(10)).getMember(Mockito.anyString());
+        verify(userRepository, Mockito.times(1)).findByMemberName(Mockito.any(Pageable.class), Mockito.isNull());
+        verify(memberServiceClient, Mockito.times(10)).getMember(Mockito.anyString());
     }
 
     @Test
@@ -436,8 +464,8 @@ public class UserServiceTest {
 
         userService.updateMemberNames();
 
-        Mockito.verify(userRepository, Mockito.times(1)).findByMemberName(Mockito.any(Pageable.class), Mockito.isNull());
-        Mockito.verify(memberServiceClient, Mockito.times(2)).getMember(Mockito.anyString());
+        verify(userRepository, Mockito.times(1)).findByMemberName(Mockito.any(Pageable.class), Mockito.isNull());
+        verify(memberServiceClient, Mockito.times(2)).getMember(Mockito.anyString());
     }
 
     @Test
@@ -449,15 +477,15 @@ public class UserServiceTest {
         assertNotNull(users);
         assertEquals(20, users.getTotalElements());
 
-        Mockito.verify(userRepository, Mockito.times(1)).findByDeletedFalse(Mockito.any(Pageable.class));
-        Mockito.verify(userMapper, Mockito.times(20)).toUserDTO(Mockito.any(User.class));
+        verify(userRepository, Mockito.times(1)).findByDeletedFalse(Mockito.any(Pageable.class));
+        verify(userMapper, Mockito.times(20)).toUserDTO(Mockito.any(User.class));
 
         users = userService.getAllManagedUsers(Mockito.mock(Pageable.class), "filter");
         assertNotNull(users);
         assertEquals(10, users.getTotalElements());
 
-        Mockito.verify(userRepository, Mockito.times(1)).findByDeletedIsFalseAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndEmailContainingIgnoreCase(eq("filter"), eq("filter"), eq("filter"), eq("filter"), Mockito.any(Pageable.class));
-        Mockito.verify(userMapper, Mockito.times(30)).toUserDTO(Mockito.any(User.class)); // 10
+        verify(userRepository, Mockito.times(1)).findByDeletedIsFalseAndMemberNameContainingIgnoreCaseOrDeletedIsFalseAndFirstNameContainingIgnoreCaseOrDeletedIsFalseAndLastNameContainingIgnoreCaseOrDeletedIsFalseAndEmailContainingIgnoreCase(eq("filter"), eq("filter"), eq("filter"), eq("filter"), Mockito.any(Pageable.class));
+        verify(userMapper, Mockito.times(30)).toUserDTO(Mockito.any(User.class)); // 10
         // more
     }
 
@@ -512,7 +540,7 @@ public class UserServiceTest {
 
         userService.sendActivationReminders();
 
-        Mockito.verify(userRepository, Mockito.times(4)).save(userCaptor.capture());
+        verify(userRepository, Mockito.times(4)).save(userCaptor.capture());
 
         List<User> captured = userCaptor.getAllValues();
         assertThat(captured.get(1).getEmail()).isEqualTo("2@user.com");
@@ -537,7 +565,7 @@ public class UserServiceTest {
         when(userRepository.findOneByEmailIgnoreCase(eq("username"))).thenReturn(Optional.of(getUserUsingMfa()));
         when(userRepository.findById(eq("userId"))).thenReturn(Optional.of(getUserUsingMfa()));
         userService.disableMfa("userId");
-        Mockito.verify(userRepository).save(userCaptor.capture());
+        verify(userRepository).save(userCaptor.capture());
         User captured = userCaptor.getValue();
         assertThat(captured.getMfaEnabled()).isFalse();
         assertThat(captured.getMfaEncryptedSecret()).isNull();
@@ -549,7 +577,7 @@ public class UserServiceTest {
         when(userRepository.findOneByEmailIgnoreCase(eq("username"))).thenReturn(Optional.of(getAdminUser()));
         when(userRepository.findById(eq("userId"))).thenReturn(Optional.of(getUserUsingMfa()));
         userService.disableMfa("userId");
-        Mockito.verify(userRepository).save(userCaptor.capture());
+        verify(userRepository).save(userCaptor.capture());
         User captured = userCaptor.getValue();
         assertThat(captured.getMfaEnabled()).isFalse();
         assertThat(captured.getMfaEncryptedSecret()).isNull();
@@ -599,9 +627,9 @@ public class UserServiceTest {
         when(userRepository.findOneByEmailIgnoreCase(eq("user"))).thenReturn(Optional.of(user));
         userService.validMfaCode("user", "backupCode2");
 
-        Mockito.verify(passwordEncoder, Mockito.times(3)).matches(eq("backupCode2"), Mockito.anyString());
-        Mockito.verify(userRepository).findOneByEmailIgnoreCase(eq("user"));
-        Mockito.verify(userRepository).save(userCaptor.capture());
+        verify(passwordEncoder, Mockito.times(3)).matches(eq("backupCode2"), Mockito.anyString());
+        verify(userRepository).findOneByEmailIgnoreCase(eq("user"));
+        verify(userRepository).save(userCaptor.capture());
 
         User saved = userCaptor.getValue();
         assertEquals(2, saved.getMfaBackupCodes().size());
@@ -656,7 +684,7 @@ public class UserServiceTest {
             // hashed
         });
 
-        Mockito.verify(userRepository).save(userCaptor.capture());
+        verify(userRepository).save(userCaptor.capture());
 
         User captured = userCaptor.getValue();
         assertThat(captured.getMfaEnabled()).isTrue();
@@ -676,7 +704,7 @@ public class UserServiceTest {
         boolean success = userService.updateUsersMemberName("member-id", "newName");
         assertThat(success).isTrue();
 
-        Mockito.verify(userRepository).updateMemberNames(eq("member-id"), eq("newName"));
+        verify(userRepository).updateMemberNames(eq("member-id"), eq("newName"));
     }
 
     private List<User> getUsersForMemberId(String memberId, int from, int to) {

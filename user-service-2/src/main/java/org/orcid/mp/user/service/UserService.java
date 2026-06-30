@@ -214,6 +214,9 @@ public class UserService {
             mailService.sendOrganizationOwnerChangedMail(newUser, member.getClientName());
         }
 
+        if (newUser.getManageApiCredsEnabled() != null && newUser.getManageApiCredsEnabled()) {
+            mailService.sendApiCredsEnabledEmail(newUser);
+        }
         return userMapper.toUserDTO(newUser);
     }
 
@@ -284,6 +287,11 @@ public class UserService {
         user.setMemberName(member.getClientName());
         user.setLangKey(userDTO.getLangKey() != null ? userDTO.getLangKey() : user.getLangKey());
         user.setAdmin(userDTO.getIsAdmin());
+
+        if ((user.getManageApiCredsEnabled() == null || !user.getManageApiCredsEnabled()) && userDTO.isManageApiCredsEnabled()) {
+            mailService.sendApiCredsEnabledEmail(user);
+        }
+
         user.setManageApiCredsEnabled(userDTO.isManageApiCredsEnabled());
 
         if (user.getMemberId() != null && userDTO.getMemberId() != null && !user.getMemberId().equals(userDTO.getMemberId())) {

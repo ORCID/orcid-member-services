@@ -48,6 +48,7 @@ public class UserMapperTest {
         assertThat(user.getImageUrl()).isEqualTo("http://placehold.it/50x50");
         assertThat(user.getLangKey()).isEqualTo("en");
         assertThat(user.getAdmin()).isTrue();
+        assertThat(user.getManageApiCredsEnabled()).isTrue();
     }
 
     @Test
@@ -90,7 +91,7 @@ public class UserMapperTest {
         userDTO.setCreatedBy("someone");
         userDTO.setLastModifiedBy("hello@orcid.org");
         userDTO.setIsAdmin(true);
-        userDTO.setManageApiCredsEnabled(false);
+        userDTO.setManageApiCredsEnabled(true);
         return userDTO;
     }
 
