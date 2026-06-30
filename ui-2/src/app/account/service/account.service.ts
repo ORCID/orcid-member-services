@@ -1,7 +1,7 @@
 import { Injectable, OnInit, inject } from '@angular/core'
 import { SessionStorageService } from 'ngx-webstorage'
 import { HttpClient, HttpResponse } from '@angular/common/http'
-import { BehaviorSubject, EMPTY, Observable, Subject, catchError, map, of, takeUntil } from 'rxjs'
+import { BehaviorSubject, EMPTY, Observable, Subject, catchError, map, of, takeUntil, tap } from 'rxjs'
 
 import { IAccount } from '../model/account.model'
 import { LanguageService } from 'src/app/shared/service/language.service'
@@ -19,6 +19,7 @@ export class AccountService {
   private oidcSecurityService = inject(OidcSecurityService)
 
   private accountData = new BehaviorSubject<IAccount | null | undefined>(undefined)
+  readonly accountData$ = this.accountData.asObservable()
   private isFetchingAccountData = false
   private stopFetchingAccountData = new Subject()
   private authenticated = false
@@ -90,6 +91,9 @@ export class AccountService {
 
   enableMfa(mfaSetup: any): Observable<string[] | null> {
     return this.http.post('/userservice/account/mfa/on', mfaSetup, { observe: 'response' }).pipe(
+      tap(() => {
+        this.accountData.next({ ...this.accountData.value!, mfaEnabled: true })
+      }),
       map((res: HttpResponse<any>) => res.body),
       catchError(() => {
         console.error('error enabling mfa')
@@ -100,6 +104,9 @@ export class AccountService {
 
   disableMfa(userId: string): Observable<boolean> {
     return this.http.post(`/userservice/account/${userId}/mfa/off`, null, { observe: 'response' }).pipe(
+      tap(() => {
+        this.accountData.next({ ...this.accountData.value!, mfaEnabled: false })
+      }),
       map((res: HttpResponse<any>) => this.isSuccess(res)),
       catchError(() => {
         return of(false)

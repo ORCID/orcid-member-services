@@ -149,7 +149,7 @@ export class UserUpdateComponent implements OnInit {
       lastName: user.lastName,
       mainContact: user.mainContact,
       memberId: user.memberId,
-      manageApiCredentialsEnabled: user.mainContact || user.manageApiCredsEnabled,
+      manageApiCredentialsEnabled: user.manageApiCredsEnabled,
       activated: user.activated,
       isAdmin: user.isAdmin,
       createdBy: user.createdBy,

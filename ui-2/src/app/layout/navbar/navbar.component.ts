@@ -89,6 +89,14 @@ export class NavbarComponent {
           this.resetAuthenticationState()
         }
       })
+
+    this.accountService.accountData$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((account) => {
+        if (account) {
+          this.updateAuthenticationState()
+        }
+      })
   }
 
   private updateAuthenticationState() {
