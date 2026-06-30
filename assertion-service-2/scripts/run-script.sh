@@ -41,7 +41,7 @@ if [[ -z "$USERNAME" || -z "$SERVER" || -z "$CONTAINER" ]]; then
 fi
 
 if [[ -n "$SCRIPT_PATH" ]]; then
-    ssh "$USERNAME@$SERVER" "docker exec $CONTAINER python3 /app/scripts/$SCRIPT_PATH"
+    ssh -t "$USERNAME@$SERVER" "docker exec -i $CONTAINER python3 /app/scripts/$SCRIPT_PATH"
 else
     ssh -t "$USERNAME@$SERVER" "docker exec -it $CONTAINER /bin/bash"
 fi

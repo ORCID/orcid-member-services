@@ -56,7 +56,6 @@ class OrcidRecordBackfiller:
     def __init__(self, connection: MongoDBConnection):
         self.connection = connection
         self.collection_assertion = connection.get_collection("assertion")
-        self.collection_snr = connection.get_collection("send_notifications_request")
         self.collection_orcid_record = connection.get_collection("orcid_record")
 
     def _distinct_emails(self, collection, label: str) -> Set[str]:
@@ -89,10 +88,9 @@ class OrcidRecordBackfiller:
             candidate_emails = {source_email}
             logger.info("  Single-email mode: %s", source_email)
         else:
-            logger.info("  Building candidate set from assertion + send_notifications_request ...")
+            logger.info("  Building candidate set from assertion ...")
             from_assertion = self._distinct_emails(self.collection_assertion, "assertion")
-            from_snr = self._distinct_emails(self.collection_snr, "send_notifications_request")
-            candidate_emails = from_assertion | from_snr
+            candidate_emails = from_assertion
             logger.info("  Combined candidate set: %d unique emails", len(candidate_emails))
 
         if not candidate_emails:
@@ -211,8 +209,7 @@ Environment Variables:
         required=False,
         default=None,
         help="Optional single email to process. When given only that email "
-        "is checked / inserted; otherwise every distinct email in assertion "
-        "and send_notifications_request is considered.",
+        "is checked / inserted; otherwise every distinct email in assertion.",
     )
 
     return parser.parse_args()
@@ -237,7 +234,7 @@ def main():
     logger.info("Backfill missing orcid_record placeholders")
     logger.info("=" * 80)
     logger.info("Database:      %s", database)
-    logger.info("Collections:   assertion, send_notifications_request -> orcid_record")
+    logger.info("Collections:   assertion -> orcid_record")
     logger.info(
         "MongoDB URI:   %s...",
         mongo_uri[:20] if len(mongo_uri) > 20 else mongo_uri,
