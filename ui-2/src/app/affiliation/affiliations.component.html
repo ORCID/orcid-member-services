@@ -3,23 +3,13 @@
   <div class="row justify-content-end">
     <div class="col-md-12 mb-2 d-flex flex-wrap justify-content-end gap-2">
       <button
-        data-cy="sendNotifications"
-        class="btn btn-primary send-notifications ms-1"
-        [routerLink]="['/', 'affiliations', { outlets: { popup: 'notifications' } }]"
-      >
-        <fa-icon [icon]="faPaperPlane" />
-        <span i18n="@@gatewayApp.assertionServiceAssertion.home.permissionNotificationsLabel.string">
-          Send permission notifications
-        </span>
-      </button>
-      <button
-        id="jh-generate-links"
+        id="jh-generate-csv"
         class="btn btn-primary jh-generate-links generate-links ms-1"
-        (click)="generatePermissionLinks()"
+        (click)="generateCSV()"
       >
         <fa-icon [icon]="faFileDownload" />
-        <span i18n="@@gatewayApp.assertionServiceAssertion.reports.links.button.string">
-          Request permission links
+        <span i18n="@@gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.button.string">
+          Request affiliations for edit
         </span>
       </button>
       <button
@@ -33,14 +23,32 @@
         </span>
       </button>
       <button
-        id="jh-generate-csv"
+        id="jh-generate-links"
         class="btn btn-primary jh-generate-links generate-links ms-1"
-        (click)="generateCSV()"
+        (click)="generatePermissionLinks()"
       >
         <fa-icon [icon]="faFileDownload" />
-        <span i18n="@@gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.button.string">
-          Request affiliations for edit
+        <span i18n="@@gatewayApp.assertionServiceAssertion.reports.links.button.string">
+          Request permission links
         </span>
+      </button>
+      <button
+        data-cy="sendNotifications"
+        class="btn btn-primary send-notifications ms-1"
+        [routerLink]="['/', 'affiliations', { outlets: { popup: 'notifications' } }]"
+      >
+        <fa-icon [icon]="faPaperPlane" />
+        <span i18n="@@gatewayApp.assertionServiceAssertion.home.permissionNotificationsLabel.string">
+          Send permission notifications
+        </span>
+      </button>
+       <button
+        id="jh-create-entity"
+        class="btn btn-primary jh-create-entity create-assertion ms-1"
+        [routerLink]="['/affiliations/new']"
+      >
+        <fa-icon [icon]="faPlus" />
+        <span i18n="@@gatewayApp.assertionServiceAssertion.home.createLabel.string"> Add affiliation </span>
       </button>
       <button
         id="jh-upload-entities"
@@ -51,14 +59,6 @@
         <span i18n="@@gatewayApp.assertionServiceAssertion.home.uploadLabel.string">
           Import affiliations from CSV
         </span>
-      </button>
-      <button
-        id="jh-create-entity"
-        class="btn btn-primary jh-create-entity create-assertion ms-1"
-        [routerLink]="['/affiliations/new']"
-      >
-        <fa-icon [icon]="faPlus" />
-        <span i18n="@@gatewayApp.assertionServiceAssertion.home.createLabel.string"> Add affiliation </span>
       </button>
     </div>
   </div>
