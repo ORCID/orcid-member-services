@@ -3,6 +3,24 @@
   <div class="row justify-content-end">
     <div class="col-md-12 mb-2 d-flex flex-wrap justify-content-end gap-2">
       <button
+        id="jh-create-entity"
+        class="btn btn-primary jh-create-entity create-assertion ms-1"
+        [routerLink]="['/affiliations/new']"
+      >
+        <fa-icon [icon]="faPlus" />
+        <span i18n="@@gatewayApp.assertionServiceAssertion.home.createLabel.string"> Add affiliation </span>
+      </button>
+      <button
+        id="jh-upload-entities"
+        class="btn btn-primary jh-upload-entities upload-assertions ms-1"
+        [routerLink]="['/' + 'affiliations', { outlets: { popup: 'import' } }]"
+      >
+        <fa-icon [icon]="faFileImport" />
+        <span i18n="@@gatewayApp.assertionServiceAssertion.home.uploadLabel.string">
+          Import affiliations from CSV
+        </span>
+      </button>
+      <button
         id="jh-generate-csv"
         class="btn btn-primary jh-generate-links generate-links ms-1"
         (click)="generateCSV()"
@@ -40,24 +58,6 @@
         <fa-icon [icon]="faPaperPlane" />
         <span i18n="@@gatewayApp.assertionServiceAssertion.home.permissionNotificationsLabel.string">
           Send permission notifications
-        </span>
-      </button>
-       <button
-        id="jh-create-entity"
-        class="btn btn-primary jh-create-entity create-assertion ms-1"
-        [routerLink]="['/affiliations/new']"
-      >
-        <fa-icon [icon]="faPlus" />
-        <span i18n="@@gatewayApp.assertionServiceAssertion.home.createLabel.string"> Add affiliation </span>
-      </button>
-      <button
-        id="jh-upload-entities"
-        class="btn btn-primary jh-upload-entities upload-assertions ms-1"
-        [routerLink]="['/' + 'affiliations', { outlets: { popup: 'import' } }]"
-      >
-        <fa-icon [icon]="faFileImport" />
-        <span i18n="@@gatewayApp.assertionServiceAssertion.home.uploadLabel.string">
-          Import affiliations from CSV
         </span>
       </button>
     </div>
