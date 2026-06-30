@@ -74,6 +74,11 @@ public class MailService {
         }
     }
 
+    public void sendApiCredsEnabledEmail(User user) {
+        LOGGER.debug("Sending edit api credentials enabled email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, "mail/apiCredsEmail", "email.apiCreds.title");
+    }
+
     private void sendEmailFromTemplate(User user, String templateName, String titleKey) {
         LOGGER.debug("Preparing email using template {}", templateName);
         Locale locale = getLocale(user.getLangKey());
