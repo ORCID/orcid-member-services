@@ -124,7 +124,7 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
         ));
 
         AggregationExpression tokenCondition = BooleanOperators.And.and(
-                ComparisonOperators.Eq.valueOf("$$token.member_id").equalTo("$member_id"),
+                ComparisonOperators.Eq.valueOf("$$token.member_id").equalTo("member_id"),
                 tokenIdNotNull,
                 ComparisonOperators.Ne.valueOf("$$token.token_id").notEqualToValue(""),
                 revokedDateIsNull,
