@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, signal, OnInit } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  inject,
+  signal,
+  OnInit,
+} from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormBuilder, FormControl, Validators, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -115,8 +123,9 @@ export class UserUpdateComponent implements OnInit {
   }
 
   onChanges(): void {
-    this.editForm.get('salesforceId')?.valueChanges.subscribe(() => {
-      const selectedOrg = this.memberList().find((cm) => cm.salesforceId === this.editForm.get(['salesforceId'])?.value)
+    this.editForm.get('memberId')?.valueChanges.subscribe(() => {
+      console.log('UserUpdateComponent: memberId value changed, checking if selected org is superadminEnabled')
+      const selectedOrg = this.memberList().find((cm) => cm.id === this.editForm.get(['memberId'])?.value)
       if (this.hasRoleAdmin()) {
         if (selectedOrg) {
           this.showIsAdminCheckbox.set(selectedOrg.superadminEnabled || false)
