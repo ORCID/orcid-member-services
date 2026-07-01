@@ -109,12 +109,19 @@
               [attr.aria-sort]="sortColumn() === 'mainContact' ? (ascending() ? 'ascending' : 'descending') : 'none'"
             >
               <button type="button" class="th-sort" (click)="updateSort('mainContact')">
-                <span i18n="@@gatewayApp.msUserServiceMSUser.mainContact.string">Organization Owner</span>
+                <span i18n="@@gatewayApp.msUserServiceMSUser.mainContact.string">Organization Owner?</span>
                 @if (sortColumn() === 'mainContact') {
                   <fa-icon class="ms-2" [icon]="ascending() ? faSortDown : faSortUp" />
                 }
               </button>
             </th>
+            @if (featureService.isEnabled('MANAGE_API_CREDENTIALS')) {
+              <th class="text-center">
+                <span i18n="@@gatewayApp.msUserServiceMSUser.manageApiCredentialsEnabled.string"
+                  >Manage API credentials?</span
+                >
+              </th>
+            }
             <th
               scope="col"
               [attr.aria-sort]="sortColumn() === 'salesforceId' ? (ascending() ? 'ascending' : 'descending') : 'none'"
@@ -137,6 +144,11 @@
                 }
               </button>
             </th>
+            @if (hasRoleAdmin() && featureService.isEnabled('MANAGE_API_CREDENTIALS')) {
+              <th class="text-center">
+                <span i18n="@@gatewayApp.msUserServiceMSUser.mfa.string">2FA enabled?</span>
+              </th>
+            }
             <th
               scope="col"
               [attr.aria-sort]="sortColumn() === 'lastModifiedDate' ? (ascending() ? 'ascending' : 'descending') : 'none'"
@@ -148,16 +160,6 @@
                 }
               </button>
             </th>
-            @if (hasRoleAdmin() && featureService.isEnabled('MANAGE_API_CREDENTIALS')) {
-              <th class="text-center">
-                <span i18n="@@gatewayApp.msUserServiceMSUser.mfa.string">2FA</span>
-              </th>
-              <th class="text-center">
-                <span i18n="@@gatewayApp.msUserServiceMSUser.manageApiCredentialsEnabled.string"
-                  >Manage API credentials</span
-                >
-              </th>
-            }
             <th></th>
           </tr>
         </thead>
@@ -178,6 +180,17 @@
                   <fa-icon aria-hidden="true" [icon]="faTimesCircle" [style.color]="'#f22112'" />
                 }
               </td>
+              @if (featureService.isEnabled('MANAGE_API_CREDENTIALS')) {
+                <td class="text-center">
+                  <span class="visually-hidden">{{ user.manageApiCredsEnabled }}</span>
+                  @if (user.manageApiCredsEnabled) {
+                    <fa-icon aria-hidden="true" [icon]="faCheckCircle" [style.color]="'#28a745'" />
+                  }
+                  @if (!user.manageApiCredsEnabled) {
+                    <fa-icon aria-hidden="true" [icon]="faTimesCircle" [style.color]="'#f22112'" />
+                  }
+                </td>
+              }
               @if (hasRoleAdmin()) {
                 <td>
                   <a [routerLink]="['/members', user.memberId, 'view']">{{ user.memberName }}</a>
@@ -195,7 +208,6 @@
                   <fa-icon aria-hidden="true" [icon]="faTimesCircle" [style.color]="'#f22112'" />
                 }
               </td>
-              <td>{{ user.lastModifiedDate?.toString() | date: 'medium' }}</td>
               @if (hasRoleAdmin() && featureService.isEnabled('MANAGE_API_CREDENTIALS')) {
                 <td class="text-center">
                   <span class="visually-hidden">{{ user.mfaEnabled }}</span>
@@ -206,16 +218,8 @@
                     <fa-icon aria-hidden="true" [icon]="faTimesCircle" [style.color]="'#f22112'" />
                   }
                 </td>
-                <td class="text-center">
-                  <span class="visually-hidden">{{ user.manageApiCredsEnabled }}</span>
-                  @if (user.manageApiCredsEnabled) {
-                    <fa-icon aria-hidden="true" [icon]="faCheckCircle" [style.color]="'#28a745'" />
-                  }
-                  @if (!user.manageApiCredsEnabled) {
-                    <fa-icon aria-hidden="true" [icon]="faTimesCircle" [style.color]="'#f22112'" />
-                  }
-                </td>
               }
+              <td>{{ user.lastModifiedDate?.toString() | date: 'medium' }}</td>
               <td class="text-end">
                 <div class="btn-group">
                   @if (!user.activated) {
