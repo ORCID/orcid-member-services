@@ -113,34 +113,50 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
         LookupOperation lookupRecord = Aggregation.lookup("orcid_record", "email", "email", "linked_record");
         UnwindOperation unwindRecord = Aggregation.unwind("linked_record", false);
 
-        AggregationExpression tokenIdNotNull = ctx -> new org.bson.Document("$ne", java.util.Arrays.asList("$$token.token_id", null));
-        AggregationExpression revokedDateIsNull = ctx -> new org.bson.Document("$eq", java.util.Arrays.asList(
-                new org.bson.Document("$ifNull", java.util.Arrays.asList("$$token.revoked_date", null)),
-                null
-        ));
-        AggregationExpression deniedDateIsNull = ctx -> new org.bson.Document("$eq", java.util.Arrays.asList(
-                new org.bson.Document("$ifNull", java.util.Arrays.asList("$$token.denied_date", null)),
-                null
-        ));
+        // Bypass Spring Data's Criteria builder entirely with a custom pipeline stage
+        AggregationOperation matchValidTokenAndOrcid = ctx -> {
 
-        AggregationExpression tokenCondition = BooleanOperators.And.and(
-                ComparisonOperators.Eq.valueOf("$$token.member_id").equalTo("member_id"),
-                tokenIdNotNull,
-                ComparisonOperators.Ne.valueOf("$$token.token_id").notEqualToValue(""),
-                revokedDateIsNull,
-                deniedDateIsNull
-        );
+            org.bson.Document andConditions = new org.bson.Document("$and", java.util.Arrays.asList(
+                    // 1. member_id must perfectly match the root document's member_id
+                    new org.bson.Document("$eq", java.util.Arrays.asList("$$token.member_id", "$member_id")),
 
-        AggregationExpression validTokensFilter = ArrayOperators.Filter.filter("linked_record.tokens").as("token").by(tokenCondition);
-        AggregationExpression hasValidTokens = ComparisonOperators.Gt.valueOf(ArrayOperators.Size.lengthOfArray(validTokensFilter)).greaterThanValue(0);
+                    // 2. token_id must exist and not be empty (ifNull defaults missing fields to "")
+                    new org.bson.Document("$ne", java.util.Arrays.asList(
+                            new org.bson.Document("$ifNull", java.util.Arrays.asList("$$token.token_id", "")), ""
+                    )),
 
-        Criteria validRecordCriteria = new Criteria().andOperator(
-                Criteria.where("linked_record.orcid").exists(true).ne(null).ne(""),
-                Criteria.expr(hasValidTokens)
-        );
+                    // 3. revoked_date must be missing/null
+                    new org.bson.Document("$eq", java.util.Arrays.asList(
+                            new org.bson.Document("$ifNull", java.util.Arrays.asList("$$token.revoked_date", null)), null
+                    )),
 
-        MatchOperation matchValidTokenAndOrcid = Aggregation.match(validRecordCriteria);
-        return Arrays.asList(lookupRecord, unwindRecord, matchValidTokenAndOrcid);
+                    // 4. denied_date must be missing/null
+                    new org.bson.Document("$eq", java.util.Arrays.asList(
+                            new org.bson.Document("$ifNull", java.util.Arrays.asList("$$token.denied_date", null)), null
+                    ))
+            ));
+
+            // Safely handle if linked_record.tokens is entirely missing
+            org.bson.Document filterInput = new org.bson.Document("$ifNull",
+                    java.util.Arrays.asList("$linked_record.tokens", java.util.Collections.emptyList()));
+
+            org.bson.Document filter = new org.bson.Document("$filter", new org.bson.Document("input", filterInput)
+                    .append("as", "token")
+                    .append("cond", andConditions));
+
+            org.bson.Document size = new org.bson.Document("$size", filter);
+            org.bson.Document expr = new org.bson.Document("$expr", new org.bson.Document("$gt", java.util.Arrays.asList(size, 0)));
+
+            // Combine the standard orcid check with the raw $expr array check
+            org.bson.Document matchLogic = new org.bson.Document()
+                    .append("linked_record.orcid", new org.bson.Document("$exists", true).append("$ne", null).append("$nin", java.util.Arrays.asList("")))
+                    .append("$expr", expr.get("$expr"));
+
+            // Return the pure $match stage
+            return new org.bson.Document("$match", matchLogic);
+        };
+
+        return java.util.Arrays.asList(lookupRecord, unwindRecord, matchValidTokenAndOrcid);
     }
 
     @Override

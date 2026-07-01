@@ -159,10 +159,11 @@ public class AssertionService {
     }
 
     public void postAssertionsToOrcid() throws JAXBException {
-        Pageable pageable = getPageableForRegistrySync();
-
         LOG.info("POSTing affiliations to orcid registry...");
+
+        Pageable pageable = getPageableForRegistrySync();
         List<Assertion> assertionsToAdd = assertionRepository.findAllToCreateInOrcidRegistry(pageable);
+
         LOG.info("Fetched {} assertions to create in orcid registry", assertionsToAdd.size());
         while (assertionsToAdd != null && !assertionsToAdd.isEmpty()) {
             for (Assertion assertion : assertionsToAdd) {
