@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { By } from '@angular/platform-browser'
 import { AccountService } from 'src/app/account/service/account.service'
 import { FooterComponent } from './footer.component'
+import { of } from 'rxjs'
 
 describe('FooterComponent', () => {
   let component: FooterComponent
@@ -20,7 +21,7 @@ describe('FooterComponent', () => {
     fixture = TestBed.createComponent(FooterComponent)
     accountService = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
     accountService.isAuthenticated.and.returnValue(false)
-    accountService.getReleaseVersion.and.returnValue(null)
+    accountService.getReleaseVersion.and.returnValue(of('1.0.0'))
     component = fixture.componentInstance
   })
 

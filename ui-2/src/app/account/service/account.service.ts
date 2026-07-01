@@ -22,11 +22,12 @@ export class AccountService {
   private isFetchingAccountData = false
   private stopFetchingAccountData = new Subject()
   private authenticated = false
-  private releaseVersion: string | null = null
+  private releaseVersion = new BehaviorSubject<string | null>(null)
 
   constructor() {
     this.http.get('/userservice/account/releaseVersion', { responseType: 'text' }).subscribe((version) => {
-      this.releaseVersion = version
+      console.log('Fetched release version: ', version)
+      this.releaseVersion.next(version)
     })
   }
 
@@ -200,7 +201,7 @@ export class AccountService {
     return this.isIdentityResolved() && this.accountData ? this.accountData.value!.mfaEnabled : false
   }
 
-  getReleaseVersion(): string | null {
-    return this.releaseVersion
+  getReleaseVersion(): Observable<string | null> {
+    return this.releaseVersion.asObservable()
   }
 }
