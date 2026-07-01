@@ -416,8 +416,8 @@ public class AssertionService {
         boolean existingHasId = !StringUtils.isBlank(existing.getId());
         boolean candidateHasId = !StringUtils.isBlank(candidate.getId());
 
-        if (existingHasId || candidateHasId) {
-            return existingHasId && candidateHasId && existing.getId().equals(candidate.getId());
+        if (existingHasId && candidateHasId && existing.getId().equals(candidate.getId())) {
+            return true;
         }
 
         return AssertionUtils.duplicates(existing, candidate);
@@ -425,6 +425,7 @@ public class AssertionService {
 
     private Assertion copyAssertionForDuplicateCheck(Assertion source) {
         Assertion copy = new Assertion();
+        copy.setId(source.getId());
         copy.setEmail(source.getEmail());
         copy.setAffiliationSection(source.getAffiliationSection());
         copy.setDepartmentName(source.getDepartmentName());

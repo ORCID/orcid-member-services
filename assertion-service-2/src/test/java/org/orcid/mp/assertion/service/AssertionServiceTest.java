@@ -1607,6 +1607,45 @@ class AssertionServiceTest {
         Mockito.verify(assertionRepository, Mockito.times(2)).insert(Mockito.any(Assertion.class));
     }
 
+    @Test
+    void testProcessUploadCountsDuplicateRowsWithSameId() {
+        User user = getUser();
+
+        Assertion first = getAssertionWithEmail("duplicate-update@email.com");
+        first.setId("same-id");
+
+        Assertion duplicate = getAssertionWithEmail("duplicate-update@email.com");
+        duplicate.setId("same-id");
+
+        AssertionsUpload upload = new AssertionsUpload();
+        upload.addAssertion(first);
+        upload.addAssertion(duplicate);
+
+        when(assertionRepository.findByEmailAndMemberId(Mockito.eq("duplicate-update@email.com"), Mockito.eq(DEFAULT_MEMBER_ID)))
+                .thenReturn(List.of());
+        when(assertionRepository.findById(Mockito.eq("same-id"))).thenReturn(Optional.of(getAssertionWithEmail("duplicate-update@email.com")));
+        when(orcidRecordService.findByEmail(Mockito.eq("duplicate-update@email.com"))).thenReturn(Optional.empty());
+        when(assertionRepository.save(Mockito.any(Assertion.class))).thenAnswer(new Answer<Assertion>() {
+            @Override
+            public Assertion answer(InvocationOnMock invocation) {
+                Assertion assertion = invocation.getArgument(0);
+                assertion.setId("same-id");
+                return assertion;
+            }
+        });
+
+        AssertionsUploadSummary summary = ReflectionTestUtils.invokeMethod(assertionService, "processUpload", upload, user);
+
+        assertNotNull(summary);
+        assertEquals(0, summary.getNumAdded());
+        assertEquals(1, summary.getNumDuplicates());
+        assertEquals(1, summary.getNumUpdated());
+        assertEquals(0, summary.getNumDeleted());
+
+        Mockito.verify(assertionRepository, Mockito.times(1)).save(Mockito.any(Assertion.class));
+        Mockito.verify(assertionRepository, Mockito.never()).insert(Mockito.any(Assertion.class));
+    }
+
     private List<StoredFile> getDummyStoredFiles() {
         return Arrays.asList(getDummyStoredFile(), getDummyStoredFile());
     }

@@ -355,7 +355,7 @@ public class AssertionResource {
         }
 
         if (assertionService.isDuplicate(assertion)) {
-            throw new BadRequestAlertException("This assertion already exists");
+            throw new BadRequestAlertException("This affiliation already exists");
         }
 
         // XXX this isn't validating
