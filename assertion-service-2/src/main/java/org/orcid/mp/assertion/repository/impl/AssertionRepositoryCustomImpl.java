@@ -32,7 +32,10 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
     @Override
     public List<Assertion> findAllToUpdateInOrcidRegistry(Pageable pageable) {
-        ProjectionOperation timeModifiedAfterSync = Aggregation.project("added_to_orcid", "updated_in_orcid", "modified", "created", "email", "member_id", "status").andExpression("modified - added_to_orcid").as("timeModifiedAfterAddingToOrcid").andExpression("modified - updated_in_orcid").as("timeModifiedAfterUpdatingInOrcid");
+        AddFieldsOperation timeModifiedAfterSync = Aggregation.addFields()
+                .addField("timeModifiedAfterAddingToOrcid").withValueOfExpression("modified - added_to_orcid")
+                .addField("timeModifiedAfterUpdatingInOrcid").withValueOfExpression("modified - updated_in_orcid")
+                .build();
 
         Criteria addedToOrcidSet = new Criteria();
         addedToOrcidSet.andOperator(Criteria.where("added_to_orcid").exists(true), Criteria.where("added_to_orcid").ne(null));
