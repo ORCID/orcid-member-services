@@ -117,6 +117,7 @@ export class MemberUpdateComponent implements OnInit {
 
     if (sfId) {
       this.editForm.get('salesforceId')?.disable()
+      this.editForm.get('clientName')?.disable()
     }
   }
 
