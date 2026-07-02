@@ -847,7 +847,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">211</context>
+          <context context-type="linenumber">229</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.back.string" datatype="html">
@@ -873,7 +873,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="linenumber">88</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-update.component.html</context>
@@ -924,7 +924,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">233</context>
+          <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.edit.string" datatype="html">
@@ -959,7 +959,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">222</context>
+          <context context-type="linenumber">240</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.save.string" datatype="html">
@@ -997,7 +997,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">134</context>
+          <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.createdDate.string" datatype="html">
@@ -1098,7 +1098,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">145</context>
+          <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.lastName.string" datatype="html">
@@ -1137,6 +1137,10 @@
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
           <context context-type="linenumber">88</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/users.component.html</context>
+          <context context-type="linenumber">121</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.memberId.string" datatype="html">
         <source>Organization</source>
@@ -1146,10 +1150,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.mfa.string" datatype="html">
-        <source>2FA</source>
+        <source>2FA enabled?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">153</context>
+          <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.salesforceId.string" datatype="html">
@@ -1160,7 +1164,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">123</context>
+          <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.sendActivate.error.string" datatype="html">
@@ -1303,7 +1307,7 @@
         <source>Are you sure you want to transfer ownership? You are about to transfer ownership of this organization account. If you are the organization owner after transferring ownership, you will no longer have access to administrative functions, such as managing users.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.ts</context>
-          <context context-type="linenumber">250</context>
+          <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.delete.question.string" datatype="html">
@@ -1338,7 +1342,7 @@
         <source>Upload</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">92</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-import-dialog.component.html</context>
@@ -1435,7 +1439,7 @@
         <source> Add affiliation </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.home.forHelpTroubleshooting.string" datatype="html">
@@ -1464,7 +1468,7 @@
         <source> Send permission notifications </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.home.title.string" datatype="html">
@@ -1478,7 +1482,7 @@
         <source> Import affiliations from CSV </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.orcidId.string" datatype="html">
@@ -1496,7 +1500,7 @@
         <source> Request affiliations for edit </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsForEdit.confirmation.string" datatype="html">
@@ -1510,7 +1514,7 @@
         <source> Request affiliation status report </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.reports.affiliationsReport.confirmation.string" datatype="html">
@@ -1524,7 +1528,7 @@
         <source> Request permission links </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliations.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.reports.links.confirmation.string" datatype="html">
@@ -3397,7 +3401,7 @@
         <source>Close</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.AffiliationSection.DISTINCTION.string" datatype="html">
@@ -3549,7 +3553,7 @@
         <source>Browse…</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.import.failure.string" datatype="html">
@@ -3563,7 +3567,7 @@
         <source>File Path</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.import.label.string" datatype="html">
@@ -3652,7 +3656,7 @@
         <source>Please do not forget to download and send permission links to your researchers once the upload has completed.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.url.string" datatype="html">
@@ -3762,7 +3766,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-import-dialog.component.ts</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.validation.disambiguatedOrgId.string" datatype="html">
