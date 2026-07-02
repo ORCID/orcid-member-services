@@ -1,7 +1,7 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing'
 import { ReactiveFormsModule } from '@angular/forms'
 import { By } from '@angular/platform-browser'
-import { of } from 'rxjs'
+import { BehaviorSubject, of } from 'rxjs'
 import { AccountService, LoginService } from 'src/app/account'
 import { MemberService } from 'src/app/member/service/member.service'
 import { HasAnyAuthorityDirective } from 'src/app/shared/directive/has-any-authority.directive'
@@ -43,6 +43,7 @@ describe('NavbarComponent', () => {
       'getMemberId',
     ])
     accountServiceSpy.getAccountData.and.returnValue(of(null))
+    ;(accountServiceSpy as any).accountData = new BehaviorSubject(null)
     const modalServiceSpy = jasmine.createSpyObj('NgbModal', ['open'])
     const mockOidcSecurityService = {
       checkAuth: () => of({ isAuthenticated: true, userData: { email: 'test@email.com' } }),
