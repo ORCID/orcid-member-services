@@ -18,8 +18,7 @@ export class AccountService {
   private memberService = inject(MemberService)
   private oidcSecurityService = inject(OidcSecurityService)
 
-  private accountData = new BehaviorSubject<IAccount | null | undefined>(undefined)
-  readonly accountData$ = this.accountData.asObservable()
+  readonly accountData = new BehaviorSubject<IAccount | null | undefined>(undefined)
   private isFetchingAccountData = false
   private stopFetchingAccountData = new Subject()
   private authenticated = false

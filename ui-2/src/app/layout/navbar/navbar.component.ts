@@ -90,7 +90,7 @@ export class NavbarComponent {
         }
       })
 
-    this.accountService.accountData$
+    this.accountService.accountData.asObservable()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((account) => {
         if (account) {
