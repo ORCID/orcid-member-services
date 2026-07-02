@@ -1683,6 +1683,9 @@ class AssertionServiceTest {
         upload.addAssertion(getAssertionWithEmail("1@email.com"));
         upload.addAssertion(getAssertionWithEmail("1@email.com"));
 
+        // assertions in upload won't have member id set
+        upload.getAssertions().forEach(a -> a.setMemberId(null));
+
         when(assertionsCsvReader.readAssertionsUpload(Mockito.any(InputStream.class), Mockito.any(User.class))).thenReturn(upload);
 
         assertionService.processAssertionUploads();
