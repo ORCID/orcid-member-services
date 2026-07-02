@@ -354,7 +354,7 @@ public class AssertionResource {
             throw new IllegalArgumentException("invalid org id");
         }
 
-        if (assertionService.isDuplicate(assertion)) {
+        if (assertionService.isDuplicate(assertion, getLoggedInUser().getMemberId())) {
             throw new BadRequestAlertException("This assertion already exists");
         }
 

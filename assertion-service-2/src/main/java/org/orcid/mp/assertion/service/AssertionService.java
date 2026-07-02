@@ -379,7 +379,7 @@ public class AssertionService {
                     duplicates++;
                 }
             } else {
-                if (!isDuplicate(a)) {
+                if (!isDuplicate(a, user.getMemberId())) {
                     if (a.getId() == null || a.getId().isEmpty()) {
                         createAssertion(a, user);
                         created++;
@@ -411,9 +411,9 @@ public class AssertionService {
         return assertionsCsvReader.readAssertionsUpload(inputStream, user);
     }
 
-    public boolean isDuplicate(Assertion assertion) {
+    public boolean isDuplicate(Assertion assertion, String memberId) {
         Assertion normalized = assertionNormalizer.normalize(assertion);
-        List<Assertion> assertions = assertionRepository.findByEmailAndMemberId(assertion.getEmail(), assertion.getMemberId());
+        List<Assertion> assertions = assertionRepository.findByEmailAndMemberId(assertion.getEmail(), memberId);
         for (Assertion a : assertions) {
             if (AssertionUtils.duplicates(normalized, a)) {
                 return true;
