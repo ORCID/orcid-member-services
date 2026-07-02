@@ -297,14 +297,14 @@ class AssertionsCsvReaderTest {
         AssertionsUpload upload = reader.readAssertionsUpload(inputStream, getUser("en"));
 
         assertEquals(0, upload.getErrors().size());
-        assertEquals(7, upload.getAssertions().size());
+        assertEquals(9, upload.getAssertions().size());
         assertEquals(1, upload.getUsers().size());
 
         long serviceAssertions = upload.getAssertions().stream()
                 .filter(assertion -> assertion.getAffiliationSection().name().equals("SERVICE"))
                 .count();
 
-        assertEquals(1, serviceAssertions);
+        assertEquals(3, serviceAssertions);
     }
 
     private Assertion getDummyAssertionWithEmail() {
