@@ -1,27 +1,36 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { By } from '@angular/platform-browser'
+import { OidcSecurityService } from 'angular-auth-oidc-client'
+import { BehaviorSubject, of } from 'rxjs'
 import { AccountService } from 'src/app/account/service/account.service'
 import { FooterComponent } from './footer.component'
-import { of } from 'rxjs'
 
 describe('FooterComponent', () => {
   let component: FooterComponent
   let fixture: ComponentFixture<FooterComponent>
   let accountService: jasmine.SpyObj<AccountService>
+  let oidcAuthState: BehaviorSubject<{ isAuthenticated: boolean }>
 
   beforeEach(() => {
-    const accountServiceSpy = jasmine.createSpyObj('AccountService', ['isAuthenticated', 'getReleaseVersion'])
+    oidcAuthState = new BehaviorSubject<{ isAuthenticated: boolean }>({ isAuthenticated: false })
+    const accountServiceSpy = jasmine.createSpyObj('AccountService', ['getReleaseVersion'])
+    const oidcSecurityServiceMock = {
+      isAuthenticated$: oidcAuthState.asObservable(),
+    }
 
     TestBed.configureTestingModule({
       imports: [FooterComponent],
-      providers: [{ provide: AccountService, useValue: accountServiceSpy }],
+      providers: [
+        { provide: AccountService, useValue: accountServiceSpy },
+        { provide: OidcSecurityService, useValue: oidcSecurityServiceMock },
+      ],
     }).compileComponents()
 
-    fixture = TestBed.createComponent(FooterComponent)
     accountService = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
-    accountService.isAuthenticated.and.returnValue(false)
-    accountService.getReleaseVersion.and.returnValue(of('1.0.0'))
+    accountService.getReleaseVersion.and.returnValue(of(null))
+
+    fixture = TestBed.createComponent(FooterComponent)
     component = fixture.componentInstance
   })
 
@@ -45,14 +54,14 @@ describe('FooterComponent', () => {
   })
 
   it('if not authenticated, should not contain help link', () => {
-    accountService.isAuthenticated.and.returnValue(false)
+    oidcAuthState.next({ isAuthenticated: false })
     fixture.detectChanges()
     const helpLink = fixture.debugElement.query(By.css('#helpLink'))
     expect(helpLink).toBeFalsy()
   })
 
   it('if authenticated, should contain help link', () => {
-    accountService.isAuthenticated.and.returnValue(true)
+    oidcAuthState.next({ isAuthenticated: true })
     fixture.detectChanges()
     const helpLink = fixture.debugElement.query(By.css('#helpLink'))
     expect(helpLink).toBeTruthy()
