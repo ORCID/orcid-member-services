@@ -21,14 +21,18 @@ export class ErrorAlertComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.errorService.on().pipe(takeUntilDestroyed(this.destroyRef)).subscribe((err: AppError) => {
-      const alert: ErrorAlert = {
-        type: 'danger',
-        msg: err.message,
-        toast: false,
-      }
-      this.alertsState.update((currentAlerts) => [...currentAlerts, alert])
-    })
+    this.errorService
+      .on()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((err: AppError) => {
+        console.log('ErrorAlertComponent received error:', err)
+        const alert: ErrorAlert = {
+          type: 'danger',
+          msg: err.message,
+          toast: false,
+        }
+        this.alertsState.update((currentAlerts) => [...currentAlerts, alert])
+      })
   }
 
   @HostListener('document:keyup.escape')
