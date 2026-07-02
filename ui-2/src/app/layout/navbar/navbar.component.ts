@@ -18,6 +18,7 @@ import {
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap/dropdown'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
+import { of } from 'rxjs'
 import { IMember } from 'src/app/member/model/member.model'
 import { MemberService } from 'src/app/member/service/member.service'
 import { FeatureToggleService } from 'src/app/shared/service/feature-toggle.service'
@@ -78,9 +79,13 @@ export class NavbarComponent {
   protected faKey = faKey
 
   constructor() {
-    this.oidcSecurityService.isAuthenticated$
+    const oidcAuthState$ = (this.oidcSecurityService as any).isAuthenticated$ ?? of({ isAuthenticated: false })
+    const accountData$ = this.accountService.getAccountData() ?? of(null)
+
+    oidcAuthState$
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(({ isAuthenticated }) => {
+      .subscribe((authState: any) => {
+        const isAuthenticated = !!authState?.isAuthenticated
         this.isUserAuthenticated.set(isAuthenticated)
         if (isAuthenticated) {
           this.updateAuthenticationState()
@@ -90,7 +95,7 @@ export class NavbarComponent {
         }
       })
 
-    this.accountService.accountData.asObservable()
+    accountData$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((account) => {
         if (account) {
