@@ -42,6 +42,7 @@ describe('NavbarComponent', () => {
       'getImageUrl',
       'getMemberId',
     ])
+    accountServiceSpy.getAccountData.and.returnValue(of(null))
     const modalServiceSpy = jasmine.createSpyObj('NgbModal', ['open'])
     const mockOidcSecurityService = {
       checkAuth: () => of({ isAuthenticated: true, userData: { email: 'test@email.com' } }),
