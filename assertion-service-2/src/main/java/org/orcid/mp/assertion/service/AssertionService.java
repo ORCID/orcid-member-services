@@ -362,17 +362,21 @@ public class AssertionService {
         int duplicates = 0;
         int created = 0;
         int updated = 0;
-        int deleted = 0;
 
         List<String> registryDeleteFailures = new ArrayList<>();
+        List<String> deletedAssertions = new ArrayList<>();
 
         for (Assertion a : upload.getAssertions()) {
             if (assertionToDelete(a)) {
-                try {
-                    deleteById(a.getId(), user);
-                    deleted++;
-                } catch (RegistryDeleteFailureException e) {
-                    registryDeleteFailures.add(a.getId());
+                if (!deletedAssertions.contains(a.getId())) {
+                    try {
+                        deleteById(a.getId(), user);
+                        deletedAssertions.add(a.getId());
+                    } catch (RegistryDeleteFailureException e) {
+                        registryDeleteFailures.add(a.getId());
+                    }
+                } else {
+                    duplicates++;
                 }
             } else {
                 if (!isDuplicate(a)) {
@@ -396,7 +400,7 @@ public class AssertionService {
         summary.setNumAdded(created);
         summary.setNumUpdated(updated);
         summary.setNumDuplicates(duplicates);
-        summary.setNumDeleted(deleted);
+        summary.setNumDeleted(deletedAssertions.size());
         summary.setRegistryDeleteFailures(registryDeleteFailures);
 
         return summary;
