@@ -1593,7 +1593,7 @@ class AssertionServiceTest {
         upload.addAssertion(unique);
 
         when(assertionRepository.findByEmailAndMemberId(Mockito.eq("duplicate@email.com"), Mockito.eq(DEFAULT_MEMBER_ID)))
-                .thenReturn(List.of());
+                .thenReturn(List.of()).thenReturn(List.of(first)).thenReturn(List.of(first, duplicate));
         when(orcidRecordService.findByEmail(Mockito.eq("duplicate@email.com"))).thenReturn(Optional.empty());
 
         AssertionsUploadSummary summary = ReflectionTestUtils.invokeMethod(assertionService, "processUpload", upload, user);

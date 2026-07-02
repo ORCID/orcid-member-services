@@ -290,6 +290,23 @@ class AssertionsCsvReaderTest {
         assertNull(upload.getAssertions().get(2).getEndDay());
     }
 
+    @Test
+    void testReadAssertionsUploadDoesNotStoreDuplicateRows() throws IOException {
+        InputStream inputStream = getClass().getResourceAsStream("/assertions-with-duplicate-affiliations.csv");
+
+        AssertionsUpload upload = reader.readAssertionsUpload(inputStream, getUser("en"));
+
+        assertEquals(0, upload.getErrors().size());
+        assertEquals(7, upload.getAssertions().size());
+        assertEquals(1, upload.getUsers().size());
+
+        long serviceAssertions = upload.getAssertions().stream()
+                .filter(assertion -> assertion.getAffiliationSection().name().equals("SERVICE"))
+                .count();
+
+        assertEquals(1, serviceAssertions);
+    }
+
     private Assertion getDummyAssertionWithEmail() {
         Assertion dummy = new Assertion();
         dummy.setEmail("email@orcid.org");
