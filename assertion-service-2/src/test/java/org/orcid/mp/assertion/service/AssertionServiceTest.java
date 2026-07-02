@@ -1593,7 +1593,7 @@ class AssertionServiceTest {
         upload.addAssertion(unique);
 
         when(assertionRepository.findByEmailAndMemberId(Mockito.eq("duplicate@email.com"), Mockito.eq(DEFAULT_MEMBER_ID)))
-                .thenReturn(List.of());
+                .thenReturn(List.of()).thenReturn(List.of(first)).thenReturn(List.of(first, duplicate));
         when(orcidRecordService.findByEmail(Mockito.eq("duplicate@email.com"))).thenReturn(Optional.empty());
 
         AssertionsUploadSummary summary = ReflectionTestUtils.invokeMethod(assertionService, "processUpload", upload, user);
@@ -1603,6 +1603,50 @@ class AssertionServiceTest {
         assertEquals(1, summary.getNumDuplicates());
         assertEquals(0, summary.getNumUpdated());
         assertEquals(0, summary.getNumDeleted());
+
+        Mockito.verify(assertionRepository, Mockito.times(2)).insert(Mockito.any(Assertion.class));
+    }
+
+    @Test
+    void testProcessUploadCountsWithDeleteDuplicates() {
+        User user = getUser();
+
+        Assertion first = getAssertionWithoutIdForEmail("duplicate@email.com");
+        Assertion duplicate = getAssertionWithoutIdForEmail("duplicate@email.com");
+        Assertion unique = getAssertionWithoutIdForEmail("duplicate@email.com");
+        unique.setRoleTitle("different role");
+
+        Assertion storedVersionOfAssertionToDelete = getAssertionWithoutIdForEmail("deleteDuplicate");
+
+        Assertion deleteDuplicate1 = new Assertion();
+        deleteDuplicate1.setId("deleteDuplicate");
+
+        Assertion deleteDuplicate2 = new Assertion();
+        deleteDuplicate2.setId("deleteDuplicate");
+
+        Assertion deleteDuplicate3 = new Assertion();
+        deleteDuplicate3.setId("deleteDuplicate");
+
+        AssertionsUpload upload = new AssertionsUpload();
+        upload.addAssertion(first);
+        upload.addAssertion(duplicate);
+        upload.addAssertion(unique);
+        upload.addAssertion(deleteDuplicate1);
+        upload.addAssertion(deleteDuplicate2);
+        upload.addAssertion(deleteDuplicate3);
+
+        when(assertionRepository.findByEmailAndMemberId(Mockito.eq("duplicate@email.com"), Mockito.eq(DEFAULT_MEMBER_ID)))
+                .thenReturn(List.of()).thenReturn(List.of(first)).thenReturn(List.of(first, duplicate));
+        when(orcidRecordService.findByEmail(Mockito.eq("duplicate@email.com"))).thenReturn(Optional.empty());
+        when(assertionRepository.findById(Mockito.eq("deleteDuplicate"))).thenReturn(Optional.of(storedVersionOfAssertionToDelete));
+
+        AssertionsUploadSummary summary = ReflectionTestUtils.invokeMethod(assertionService, "processUpload", upload, user);
+
+        assertNotNull(summary);
+        assertEquals(2, summary.getNumAdded());
+        assertEquals(3, summary.getNumDuplicates());
+        assertEquals(0, summary.getNumUpdated());
+        assertEquals(1, summary.getNumDeleted());
 
         Mockito.verify(assertionRepository, Mockito.times(2)).insert(Mockito.any(Assertion.class));
     }
