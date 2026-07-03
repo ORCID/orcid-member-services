@@ -18,6 +18,7 @@ import org.jboss.aerogear.security.otp.Totp;
 import org.jboss.aerogear.security.otp.api.Base32;
 import org.orcid.mp.user.client.MemberServiceClient;
 import org.orcid.mp.user.config.Constants;
+import org.orcid.mp.user.config.togglz.PortalFeatures;
 import org.orcid.mp.user.domain.ActivationReminder;
 import org.orcid.mp.user.domain.Member;
 import org.orcid.mp.user.domain.User;
@@ -214,7 +215,7 @@ public class UserService {
             mailService.sendOrganizationOwnerChangedMail(newUser, member.getClientName());
         }
 
-        if (newUser.getManageApiCredsEnabled() != null && newUser.getManageApiCredsEnabled()) {
+        if (newUser.getManageApiCredsEnabled() != null && newUser.getManageApiCredsEnabled() && PortalFeatures.MANAGE_API_CREDENTIALS.isActive()) {
             mailService.sendApiCredsEnabledEmail(newUser);
         }
         return userMapper.toUserDTO(newUser);
@@ -288,7 +289,7 @@ public class UserService {
         user.setLangKey(userDTO.getLangKey() != null ? userDTO.getLangKey() : user.getLangKey());
         user.setAdmin(userDTO.getIsAdmin());
 
-        if ((user.getManageApiCredsEnabled() == null || !user.getManageApiCredsEnabled()) && userDTO.isManageApiCredsEnabled()) {
+        if ((user.getManageApiCredsEnabled() == null || !user.getManageApiCredsEnabled()) && userDTO.isManageApiCredsEnabled() && PortalFeatures.MANAGE_API_CREDENTIALS.isActive()) {
             mailService.sendApiCredsEnabledEmail(user);
         }
 

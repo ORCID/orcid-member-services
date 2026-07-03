@@ -141,6 +141,12 @@
             <artifactId>togglz-mongodb</artifactId>
             <version>4.4.0</version>
         </dependency>
+		<dependency>
+			<groupId>org.togglz</groupId>
+			<artifactId>togglz-testing</artifactId>
+			<version>4.4.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
