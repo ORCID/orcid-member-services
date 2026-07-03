@@ -9,6 +9,7 @@ import org.mockito.*;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.orcid.mp.user.client.MemberServiceClient;
+import org.orcid.mp.user.config.togglz.PortalFeatures;
 import org.orcid.mp.user.domain.ActivationReminder;
 import org.orcid.mp.user.domain.Member;
 import org.orcid.mp.user.domain.User;
@@ -30,6 +31,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.togglz.testing.TestFeatureManager;
+import org.togglz.testing.TestFeatureManagerProvider;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,10 +81,15 @@ public class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
+    private TestFeatureManager featureManager;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         SecurityContextHolder.setContext(new MockSecurityContext("username"));
+        featureManager = new TestFeatureManager(PortalFeatures.class);
+        featureManager.disableAll();
+        TestFeatureManagerProvider.setFeatureManager(featureManager);
     }
 
     @Test
@@ -173,6 +181,8 @@ public class UserServiceTest {
 
     @Test
     void testCreateUserForMemberWithoutAsserionsEnabled() {
+        featureManager.enableAll();
+
         when(memberServiceClient.getMember(Mockito.anyString())).thenReturn(memberWithAMEnabled());
         when(userRepository.save(Mockito.any(User.class))).thenAnswer(new Answer<User>() {
             @Override
@@ -225,6 +235,8 @@ public class UserServiceTest {
 
     @Test
     void testUpdateUserForMemberWithManageApiCredentialsEnabled() {
+        featureManager.enableAll(); // enable togglz
+
         when(memberServiceClient.getMember(Mockito.anyString())).thenReturn(memberWithAMEnabled());
         when(userRepository.save(Mockito.any(User.class))).thenAnswer(new Answer<User>() {
             @Override
