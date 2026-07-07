@@ -13,7 +13,6 @@ import org.orcid.mp.member.error.UnauthorizedMemberAccessException;
 import org.orcid.mp.member.pojo.AddConsortiumMember;
 import org.orcid.mp.member.pojo.MemberContactUpdate;
 import org.orcid.mp.member.pojo.RemoveConsortiumMember;
-import org.orcid.mp.member.repository.MemberRepository;
 import org.orcid.mp.member.salesforce.*;
 import org.orcid.mp.member.security.MockSecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,13 +42,13 @@ public class SalesforceServiceTest {
     private UserService userService;
 
     @Mock
-    private MemberRepository memberRepository;
-
-    @Mock
     private MailService mailService;
 
     @Captor
     private ArgumentCaptor<MemberUpdateData> publicMemberDetailsCaptor;
+
+    @Mock
+    private MemberService memberService;
 
     private SalesforceService salesforceService;
 
@@ -58,7 +57,7 @@ public class SalesforceServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        salesforceService = new SalesforceService(userService, mailService, salesforceClient, memberRepository, objectMapper);
+        salesforceService = new SalesforceService(memberService, userService, mailService, salesforceClient, objectMapper);
         SecurityContextHolder.setContext(new MockSecurityContext("me"));
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
     }
@@ -66,7 +65,6 @@ public class SalesforceServiceTest {
     @Test
     void testGetMemberDetails() throws IOException, UnauthorizedMemberAccessException {
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
         Mockito.when(salesforceClient.getMemberDetails(Mockito.eq("salesforceId"))).thenReturn(getFileContent("src/test/resources/salesforce/member.json"));
 
         MemberDetails memberDetails = salesforceService.getMemberDetails("salesforceId");
@@ -147,7 +145,6 @@ public class SalesforceServiceTest {
     @Test
     void testGetMemberOrgIds_forConsortiumMemberByConsortiumLead() throws IOException, UnauthorizedMemberAccessException {
         Mockito.when(userService.getLoggedInUser()).thenReturn(getCLUser());
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
         Mockito.when(salesforceClient.getMemberOrgIds(Mockito.eq("salesforceId"))).thenReturn(objectMapper.writeValueAsString(getMemberOrgIds()));
 
         MemberOrgIds memberOrgIds = salesforceService.getMemberOrgIds("salesforceId");
@@ -185,7 +182,6 @@ public class SalesforceServiceTest {
     @Test
     void testUpdatePublicMemberDetails() throws IOException, UnauthorizedMemberAccessException {
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
         Mockito.doNothing().when(salesforceClient).updatePublicMemberDetails(Mockito.any(MemberUpdateData.class));
 
         MemberUpdateData memberUpdateData = getPublicMemberDetails();
@@ -206,7 +202,6 @@ public class SalesforceServiceTest {
     void testUpdatePublicMemberDetails_forConsortiumMemberByConsortiumLead() throws IOException, UnauthorizedMemberAccessException {
         Mockito.when(userService.getLoggedInUser()).thenReturn(getCLUser());
         Mockito.doNothing().when(salesforceClient).updatePublicMemberDetails(Mockito.any(MemberUpdateData.class));
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
 
         MemberUpdateData memberUpdateData = getPublicMemberDetails();
         salesforceService.updatePublicMemberDetails(memberUpdateData);
@@ -242,7 +237,7 @@ public class SalesforceServiceTest {
     void testAddConsortiumMember() {
         Mockito.doNothing().when(mailService).sendAddConsortiumMemberEmail(Mockito.any(AddConsortiumMember.class));
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(memberRepository.findById(Mockito.eq("memberId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        Mockito.when(memberService.getMember(Mockito.eq("memberId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
 
         AddConsortiumMember addConsortiumMember = new AddConsortiumMember();
         addConsortiumMember.setOrgName("new org name");
@@ -251,14 +246,13 @@ public class SalesforceServiceTest {
 
         Mockito.verify(mailService).sendAddConsortiumMemberEmail(Mockito.any(AddConsortiumMember.class));
         Mockito.verify(userService).getLoggedInUser();
-        Mockito.verify(memberRepository).findById(Mockito.eq("memberId"));
+        Mockito.verify(memberService).getMember(Mockito.eq("memberId"));
     }
 
     @Test
     void testRemoveConsortiumMember_nonCL() {
         Mockito.doNothing().when(mailService).sendRemoveConsortiumMemberEmail(Mockito.any(RemoveConsortiumMember.class));
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
 
         RemoveConsortiumMember removeConsortiumMember = new RemoveConsortiumMember();
         removeConsortiumMember.setOrgName("old org name");
@@ -272,7 +266,7 @@ public class SalesforceServiceTest {
     void testRemoveConsortiumMember() {
         Mockito.doNothing().when(mailService).sendRemoveConsortiumMemberEmail(Mockito.any(RemoveConsortiumMember.class));
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(memberRepository.findById(Mockito.eq("memberId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        Mockito.when(memberService.getMember(Mockito.eq("memberId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
 
         RemoveConsortiumMember removeConsortiumMember = new RemoveConsortiumMember();
         removeConsortiumMember.setOrgName("old org name");
@@ -281,14 +275,13 @@ public class SalesforceServiceTest {
 
         Mockito.verify(mailService).sendRemoveConsortiumMemberEmail(Mockito.any(RemoveConsortiumMember.class));
         Mockito.verify(userService).getLoggedInUser();
-        Mockito.verify(memberRepository).findById(Mockito.eq("memberId"));
+        Mockito.verify(memberService).getMember(Mockito.eq("memberId"));
     }
 
     @Test
     void testAddConsortiumMember_nonCL() {
         Mockito.doNothing().when(mailService).sendAddConsortiumMemberEmail(Mockito.any(AddConsortiumMember.class));
         Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.eq("salesforceId"))).thenReturn(Optional.of(getMember()));
 
         AddConsortiumMember addConsortiumMember = new AddConsortiumMember();
         addConsortiumMember.setOrgName("new org name");

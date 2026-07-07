@@ -12,13 +12,13 @@ import org.orcid.mp.member.domain.User;
 import org.orcid.mp.member.pojo.AddConsortiumMember;
 import org.orcid.mp.member.pojo.MemberContactUpdate;
 import org.orcid.mp.member.pojo.RemoveConsortiumMember;
-import org.orcid.mp.member.repository.MemberRepository;
 import org.orcid.mp.member.salesforce.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -30,8 +30,6 @@ public class SalesforceService {
 
     private SalesforceClient salesforceClient;
 
-    private MemberRepository memberRepository;
-
     private ObjectMapper objectMapper;
 
     private List<Country> salesforceCountries;
@@ -42,12 +40,15 @@ public class SalesforceService {
     @Autowired
     private MailService mailService;
 
-    public SalesforceService(UserService userService, MailService mailService, SalesforceClient salesforceClient, MemberRepository memberRepository, ObjectMapper objectMapper) {
+    @Autowired
+    private MemberService memberService;
+
+    public SalesforceService(MemberService memberService, UserService userService, MailService mailService, SalesforceClient salesforceClient, ObjectMapper objectMapper) {
         this.salesforceClient = salesforceClient;
-        this.memberRepository = memberRepository;
         this.objectMapper = objectMapper;
         this.userService = userService;
         this.mailService = mailService;
+        this.memberService = memberService;
     }
 
     public void processMemberContact(MemberContactUpdate memberContactUpdate, String salesforceId)  {
@@ -73,7 +74,7 @@ public class SalesforceService {
     public void requestNewConsortiumMember(AddConsortiumMember addConsortiumMember) {
         User user = userService.getLoggedInUser();
 
-        Optional<Member> optionalMember = memberRepository.findById(user.getMemberId());
+        Optional<Member> optionalMember = memberService.getMember(user.getMemberId());
         Member member = optionalMember.get();
         if (!member.getIsConsortiumLead()) {
             throw new RuntimeException("Requesting member is not a consortium lead");
@@ -90,7 +91,7 @@ public class SalesforceService {
         User user = userService.getLoggedInUser();
         LOG.info("Requesting remove consortium member {} by user {}", removeConsortiumMember.getOrgName(), user.getEmail());
 
-        Optional<Member> optionalMember = memberRepository.findById(user.getMemberId());
+        Optional<Member> optionalMember = memberService.getMember(user.getMemberId());
         Member member = optionalMember.get();
         if (!member.getIsConsortiumLead()) {
             throw new RuntimeException("Requesting member is not a consortium lead");
@@ -178,8 +179,48 @@ public class SalesforceService {
         }
     }
 
-    private void syncMember(MemberDetails member) {
-        LOG.info("Syncing member {} : {}", member.getId(), member.getName());
+    private void syncMember(MemberDetails salesforceMemberData) {
+        LOG.info("Syncing member {} : {}", salesforceMemberData.getId(), salesforceMemberData.getName());
+        Optional<Member> existingMemberRecord = memberService.getMember(salesforceMemberData.getId());
+        if (existingMemberRecord.isPresent()) {
+            LOG.debug("Found existing member {}", salesforceMemberData.getId());
+            updateExistingMemberWithSalesforceData(existingMemberRecord.get(), salesforceMemberData);
+        } else {
+            LOG.debug("Member {} not found", salesforceMemberData.getId());
+            createNewMemberWithSalesforceData(salesforceMemberData);
+        }
+    }
+
+    private void createNewMemberWithSalesforceData(MemberDetails salesforceMemberData) {
+        Member member = new Member();
+        member.setSalesforceId(salesforceMemberData.getId());
+        member.setActive(salesforceMemberData.isActiveMember());
+        member.setClientName(salesforceMemberData.getName());
+        member = memberService.createMember(member);
+        LOG.info("Created new member {}", member.getId());
+    }
+
+    private void updateExistingMemberWithSalesforceData(Member member, MemberDetails salesforceMemberData) {
+        member = updateMemberMetadata(member, salesforceMemberData);
+        member = updateMemberSalesforceStatus(member, salesforceMemberData);
+        member.setLastUpdatedWithSalesforceData(Instant.now());
+        memberService.updateMember(member);
+    }
+
+    private Member updateMemberSalesforceStatus(Member member, MemberDetails salesforceMemberData) {
+        if (salesforceMemberData.isActiveMember() && !member.isActive()) {
+            LOG.info("Activating member {}", member.getId());
+            member.setActive(true);
+        } else if (!salesforceMemberData.isActiveMember() && member.isActive()) {
+            LOG.info("Deactivating member {}", member.getId());
+            member.setActive(false);
+        }
+        return member;
+    }
+
+    private Member updateMemberMetadata(Member member, MemberDetails salesforceMemberData) {
+        member.setClientName(salesforceMemberData.getName());
+        return memberService.updateMember(member);
     }
 
     private List<MemberDetails> getAllMembers() throws JsonProcessingException {
