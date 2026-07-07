@@ -17,7 +17,7 @@ import java.util.Locale;
 
 @Document(collection = "assertion")
 @CompoundIndexes({
-        @CompoundIndex(name = "added_created_status_idx", def = "{'added_to_orcid': 1, 'created': 1, 'status': 1}")
+        @CompoundIndex(name = "status_1_created_1", def = "{'status': 1, 'created': 1}")
 })
 public class Assertion implements Serializable {
     private static final long serialVersionUID = 1845971448687999429L;

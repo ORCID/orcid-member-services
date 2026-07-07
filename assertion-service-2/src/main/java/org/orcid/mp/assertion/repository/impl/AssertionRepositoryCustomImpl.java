@@ -85,14 +85,18 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
     @Override
     public List<Assertion> findAllToCreateInOrcidRegistry(Pageable pageable) {
+        Criteria applicableStatus = Criteria.where("status").in(
+                AssertionStatus.PENDING.name(),
+                AssertionStatus.NOTIFICATION_SENT.name(),
+                AssertionStatus.NOTIFICATION_FAILED.name(),
+                AssertionStatus.USER_REVOKED_ACCESS.name()
+        );
+
         Criteria notAddedToOrcid = new Criteria();
         notAddedToOrcid.orOperator(Criteria.where("added_to_orcid").exists(false), Criteria.where("added_to_orcid").is(null));
 
-        Criteria notDeprecatedOrDeactivated = new Criteria();
-        notDeprecatedOrDeactivated.andOperator(Criteria.where("status").ne(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name()));
-
         Criteria notAddedToOrcidAndNotDeprecatedOrDeactivated = new Criteria();
-        notAddedToOrcidAndNotDeprecatedOrDeactivated.andOperator(notAddedToOrcid, notDeprecatedOrDeactivated);
+        notAddedToOrcidAndNotDeprecatedOrDeactivated.andOperator(applicableStatus, notAddedToOrcid);
 
         MatchOperation initialMatch = Aggregation.match(notAddedToOrcidAndNotDeprecatedOrDeactivated);
 
