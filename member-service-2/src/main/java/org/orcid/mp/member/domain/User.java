@@ -33,8 +33,6 @@ public class User {
 
     private String langKey;
 
-    private Set<String> authorities;
-
     private String memberName;
 
     public String getId() {
@@ -147,14 +145,6 @@ public class User {
 
     public void setLangKey(String langKey) {
         this.langKey = langKey;
-    }
-
-    public Set<String> getAuthorities() {
-        return authorities;
-    }
-
-    public void setAuthorities(Set<String> authorities) {
-        this.authorities = authorities;
     }
 
     public String getMemberName() {

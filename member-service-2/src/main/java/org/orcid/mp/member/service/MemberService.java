@@ -173,27 +173,6 @@ public class MemberService {
         return member;
     }
 
-    public void updateUsersOnConsortiumLeadChange(Member member, Member existentMember) {
-        if (existentMember == null) {
-            throw new BadRequestAlertException("Invalid id");
-        }
-        if (Boolean.compare(existentMember.getIsConsortiumLead(), member.getIsConsortiumLead()) != 0) {
-            List<User> usersBelongingToMember = userService.getUsersByMemberId(member.getId());
-            for (User user : usersBelongingToMember) {
-                Set<String> authorities = user.getAuthorities();
-                if (member.getIsConsortiumLead()) {
-                    // add role consortium lead
-                    authorities.add(AuthoritiesConstants.CONSORTIUM_LEAD);
-                } else {
-                    // remove role consortium lead
-                    authorities.remove(AuthoritiesConstants.CONSORTIUM_LEAD);
-                }
-                user.setAuthorities(authorities);
-                userService.updateUser(user);
-            }
-        }
-    }
-
     public void updateMemberDefaultLanguage(String memberId, String language) {
         Optional<Member> optional = memberRepository.findById(memberId);
         if (optional.isPresent()) {
