@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser'
 import { CommonModule } from '@angular/common'
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { FormsModule } from '@angular/forms'
-import { AuthInterceptor, AuthModule, LogLevel } from 'angular-auth-oidc-client'
+import { AbstractSecurityStorage, AuthInterceptor, AuthModule, DefaultLocalStorageService, LogLevel } from 'angular-auth-oidc-client'
 import { QuillModule } from 'ngx-quill'
 import { provideNgxWebstorage, withLocalStorage, withNgxWebstorageConfig, withSessionStorage } from 'ngx-webstorage'
 import { environment } from '../environments/environment'
@@ -50,6 +50,10 @@ import { ApiCredentialsMfaEnabledDialogComponent } from './layout/navbar/api-cre
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
+    },
+    {
+      provide: AbstractSecurityStorage,
+      useClass: DefaultLocalStorageService,
     },
     {
       provide: HTTP_INTERCEPTORS,
