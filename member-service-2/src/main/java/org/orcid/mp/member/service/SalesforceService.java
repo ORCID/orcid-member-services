@@ -180,7 +180,7 @@ public class SalesforceService {
     }
 
     private void syncMember(MemberDetails salesforceMemberData) {
-        LOG.info("Syncing member {} : {}", salesforceMemberData.getId(), salesforceMemberData.getName());
+        LOG.info("Syncing member {} : {}", salesforceMemberData.getId());
         Optional<Member> existingMemberRecord = memberService.getMember(salesforceMemberData.getId());
         if (existingMemberRecord.isPresent()) {
             LOG.debug("Found existing member {}", salesforceMemberData.getId());
@@ -211,16 +211,19 @@ public class SalesforceService {
         if (salesforceMemberData.isActiveMember() && !member.isActive()) {
             LOG.info("Activating member {}", member.getId());
             member.setActive(true);
+            member.setActivatedDate(Instant.now());
         } else if (!salesforceMemberData.isActiveMember() && member.isActive()) {
             LOG.info("Deactivating member {}", member.getId());
             member.setActive(false);
+            member.setDeactivatedDate(Instant.now());
         }
         return member;
     }
 
     private Member updateMemberMetadata(Member member, MemberDetails salesforceMemberData) {
+        LOG.info("Updating member {} name to {}", member.getId(), salesforceMemberData.getName());
         member.setClientName(salesforceMemberData.getName());
-        return memberService.updateMember(member);
+        return member;
     }
 
     private List<MemberDetails> getAllMembers() throws JsonProcessingException {

@@ -1,0 +1,112 @@
+{
+  "totalSize": 5,
+  "done": true,
+  "nextRecordsUrl": null,
+  "records": [
+    {
+      "Id": "0011000001XYZ01",
+      "Consortia_Member__c": false,
+      "Consortium_Lead__c": null,
+      "Name": "Global Research University",
+      "Public_Display_Name__c": "Global Res Uni",
+      "Website": "https://www.globalresuni.edu",
+      "BillingCountry": "US",
+      "Research_Community__c": "Academic",
+      "Public_Display_Description__c": "<p>Leading global institution.</p>",
+      "Logo_Description__c": "https://logos.com/gru.png",
+      "Public_Display_Email__c": "info@globalresuni.edu",
+      "Last_membership_start_date__c": "2025-01-01",
+      "Last_membership_end_date__c": "2026-12-31",
+      "Trademark_License__c": "Approved",
+      "BillingAddress": {
+        "city": "Boston",
+        "country": "US"
+      },
+      "Active_Member__c": true
+    },
+    {
+      "Id": "0011000002XYZ02",
+      "Consortia_Member__c": true,
+      "Consortium_Lead__c": "0011000001XYZ01",
+      "Name": "Consortium Sub-Member A",
+      "Public_Display_Name__c": "Sub-Member A",
+      "Website": "https://sub-a.org",
+      "BillingCountry": "UK",
+      "Research_Community__c": "Healthcare",
+      "Public_Display_Description__c": null,
+      "Logo_Description__c": null,
+      "Public_Display_Email__c": "contact@sub-a.org",
+      "Last_membership_start_date__c": "2024-06-15",
+      "Last_membership_end_date__c": "2026-06-14",
+      "Trademark_License__c": "Pending",
+      "BillingAddress": {
+        "city": "London",
+        "country": "UK"
+      },
+      "Active_Member__c": true
+    },
+    {
+      "Id": "0011000003XYZ03",
+      "Consortia_Member__c": true,
+      "Consortium_Lead__c": "0011000001XYZ01",
+      "Name": "Consortium Sub-Member B",
+      "Public_Display_Name__c": "Sub-Member B",
+      "Website": "https://sub-b.org",
+      "BillingCountry": "FR",
+      "Research_Community__c": "Government",
+      "Public_Display_Description__c": "<p>National laboratory.</p>",
+      "Logo_Description__c": "https://logos.com/sub-b.png",
+      "Public_Display_Email__c": null,
+      "Last_membership_start_date__c": "2025-03-01",
+      "Last_membership_end_date__c": "2027-02-28",
+      "Trademark_License__c": "Approved",
+      "BillingAddress": {
+        "city": "Paris",
+        "country": "FR"
+      },
+      "Active_Member__c": true
+    },
+    {
+      "Id": "0011000004XYZ04",
+      "Consortia_Member__c": false,
+      "Consortium_Lead__c": null,
+      "Name": "Legacy Research Lab",
+      "Public_Display_Name__c": "Legacy Lab",
+      "Website": "https://legacylab.com",
+      "BillingCountry": "CA",
+      "Research_Community__c": "Corporate",
+      "Public_Display_Description__c": null,
+      "Logo_Description__c": null,
+      "Public_Display_Email__c": "admin@legacylab.com",
+      "Last_membership_start_date__c": "2020-01-01",
+      "Last_membership_end_date__c": "2023-12-31",
+      "Trademark_License__c": "Expired",
+      "BillingAddress": {
+        "city": "Toronto",
+        "country": "CA"
+      },
+      "Active_Member__c": false
+    },
+    {
+      "Id": "0011000005XYZ05",
+      "Consortia_Member__c": false,
+      "Consortium_Lead__c": null,
+      "Name": "New Horizon Publisher",
+      "Public_Display_Name__c": "New Horizon",
+      "Website": "https://newhorizonpub.com",
+      "BillingCountry": "AU",
+      "Research_Community__c": "Publisher",
+      "Public_Display_Description__c": "<p>Open access publisher.</p>",
+      "Logo_Description__c": null,
+      "Public_Display_Email__c": "oa@newhorizonpub.com",
+      "Last_membership_start_date__c": "2026-01-01",
+      "Last_membership_end_date__c": "2026-12-31",
+      "Trademark_License__c": "Approved",
+      "BillingAddress": {
+        "city": "Sydney",
+        "country": "AU"
+      },
+      "Active_Member__c": true
+    }
+  ]
+}

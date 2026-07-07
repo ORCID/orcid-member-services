@@ -15,10 +15,12 @@ import org.orcid.mp.member.pojo.MemberContactUpdate;
 import org.orcid.mp.member.pojo.RemoveConsortiumMember;
 import org.orcid.mp.member.salesforce.*;
 import org.orcid.mp.member.security.MockSecurityContext;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -30,8 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class SalesforceServiceTest {
 
@@ -49,6 +50,9 @@ public class SalesforceServiceTest {
 
     @Mock
     private MemberService memberService;
+
+    @Captor
+    private ArgumentCaptor<Member> salesforceUpdateCaptor;
 
     private SalesforceService salesforceService;
 
@@ -340,6 +344,104 @@ public class SalesforceServiceTest {
         assertEquals(26, ireland.getStates().size());
     }
 
+    @Test
+    void testSyncMembers_updates() {
+        when(salesforceClient.getMembers()).thenReturn(getSalesforceMembersResponse());
+        doAnswer(invocation -> invocation.getArgument(0)).when(memberService).updateMember(Mockito.any());
+        when(memberService.getMember(Mockito.eq("0011000001XYZ01"))).thenReturn(Optional.of(getMember("0011000001XYZ01", false)));
+        when(memberService.getMember(Mockito.eq("0011000002XYZ02"))).thenReturn(Optional.of(getMember("0011000002XYZ02", true)));
+        when(memberService.getMember(Mockito.eq("0011000003XYZ03"))).thenReturn(Optional.of(getMember("0011000003XYZ03", true)));
+        when(memberService.getMember(Mockito.eq("0011000004XYZ04"))).thenReturn(Optional.of(getMember("0011000004XYZ04", true)));
+        when(memberService.getMember(Mockito.eq("0011000005XYZ05"))).thenReturn(Optional.of(getMember("0011000005XYZ05", false)));
+
+        salesforceService.syncMembers();
+
+        verify(memberService, times(5)).updateMember(salesforceUpdateCaptor.capture());
+
+        List<Member> updatedMembers = salesforceUpdateCaptor.getAllValues();
+        assertThat(updatedMembers.get(0)).isNotNull();
+        assertThat(updatedMembers.get(0).getSalesforceId()).isEqualTo("0011000001XYZ01");
+        assertThat(updatedMembers.get(0).getClientName()).isEqualTo("Global Research University");
+        assertThat(updatedMembers.get(0).isActive()).isTrue();
+        assertThat(updatedMembers.get(0).getActivatedDate()).isNotNull();
+        assertThat(updatedMembers.get(0).getDeactivatedDate()).isNull();
+        assertThat(updatedMembers.get(1)).isNotNull();
+        assertThat(updatedMembers.get(1).getSalesforceId()).isEqualTo("0011000002XYZ02");
+        assertThat(updatedMembers.get(1).getClientName()).isEqualTo("Consortium Sub-Member A");
+        assertThat(updatedMembers.get(1).isActive()).isTrue();
+        assertThat(updatedMembers.get(1).getActivatedDate()).isNull(); // hasn't just been activated
+        assertThat(updatedMembers.get(1).getDeactivatedDate()).isNull();
+        assertThat(updatedMembers.get(2)).isNotNull();
+        assertThat(updatedMembers.get(2).getSalesforceId()).isEqualTo("0011000003XYZ03");
+        assertThat(updatedMembers.get(2).getClientName()).isEqualTo("Consortium Sub-Member B");
+        assertThat(updatedMembers.get(2).isActive()).isTrue();
+        assertThat(updatedMembers.get(2).getActivatedDate()).isNull();
+        assertThat(updatedMembers.get(2).getDeactivatedDate()).isNull();
+        assertThat(updatedMembers.get(3)).isNotNull();
+        assertThat(updatedMembers.get(3).getSalesforceId()).isEqualTo("0011000004XYZ04");
+        assertThat(updatedMembers.get(3).getClientName()).isEqualTo("Legacy Research Lab");
+        assertThat(updatedMembers.get(3).isActive()).isFalse();
+        assertThat(updatedMembers.get(3).getDeactivatedDate()).isNotNull();
+        assertThat(updatedMembers.get(3).getActivatedDate()).isNull();
+        assertThat(updatedMembers.get(4)).isNotNull();
+        assertThat(updatedMembers.get(4).getSalesforceId()).isEqualTo("0011000005XYZ05");
+        assertThat(updatedMembers.get(4).getClientName()).isEqualTo("New Horizon Publisher");
+        assertThat(updatedMembers.get(4).isActive()).isTrue();
+        assertThat(updatedMembers.get(4).getActivatedDate()).isNotNull();
+        assertThat(updatedMembers.get(4).getDeactivatedDate()).isNull();
+    }
+
+    @Test
+    void testSyncMembers_creates() {
+        when(salesforceClient.getMembers()).thenReturn(getSalesforceMembersResponse());
+        doAnswer(invocation -> invocation.getArgument(0)).when(memberService).createMember(Mockito.any());
+
+        salesforceService.syncMembers();
+
+        verify(memberService, times(5)).createMember(salesforceUpdateCaptor.capture());
+
+        List<Member> updatedMembers = salesforceUpdateCaptor.getAllValues();
+        assertThat(updatedMembers.get(0)).isNotNull();
+        assertThat(updatedMembers.get(0).getSalesforceId()).isEqualTo("0011000001XYZ01");
+        assertThat(updatedMembers.get(0).getClientName()).isEqualTo("Global Research University");
+        assertThat(updatedMembers.get(0).isActive()).isTrue();
+        assertThat(updatedMembers.get(0).getActivatedDate()).isNull();
+        assertThat(updatedMembers.get(0).getDeactivatedDate()).isNull();
+        assertThat(updatedMembers.get(1)).isNotNull();
+        assertThat(updatedMembers.get(1).getSalesforceId()).isEqualTo("0011000002XYZ02");
+        assertThat(updatedMembers.get(1).getClientName()).isEqualTo("Consortium Sub-Member A");
+        assertThat(updatedMembers.get(1).isActive()).isTrue();
+        assertThat(updatedMembers.get(1).getActivatedDate()).isNull(); // hasn't just been activated
+        assertThat(updatedMembers.get(1).getDeactivatedDate()).isNull();
+        assertThat(updatedMembers.get(2)).isNotNull();
+        assertThat(updatedMembers.get(2).getSalesforceId()).isEqualTo("0011000003XYZ03");
+        assertThat(updatedMembers.get(2).getClientName()).isEqualTo("Consortium Sub-Member B");
+        assertThat(updatedMembers.get(2).isActive()).isTrue();
+        assertThat(updatedMembers.get(2).getActivatedDate()).isNull();
+        assertThat(updatedMembers.get(2).getDeactivatedDate()).isNull();
+        assertThat(updatedMembers.get(3)).isNotNull();
+        assertThat(updatedMembers.get(3).getSalesforceId()).isEqualTo("0011000004XYZ04");
+        assertThat(updatedMembers.get(3).getClientName()).isEqualTo("Legacy Research Lab");
+        assertThat(updatedMembers.get(3).isActive()).isFalse();
+        assertThat(updatedMembers.get(3).getDeactivatedDate()).isNull();
+        assertThat(updatedMembers.get(3).getActivatedDate()).isNull();
+        assertThat(updatedMembers.get(4)).isNotNull();
+        assertThat(updatedMembers.get(4).getSalesforceId()).isEqualTo("0011000005XYZ05");
+        assertThat(updatedMembers.get(4).getClientName()).isEqualTo("New Horizon Publisher");
+        assertThat(updatedMembers.get(4).isActive()).isTrue();
+        assertThat(updatedMembers.get(4).getActivatedDate()).isNull();
+        assertThat(updatedMembers.get(4).getDeactivatedDate()).isNull();
+    }
+
+    private String getSalesforceMembersResponse() {
+        try {
+            ClassPathResource resource = new ClassPathResource("salesforce/members.json");
+            return Files.readString(resource.getFile().toPath(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read members.json test resource file", e);
+        }
+    }
+
     private List<Country> getSalesforceCountries() {
         State state1 = new State();
         state1.setName("state1");
@@ -377,14 +479,10 @@ public class SalesforceServiceTest {
         return user;
     }
 
-    private Member getMember() {
+    private Member getMember(String salesforceId, boolean active) {
         Member member = new Member();
-        member.setAssertionServiceEnabled(true);
-        member.setClientId("XXXX-XXXX-XXXX-XXXX");
-        member.setClientName("clientname");
-        member.setIsConsortiumLead(false);
-        member.setSalesforceId("two");
-        member.setParentSalesforceId("parentSalesforceId");
+        member.setSalesforceId(salesforceId);
+        member.setActive(active);
         return member;
     }
 
