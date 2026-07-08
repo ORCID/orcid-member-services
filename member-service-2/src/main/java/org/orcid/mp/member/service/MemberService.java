@@ -79,12 +79,12 @@ public class MemberService {
             return createMember(member);
         } else {
             member.setId(optional.get().getId());
-            return updateMember(member);
+            return updateMember(member, SecurityUtils.getCurrentUserLogin().get());
         }
     }
 
     public Member createMember(Member member) {
-        MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser());
+        MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser().getLangKey());
         if (!validation.isValid()) {
             throw new BadRequestAlertException("Member invalid");
         }
@@ -97,14 +97,14 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Member updateMember(Member member) {
+    public Member updateMember(Member member, String updatedBy) {
         Optional<Member> optional = memberRepository.findById(member.getId());
         validateMemberUpdate(member, optional);
 
         Member existingMember = optional.get();
         existingMember.setClientId(member.getClientId());
         existingMember.setParentSalesforceId(member.getParentSalesforceId());
-        existingMember.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+        existingMember.setLastModifiedBy(updatedBy);
         existingMember.setLastModifiedDate(Instant.now());
         existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
         existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
@@ -122,7 +122,7 @@ public class MemberService {
     }
 
     private void validateMemberUpdate(Member member, Optional<Member> existingMember) {
-        MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser());
+        MemberValidation validation = memberValidator.validate(member, member.getDefaultLanguage());
         if (!validation.isValid()) {
             throw new BadRequestAlertException("Member invalid");
         }
@@ -148,7 +148,7 @@ public class MemberService {
     }
 
     public MemberValidation validateMember(Member member) {
-        return memberValidator.validate(member, userService.getLoggedInUser());
+        return memberValidator.validate(member, userService.getLoggedInUser().getLangKey());
     }
 
     public Page<Member> getMembers(Pageable pageable) {

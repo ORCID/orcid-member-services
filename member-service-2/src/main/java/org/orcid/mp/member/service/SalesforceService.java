@@ -204,7 +204,7 @@ public class SalesforceService {
         member = updateMemberMetadata(member, salesforceMemberData);
         member = updateMemberSalesforceStatus(member, salesforceMemberData);
         member.setLastUpdatedWithSalesforceData(Instant.now());
-        memberService.updateMember(member);
+        memberService.updateMember(member, "salesforce-sync");
     }
 
     private Member updateMemberSalesforceStatus(Member member, MemberDetails salesforceMemberData) {

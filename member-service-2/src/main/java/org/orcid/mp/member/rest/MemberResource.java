@@ -11,6 +11,7 @@ import org.orcid.mp.member.pojo.AddConsortiumMember;
 import org.orcid.mp.member.pojo.MemberContactUpdate;
 import org.orcid.mp.member.pojo.MemberContactUpdateResponse;
 import org.orcid.mp.member.pojo.RemoveConsortiumMember;
+import org.orcid.mp.member.security.SecurityUtils;
 import org.orcid.mp.member.service.SalesforceService;
 import org.orcid.mp.member.service.UserService;
 import org.orcid.mp.member.validation.MemberValidation;
@@ -126,7 +127,7 @@ public class MemberResource {
         if (!existentMember.isPresent()) {
             throw new BadRequestAlertException("Invalid id");
         }
-        member = memberService.updateMember(member);
+        member = memberService.updateMember(member, SecurityUtils.getCurrentUserLogin().get());
         return ResponseEntity.ok().body(member);
     }
 
