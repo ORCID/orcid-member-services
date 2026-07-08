@@ -128,6 +128,9 @@ export class UserUpdateComponent implements OnInit {
       if (this.hasRoleAdmin()) {
         if (selectedOrg) {
           this.showIsAdminCheckbox.set(selectedOrg.superadminEnabled || false)
+          if (!selectedOrg.superadminEnabled) {
+            this.editForm.patchValue({ isAdmin: false })
+          }
         } else {
           this.showIsAdminCheckbox.set(false)
         }
@@ -308,6 +311,10 @@ export class UserUpdateComponent implements OnInit {
             } else {
               this.subscribeToSaveResponse(this.userService.create(userFromForm))
             }
+          }
+          const selectedOrg = this.memberList().find((cm) => cm.id === this.editForm.get(['memberId'])?.value)
+          if (selectedOrg?.superadminEnabled && this.hasRoleAdmin()) {
+            this.editForm.get('isAdmin')?.setValue(false)
           }
         } else {
           this.isSaving.set(false)
