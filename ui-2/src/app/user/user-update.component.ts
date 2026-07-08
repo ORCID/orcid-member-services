@@ -125,11 +125,14 @@ export class UserUpdateComponent implements OnInit {
   onChanges(): void {
     this.editForm.get('memberId')?.valueChanges.subscribe(() => {
       const selectedOrg = this.memberList().find((cm) => cm.id === this.editForm.get(['memberId'])?.value)
-      const showAdminCheckbox = this.hasRoleAdmin() && !!selectedOrg?.superadminEnabled
-      this.showIsAdminCheckbox.set(showAdminCheckbox)
-
-      if (!showAdminCheckbox && this.editForm.get('isAdmin')?.value) {
-        this.editForm.get('isAdmin')?.setValue(false)
+      if (this.hasRoleAdmin()) {
+        if (selectedOrg) {
+          this.showIsAdminCheckbox.set(selectedOrg.superadminEnabled || false)
+        } else {
+          this.showIsAdminCheckbox.set(false)
+        }
+      } else {
+        this.showIsAdminCheckbox.set(false)
       }
     })
 
@@ -305,6 +308,10 @@ export class UserUpdateComponent implements OnInit {
             } else {
               this.subscribeToSaveResponse(this.userService.create(userFromForm))
             }
+          }
+          const selectedOrg = this.memberList().find((cm) => cm.id === this.editForm.get(['memberId'])?.value)
+          if (selectedOrg?.superadminEnabled && this.hasRoleAdmin()) {
+            this.editForm.get('isAdmin')?.setValue(false)
           }
         } else {
           this.isSaving.set(false)
