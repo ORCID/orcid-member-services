@@ -125,14 +125,11 @@ export class UserUpdateComponent implements OnInit {
   onChanges(): void {
     this.editForm.get('memberId')?.valueChanges.subscribe(() => {
       const selectedOrg = this.memberList().find((cm) => cm.id === this.editForm.get(['memberId'])?.value)
-      if (this.hasRoleAdmin()) {
-        if (selectedOrg) {
-          this.showIsAdminCheckbox.set(selectedOrg.superadminEnabled || false)
-        } else {
-          this.showIsAdminCheckbox.set(false)
-        }
-      } else {
-        this.showIsAdminCheckbox.set(false)
+      const showAdminCheckbox = this.hasRoleAdmin() && !!selectedOrg?.superadminEnabled
+      this.showIsAdminCheckbox.set(showAdminCheckbox)
+
+      if (!showAdminCheckbox && this.editForm.get('isAdmin')?.value) {
+        this.editForm.get('isAdmin')?.setValue(false)
       }
     })
 

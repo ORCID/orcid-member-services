@@ -182,6 +182,8 @@ public class UserService {
             LOG.warn("Attempt to create user with non existent member {}", userDTO.getMemberId());
             throw new BadRequestAlertException("Member does not exist");
         }
+        checkAdminAllowedForMember(userDTO, member);
+        String createdBy = SecurityUtil.getCurrentUserLogin().get();
 
         // change the auth if the logged in user is org owner and this is set as
         // mainContact
@@ -212,6 +214,12 @@ public class UserService {
             mailService.sendApiCredsEnabledEmail(newUser);
         }
         return userMapper.toUserDTO(newUser);
+    }
+
+    private void checkAdminAllowedForMember(UserDTO userDTO, Member member) {
+        if (userDTO.getIsAdmin() && (member == null || member.getSuperadminEnabled() == null || !member.getSuperadminEnabled())) {
+            throw new BadRequestAlertException("Admin users cannot be associated with this member");
+        }
     }
 
     private User createUserRecord(UserDTO userDTO) {
@@ -265,6 +273,7 @@ public class UserService {
         if (!existingUser.isPresent()) {
             throw new EmailNotFoundException();
         }
+        checkAdminAllowedForMember(userDTO, member);
 
         checkUpdateConstraints(existingUser, userDTO);
         User user = existingUser.get();

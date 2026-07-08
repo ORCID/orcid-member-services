@@ -369,6 +369,26 @@ describe('UserUpdateComponent', () => {
     expect(enableSpy).toHaveBeenCalled()
   })
 
+  it('should reset isAdmin when switching to a non-superadmin member', () => {
+    accountService.hasAnyAuthority.and.callFake((authorities: string[]) => authorities.includes('ROLE_ADMIN'))
+    memberService.getAllMembers.and.returnValue(
+      of([
+        { id: 'member-superadmin', clientName: 'A', superadminEnabled: true } as Member,
+        { id: 'member-standard', clientName: 'B', superadminEnabled: false } as Member,
+      ])
+    )
+    activatedRoute.data = of({ user: null as unknown as IUser })
+
+    fixture.detectChanges()
+
+    component.editForm.patchValue({ memberId: 'member-superadmin' })
+    component.editForm.patchValue({ isAdmin: true })
+
+    component.editForm.patchValue({ memberId: 'member-standard' })
+
+    expect(component.editForm.get('isAdmin')?.value).toBe(false)
+  })
+
   it('should send activation email for existing user', () => {
     activatedRoute.data = of({ user: { memberId: 'test', id: 'id' } as IUser })
     userService.sendActivate.and.returnValue(of(new User()))

@@ -358,7 +358,7 @@ public class UserServiceTest {
         userDTO.setId("id");
         userDTO.setEmail("email@orcid.org");
         userDTO.setMainContact(false);
-        userDTO.setIsAdmin(true);
+        userDTO.setIsAdmin(false);
         userService.updateUser(userDTO);
 
         verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
@@ -367,7 +367,7 @@ public class UserServiceTest {
         assertEquals(userDTO.getFirstName(), user.getFirstName());
         assertEquals(userDTO.getLastName(), user.getLastName());
         assertEquals(userDTO.getEmail(), user.getEmail());
-        assertTrue(user.getAdmin());
+        assertFalse(user.getAdmin());
         assertNotNull(user.getLastModifiedBy());
         assertNotNull(user.getLastModifiedDate());
     }
@@ -823,6 +823,35 @@ public class UserServiceTest {
         return upload;
     }
 
+    @Test
+    void testCreateUserAsAdminForNonSuperadminMemberThrows() {
+        when(memberServiceClient.getMember(Mockito.anyString())).thenReturn(memberWithoutSuperadminEnabled());
+
+        UserDTO userDTO = getUserDTO();
+        userDTO.setIsAdmin(true);
+
+        assertThrows(BadRequestAlertException.class, () -> userService.createUser(userDTO));
+        verify(userRepository, Mockito.never()).save(Mockito.any(User.class));
+    }
+
+    @Test
+    void testUpdateUserAsAdminForNonSuperadminMemberThrows() {
+        when(memberServiceClient.getMember(Mockito.anyString())).thenReturn(memberWithoutSuperadminEnabled());
+
+        User existing = new User();
+        existing.setId("id");
+        existing.setEmail("email@email.com");
+        existing.setMainContact(false);
+        when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(existing));
+
+        UserDTO userDTO = getUserDTO();
+        userDTO.setId("id");
+        userDTO.setIsAdmin(true);
+
+        assertThrows(BadRequestAlertException.class, () -> userService.updateUser(userDTO));
+        verify(userRepository, Mockito.never()).save(Mockito.any(User.class));
+    }
+
     private UserDTO getUserDTO() {
         UserDTO user = new UserDTO();
         user.setActivated(false);
@@ -849,6 +878,14 @@ public class UserServiceTest {
         member.setMemberId("member-id");
         member.setClientName("member");
         member.setAssertionServiceEnabled(false);
+        return member;
+    }
+
+    private Member memberWithoutSuperadminEnabled() {
+        Member member = new Member();
+        member.setMemberId("member-id");
+        member.setClientName("member");
+        member.setSuperadminEnabled(false);
         return member;
     }
 }
