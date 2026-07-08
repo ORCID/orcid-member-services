@@ -148,9 +148,16 @@ public class UserServiceTest {
         UserDTO userDTO = getUserDTO();
         userService.createUser(userDTO);
 
-        verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
+        verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
         verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
         verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
+
+        User user = userCaptor.getValue();
+        assertNotNull(user);
+        assertNotNull(user.getCreatedBy());
+        assertNotNull(user.getCreatedDate());
+        assertNotNull(user.getLastModifiedBy());
+        assertNotNull(user.getLastModifiedDate());
     }
 
     @Test
@@ -173,10 +180,17 @@ public class UserServiceTest {
         userDTO.setManageApiCredsEnabled(true);
         userService.createUser(userDTO);
 
-        verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
+        verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
         verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
         verify(mailService, Mockito.times(1)).sendApiCredsEnabledEmail(Mockito.any(User.class));
         verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
+
+        User user = userCaptor.getValue();
+        assertNotNull(user);
+        assertNotNull(user.getCreatedBy());
+        assertNotNull(user.getCreatedDate());
+        assertNotNull(user.getLastModifiedBy());
+        assertNotNull(user.getLastModifiedDate());
     }
 
     @Test
@@ -196,8 +210,15 @@ public class UserServiceTest {
         UserDTO userDTO = getUserDTO();
         userService.createUser(userDTO);
 
-        verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
+        verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
         verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
+
+        User user = userCaptor.getValue();
+        assertNotNull(user);
+        assertNotNull(user.getCreatedBy());
+        assertNotNull(user.getCreatedDate());
+        assertNotNull(user.getLastModifiedBy());
+        assertNotNull(user.getLastModifiedDate());
     }
 
     @Test
@@ -231,6 +252,8 @@ public class UserServiceTest {
         assertEquals(userDTO.getLastName(), user.getLastName());
         assertEquals(userDTO.getEmail(), user.getEmail());
         assertFalse(user.getAdmin());
+        assertNotNull(user.getLastModifiedBy());
+        assertNotNull(user.getLastModifiedDate());
     }
 
     @Test
@@ -270,6 +293,8 @@ public class UserServiceTest {
         assertEquals(userDTO.getEmail(), user.getEmail());
         assertFalse(user.getAdmin());
         assertTrue(user.getManageApiCredsEnabled());
+        assertNotNull(user.getLastModifiedBy());
+        assertNotNull(user.getLastModifiedDate());
     }
 
     @Test
@@ -306,6 +331,8 @@ public class UserServiceTest {
         assertEquals(userDTO.getEmail(), user.getEmail());
         assertFalse(user.getAdmin());
         assertFalse(user.getManageApiCredsEnabled());
+        assertNotNull(user.getLastModifiedBy());
+        assertNotNull(user.getLastModifiedDate());
     }
 
     @Test
@@ -341,6 +368,8 @@ public class UserServiceTest {
         assertEquals(userDTO.getLastName(), user.getLastName());
         assertEquals(userDTO.getEmail(), user.getEmail());
         assertTrue(user.getAdmin());
+        assertNotNull(user.getLastModifiedBy());
+        assertNotNull(user.getLastModifiedDate());
     }
 
     @Test
@@ -367,6 +396,10 @@ public class UserServiceTest {
         userService.updateUser(toUpdate);
 
         verify(mailService, Mockito.never()).sendOrganizationOwnerChangedMail(Mockito.any(User.class), Mockito.anyString());
+        verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
+        User savedUser = userCaptor.getValue();
+        assertNotNull(savedUser.getLastModifiedBy());
+        assertNotNull(savedUser.getLastModifiedDate());
     }
 
     @Test
