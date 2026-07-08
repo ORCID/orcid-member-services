@@ -128,6 +128,9 @@ export class UserUpdateComponent implements OnInit {
       if (this.hasRoleAdmin()) {
         if (selectedOrg) {
           this.showIsAdminCheckbox.set(selectedOrg.superadminEnabled || false)
+          if (!selectedOrg.superadminEnabled) {
+            this.editForm.patchValue({ isAdmin: false })
+          }
         } else {
           this.showIsAdminCheckbox.set(false)
         }
