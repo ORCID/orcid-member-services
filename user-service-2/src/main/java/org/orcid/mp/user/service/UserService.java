@@ -182,7 +182,6 @@ public class UserService {
             LOG.warn("Attempt to create user with non existent member {}", userDTO.getMemberId());
             throw new BadRequestAlertException("Member does not exist");
         }
-        String createdBy = SecurityUtil.getCurrentUserLogin().get();
 
         // change the auth if the logged in user is org owner and this is set as
         // mainContact
@@ -201,12 +200,6 @@ public class UserService {
                 userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
             }
         }
-
-        Instant now = Instant.now();
-        userDTO.setCreatedBy(createdBy);
-        userDTO.setCreatedDate(now);
-        userDTO.setLastModifiedBy(createdBy);
-        userDTO.setLastModifiedDate(now);
 
         User newUser = createUserRecord(userDTO);
         mailService.sendActivationEmail(newUser);
@@ -228,6 +221,14 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(false);
+
+        String createdBy = SecurityUtil.getCurrentUserLogin().get();
+        Instant now = Instant.now();
+        user.setCreatedBy(createdBy);
+        user.setCreatedDate(now);
+        user.setLastModifiedBy(createdBy);
+        user.setLastModifiedDate(now);
+
         userRepository.save(user);
         return user;
     }
@@ -294,12 +295,9 @@ public class UserService {
         }
 
         user.setManageApiCredsEnabled(userDTO.isManageApiCredsEnabled());
-
-        if (user.getMemberId() != null && userDTO.getMemberId() != null && !user.getMemberId().equals(userDTO.getMemberId())) {
-            user.setMemberId(userDTO.getMemberId());
-            user.setLastModifiedBy(SecurityUtil.getCurrentUserLogin().get());
-            user.setLastModifiedDate(Instant.now());
-        }
+        user.setMemberId(userDTO.getMemberId());
+        user.setLastModifiedBy(SecurityUtil.getCurrentUserLogin().get());
+        user.setLastModifiedDate(Instant.now());
         userRepository.save(user);
 
         if (owner && !previouslyOwner) {
