@@ -59,7 +59,7 @@
             </dd>
             <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.status.string">Status</dt>
             <dd class="col-md-9">
-              {{ member()?.status }}
+              {{ member()?.active ? 'Active' : 'Deactivated' }}
             </dd>
             <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.createdDate.string">Created Date</dt>
             <dd class="col-md-9">
