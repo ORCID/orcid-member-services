@@ -4,29 +4,23 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 public class Member {
 
-    @Field("client_id")
     private String clientId;
 
-    @Field("salesforce_id")
     private String salesforceId;
 
-    @Field("member_id")
     private String memberId;
 
-    @Field("parent_salesforce_id")
     private String parentSalesforceId;
 
-    @Field("client_name")
     private String clientName;
 
-    @Field("assertion_service_enabled")
     private Boolean assertionServiceEnabled;
 
-    @Field("superadmin_enabled")
     private Boolean superadminEnabled;
 
-    @Field("is_consortium_lead")
     private Boolean isConsortiumLead;
+
+    private boolean active;
 
     public Boolean getIsConsortiumLead() {
         return isConsortiumLead;
@@ -90,5 +84,13 @@ public class Member {
 
     public void setSuperadminEnabled(Boolean superadminEnabled) {
         this.superadminEnabled = superadminEnabled;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
