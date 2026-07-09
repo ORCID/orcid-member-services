@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
 
 class MemberCsvReaderTest {
 
@@ -37,7 +38,7 @@ class MemberCsvReaderTest {
 
     @Test
     void testReadMembersUpload() throws IOException {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(User.class))).thenReturn(getValidValidation());
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
 
         InputStream inputStream = getClass().getResourceAsStream("/members.csv");
         MemberUpload upload = reader.readMemberUpload(inputStream, getUser());

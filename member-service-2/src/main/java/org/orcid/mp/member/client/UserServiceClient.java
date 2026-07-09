@@ -30,7 +30,4 @@ public class UserServiceClient {
         return restClient.put().uri("/users").body(user).retrieve().toEntity(String.class).getBody();
     }
 
-    public String updateUsersMemberNames(String memberId, String newMemberName) {
-        return restClient.put().uri("/users/memberName/" + memberId + "/" + newMemberName).retrieve().toEntity(String.class).getBody();
-    }
 }

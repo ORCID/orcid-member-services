@@ -45,7 +45,7 @@ public class MemberCsvReader {
                     Member member = createMemberInstance(user);
                     member = parseLine(line, member);
 
-                    MemberValidation validation = memberValidator.validate(member, user);
+                    MemberValidation validation = memberValidator.validate(member, user.getLangKey());
                     if (!validation.isValid()) {
                         for (String error : validation.getErrors()) {
                             upload.addError(line.getRecordNumber(), error);

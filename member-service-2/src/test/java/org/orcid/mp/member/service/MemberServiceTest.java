@@ -29,6 +29,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 
 class MemberServiceTest {
@@ -67,8 +68,8 @@ class MemberServiceTest {
 
     @Test
     void testCreateMember() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(User.class))).thenReturn(getValidValidation());
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.empty());
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
+        Mockito.when(memberRepository.findBySalesforceId(anyString())).thenReturn(Optional.empty());
         Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
             @Override
             public Member answer(InvocationOnMock invocation) throws Throwable {
@@ -77,7 +78,7 @@ class MemberServiceTest {
         });
 
         Member member = getMember();
-        Member created = memberService.createMember(member);
+        Member created = memberService.createMember(member, "me");
         assertNotNull(created.getCreatedBy());
         assertNotNull(created.getCreatedDate());
         assertNotNull(created.getLastModifiedBy());
@@ -87,23 +88,25 @@ class MemberServiceTest {
         assertEquals(member.getSalesforceId(), created.getSalesforceId());
         assertEquals(member.getAssertionServiceEnabled(), created.getAssertionServiceEnabled());
         assertEquals(member.getIsConsortiumLead(), created.getIsConsortiumLead());
+        assertEquals("me", member.getCreatedBy());
+        assertEquals("me", created.getLastModifiedBy());
     }
 
     @Test
     void testCreateMemberWhenMemberExists() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(User.class))).thenReturn(getInvalidValidation("member-exists"));
-        Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.of(getMember()));
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getInvalidValidation("member-exists"));
+        Mockito.when(memberRepository.findBySalesforceId(anyString())).thenReturn(Optional.of(getMember()));
         Member member = getMember();
 
         Assertions.assertThrows(BadRequestAlertException.class, () -> {
-            memberService.createMember(member);
+            memberService.createMember(member, "me");
         });
     }
 
     @Test
     void testUpdateMember() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(User.class))).thenReturn(getValidValidation());
-        Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(getMember()));
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
+        Mockito.when(memberRepository.findById(anyString())).thenReturn(Optional.of(getMember()));
         Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
             @Override
             public Member answer(InvocationOnMock invocation) throws Throwable {
@@ -114,7 +117,7 @@ class MemberServiceTest {
         Member member = getMember();
         member.setClientName("new name");
         member.setId("id");
-        Member updated = memberService.updateMember(member);
+        Member updated = memberService.updateMember(member, "user");
         assertNotNull(updated.getLastModifiedBy());
         assertNotNull(updated.getLastModifiedDate());
         assertEquals(member.getClientName(), updated.getClientName());
@@ -127,11 +130,11 @@ class MemberServiceTest {
 
     @Test
     void testUpdateMemberWithDuplicateName() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(User.class))).thenReturn(getValidValidation());
-        Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(getMember()));
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
+        Mockito.when(memberRepository.findById(anyString())).thenReturn(Optional.of(getMember()));
 
         // return a record when name is checked against db
-        Mockito.when(memberRepository.findByClientName(Mockito.anyString())).thenReturn(Optional.of(getMember()));
+        Mockito.when(memberRepository.findByClientName(anyString())).thenReturn(Optional.of(getMember()));
 
         Member member = getMember();
         member.setId("id");
@@ -139,7 +142,7 @@ class MemberServiceTest {
         member.setClientName("new client name");
 
         Exception e = Assertions.assertThrows(BadRequestAlertException.class, () -> {
-            memberService.updateMember(member);
+            memberService.updateMember(member, "user");
         });
 
         assertThat(e.getMessage()).isEqualTo("Invalid member name");
@@ -149,8 +152,8 @@ class MemberServiceTest {
 
     @Test
     void testUpdateMemberWithMemberName() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(User.class))).thenReturn(getValidValidation());
-        Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(getMember()));
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
+        Mockito.when(memberRepository.findById(anyString())).thenReturn(Optional.of(getMember()));
         Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
             @Override
             public Member answer(InvocationOnMock invocation) throws Throwable {
@@ -159,7 +162,7 @@ class MemberServiceTest {
         });
         Member member = getMember();
         member.setClientName("a new member name");
-        memberService.updateMember(member);
+        memberService.updateMember(member, "user");
 
         // check assertion and user changes rolled back
         Mockito.verify(userService, Mockito.times(1)).updateUsersMemberNames(eq("memberId"), eq("a new member name"));
@@ -171,13 +174,14 @@ class MemberServiceTest {
 
     @Test
     void testUpdateMemberWithAssertionEnabledUpdate() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(User.class))).thenReturn(getValidValidation());
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
 
         Member existingMember = getMember();
         existingMember.setAssertionServiceEnabled(false);
         existingMember.setSalesforceId("salesforce-id");
+        existingMember.setDefaultLanguage("en");
 
-        Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(existingMember));
+        Mockito.when(memberRepository.findById(anyString())).thenReturn(Optional.of(existingMember));
         Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
             @Override
             public Member answer(InvocationOnMock invocation) throws Throwable {
@@ -189,21 +193,21 @@ class MemberServiceTest {
         member.setId("id");
         member.setSalesforceId("salesforce-id");
         member.setAssertionServiceEnabled(true);
-        memberService.updateMember(member);
+        memberService.updateMember(member, "user");
 
         Mockito.verify(memberRepository, Mockito.times(1)).save(Mockito.any(Member.class));
     }
 
     @Test
     void testUpdateMemberWithCLUpdate() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(User.class))).thenReturn(getValidValidation());
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
 
         Member existingMember = getMember();
         existingMember.setAssertionServiceEnabled(false);
         existingMember.setIsConsortiumLead(false);
         existingMember.setSalesforceId("salesforce-id");
 
-        Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(existingMember));
+        Mockito.when(memberRepository.findById(anyString())).thenReturn(Optional.of(existingMember));
         Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
             @Override
             public Member answer(InvocationOnMock invocation) throws Throwable {
@@ -216,15 +220,15 @@ class MemberServiceTest {
         member.setSalesforceId("salesforce-id");
         member.setAssertionServiceEnabled(false);
         member.setIsConsortiumLead(true);
-        memberService.updateMember(member);
+        memberService.updateMember(member, "user");
 
         Mockito.verify(memberRepository, Mockito.times(1)).save(Mockito.any(Member.class));
     }
 
     @Test
     void testUpdateNonExistentMember() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(User.class))).thenReturn(getValidValidation());
-        Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
+        Mockito.when(memberRepository.findById(anyString())).thenReturn(Optional.empty());
         Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
             @Override
             public Member answer(InvocationOnMock invocation) throws Throwable {
@@ -237,14 +241,14 @@ class MemberServiceTest {
         member.setId("id");
 
         Assertions.assertThrows(BadRequestAlertException.class, () -> {
-            memberService.updateMember(member);
+            memberService.updateMember(member, "user");
         });
     }
 
     @Test
     void testUpdateInvalidMember() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(User.class))).thenReturn(getInvalidValidation("some-error"));
-        Mockito.when(memberRepository.findById(Mockito.anyString())).thenReturn(Optional.of(getMember()));
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getInvalidValidation("some-error"));
+        Mockito.when(memberRepository.findById(anyString())).thenReturn(Optional.of(getMember()));
 
         Member member = getMember();
         member.setClientName("new name");
@@ -252,14 +256,14 @@ class MemberServiceTest {
         member.setSalesforceId(null);
 
         Assertions.assertThrows(BadRequestAlertException.class, () -> {
-            memberService.updateMember(member);
+            memberService.updateMember(member, "user");
         });
     }
 
     @Test
     void testUploadMemberCSV() throws IOException {
         Mockito.when(membersUploadReader.readMemberUpload(Mockito.any(), Mockito.any(User.class))).thenReturn(getMemberUpload());
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), Mockito.any(User.class))).thenReturn(getValidValidation());
+        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
         Mockito.when(memberRepository.findBySalesforceId(eq("one"))).thenReturn(Optional.empty());
         Member existing = getMember();
         existing.setId("two");
@@ -278,13 +282,13 @@ class MemberServiceTest {
         assertEquals(3, page.getTotalElements());
         Mockito.verify(memberRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
 
-        Mockito.when(memberRepository.findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(Mockito.anyString(),
-                Mockito.anyString(), Mockito.anyString(), Mockito.any(Pageable.class))).thenReturn(new PageImpl<>(Arrays.asList(getMember(), getMember(), getMember())));
+        Mockito.when(memberRepository.findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(anyString(),
+                anyString(), anyString(), Mockito.any(Pageable.class))).thenReturn(new PageImpl<>(Arrays.asList(getMember(), getMember(), getMember())));
         page = memberService.getMembers(Mockito.mock(Pageable.class), "test");
         assertNotNull(page);
         assertEquals(3, page.getTotalElements());
         Mockito.verify(memberRepository, Mockito.times(1)).findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(
-                Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.any(Pageable.class));
+                anyString(), anyString(), anyString(), Mockito.any(Pageable.class));
     }
 
     @Test

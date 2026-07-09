@@ -24,6 +24,8 @@ import java.util.*;
 @Service
 public class SalesforceService {
 
+    static final String SALESFORCE_SYNC_USERNAME = "salesforce-sync";
+
     private static final Logger LOG = LoggerFactory.getLogger(SalesforceService.class);
 
     private static final List<String> OPPORTUNITY_PUBLIC_STAGE_NAMES = List.of("Invoice Paid", "Agreement Signed", "Invoice Sent", "Partial Payment", "In Collections");
@@ -181,13 +183,17 @@ public class SalesforceService {
 
     private void syncMember(MemberDetails salesforceMemberData) {
         LOG.info("Syncing member {} : {}", salesforceMemberData.getId());
-        Optional<Member> existingMemberRecord = memberService.getMember(salesforceMemberData.getId());
-        if (existingMemberRecord.isPresent()) {
-            LOG.debug("Found existing member {}", salesforceMemberData.getId());
-            updateExistingMemberWithSalesforceData(existingMemberRecord.get(), salesforceMemberData);
-        } else {
-            LOG.debug("Member {} not found", salesforceMemberData.getId());
-            createNewMemberWithSalesforceData(salesforceMemberData);
+        try {
+            Optional<Member> existingMemberRecord = memberService.getMember(salesforceMemberData.getId());
+            if (existingMemberRecord.isPresent()) {
+                LOG.debug("Found existing member {}", salesforceMemberData.getId());
+                updateExistingMemberWithSalesforceData(existingMemberRecord.get(), salesforceMemberData);
+            } else {
+                LOG.debug("Member {} not found", salesforceMemberData.getId());
+                createNewMemberWithSalesforceData(salesforceMemberData);
+            }
+        } catch (Exception e) {
+            LOG.error("Failed to sync member {} : {}", salesforceMemberData.getId(), e.getMessage());
         }
     }
 
@@ -196,7 +202,9 @@ public class SalesforceService {
         member.setSalesforceId(salesforceMemberData.getId());
         member.setActive(salesforceMemberData.isActiveMember());
         member.setClientName(salesforceMemberData.getName());
-        member = memberService.createMember(member);
+        member.setAssertionServiceEnabled(false);
+        member.setIsConsortiumLead(false); // to be updated...
+        member = memberService.createMember(member, SALESFORCE_SYNC_USERNAME);
         LOG.info("Created new member {}", member.getId());
     }
 
@@ -204,7 +212,7 @@ public class SalesforceService {
         member = updateMemberMetadata(member, salesforceMemberData);
         member = updateMemberSalesforceStatus(member, salesforceMemberData);
         member.setLastUpdatedWithSalesforceData(Instant.now());
-        memberService.updateMember(member);
+        memberService.updateMember(member, SALESFORCE_SYNC_USERNAME);
     }
 
     private Member updateMemberSalesforceStatus(Member member, MemberDetails salesforceMemberData) {
