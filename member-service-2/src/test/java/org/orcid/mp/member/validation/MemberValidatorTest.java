@@ -41,7 +41,7 @@ public class MemberValidatorTest {
     @Test
     public void testValidateWithMissingAssertionsEnabled() {
         Member member = getMemberWithMissingAssertionsEnabled();
-        MemberValidation validation = memberValidator.validate(member, getUser());
+        MemberValidation validation = memberValidator.validate(member, "en");
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
@@ -54,7 +54,7 @@ public class MemberValidatorTest {
     public void testValidateWithInvalidAssertionsEnabled() {
         Member member = getConsortiaLeadWithNoClientId();
         member.setAssertionServiceEnabled(true); // invalid due to no client id
-        MemberValidation validation = memberValidator.validate(member, getUser());
+        MemberValidation validation = memberValidator.validate(member, "en");
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
@@ -66,7 +66,7 @@ public class MemberValidatorTest {
     @Test
     public void testValidateWithMissingSalesforceId() {
         Member member = getMemberWithMissingSalesforceId();
-        MemberValidation validation = memberValidator.validate(member, getUser());
+        MemberValidation validation = memberValidator.validate(member, "en");
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
@@ -78,7 +78,7 @@ public class MemberValidatorTest {
     @Test
     public void testValidateWithMissingClientId() {
         Member member = getMemberWithMissingClientId();
-        MemberValidation validation = memberValidator.validate(member, getUser());
+        MemberValidation validation = memberValidator.validate(member, "en");
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
@@ -88,7 +88,7 @@ public class MemberValidatorTest {
 
         // shouldn't be required if assertion service not enabled
         member.setAssertionServiceEnabled(false);
-        validation = memberValidator.validate(member, getUser());
+        validation = memberValidator.validate(member, "en");
         errors = validation.getErrors();
         assertTrue(validation.isValid());
         assertEquals(0, errors.size());
@@ -97,7 +97,7 @@ public class MemberValidatorTest {
     @Test
     public void testValidateWithMissingClientName() {
         Member member = getMemberWithMissingClientName();
-        MemberValidation validation = memberValidator.validate(member, getUser());
+        MemberValidation validation = memberValidator.validate(member, "en");
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
@@ -109,7 +109,7 @@ public class MemberValidatorTest {
     @Test
     public void testValidateWithInvalidClientId() {
         Member member = getMemberWithInvalidClientId();
-        MemberValidation validation = memberValidator.validate(member, getUser());
+        MemberValidation validation = memberValidator.validate(member, "en");
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
@@ -121,7 +121,7 @@ public class MemberValidatorTest {
     @Test
     public void testValidateWithValidOldClientId() {
         Member member = getMemberWithValidOldClientId();
-        MemberValidation validation = memberValidator.validate(member, getUser());
+        MemberValidation validation = memberValidator.validate(member, "en");
         List<String> errors = validation.getErrors();
         assertTrue(validation.isValid());
         assertEquals(0, errors.size());
@@ -131,7 +131,7 @@ public class MemberValidatorTest {
     @Test
     public void testValidateWithValidNewClientId() {
         Member member = getMemberWithValidNewClientId();
-        MemberValidation validation = memberValidator.validate(member, getUser());
+        MemberValidation validation = memberValidator.validate(member, "en");
         List<String> errors = validation.getErrors();
         assertTrue(validation.isValid());
         assertEquals(0, errors.size());
@@ -141,7 +141,7 @@ public class MemberValidatorTest {
     @Test
     public void testValidateWithMissingConsortiumLead() {
         Member member = getMemberWithMissingConsortiumLead();
-        MemberValidation validation = memberValidator.validate(member, getUser());
+        MemberValidation validation = memberValidator.validate(member, "en");
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
         assertEquals(1, errors.size());
@@ -153,7 +153,7 @@ public class MemberValidatorTest {
     @Test
     public void testValidateNonConsortiumLeadWithNoParentSalesforceId() {
         Member member = getNonConsortiumLeadWithNoParentSalesforceId();
-        MemberValidation validation = memberValidator.validate(member, getUser());
+        MemberValidation validation = memberValidator.validate(member, "en");
         assertTrue(validation.isValid());
     }
 
@@ -162,7 +162,7 @@ public class MemberValidatorTest {
         Member member = getConsortiaLeadWithNoClientId();
         member.setParentSalesforceId("illegal");
         member.setAssertionServiceEnabled(false);
-        MemberValidation validation = memberValidator.validate(member, getUser());
+        MemberValidation validation = memberValidator.validate(member, "en");
         assertFalse(validation.isValid());
         List<String> errors = validation.getErrors();
         assertEquals(1, errors.size());
@@ -172,13 +172,13 @@ public class MemberValidatorTest {
 
         member.setSalesforceId("legal");
         member.setParentSalesforceId("legal");
-        validation = memberValidator.validate(member, getUser());
+        validation = memberValidator.validate(member, "en");
         assertTrue(validation.isValid());
         errors = validation.getErrors();
         assertEquals(0, errors.size());
 
         member.setParentSalesforceId(null);
-        validation = memberValidator.validate(member, getUser());
+        validation = memberValidator.validate(member, "en");
         assertTrue(validation.isValid());
         errors = validation.getErrors();
         assertEquals(0, errors.size());
@@ -191,7 +191,7 @@ public class MemberValidatorTest {
         Mockito.when(memberRepository.findBySalesforceId(Mockito.anyString())).thenReturn(Optional.of(existingMember));
 
         Member invalidNewMemberWithClashingSalesforceId = getMemberWithValidNewClientId();
-        MemberValidation validation = memberValidator.validate(invalidNewMemberWithClashingSalesforceId, getUser());
+        MemberValidation validation = memberValidator.validate(invalidNewMemberWithClashingSalesforceId, "en");
 
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
@@ -208,7 +208,7 @@ public class MemberValidatorTest {
         Mockito.when(memberRepository.findByClientName(Mockito.anyString())).thenReturn(Optional.of(existingMember));
 
         Member invalidNewMemberDueToClashingClientName = getMemberWithValidNewClientId();
-        MemberValidation validation = memberValidator.validate(invalidNewMemberDueToClashingClientName, getUser());
+        MemberValidation validation = memberValidator.validate(invalidNewMemberDueToClashingClientName, "en");
 
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
@@ -226,7 +226,7 @@ public class MemberValidatorTest {
 
         Member invalidUpdatingMemberWithClashingSalesforceId = getMemberWithValidNewClientId();
         invalidUpdatingMemberWithClashingSalesforceId.setId("some-id");
-        MemberValidation validation = memberValidator.validate(invalidUpdatingMemberWithClashingSalesforceId, getUser());
+        MemberValidation validation = memberValidator.validate(invalidUpdatingMemberWithClashingSalesforceId, "en");
 
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
@@ -244,7 +244,7 @@ public class MemberValidatorTest {
 
         Member invalidUpdatingMemberDueToClashingClientName = getMemberWithValidNewClientId();
         invalidUpdatingMemberDueToClashingClientName.setId("some-id");
-        MemberValidation validation = memberValidator.validate(invalidUpdatingMemberDueToClashingClientName, getUser());
+        MemberValidation validation = memberValidator.validate(invalidUpdatingMemberDueToClashingClientName, "en");
 
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
@@ -258,7 +258,7 @@ public class MemberValidatorTest {
     public void testValidateMemberWithInvalidMemberType() {
         Member member = getMemberWithValidNewClientId();
         member.setType("invalid member type");
-        MemberValidation validation = memberValidator.validate(member, getUser());
+        MemberValidation validation = memberValidator.validate(member, "en");
 
         List<String> errors = validation.getErrors();
         assertFalse(validation.isValid());
@@ -272,11 +272,11 @@ public class MemberValidatorTest {
     public void testValidateMemberWithValidMemberType() {
         Member member = getMemberWithValidNewClientId();
         member.setType("basic");
-        MemberValidation validation = memberValidator.validate(member, getUser());
+        MemberValidation validation = memberValidator.validate(member, "en");
         assertTrue(validation.isValid());
 
         member.setType("premium");
-        validation = memberValidator.validate(member, getUser());
+        validation = memberValidator.validate(member, "en");
         assertTrue(validation.isValid());
     }
 
@@ -328,12 +328,6 @@ public class MemberValidatorTest {
         Member member = getMember();
         member.setIsConsortiumLead(null);
         return member;
-    }
-
-    private User getUser() {
-        User user = new User();
-        user.setLangKey("en");
-        return user;
     }
 
     private Member getMemberWithMissingAssertionsEnabled() {

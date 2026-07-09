@@ -68,7 +68,7 @@ public class MemberResource {
     public ResponseEntity<Member> createMember(@Valid @RequestBody Member member)
             throws URISyntaxException, JSONException {
         LOG.debug("REST request to save Member : {}", member);
-        Member created = memberService.createMember(member);
+        Member created = memberService.createMember(member, SecurityUtils.getCurrentUserLogin().get());
         return ResponseEntity.created(new URI("/api/member/" + created.getId())).body(created);
     }
 

@@ -44,12 +44,6 @@ public class MemberService {
     @Autowired
     private MemberValidator memberValidator;
 
-    @Autowired
-    private SalesforceClient salesforceClient;
-
-    @Autowired
-    private MailService mailService;
-
     public MemberUpload uploadMemberCSV(InputStream inputStream) {
         LOG.info("Reading member CSV upload");
         MemberUpload upload = null;
@@ -73,14 +67,14 @@ public class MemberService {
     public Member createOrUpdateMember(Member member) {
         Optional<Member> optional = memberRepository.findBySalesforceId(member.getSalesforceId());
         if (!optional.isPresent()) {
-            return createMember(member);
+            return createMember(member, SecurityUtils.getCurrentUserLogin().get());
         } else {
             member.setId(optional.get().getId());
             return updateMember(member, SecurityUtils.getCurrentUserLogin().get());
         }
     }
 
-    public Member createMember(Member member) {
+    public Member createMember(Member member, String createdBy) {
         MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser().getLangKey());
         if (!validation.isValid()) {
             throw new BadRequestAlertException("Member invalid");
@@ -89,8 +83,8 @@ public class MemberService {
         Instant now = Instant.now();
         member.setCreatedDate(now);
         member.setLastModifiedDate(now);
-        member.setCreatedBy(SecurityUtils.getCurrentUserLogin().get());
-        member.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+        member.setCreatedBy(createdBy);
+        member.setLastModifiedBy(createdBy);
         return memberRepository.save(member);
     }
 
@@ -119,7 +113,7 @@ public class MemberService {
     }
 
     private void validateMemberUpdate(Member member, Optional<Member> existingMember) {
-        MemberValidation validation = memberValidator.validate(member, member.getDefaultLanguage());
+        MemberValidation validation = memberValidator.validate(member, member.getDefaultLanguage() != null ? member.getDefaultLanguage() : "en");
         if (!validation.isValid()) {
             throw new BadRequestAlertException("Member invalid");
         }

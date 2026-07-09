@@ -347,7 +347,7 @@ public class SalesforceServiceTest {
     @Test
     void testSyncMembers_updates() {
         when(salesforceClient.getMembers()).thenReturn(getSalesforceMembersResponse());
-        doAnswer(invocation -> invocation.getArgument(0)).when(memberService).updateMember(Mockito.any());
+        doAnswer(invocation -> invocation.getArgument(0)).when(memberService).updateMember(Mockito.any(), anyString());
         when(memberService.getMember(Mockito.eq("0011000001XYZ01"))).thenReturn(Optional.of(getMember("0011000001XYZ01", false)));
         when(memberService.getMember(Mockito.eq("0011000002XYZ02"))).thenReturn(Optional.of(getMember("0011000002XYZ02", true)));
         when(memberService.getMember(Mockito.eq("0011000003XYZ03"))).thenReturn(Optional.of(getMember("0011000003XYZ03", true)));
@@ -356,7 +356,7 @@ public class SalesforceServiceTest {
 
         salesforceService.syncMembers();
 
-        verify(memberService, times(5)).updateMember(salesforceUpdateCaptor.capture());
+        verify(memberService, times(5)).updateMember(salesforceUpdateCaptor.capture(), anyString());
 
         List<Member> updatedMembers = salesforceUpdateCaptor.getAllValues();
         assertThat(updatedMembers.get(0)).isNotNull();
@@ -394,11 +394,11 @@ public class SalesforceServiceTest {
     @Test
     void testSyncMembers_creates() {
         when(salesforceClient.getMembers()).thenReturn(getSalesforceMembersResponse());
-        doAnswer(invocation -> invocation.getArgument(0)).when(memberService).createMember(Mockito.any());
+        doAnswer(invocation -> invocation.getArgument(0)).when(memberService).createMember(Mockito.any(), anyString());
 
         salesforceService.syncMembers();
 
-        verify(memberService, times(5)).createMember(salesforceUpdateCaptor.capture());
+        verify(memberService, times(5)).createMember(salesforceUpdateCaptor.capture(), anyString());
 
         List<Member> updatedMembers = salesforceUpdateCaptor.getAllValues();
         assertThat(updatedMembers.get(0)).isNotNull();

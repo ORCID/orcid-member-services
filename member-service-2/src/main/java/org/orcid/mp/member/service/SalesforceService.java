@@ -24,6 +24,8 @@ import java.util.*;
 @Service
 public class SalesforceService {
 
+    static final String SALESFORCE_SYNC_USERNAME = "salesforce-sync";
+
     private static final Logger LOG = LoggerFactory.getLogger(SalesforceService.class);
 
     private static final List<String> OPPORTUNITY_PUBLIC_STAGE_NAMES = List.of("Invoice Paid", "Agreement Signed", "Invoice Sent", "Partial Payment", "In Collections");
@@ -196,7 +198,7 @@ public class SalesforceService {
         member.setSalesforceId(salesforceMemberData.getId());
         member.setActive(salesforceMemberData.isActiveMember());
         member.setClientName(salesforceMemberData.getName());
-        member = memberService.createMember(member);
+        member = memberService.createMember(member, SALESFORCE_SYNC_USERNAME);
         LOG.info("Created new member {}", member.getId());
     }
 
@@ -204,7 +206,7 @@ public class SalesforceService {
         member = updateMemberMetadata(member, salesforceMemberData);
         member = updateMemberSalesforceStatus(member, salesforceMemberData);
         member.setLastUpdatedWithSalesforceData(Instant.now());
-        memberService.updateMember(member, "salesforce-sync");
+        memberService.updateMember(member, SALESFORCE_SYNC_USERNAME);
     }
 
     private Member updateMemberSalesforceStatus(Member member, MemberDetails salesforceMemberData) {
