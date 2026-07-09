@@ -2,6 +2,7 @@ package org.orcid.mp.member.service;
 
 import java.util.List;
 
+import org.orcid.mp.member.client.InternalUserServiceClient;
 import org.orcid.mp.member.client.UserServiceClient;
 import org.orcid.mp.member.domain.User;
 import org.orcid.mp.member.security.SecurityUtils;
@@ -17,6 +18,9 @@ public class UserService {
 
     @Autowired
     private UserServiceClient userServiceClient;
+
+    @Autowired
+    private InternalUserServiceClient internalUserServiceClient;
 
     public User getLoggedInUser() {
         String login = SecurityUtils.getCurrentUserLogin().get();
@@ -37,6 +41,6 @@ public class UserService {
     }
 
     public void updateUsersMemberNames(String salesforceId, String newClientName) {
-        userServiceClient.updateUsersMemberNames(salesforceId, newClientName);
+        internalUserServiceClient.updateUsersMemberNames(salesforceId, newClientName);
     }
 }

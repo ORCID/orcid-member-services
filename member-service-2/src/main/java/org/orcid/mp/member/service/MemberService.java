@@ -5,18 +5,15 @@ import java.io.InputStream;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 
 import org.orcid.mp.member.client.SalesforceClient;
 import org.orcid.mp.member.domain.Member;
-import org.orcid.mp.member.domain.User;
 import org.orcid.mp.member.error.BadRequestAlertException;
 import org.orcid.mp.member.repository.MemberRepository;
 import org.orcid.mp.member.validation.MemberValidation;
 import org.orcid.mp.member.validation.MemberValidator;
 import org.orcid.mp.member.salesforce.*;
-import org.orcid.mp.member.security.AuthoritiesConstants;
 import org.orcid.mp.member.security.SecurityUtils;
 import org.orcid.mp.member.upload.MemberCsvReader;
 import org.orcid.mp.member.upload.MemberUpload;
