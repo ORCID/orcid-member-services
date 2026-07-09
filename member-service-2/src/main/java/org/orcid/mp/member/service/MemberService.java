@@ -75,8 +75,9 @@ public class MemberService {
     }
 
     public Member createMember(Member member, String createdBy) {
-        MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser().getLangKey());
+        MemberValidation validation = memberValidator.validate(member, member.getDefaultLanguage() != null ? member.getDefaultLanguage() : "en");
         if (!validation.isValid()) {
+            LOG.warn("Member invalid {}", validation.getErrors().toString());
             throw new BadRequestAlertException("Member invalid");
         }
 

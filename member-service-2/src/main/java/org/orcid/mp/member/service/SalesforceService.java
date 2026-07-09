@@ -183,13 +183,17 @@ public class SalesforceService {
 
     private void syncMember(MemberDetails salesforceMemberData) {
         LOG.info("Syncing member {} : {}", salesforceMemberData.getId());
-        Optional<Member> existingMemberRecord = memberService.getMember(salesforceMemberData.getId());
-        if (existingMemberRecord.isPresent()) {
-            LOG.debug("Found existing member {}", salesforceMemberData.getId());
-            updateExistingMemberWithSalesforceData(existingMemberRecord.get(), salesforceMemberData);
-        } else {
-            LOG.debug("Member {} not found", salesforceMemberData.getId());
-            createNewMemberWithSalesforceData(salesforceMemberData);
+        try {
+            Optional<Member> existingMemberRecord = memberService.getMember(salesforceMemberData.getId());
+            if (existingMemberRecord.isPresent()) {
+                LOG.debug("Found existing member {}", salesforceMemberData.getId());
+                updateExistingMemberWithSalesforceData(existingMemberRecord.get(), salesforceMemberData);
+            } else {
+                LOG.debug("Member {} not found", salesforceMemberData.getId());
+                createNewMemberWithSalesforceData(salesforceMemberData);
+            }
+        } catch (Exception e) {
+            LOG.error("Failed to sync member {} : {}", salesforceMemberData.getId(), e.getMessage());
         }
     }
 
@@ -198,6 +202,7 @@ public class SalesforceService {
         member.setSalesforceId(salesforceMemberData.getId());
         member.setActive(salesforceMemberData.isActiveMember());
         member.setClientName(salesforceMemberData.getName());
+        member.setAssertionServiceEnabled(false);
         member = memberService.createMember(member, SALESFORCE_SYNC_USERNAME);
         LOG.info("Created new member {}", member.getId());
     }
