@@ -3,13 +3,11 @@ package org.orcid.mp.user.rest;
 import org.orcid.mp.user.domain.User;
 import org.orcid.mp.user.dto.UserDTO;
 import org.orcid.mp.user.mapper.UserMapper;
-import org.orcid.mp.user.security.AuthoritiesConstants;
 import org.orcid.mp.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -36,7 +34,7 @@ public class InternalResource {
      *         body the user, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{loginOrId}")
-    public ResponseEntity<UserDTO> getUserByLogin(@PathVariable String loginOrId) {
+    public ResponseEntity<UserDTO> getUserByLoginOrId(@PathVariable String loginOrId) {
         LOG.debug("Internal request to get User : {}", loginOrId);
         Optional<User> user = userService.getUserByLogin(loginOrId);
         if (!user.isPresent()) {
