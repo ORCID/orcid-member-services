@@ -203,6 +203,7 @@ public class SalesforceService {
         member.setActive(salesforceMemberData.isActiveMember());
         member.setClientName(salesforceMemberData.getName());
         member.setAssertionServiceEnabled(false);
+        member.setIsConsortiumLead(false); // to be updated...
         member = memberService.createMember(member, SALESFORCE_SYNC_USERNAME);
         LOG.info("Created new member {}", member.getId());
     }
