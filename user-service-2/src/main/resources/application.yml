@@ -92,6 +92,8 @@ application:
     clientSecret: ${APPLICATION_INTERNAL_CLIENT_SECRET}
     assertionServiceClientId: ${APPLICATION_INTERNAL_ASSERTION_SERVICE_ID}
     assertionServiceClientSecret: ${APPLICATION_INTERNAL_ASSERTION_SERVICE_CLIENT_SECRET}
+    memberServiceClientId: ${APPLICATION_INTERNAL_MEMBER_SERVICE_ID}
+    memberServiceClientSecret: ${APPLICATION_INTERNAL_MEMBER_SERVICE_CLIENT_SECRET}
   security:
     issuerUrl: ${APPLICATION_SECURITY_ISSUER_URL}
     jwt:

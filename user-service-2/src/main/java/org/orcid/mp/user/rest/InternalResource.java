@@ -8,10 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -37,8 +34,8 @@ public class InternalResource {
      *         body the user, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{loginOrId}")
-    public ResponseEntity<UserDTO> getUserByLogin(@PathVariable String loginOrId) {
-        LOG.debug("REST request to get User : {}", loginOrId);
+    public ResponseEntity<UserDTO> getUserByLoginOrId(@PathVariable String loginOrId) {
+        LOG.debug("Internal request to get User : {}", loginOrId);
         Optional<User> user = userService.getUserByLogin(loginOrId);
         if (!user.isPresent()) {
             user = userService.getUser(loginOrId);
@@ -47,6 +44,25 @@ public class InternalResource {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(userMapper.toUserDTO(user.get()));
+    }
+
+    /**
+     * {@code PUT /users/memberName/:oldMemberName/:newMemberName} : Updates memberName
+     * for existing Users.
+     *
+     * @param memberId  the memberId for finding users to update
+     * @param newMemberName the new Value of the memberName to update
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
+     */
+    @PutMapping("/memberName/{memberId}/{newMemberName}")
+    public ResponseEntity<Void> updateUsersMemberName(@PathVariable String memberId, @PathVariable String newMemberName) {
+        LOG.info("Internal request to update users' member names id to {}", newMemberName);
+        boolean success = userService.updateUsersMemberName(memberId, newMemberName);
+        if (success) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(500).build();
+        }
     }
 
 }

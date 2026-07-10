@@ -314,26 +314,6 @@ public class UserResource {
     }
 
     /**
-     * {@code PUT /users/memberName/:oldMemberName/:newMemberName} : Updates memberName
-     * for existing Users.
-     *
-     * @param memberId  the memberId for finding users to update
-     * @param newMemberName the new Value of the memberName to update
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
-     */
-    @PutMapping("/memberName/{memberId}/{newMemberName}")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Void> updateUsersMemberName(@PathVariable String memberId, @PathVariable String newMemberName) {
-        LOG.debug("REST request to update users' member names id to {}", newMemberName);
-        boolean success = userService.updateUsersMemberName(memberId, newMemberName);
-        if (success) {
-            return ResponseEntity.ok().headers(JHipsterAlerts.createEntityUpdateAlert(applicationName, true, "user", memberId)).build();
-        } else {
-            return ResponseEntity.status(500).build();
-        }
-    }
-
-    /**
      * {@code GET /users/:saleforceId}/owner : get the "login" user.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with

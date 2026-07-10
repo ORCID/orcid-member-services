@@ -15,7 +15,7 @@ export interface IMember {
   lastModifiedBy?: string
   lastModifiedDate?: Moment | undefined | null
   type?: string
-  status?: string
+  active?: boolean
   defaultLanguage?: string
 }
 
@@ -35,8 +35,8 @@ export class Member implements IMember {
     public lastModifiedBy?: string,
     public lastModifiedDate?: Moment | undefined | null,
     public type?: string,
-    public status?: string,
-    public defaultLaungage?: string
+    public active?: boolean,
+    public defaultLanguage?: string
   ) {
     this.isConsortiumLead = this.isConsortiumLead || false
     this.superadminEnabled = this.superadminEnabled || false

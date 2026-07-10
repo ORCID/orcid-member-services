@@ -58,10 +58,19 @@ public class Member implements Serializable {
     private String defaultLanguage;
 
     @Field
-    private String type;
+    private boolean active;
+
+    @Field("last_updated_with_salesforce_data")
+    private Instant lastUpdatedWithSalesforceData;
+
+    @Field("deactivated_date")
+    private Instant deactivatedDate;
+
+    @Field("activated_date")
+    private Instant activatedDate;
 
     @Field
-    private String status;
+    private String type;
 
     public String getId() {
         return id;
@@ -171,20 +180,44 @@ public class Member implements Serializable {
         this.type = type;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getDefaultLanguage() {
         return defaultLanguage;
     }
 
     public void setDefaultLanguage(String defaultLanguage) {
         this.defaultLanguage = defaultLanguage;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Instant getLastUpdatedWithSalesforceData() {
+        return lastUpdatedWithSalesforceData;
+    }
+
+    public void setLastUpdatedWithSalesforceData(Instant lastUpdatedWithSalesforceData) {
+        this.lastUpdatedWithSalesforceData = lastUpdatedWithSalesforceData;
+    }
+
+    public Instant getDeactivatedDate() {
+        return deactivatedDate;
+    }
+
+    public void setDeactivatedDate(Instant deactivatedDate) {
+        this.deactivatedDate = deactivatedDate;
+    }
+
+    public Instant getActivatedDate() {
+        return activatedDate;
+    }
+
+    public void setActivatedDate(Instant activatedDate) {
+        this.activatedDate = activatedDate;
     }
 
     @Override
@@ -204,8 +237,10 @@ public class Member implements Serializable {
         result = prime * result + ((parentSalesforceId == null) ? 0 : parentSalesforceId.hashCode());
         result = prime * result + ((salesforceId == null) ? 0 : salesforceId.hashCode());
         result = prime * result + ((type == null) ? 0 : type.hashCode());
-        result = prime * result + ((status == null) ? 0 : status.hashCode());
         result = prime * result + ((defaultLanguage == null) ? 0 : defaultLanguage.hashCode());
+        result = prime * result + ((deactivatedDate == null) ? 0 : deactivatedDate.hashCode());
+        result = prime * result + ((activatedDate == null) ? 0 : activatedDate.hashCode());
+        result = prime * result + ((lastUpdatedWithSalesforceData == null) ? 0 : lastUpdatedWithSalesforceData.hashCode());
         return result;
     }
 
@@ -283,16 +318,32 @@ public class Member implements Serializable {
                 return false;
         } else if (!type.equals(other.type))
             return false;
-        if (status == null) {
-            if (other.status != null)
-                return false;
-        } else if (!status.equals(other.status))
-            return false;
         if (defaultLanguage == null) {
             if (other.defaultLanguage != null)
                 return false;
         } else if (!defaultLanguage.equals(other.defaultLanguage))
             return false;
+        if (deactivatedDate == null) {
+            if (other.deactivatedDate != null)
+                return false;
+        } else if (!deactivatedDate.equals(other.deactivatedDate)) {
+            return false;
+        }
+        if (activatedDate == null) {
+            if (other.activatedDate != null)
+                return false;
+        } else if (!activatedDate.equals(other.activatedDate)) {
+            return false;
+        }
+        if (lastUpdatedWithSalesforceData == null) {
+            if (other.lastUpdatedWithSalesforceData != null)
+                return false;
+        } else if (!lastUpdatedWithSalesforceData.equals(other.lastUpdatedWithSalesforceData)) {
+            return false;
+        }
+        if (active != other.active) {
+            return false;
+        }
         return true;
     }
 
@@ -301,6 +352,7 @@ public class Member implements Serializable {
         return "Member [id=" + id + ", clientId=" + clientId + ", salesforceId=" + salesforceId + ", parentSalesforceId=" + parentSalesforceId + ", clientName="
                 + clientName + ", isConsortiumLead=" + isConsortiumLead + ", assertionServiceEnabled=" + assertionServiceEnabled + ", superadminEnabled="
                 + superadminEnabled + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate="
-                + lastModifiedDate + ", type=" + type  + ", status=" + status + ", defaultLanguage=" + defaultLanguage + "]";
+                + lastModifiedDate + ", type=" + type  + ", defaultLanguage=" + defaultLanguage + ", active=" + active + "]";
     }
+
 }

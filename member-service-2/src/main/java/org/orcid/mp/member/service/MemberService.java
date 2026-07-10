@@ -5,18 +5,15 @@ import java.io.InputStream;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 
 import org.orcid.mp.member.client.SalesforceClient;
 import org.orcid.mp.member.domain.Member;
-import org.orcid.mp.member.domain.User;
 import org.orcid.mp.member.error.BadRequestAlertException;
 import org.orcid.mp.member.repository.MemberRepository;
 import org.orcid.mp.member.validation.MemberValidation;
 import org.orcid.mp.member.validation.MemberValidator;
 import org.orcid.mp.member.salesforce.*;
-import org.orcid.mp.member.security.AuthoritiesConstants;
 import org.orcid.mp.member.security.SecurityUtils;
 import org.orcid.mp.member.upload.MemberCsvReader;
 import org.orcid.mp.member.upload.MemberUpload;
@@ -47,12 +44,6 @@ public class MemberService {
     @Autowired
     private MemberValidator memberValidator;
 
-    @Autowired
-    private SalesforceClient salesforceClient;
-
-    @Autowired
-    private MailService mailService;
-
     public MemberUpload uploadMemberCSV(InputStream inputStream) {
         LOG.info("Reading member CSV upload");
         MemberUpload upload = null;
@@ -76,35 +67,36 @@ public class MemberService {
     public Member createOrUpdateMember(Member member) {
         Optional<Member> optional = memberRepository.findBySalesforceId(member.getSalesforceId());
         if (!optional.isPresent()) {
-            return createMember(member);
+            return createMember(member, SecurityUtils.getCurrentUserLogin().get());
         } else {
             member.setId(optional.get().getId());
-            return updateMember(member);
+            return updateMember(member, SecurityUtils.getCurrentUserLogin().get());
         }
     }
 
-    public Member createMember(Member member) {
-        MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser());
+    public Member createMember(Member member, String createdBy) {
+        MemberValidation validation = memberValidator.validate(member, member.getDefaultLanguage() != null ? member.getDefaultLanguage() : "en");
         if (!validation.isValid()) {
+            LOG.warn("Member invalid {}", validation.getErrors().toString());
             throw new BadRequestAlertException("Member invalid");
         }
 
         Instant now = Instant.now();
         member.setCreatedDate(now);
         member.setLastModifiedDate(now);
-        member.setCreatedBy(SecurityUtils.getCurrentUserLogin().get());
-        member.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+        member.setCreatedBy(createdBy);
+        member.setLastModifiedBy(createdBy);
         return memberRepository.save(member);
     }
 
-    public Member updateMember(Member member) {
+    public Member updateMember(Member member, String updatedBy) {
         Optional<Member> optional = memberRepository.findById(member.getId());
         validateMemberUpdate(member, optional);
 
         Member existingMember = optional.get();
         existingMember.setClientId(member.getClientId());
         existingMember.setParentSalesforceId(member.getParentSalesforceId());
-        existingMember.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
+        existingMember.setLastModifiedBy(updatedBy);
         existingMember.setLastModifiedDate(Instant.now());
         existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
         existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
@@ -122,7 +114,7 @@ public class MemberService {
     }
 
     private void validateMemberUpdate(Member member, Optional<Member> existingMember) {
-        MemberValidation validation = memberValidator.validate(member, userService.getLoggedInUser());
+        MemberValidation validation = memberValidator.validate(member, member.getDefaultLanguage() != null ? member.getDefaultLanguage() : "en");
         if (!validation.isValid()) {
             throw new BadRequestAlertException("Member invalid");
         }
@@ -148,7 +140,7 @@ public class MemberService {
     }
 
     public MemberValidation validateMember(Member member) {
-        return memberValidator.validate(member, userService.getLoggedInUser());
+        return memberValidator.validate(member, userService.getLoggedInUser().getLangKey());
     }
 
     public Page<Member> getMembers(Pageable pageable) {

@@ -10,6 +10,21 @@ spring:
         jwt:
           issuer-uri: ${APPLICATION_SECURITY_ISSUER_URL}
           jwk-set-uri: ${APPLICATION_USER_SERVICE_URL}/oauth2/jwks
+      client:
+        registration:
+          # This ID is used in your Java RestClient/WebClient code in the Member Service
+          internal-member-client:
+            provider: user-service-provider
+            client-id: ${APPLICATION_INTERNAL_MEMBER_SERVICE_ID}
+            client-secret: ${APPLICATION_INTERNAL_MEMBER_SERVICE_CLIENT_SECRET}
+            authorization-grant-type: client_credentials
+            scope: internal
+        provider:
+          user-service-provider:
+            # The URL of your User Service (Auth Server)
+            token-uri: ${APPLICATION_USER_SERVICE_URL}/oauth2/token
+            # (Optional for client_credentials flow, but good to have)
+            authorization-uri: ${APPLICATION_USER_SERVICE_URL}/oauth2/authorize
   data:
     mongodb:
       database: memberservice

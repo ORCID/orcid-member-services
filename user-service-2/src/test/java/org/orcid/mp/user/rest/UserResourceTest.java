@@ -43,9 +43,6 @@ public class UserResourceTest {
     @Mock
     private UserValidator userValidator;
 
-    @Mock
-    private UserMapper userMapper;
-
     @InjectMocks
     private UserResource userResource;
 
@@ -62,13 +59,6 @@ public class UserResourceTest {
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-    }
-
-    @Test
-    void testUpdateUsersMemberName() {
-        Mockito.when(userService.updateUsersMemberName(Mockito.eq("member-id"), Mockito.eq("newName"))).thenReturn(true);
-        ResponseEntity<Void> response = userResource.updateUsersMemberName("member-id", "newName");
-        assertTrue(response.getStatusCode().is2xxSuccessful());
     }
 
     @Test

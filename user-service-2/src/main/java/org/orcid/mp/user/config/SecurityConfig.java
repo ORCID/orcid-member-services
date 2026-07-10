@@ -75,6 +75,12 @@ public class SecurityConfig {
     @Value("${application.internal.assertionServiceClientSecret}")
     private String internalAssertionServiceClientSecret;
 
+    @Value("${application.internal.memberServiceClientId}")
+    private String internalMemberServiceClientId;
+
+    @Value("${application.internal.memberServiceClientSecret}")
+    private String internalMemberServiceClientSecret;
+
     @Value("${application.security.jwt.private-key}")
     private RSAPrivateKey privateKey;
 
@@ -210,7 +216,18 @@ public class SecurityConfig {
                         .build())
                 .build();
 
-        return new InMemoryRegisteredClientRepository(oidcClient, userServiceClient, assertionServiceClient);
+        RegisteredClient memberServiceClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId(internalMemberServiceClientId)
+                .clientSecret(encoder.encode(internalMemberServiceClientSecret))
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .scope("internal")
+                .tokenSettings(TokenSettings.builder()
+                        .accessTokenTimeToLive(Duration.ofMinutes(5)) // Keep internal tokens short-lived
+                        .build())
+                .build();
+
+        return new InMemoryRegisteredClientRepository(oidcClient, userServiceClient, assertionServiceClient, memberServiceClient);
     }
 
     @Bean
