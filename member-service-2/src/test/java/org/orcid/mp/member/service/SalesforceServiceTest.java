@@ -345,8 +345,9 @@ public class SalesforceServiceTest {
     }
 
     @Test
-    void testSyncMembers_updates() {
-        when(salesforceClient.getMembers()).thenReturn(getSalesforceMembersResponse());
+    void testSyncMembers_updates() throws IOException {
+        when(salesforceClient.getMembers()).thenReturn(getFileContent("src/test/resources/salesforce/members.json"));
+        when(salesforceClient.getConsortium(anyString())).thenReturn("{}");
         doAnswer(invocation -> invocation.getArgument(0)).when(memberService).updateMember(Mockito.any(), anyString());
         when(memberService.getMember(Mockito.eq("0011000001XYZ01"))).thenReturn(Optional.of(getMember("0011000001XYZ01", false)));
         when(memberService.getMember(Mockito.eq("0011000002XYZ02"))).thenReturn(Optional.of(getMember("0011000002XYZ02", true)));
@@ -392,8 +393,35 @@ public class SalesforceServiceTest {
     }
 
     @Test
-    void testSyncMembers_creates() {
-        when(salesforceClient.getMembers()).thenReturn(getSalesforceMembersResponse());
+    void testSyncMembers_updateMemberToCL() throws IOException {
+        Member nonCL = getMember("0011000001XYZ01", true);
+        nonCL.setIsConsortiumLead(false);
+
+        when(salesforceClient.getMembers()).thenReturn(getFileContent("src/test/resources/salesforce/members.json"));
+        when(salesforceClient.getConsortium(eq("0011000001XYZ01"))).thenReturn(getFileContent("src/test/resources/salesforce/consortium.json"));
+        when(memberService.getMember(eq("0011000001XYZ01"))).thenReturn(Optional.of(getMember("0011000001XYZ01", false)));
+        when(salesforceClient.getMemberDetails(eq("0011000001XYZ01"))).thenReturn(getFileContent("src/test/resources/salesforce/consortiumLead.json"));
+
+        salesforceService.syncMembers();
+
+        verify(memberService).updateMember(salesforceUpdateCaptor.capture(), anyString());
+        verify(memberService).addParent(eq("some-consortium-member-id"), eq("0011000001XYZ01"));
+
+        Member updatedMember = salesforceUpdateCaptor.getValue();
+        assertThat(updatedMember).isNotNull();
+        assertThat(updatedMember.getSalesforceId()).isEqualTo("0011000001XYZ01");
+        assertThat(updatedMember.getIsConsortiumLead()).isTrue();
+    }
+
+    @Test
+    void testSyncMembers_updateCLToMember() {
+
+    }
+
+    @Test
+    void testSyncMembers_creates() throws IOException {
+        when(salesforceClient.getMembers()).thenReturn(getFileContent("src/test/resources/salesforce/members.json"));
+        when(salesforceClient.getConsortium(anyString())).thenReturn("{}");
         doAnswer(invocation -> invocation.getArgument(0)).when(memberService).createMember(Mockito.any(), anyString());
 
         salesforceService.syncMembers();
@@ -433,13 +461,33 @@ public class SalesforceServiceTest {
         assertThat(updatedMembers.get(4).getDeactivatedDate()).isNull();
     }
 
-    private String getSalesforceMembersResponse() {
-        try {
-            ClassPathResource resource = new ClassPathResource("salesforce/members.json");
-            return Files.readString(resource.getFile().toPath(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read members.json test resource file", e);
-        }
+    @Test
+    void testSyncMembers_createCL() throws IOException {
+        Member nonCL = getMember("0011000001XYZ01", true);
+        nonCL.setIsConsortiumLead(false);
+
+        when(salesforceClient.getMembers()).thenReturn(getFileContent("src/test/resources/salesforce/members.json"));
+        when(salesforceClient.getConsortium(eq("0011000001XYZ01"))).thenReturn(getFileContent("src/test/resources/salesforce/consortium.json"));
+        when(memberService.getMember(eq("0011000001XYZ01"))).thenReturn(Optional.empty());
+        when(salesforceClient.getMemberDetails(eq("0011000001XYZ01"))).thenReturn(getFileContent("src/test/resources/salesforce/consortiumLead.json"));
+
+        when(memberService.createMember(any(), anyString())).thenAnswer(invocation -> {
+            Member member = invocation.getArgument(0);
+            member.setId("id");
+            return member;
+        });
+
+        salesforceService.syncMembers();
+
+        verify(memberService, times(5)).createMember(salesforceUpdateCaptor.capture(), anyString());
+        verify(memberService).addParent(eq("some-consortium-member-id"), eq("0011000001XYZ01"));
+
+        List<Member> createdMembers = salesforceUpdateCaptor.getAllValues();
+        Member createdCL = createdMembers.get(0);
+
+        assertThat(createdCL).isNotNull();
+        assertThat(createdCL.getSalesforceId()).isEqualTo("0011000001XYZ01");
+        assertThat(createdCL.getIsConsortiumLead()).isTrue();
     }
 
     private List<Country> getSalesforceCountries() {

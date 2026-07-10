@@ -122,7 +122,10 @@ public class SalesforceService {
         JsonNode memberElement = getMemberJson(salesforceId);
         if (memberElement != null) {
             ArrayNode consortiumMembers = getConsortiumMembersJson(salesforceId);
-
+            if (consortiumMembers == null) {
+                LOG.debug("No consortium members found for salesforce id {}", salesforceId);
+                return null;
+            }
             try {
                 ConsortiumLeadDetails consortiumLeadDetails = objectMapper.treeToValue(memberElement, ConsortiumLeadDetails.class);
                 List<ConsortiumMember> members = objectMapper.treeToValue(consortiumMembers, new TypeReference<List<ConsortiumMember>>() {});
@@ -182,40 +185,63 @@ public class SalesforceService {
     }
 
     private void syncMember(MemberDetails salesforceMemberData) {
-        LOG.info("Syncing member {} : {}", salesforceMemberData.getId());
+        LOG.info("Syncing member with SF ID {} : {}", salesforceMemberData.getId());
         try {
+            ConsortiumLeadDetails consortiumData = getConsortiumLeadDetails(salesforceMemberData.getId());
             Optional<Member> existingMemberRecord = memberService.getMember(salesforceMemberData.getId());
             if (existingMemberRecord.isPresent()) {
                 LOG.debug("Found existing member {}", salesforceMemberData.getId());
-                updateExistingMemberWithSalesforceData(existingMemberRecord.get(), salesforceMemberData);
+                updateExistingMemberWithSalesforceData(existingMemberRecord.get(), salesforceMemberData, consortiumData != null);
+                if (consortiumData != null) {
+                    updateParentForConsortiumMembers(consortiumData);
+                } else if (consortiumData == null && existingMemberRecord.get().getIsConsortiumLead()) {
+                    // member no longer consortium lead
+                    removeParentFromConsortiumMembers(consortiumData);
+                }
             } else {
                 LOG.debug("Member {} not found", salesforceMemberData.getId());
-                createNewMemberWithSalesforceData(salesforceMemberData);
+                createNewMemberWithSalesforceData(salesforceMemberData, consortiumData != null);
+                if (consortiumData != null) {
+                    updateParentForConsortiumMembers(consortiumData);
+                }
             }
         } catch (Exception e) {
             LOG.error("Failed to sync member {} : {}", salesforceMemberData.getId(), e.getMessage());
         }
     }
 
-    private void createNewMemberWithSalesforceData(MemberDetails salesforceMemberData) {
+    private void updateParentForConsortiumMembers(ConsortiumLeadDetails consortiumData) {
+        consortiumData.getConsortiumMembers().forEach(consortiumMember -> {
+            memberService.addParent(consortiumMember.getSalesforceId(), consortiumData.getId());
+        });
+        memberService.removeParentFromMembersNoLongerPartOfConsortium(consortiumData.getMemberId(), consortiumData.getConsortiumMembers().stream().map(ConsortiumMember::getMemberId));
+    }
+
+    private void removeParentFromConsortiumMembers(ConsortiumLeadDetails consortiumData) {
+        consortiumData.getConsortiumMembers().forEach(consortiumMember -> {
+            memberService.removeParent(consortiumMember.getMemberId());
+        });
+    }
+
+    private void createNewMemberWithSalesforceData(MemberDetails salesforceMemberData, boolean consortiumLead) {
         Member member = new Member();
         member.setSalesforceId(salesforceMemberData.getId());
         member.setActive(salesforceMemberData.isActiveMember());
         member.setClientName(salesforceMemberData.getName());
         member.setAssertionServiceEnabled(false);
-        member.setIsConsortiumLead(false); // to be updated...
+        member.setIsConsortiumLead(consortiumLead);
         member = memberService.createMember(member, SALESFORCE_SYNC_USERNAME);
         LOG.info("Created new member {}", member.getId());
     }
 
-    private void updateExistingMemberWithSalesforceData(Member member, MemberDetails salesforceMemberData) {
-        member = updateMemberMetadata(member, salesforceMemberData);
-        member = updateMemberSalesforceStatus(member, salesforceMemberData);
+    private void updateExistingMemberWithSalesforceData(Member member, MemberDetails salesforceMemberData, boolean consortiumLead) {
+        member = updateMemberMetadata(member, salesforceMemberData, consortiumLead);
+        member = updateMemberStatus(member, salesforceMemberData);
         member.setLastUpdatedWithSalesforceData(Instant.now());
         memberService.updateMember(member, SALESFORCE_SYNC_USERNAME);
     }
 
-    private Member updateMemberSalesforceStatus(Member member, MemberDetails salesforceMemberData) {
+    private Member updateMemberStatus(Member member, MemberDetails salesforceMemberData) {
         if (salesforceMemberData.isActiveMember() && !member.isActive()) {
             LOG.info("Activating member {}", member.getId());
             member.setActive(true);
@@ -228,9 +254,10 @@ public class SalesforceService {
         return member;
     }
 
-    private Member updateMemberMetadata(Member member, MemberDetails salesforceMemberData) {
+    private Member updateMemberMetadata(Member member, MemberDetails salesforceMemberData, boolean consortiumLead) {
         LOG.info("Updating member {} name to {}", member.getId(), salesforceMemberData.getName());
         member.setClientName(salesforceMemberData.getName());
+        member.setIsConsortiumLead(consortiumLead);
         return member;
     }
 
@@ -355,7 +382,7 @@ public class SalesforceService {
                     LOG.warn("Consortium opportunities JSON is not an array for salesforce id {}", salesforceId);
                 }
             } else {
-                LOG.warn("No consortium opportunities found for salesforce id {}", salesforceId);
+                LOG.debug("No consortium opportunities found for salesforce id {}", salesforceId);
             }
         } catch (JsonProcessingException e) {
             LOG.warn("Error processing consortium JSON from Salesforce for salesforce id {}", salesforceId, e);

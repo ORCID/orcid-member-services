@@ -31,6 +31,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class MemberServiceTest {
 
@@ -59,18 +61,18 @@ class MemberServiceTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         SecurityContextHolder.setContext(new MockSecurityContext("me"));
-        Mockito.when(userService.getLoggedInUser()).thenReturn(getUser());
-        Mockito.when(memberRepository.findById(eq("memberId"))).thenReturn(Optional.of(getMember()));
-        Mockito.when(memberRepository.findById(eq("parentMemberId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
-        Mockito.when(memberRepository.findBySalesforceId(eq("salesforceId"))).thenReturn(Optional.of(getMember()));
-        Mockito.when(memberRepository.findBySalesforceId(eq("parentSalesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        when(userService.getLoggedInUser()).thenReturn(getUser());
+        when(memberRepository.findById(eq("memberId"))).thenReturn(Optional.of(getMember()));
+        when(memberRepository.findById(eq("parentMemberId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
+        when(memberRepository.findBySalesforceId(eq("salesforceId"))).thenReturn(Optional.of(getMember()));
+        when(memberRepository.findBySalesforceId(eq("parentSalesforceId"))).thenReturn(Optional.of(getConsortiumLeadMember()));
     }
 
     @Test
     void testCreateMember() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
-        Mockito.when(memberRepository.findBySalesforceId(anyString())).thenReturn(Optional.empty());
-        Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+        when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
+        when(memberRepository.findBySalesforceId(anyString())).thenReturn(Optional.empty());
+        when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
             @Override
             public Member answer(InvocationOnMock invocation) throws Throwable {
                 return (Member) invocation.getArgument(0);
@@ -94,8 +96,8 @@ class MemberServiceTest {
 
     @Test
     void testCreateMemberWhenMemberExists() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getInvalidValidation("member-exists"));
-        Mockito.when(memberRepository.findBySalesforceId(anyString())).thenReturn(Optional.of(getMember()));
+        when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getInvalidValidation("member-exists"));
+        when(memberRepository.findBySalesforceId(anyString())).thenReturn(Optional.of(getMember()));
         Member member = getMember();
 
         Assertions.assertThrows(BadRequestAlertException.class, () -> {
@@ -105,9 +107,9 @@ class MemberServiceTest {
 
     @Test
     void testUpdateMember() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
-        Mockito.when(memberRepository.findById(anyString())).thenReturn(Optional.of(getMember()));
-        Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+        when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
+        when(memberRepository.findById(anyString())).thenReturn(Optional.of(getMember()));
+        when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
             @Override
             public Member answer(InvocationOnMock invocation) throws Throwable {
                 return (Member) invocation.getArgument(0);
@@ -130,11 +132,11 @@ class MemberServiceTest {
 
     @Test
     void testUpdateMemberWithDuplicateName() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
-        Mockito.when(memberRepository.findById(anyString())).thenReturn(Optional.of(getMember()));
+        when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
+        when(memberRepository.findById(anyString())).thenReturn(Optional.of(getMember()));
 
         // return a record when name is checked against db
-        Mockito.when(memberRepository.findByClientName(anyString())).thenReturn(Optional.of(getMember()));
+        when(memberRepository.findByClientName(anyString())).thenReturn(Optional.of(getMember()));
 
         Member member = getMember();
         member.setId("id");
@@ -147,14 +149,14 @@ class MemberServiceTest {
 
         assertThat(e.getMessage()).isEqualTo("Invalid member name");
 
-        Mockito.verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
+        verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
     }
 
     @Test
     void testUpdateMemberWithMemberName() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
-        Mockito.when(memberRepository.findById(anyString())).thenReturn(Optional.of(getMember()));
-        Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+        when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
+        when(memberRepository.findById(anyString())).thenReturn(Optional.of(getMember()));
+        when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
             @Override
             public Member answer(InvocationOnMock invocation) throws Throwable {
                 return (Member) invocation.getArgument(0);
@@ -165,8 +167,8 @@ class MemberServiceTest {
         memberService.updateMember(member, "user");
 
         // check assertion and user changes rolled back
-        Mockito.verify(userService, Mockito.times(1)).updateUsersMemberNames(eq("memberId"), eq("a new member name"));
-        Mockito.verify(memberRepository, Mockito.times(1)).save(memberCaptor.capture());
+        verify(userService, Mockito.times(1)).updateUsersMemberNames(eq("memberId"), eq("a new member name"));
+        verify(memberRepository, Mockito.times(1)).save(memberCaptor.capture());
 
         Member saved = memberCaptor.getValue();
         assertThat(saved.getClientName()).isEqualTo("a new member name");
@@ -174,15 +176,15 @@ class MemberServiceTest {
 
     @Test
     void testUpdateMemberWithAssertionEnabledUpdate() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
+        when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
 
         Member existingMember = getMember();
         existingMember.setAssertionServiceEnabled(false);
         existingMember.setSalesforceId("salesforce-id");
         existingMember.setDefaultLanguage("en");
 
-        Mockito.when(memberRepository.findById(anyString())).thenReturn(Optional.of(existingMember));
-        Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+        when(memberRepository.findById(anyString())).thenReturn(Optional.of(existingMember));
+        when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
             @Override
             public Member answer(InvocationOnMock invocation) throws Throwable {
                 return (Member) invocation.getArgument(0);
@@ -195,20 +197,20 @@ class MemberServiceTest {
         member.setAssertionServiceEnabled(true);
         memberService.updateMember(member, "user");
 
-        Mockito.verify(memberRepository, Mockito.times(1)).save(Mockito.any(Member.class));
+        verify(memberRepository, Mockito.times(1)).save(Mockito.any(Member.class));
     }
 
     @Test
     void testUpdateMemberWithCLUpdate() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
+        when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
 
         Member existingMember = getMember();
         existingMember.setAssertionServiceEnabled(false);
         existingMember.setIsConsortiumLead(false);
         existingMember.setSalesforceId("salesforce-id");
 
-        Mockito.when(memberRepository.findById(anyString())).thenReturn(Optional.of(existingMember));
-        Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+        when(memberRepository.findById(anyString())).thenReturn(Optional.of(existingMember));
+        when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
             @Override
             public Member answer(InvocationOnMock invocation) throws Throwable {
                 return (Member) invocation.getArgument(0);
@@ -222,14 +224,14 @@ class MemberServiceTest {
         member.setIsConsortiumLead(true);
         memberService.updateMember(member, "user");
 
-        Mockito.verify(memberRepository, Mockito.times(1)).save(Mockito.any(Member.class));
+        verify(memberRepository, Mockito.times(1)).save(Mockito.any(Member.class));
     }
 
     @Test
     void testUpdateNonExistentMember() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
-        Mockito.when(memberRepository.findById(anyString())).thenReturn(Optional.empty());
-        Mockito.when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+        when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
+        when(memberRepository.findById(anyString())).thenReturn(Optional.empty());
+        when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
             @Override
             public Member answer(InvocationOnMock invocation) throws Throwable {
                 return (Member) invocation.getArgument(0);
@@ -247,8 +249,8 @@ class MemberServiceTest {
 
     @Test
     void testUpdateInvalidMember() {
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getInvalidValidation("some-error"));
-        Mockito.when(memberRepository.findById(anyString())).thenReturn(Optional.of(getMember()));
+        when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getInvalidValidation("some-error"));
+        when(memberRepository.findById(anyString())).thenReturn(Optional.of(getMember()));
 
         Member member = getMember();
         member.setClientName("new name");
@@ -262,32 +264,32 @@ class MemberServiceTest {
 
     @Test
     void testUploadMemberCSV() throws IOException {
-        Mockito.when(membersUploadReader.readMemberUpload(Mockito.any(), Mockito.any(User.class))).thenReturn(getMemberUpload());
-        Mockito.when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
-        Mockito.when(memberRepository.findBySalesforceId(eq("one"))).thenReturn(Optional.empty());
+        when(membersUploadReader.readMemberUpload(Mockito.any(), Mockito.any(User.class))).thenReturn(getMemberUpload());
+        when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
+        when(memberRepository.findBySalesforceId(eq("one"))).thenReturn(Optional.empty());
         Member existing = getMember();
         existing.setId("two");
-        Mockito.when(memberRepository.findBySalesforceId(eq("two"))).thenReturn(Optional.of(existing));
-        Mockito.when(memberRepository.findById(eq("two"))).thenReturn(Optional.of(getMemberUpload().getMembers().get(1)));
-        Mockito.when(memberRepository.findBySalesforceId(eq("three"))).thenReturn(Optional.empty());
+        when(memberRepository.findBySalesforceId(eq("two"))).thenReturn(Optional.of(existing));
+        when(memberRepository.findById(eq("two"))).thenReturn(Optional.of(getMemberUpload().getMembers().get(1)));
+        when(memberRepository.findBySalesforceId(eq("three"))).thenReturn(Optional.empty());
         memberService.uploadMemberCSV(null);
-        Mockito.verify(memberRepository, Mockito.times(3)).save(Mockito.any(Member.class));
+        verify(memberRepository, Mockito.times(3)).save(Mockito.any(Member.class));
     }
 
     @Test
     void testGetMembers() {
-        Mockito.when(memberRepository.findAll(Mockito.any(Pageable.class))).thenReturn(new PageImpl<>(Arrays.asList(getMember(), getMember(), getMember())));
+        when(memberRepository.findAll(Mockito.any(Pageable.class))).thenReturn(new PageImpl<>(Arrays.asList(getMember(), getMember(), getMember())));
         Page<Member> page = memberService.getMembers(Mockito.mock(Pageable.class));
         assertNotNull(page);
         assertEquals(3, page.getTotalElements());
-        Mockito.verify(memberRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
+        verify(memberRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
 
-        Mockito.when(memberRepository.findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(anyString(),
+        when(memberRepository.findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(anyString(),
                 anyString(), anyString(), Mockito.any(Pageable.class))).thenReturn(new PageImpl<>(Arrays.asList(getMember(), getMember(), getMember())));
         page = memberService.getMembers(Mockito.mock(Pageable.class), "test");
         assertNotNull(page);
         assertEquals(3, page.getTotalElements());
-        Mockito.verify(memberRepository, Mockito.times(1)).findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(
+        verify(memberRepository, Mockito.times(1)).findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(
                 anyString(), anyString(), anyString(), Mockito.any(Pageable.class));
     }
 
@@ -295,7 +297,7 @@ class MemberServiceTest {
     void testUpdateMemberDefaultLanguage() throws UnauthorizedMemberAccessException {
         Member member = getMember();
         memberService.updateMemberDefaultLanguage("memberId", "en");
-        Mockito.verify(memberRepository).save(memberCaptor.capture());
+        verify(memberRepository).save(memberCaptor.capture());
         Member captured = memberCaptor.getValue();
         assertThat(captured.getAssertionServiceEnabled()).isEqualTo(member.getAssertionServiceEnabled());
         assertThat(captured.getClientId()).isEqualTo(member.getClientId());
@@ -311,6 +313,102 @@ class MemberServiceTest {
         assertThat(captured.getType()).isEqualTo(member.getType());
 
         assertThat(captured.getDefaultLanguage()).isEqualTo("en");
+    }
+
+    @Test
+    void testRemoveParent() {
+        Member member = getMember();
+        assertThat(member.getParentSalesforceId()).isEqualTo("parentSalesforceId");
+        when(memberRepository.findBySalesforceId(eq("salesforceId"))).thenReturn(Optional.of(member));
+
+        memberService.removeParent("salesforceId");
+
+        verify(memberRepository).save(memberCaptor.capture());
+
+        Member saved = memberCaptor.getValue();
+        assertThat(saved.getSalesforceId()).isEqualTo("salesforceId");
+        assertThat(saved.getParentSalesforceId()).isNull();
+    }
+
+    @Test
+    void testRemoveParentWhenMemberNotFound() {
+        when(memberRepository.findBySalesforceId(eq("missingSalesforceId"))).thenReturn(Optional.empty());
+        memberService.removeParent("missingSalesforceId");
+        verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
+    }
+
+    @Test
+    void testAddParent() {
+        Member childMember = getMember();
+        childMember.setParentSalesforceId(null);
+
+        Member parentMember = getConsortiumLeadMember();
+
+        when(memberRepository.findBySalesforceId(eq("salesforceId"))).thenReturn(Optional.of(childMember));
+        when(memberRepository.findBySalesforceId(eq("parentSalesforceId"))).thenReturn(Optional.of(parentMember));
+
+        memberService.addParent("salesforceId", "parentSalesforceId");
+
+        verify(memberRepository).save(memberCaptor.capture());
+
+        Member saved = memberCaptor.getValue();
+        assertThat(saved.getSalesforceId()).isEqualTo("salesforceId");
+        assertThat(saved.getParentSalesforceId()).isEqualTo("parentSalesforceId");
+    }
+
+    @Test
+    void testAddParentWhenChildMemberNotFound() {
+        when(memberRepository.findBySalesforceId(eq("missingSalesforceId"))).thenReturn(Optional.empty());
+
+        memberService.addParent("missingSalesforceId", "parentSalesforceId");
+
+        verify(memberRepository, Mockito.never()).findById(eq("parentSalesforceId"));
+        verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
+    }
+
+
+
+    @Test
+    void testRemoveParentFromMembersNoLongerPartOfConsortium() {
+        Member parentMember = getConsortiumLeadMember();
+
+        Member removedConsortiumMember = getConsortiumMember("removedSalesforceId");
+        removedConsortiumMember.setParentSalesforceId(parentMember.getSalesforceId());
+
+        when(memberRepository.findBySalesforceId(eq("parentSalesforceId"))).thenReturn(Optional.of(parentMember));
+        when(memberRepository.findAllByParentSalesforceId(eq("parentSalesforceId")))
+                .thenReturn(Arrays.asList(removedConsortiumMember));
+
+        memberService.removeParentFromMembersNoLongerPartOfConsortium(
+                "parentSalesforceId",
+                Arrays.asList("salesforceId").stream()
+        );
+
+        verify(memberRepository).save(memberCaptor.capture());
+
+        Member saved = memberCaptor.getValue();
+        assertThat(saved.getSalesforceId()).isEqualTo("removedSalesforceId");
+        assertThat(saved.getParentSalesforceId()).isNull();
+    }
+
+    @Test
+    void testRemoveParentFromMembersNoLongerPartOfConsortiumDoesNotSaveCurrentConsortiumMembers() {
+        Member parentMember = getConsortiumLeadMember();
+
+        Member currentConsortiumMember = getConsortiumMember("memberId");
+        currentConsortiumMember.setParentSalesforceId(parentMember.getSalesforceId());
+
+        when(memberRepository.findById(eq("parentMemberId"))).thenReturn(Optional.of(parentMember));
+        when(memberRepository.findAllByParentSalesforceId(eq("parentSalesforceId")))
+                .thenReturn(Arrays.asList(currentConsortiumMember));
+
+        memberService.removeParentFromMembersNoLongerPartOfConsortium(
+                "parentMemberId",
+                Arrays.asList("memberId").stream()
+        );
+
+        verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
+        assertThat(currentConsortiumMember.getParentSalesforceId()).isEqualTo("parentSalesforceId");
     }
 
     private MemberDetails getMemberDetails() {
