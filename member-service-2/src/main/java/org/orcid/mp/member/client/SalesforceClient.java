@@ -290,7 +290,7 @@ public class SalesforceClient {
         try {
             accessToken.set(getAccessToken());
         } catch (Exception e) {
-            LOG.error("Failed to create internal access token", e);
+            LOG.error("Failed to create access token", e);
             throw new RuntimeException(e);
         }
     }

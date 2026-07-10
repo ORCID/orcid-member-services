@@ -1,28 +1,26 @@
 package org.orcid.mp.member.service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
-
-
-import org.orcid.mp.member.client.SalesforceClient;
 import org.orcid.mp.member.domain.Member;
 import org.orcid.mp.member.error.BadRequestAlertException;
 import org.orcid.mp.member.repository.MemberRepository;
-import org.orcid.mp.member.validation.MemberValidation;
-import org.orcid.mp.member.validation.MemberValidator;
-import org.orcid.mp.member.salesforce.*;
 import org.orcid.mp.member.security.SecurityUtils;
 import org.orcid.mp.member.upload.MemberCsvReader;
 import org.orcid.mp.member.upload.MemberUpload;
+import org.orcid.mp.member.validation.MemberValidation;
+import org.orcid.mp.member.validation.MemberValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Service class for managing members.
@@ -106,6 +104,76 @@ public class MemberService {
         return memberRepository.save(existingMember);
     }
 
+    public MemberValidation validateMember(Member member) {
+        return memberValidator.validate(member, userService.getLoggedInUser().getLangKey());
+    }
+
+    public Page<Member> getMembers(Pageable pageable) {
+        return memberRepository.findAll(pageable);
+    }
+
+    public Page<Member> getMembers(Pageable pageable, String filter) {
+        return memberRepository.findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(filter, filter, filter,
+                pageable);
+    }
+
+    public List<Member> getAllMembers() {
+        return memberRepository.findAllByOrderByClientNameAsc();
+    }
+
+    public Optional<Member> getMember(String id) {
+        Optional<Member> member = memberRepository.findById(id);
+        if (!member.isPresent()) {
+            LOG.debug("Member settings not found for id {}, searching against salesforceId", id);
+            member = memberRepository.findBySalesforceId(id);
+        }
+        return member;
+    }
+
+    public void updateMemberDefaultLanguage(String memberId, String language) {
+        Optional<Member> optional = memberRepository.findById(memberId);
+        if (optional.isPresent()) {
+            Member member = optional.get();
+            member.setDefaultLanguage(language);
+            memberRepository.save(member);
+        } else {
+            throw new RuntimeException("Member " + memberId + " not found");
+        }
+    }
+
+    public void addParent(String childSalesforceId, String parentSalesforceId) {
+        LOG.info("Adding parent {} to member {}", parentSalesforceId, childSalesforceId);
+        Optional<Member> childMember = memberRepository.findBySalesforceId(childSalesforceId);
+        if (!childMember.isPresent()) {
+            LOG.warn("Child member {} not found", childSalesforceId);
+        } else {
+            childMember.get().setParentSalesforceId(parentSalesforceId);
+            memberRepository.save(childMember.get());
+        }
+    }
+
+    public void removeParent(String salesforceId) {
+        LOG.info("Removing parent from member {}", salesforceId);
+        Optional<Member> member = memberRepository.findBySalesforceId(salesforceId);
+        if (member.isPresent()) {
+            member.get().setParentSalesforceId(null);
+            memberRepository.save(member.get());
+        } else {
+            LOG.warn("Child member {} not found", salesforceId);
+        }
+    }
+
+    public void removeParentFromMembersNoLongerPartOfConsortium(String salesforceId, Stream<String> consortiumSalesforceIds) {
+        List<Member> members = memberRepository.findAllByParentSalesforceId(salesforceId);
+        members.forEach(m -> {
+            if (consortiumSalesforceIds.noneMatch(id -> id.equals(m.getSalesforceId()))) {
+                LOG.info("Removing parent from member {}", m.getId());
+                m.setParentSalesforceId(null);
+                memberRepository.save(m);
+            }
+        });
+    }
+
     private void propagateUpdatesAndSave(Member member, Member existingMember) {
         if (!member.getClientName().equals(existingMember.getClientName())) {
             userService.updateUsersMemberNames(existingMember.getId(), member.getClientName());
@@ -136,43 +204,6 @@ public class MemberService {
             if (optionalSalesforceId.isPresent()) {
                 throw new BadRequestAlertException("Invalid salesForceId");
             }
-        }
-    }
-
-    public MemberValidation validateMember(Member member) {
-        return memberValidator.validate(member, userService.getLoggedInUser().getLangKey());
-    }
-
-    public Page<Member> getMembers(Pageable pageable) {
-        return memberRepository.findAll(pageable);
-    }
-
-    public Page<Member> getMembers(Pageable pageable, String filter) {
-        return memberRepository.findByClientNameContainingIgnoreCaseOrSalesforceIdContainingIgnoreCaseOrParentSalesforceIdContainingIgnoreCase(filter, filter, filter,
-            pageable);
-    }
-
-    public List<Member> getAllMembers() {
-        return memberRepository.findAllByOrderByClientNameAsc();
-    }
-
-    public Optional<Member> getMember(String id) {
-        Optional<Member> member = memberRepository.findById(id);
-        if (!member.isPresent()) {
-            LOG.debug("Member settings not found for id {}, searching against salesforceId", id);
-            member = memberRepository.findBySalesforceId(id);
-        }
-        return member;
-    }
-
-    public void updateMemberDefaultLanguage(String memberId, String language) {
-        Optional<Member> optional = memberRepository.findById(memberId);
-        if (optional.isPresent()) {
-            Member member = optional.get();
-            member.setDefaultLanguage(language);
-            memberRepository.save(member);
-        } else {
-            throw new RuntimeException("Member " + memberId + " not found");
         }
     }
 }
