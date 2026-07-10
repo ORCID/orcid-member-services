@@ -157,7 +157,7 @@ services:
 
   r7insight_docker:
     restart: unless-stopped
-    image: rapid7/r7insight_docker:4.0.0
+    image: rapid7/r7insight_docker:5.0.0
     security_opt:
       - no-new-privileges
     environment:
