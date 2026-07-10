@@ -1,9 +1,17 @@
 <div class="modal-body login-page">
   <div class="login-panel">
         @if (authenticationError) {
-          <div class="alert alert-danger" i18n="@@login.messages.error.authentication.string">
-            <strong>Failed to sign in!</strong> Please check your credentials and try again.
-          </div>
+          @if (backendErrorMessage) {
+            <!-- If we have a body message, show it (bypasses the static i18n) -->
+            <div class="alert alert-danger">
+              <strong>Failed to sign in!</strong> {{ backendErrorMessage }}
+            </div>
+          } @else {
+            <!-- Your original, completely untouched block for perfect i18n compatibility -->
+            <div class="alert alert-danger" i18n="@@login.messages.error.authentication.string">
+              <strong>Failed to sign in!</strong> Please check your credentials and try again.
+            </div>
+          }
         }
         <form id="signin-form" class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
           <div class="mb-3">

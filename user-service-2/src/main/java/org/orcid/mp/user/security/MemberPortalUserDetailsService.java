@@ -1,6 +1,5 @@
 package org.orcid.mp.user.security;
 
-import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.orcid.mp.user.domain.User;
 import org.orcid.mp.user.repository.UserRepository;
 import org.orcid.mp.user.service.AuthorityService;
@@ -22,9 +21,7 @@ import java.util.stream.Collectors;
 public class MemberPortalUserDetailsService implements UserDetailsService {
 
     private final Logger log = LoggerFactory.getLogger(MemberPortalUserDetailsService.class);
-
     private final UserRepository userRepository;
-
     private final AuthorityService authorityService;
 
     public MemberPortalUserDetailsService(UserRepository userRepository, AuthorityService authorityService) {
@@ -36,27 +33,28 @@ public class MemberPortalUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating {}", login);
 
-        if (new EmailValidator().isValid(login, null)) {
-            return userRepository.findOneByEmailIgnoreCase(login).map(user -> createSpringSecurityUser(login, user))
-                    .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
-        }
-
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
-        return userRepository.findOneByEmailIgnoreCase(lowercaseLogin).map(user -> createSpringSecurityUser(lowercaseLogin, user))
+        return userRepository.findOneByEmailIgnoreCase(lowercaseLogin)
+                .map(this::createSpringSecurityUser)
                 .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
-
     }
 
-    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
-        if (!user.getActivated()) {
-            throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
-        }
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getGrantedAuthorities(user));
+    private org.springframework.security.core.userdetails.User createSpringSecurityUser(User user) {
+        // Leave enabled as true here so standard pre-checks don't trip before the password match
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                true,
+                true,
+                true,
+                true,
+                getGrantedAuthorities(user)
+        );
     }
 
     private List<GrantedAuthority> getGrantedAuthorities(User user) {
+        // Pass null or adjust authorityService if it strictly requires the Member object
         Set<String> authorities = authorityService.getAuthoritiesForUser(user);
-        return authorities.stream().map(s -> new SimpleGrantedAuthority(s)).collect(Collectors.toList());
+        return authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
-
 }

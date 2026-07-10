@@ -1,4 +1,13 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, ElementRef, NgZone, inject, signal } from '@angular/core'
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  ElementRef,
+  NgZone,
+  inject,
+  signal,
+} from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
@@ -29,6 +38,7 @@ export class LoginComponent implements AfterViewInit {
   private readonly destroyRef = inject(DestroyRef)
 
   protected readonly authenticationErrorState = signal(false)
+  protected readonly backendErrorMessageState = signal<string | null>(null)
   protected readonly showMfaState = signal(false)
   protected readonly mfaErrorState = signal(false)
 
@@ -40,6 +50,10 @@ export class LoginComponent implements AfterViewInit {
 
   protected get authenticationError(): boolean {
     return this.authenticationErrorState()
+  }
+
+  protected get backendErrorMessage(): string | null {
+    return this.backendErrorMessageState()
   }
 
   protected get showMfa(): boolean {
@@ -113,6 +127,8 @@ export class LoginComponent implements AfterViewInit {
         }
       },
       error: (err) => {
+        const bodyMessage = typeof err.error === 'string' ? err.error : err.error?.message || err.error?.detail || null
+
         if (err.status === 401) {
           if (err.error?.error === 'mfa_required' || err.error?.error === 'mfa_invalid') {
             if (err.error?.error === 'mfa_required') {
@@ -124,6 +140,7 @@ export class LoginComponent implements AfterViewInit {
             }
           } else {
             this.authenticationErrorState.set(true)
+            this.backendErrorMessageState.set(bodyMessage)
           }
         } else {
           this.authenticationErrorState.set(true)

@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.orcid.mp.user.client.InternalMemberServiceClient;
 import org.orcid.mp.user.security.AuthenticationSuccessHandler;
 import org.orcid.mp.user.security.MfaAuthenticationFailureHandler;
 import org.orcid.mp.user.security.MfaAuthenticationProvider;
@@ -128,6 +129,7 @@ public class SecurityConfig {
     @Order(2)
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http,
                                                           UserService userService,
+                                                          InternalMemberServiceClient internalMemberServiceClient,
                                                           UserDetailsService userDetailsService, JwtDecoder jwtDecoder,
                                                           JwtAuthenticationConverter jwtAuthenticationConverter) throws Exception {
 
@@ -135,7 +137,7 @@ public class SecurityConfig {
         jwtAuthProvider.setJwtAuthenticationConverter(jwtAuthenticationConverter);
 
         AuthenticationManager authManager = new ProviderManager(
-                new MfaAuthenticationProvider(userService, passwordEncoder(), userDetailsService),
+                new MfaAuthenticationProvider(userService, passwordEncoder(), userDetailsService, internalMemberServiceClient),
                 jwtAuthProvider
         );
 
