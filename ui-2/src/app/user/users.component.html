@@ -59,14 +59,21 @@
     <div class="col-md-12">
       <app-alert-error />
       <app-alert-toast />
-      @if ((users()?.length ?? 0) === 0) {
+      @if (isLoading()) {
+        <div class="d-flex justify-content-center my-5">
+          <div class="spinner-border text-secondary" role="status">
+            <span class="visually-hidden" i18n="@@global.loading.string">Loading...</span>
+          </div>
+        </div>
+      }
+      @if (!isLoading() && (users()?.length ?? 0) === 0) {
         <div class="alert alert-warning">
           <span i18n="@@gatewayApp.msUserServiceMSUser.home.notFound.string">No users to show</span>
         </div>
       }
     </div>
   </div>
-  @if ((users()?.length ?? 0) > 0) {
+  @if (!isLoading() && (users()?.length ?? 0) > 0) {
     <div class="table-responsive">
       <table class="table table-striped">
         <thead>
