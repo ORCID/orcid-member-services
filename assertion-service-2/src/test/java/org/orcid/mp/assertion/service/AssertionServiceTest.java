@@ -175,13 +175,14 @@ class AssertionServiceTest {
         when(orcidRecordService.findByEmail(anyString())).thenReturn(Optional.of(record));
         when(assertionRepository.findAllByEmail(Mockito.eq("email"))).thenReturn(Arrays.asList(one, two));
 
-        assertionService.updateOrcidIdsForEmailAndMemberId("email", DEFAULT_MEMBER_ID);
+        assertionService.updateOrcidIdsAndTokenAvailableFlagForEmailAndMemberId("email", DEFAULT_MEMBER_ID);
 
         Mockito.verify(assertionRepository, Mockito.times(1)).save(assertionCaptor.capture());
 
         Assertion captured = assertionCaptor.getValue();
         assertEquals("this one sould be saved", captured.getRoleTitle());
         assertNotNull(captured.getOrcidId());
+        assertTrue(captured.isTokenAvailable());
         assertEquals("orcid", captured.getOrcidId());
     }
 
@@ -232,6 +233,7 @@ class AssertionServiceTest {
 
         Assertion inserted = assertionCaptor.getValue();
         assertEquals("orcid", inserted.getOrcidId());
+        assertTrue(inserted.isTokenAvailable());
     }
 
     @Test
@@ -261,6 +263,7 @@ class AssertionServiceTest {
 
         Assertion inserted = assertionCaptor.getValue();
         assertNull(inserted.getOrcidId());
+        assertFalse(inserted.isTokenAvailable());
     }
 
     @Test

@@ -47,7 +47,6 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
                 Criteria.where("updated_in_orcid").is(null)
         );
 
-        // 1. Spring Data native $expr for: modified > updated_in_orcid
         AggregationExpression modifiedAfterUpdated = ComparisonOperators.valueOf("modified")
                 .greaterThan("updated_in_orcid");
 
@@ -56,7 +55,6 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
                 Criteria.expr(modifiedAfterUpdated)
         );
 
-        // 2. Spring Data native $expr for: modified > added_to_orcid
         AggregationExpression modifiedAfterAdded = ComparisonOperators.valueOf("modified")
                 .greaterThan("added_to_orcid");
 
@@ -73,14 +71,16 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
         Criteria notDeprecatedOrDeactivated = Criteria.where("status").ne(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name());
         Criteria notDeletedInOrcid = Criteria.where("status").ne(AssertionStatus.USER_DELETED_FROM_ORCID.name());
+        Criteria hasValidToken = Criteria.where("token_available").is(true);
 
-        Criteria needsUpdatingInOrcidAndNotDeprecatedOrDeactivatedAndNotDeleted = new Criteria().andOperator(
+        Criteria finalCriteria = new Criteria().andOperator(
                 needsUpdatingInOrcid,
                 notDeprecatedOrDeactivated,
-                notDeletedInOrcid
+                notDeletedInOrcid,
+                hasValidToken
         );
 
-        MatchOperation initialMatch = Aggregation.match(needsUpdatingInOrcidAndNotDeprecatedOrDeactivatedAndNotDeleted);
+        MatchOperation initialMatch = Aggregation.match(finalCriteria);
 
         SortOperation sort = new SortOperation(pageable.getSort());
         SkipOperation skip = new SkipOperation(pageable.getOffset());
@@ -88,7 +88,6 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
         List<AggregationOperation> operations = new ArrayList<>();
         operations.add(initialMatch);
-        operations.addAll(buildOrcidRecordValidationStages()); // Uses the existing lookup logic
         operations.add(sort);
         operations.add(skip);
         operations.add(limit);
@@ -110,10 +109,15 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
         Criteria notAddedToOrcid = new Criteria();
         notAddedToOrcid.orOperator(Criteria.where("added_to_orcid").exists(false), Criteria.where("added_to_orcid").is(null));
 
-        Criteria notAddedToOrcidAndNotDeprecatedOrDeactivated = new Criteria();
-        notAddedToOrcidAndNotDeprecatedOrDeactivated.andOperator(applicableStatus, notAddedToOrcid);
+        Criteria hasValidToken = Criteria.where("token_available").is(true);
 
-        MatchOperation initialMatch = Aggregation.match(notAddedToOrcidAndNotDeprecatedOrDeactivated);
+        Criteria finalCriteria = new Criteria().andOperator(
+                applicableStatus,
+                notAddedToOrcid,
+                hasValidToken
+        );
+
+        MatchOperation initialMatch = Aggregation.match(finalCriteria);
 
         SortOperation sort = new SortOperation(pageable.getSort());
         SkipOperation skip = new SkipOperation(pageable.getOffset());
@@ -121,7 +125,6 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
         List<AggregationOperation> operations = new ArrayList<>();
         operations.add(initialMatch);
-        operations.addAll(buildOrcidRecordValidationStages()); // <-- Inject common logic
         operations.add(sort);
         operations.add(skip);
         operations.add(limit);
@@ -129,56 +132,6 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
         Aggregation aggregation = Aggregation.newAggregation(operations);
         AggregationResults<Assertion> results = mongoTemplate.aggregate(aggregation, "assertion", Assertion.class);
         return results.getMappedResults();
-    }
-
-    private List<AggregationOperation> buildOrcidRecordValidationStages() {
-        LookupOperation lookupRecord = Aggregation.lookup("orcid_record", "email", "email", "linked_record");
-        UnwindOperation unwindRecord = Aggregation.unwind("linked_record", false);
-
-        // Bypass Spring Data's Criteria builder entirely with a custom pipeline stage
-        AggregationOperation matchValidTokenAndOrcid = ctx -> {
-
-            org.bson.Document andConditions = new org.bson.Document("$and", java.util.Arrays.asList(
-                    // 1. member_id must perfectly match the root document's member_id
-                    new org.bson.Document("$eq", java.util.Arrays.asList("$$token.member_id", "$member_id")),
-
-                    // 2. token_id must exist and not be empty (ifNull defaults missing fields to "")
-                    new org.bson.Document("$ne", java.util.Arrays.asList(
-                            new org.bson.Document("$ifNull", java.util.Arrays.asList("$$token.token_id", "")), ""
-                    )),
-
-                    // 3. revoked_date must be missing/null
-                    new org.bson.Document("$eq", java.util.Arrays.asList(
-                            new org.bson.Document("$ifNull", java.util.Arrays.asList("$$token.revoked_date", null)), null
-                    )),
-
-                    // 4. denied_date must be missing/null
-                    new org.bson.Document("$eq", java.util.Arrays.asList(
-                            new org.bson.Document("$ifNull", java.util.Arrays.asList("$$token.denied_date", null)), null
-                    ))
-            ));
-
-            // Safely handle if linked_record.tokens is entirely missing
-            org.bson.Document filterInput = new org.bson.Document("$ifNull",
-                    java.util.Arrays.asList("$linked_record.tokens", java.util.Collections.emptyList()));
-
-            org.bson.Document filter = new org.bson.Document("$filter", new org.bson.Document("input", filterInput)
-                    .append("as", "token")
-                    .append("cond", andConditions));
-
-            org.bson.Document size = new org.bson.Document("$size", filter);
-            org.bson.Document expr = new org.bson.Document("$expr", new org.bson.Document("$gt", java.util.Arrays.asList(size, 0)));
-
-            // Combine the standard orcid check with the raw $expr array check
-            org.bson.Document matchLogic = new org.bson.Document()
-                    .append("linked_record.orcid", new org.bson.Document("$exists", true).append("$ne", null).append("$nin", java.util.Arrays.asList("")))
-                    .append("$expr", expr.get("$expr"));
-
-            // Return the pure $match stage
-            return new org.bson.Document("$match", matchLogic);
-        };
-
-        return java.util.Arrays.asList(lookupRecord, unwindRecord, matchValidTokenAndOrcid);
     }
 
     @Override
