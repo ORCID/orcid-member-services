@@ -53,6 +53,9 @@ logging:
     format:
       console: logstash
 
+mongock:
+  migration-scan-package: org.orcid.mp.member.data.migration
+
 application:
   httpclient:
     maxConnTotal: ${APPLICATION_HTTPCLIENT_MAX_CONN_TOTAL:100}

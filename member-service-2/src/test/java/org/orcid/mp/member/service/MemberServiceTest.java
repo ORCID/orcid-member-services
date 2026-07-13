@@ -23,9 +23,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -107,8 +109,11 @@ class MemberServiceTest {
 
     @Test
     void testUpdateMember() {
+        Member existingMember = getMember();
+        existingMember.setActive(false);
+
         when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
-        when(memberRepository.findById(anyString())).thenReturn(Optional.of(getMember()));
+        when(memberRepository.findById(anyString())).thenReturn(Optional.of(existingMember));
         when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
             @Override
             public Member answer(InvocationOnMock invocation) throws Throwable {
@@ -117,17 +122,55 @@ class MemberServiceTest {
         });
 
         Member member = getMember();
-        member.setClientName("new name");
         member.setId("id");
+        member.setActive(true);
+        member.setActivatedDate(Instant.now());
+        member.setClientName("something different");
+
         Member updated = memberService.updateMember(member, "user");
         assertNotNull(updated.getLastModifiedBy());
         assertNotNull(updated.getLastModifiedDate());
         assertEquals(member.getClientName(), updated.getClientName());
-        assertNotEquals(getMember().getClientName(), updated.getClientName());
+        assertEquals("something different", updated.getClientName());
         assertEquals(member.getClientId(), updated.getClientId());
         assertEquals(member.getSalesforceId(), updated.getSalesforceId());
         assertEquals(member.getAssertionServiceEnabled(), updated.getAssertionServiceEnabled());
         assertEquals(member.getIsConsortiumLead(), updated.getIsConsortiumLead());
+        assertTrue(updated.isActive());
+        assertNotNull(updated.getActivatedDate());
+    }
+
+    @Test
+    void testUpdateMember_deactivate() {
+        Member existingMember = getMember();
+        existingMember.setActive(true);
+
+        when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
+        when(memberRepository.findById(anyString())).thenReturn(Optional.of(existingMember));
+        when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+            @Override
+            public Member answer(InvocationOnMock invocation) throws Throwable {
+                return (Member) invocation.getArgument(0);
+            }
+        });
+
+        Member member = getMember();
+        member.setId("id");
+        member.setActive(false);
+        member.setClientName("something different");
+        member.setDeactivatedDate(Instant.now());
+
+        Member updated = memberService.updateMember(member, "user");
+        assertNotNull(updated.getLastModifiedBy());
+        assertNotNull(updated.getLastModifiedDate());
+        assertEquals(member.getClientName(), updated.getClientName());
+        assertEquals("something different", updated.getClientName());
+        assertEquals(member.getClientId(), updated.getClientId());
+        assertEquals(member.getSalesforceId(), updated.getSalesforceId());
+        assertEquals(member.getAssertionServiceEnabled(), updated.getAssertionServiceEnabled());
+        assertEquals(member.getIsConsortiumLead(), updated.getIsConsortiumLead());
+        assertFalse(updated.isActive());
+        assertNotNull(updated.getDeactivatedDate());
     }
 
     @Test
@@ -381,7 +424,7 @@ class MemberServiceTest {
 
         memberService.removeParentFromMembersNoLongerPartOfConsortium(
                 "parentSalesforceId",
-                Arrays.asList("salesforceId").stream()
+                Set.of("salesforceId")
         );
 
         verify(memberRepository).save(memberCaptor.capture());
@@ -404,7 +447,7 @@ class MemberServiceTest {
 
         memberService.removeParentFromMembersNoLongerPartOfConsortium(
                 "parentMemberId",
-                Arrays.asList("memberId").stream()
+                Set.of("memberId")
         );
 
         verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class SalesforceService {
@@ -185,7 +186,7 @@ public class SalesforceService {
     }
 
     private void syncMember(MemberDetails salesforceMemberData) {
-        LOG.info("Syncing member with SF ID {} : {}", salesforceMemberData.getId());
+        LOG.info("Syncing member with SF ID {}", salesforceMemberData.getId());
         try {
             ConsortiumLeadDetails consortiumData = getConsortiumLeadDetails(salesforceMemberData.getId());
             Optional<Member> existingMemberRecord = memberService.getMember(salesforceMemberData.getId());
@@ -206,7 +207,7 @@ public class SalesforceService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("Failed to sync member {} : {}", salesforceMemberData.getId(), e.getMessage());
+            LOG.error("Failed to sync member {}", salesforceMemberData.getId(), e);
         }
     }
 
@@ -214,7 +215,12 @@ public class SalesforceService {
         consortiumData.getConsortiumMembers().forEach(consortiumMember -> {
             memberService.addParent(consortiumMember.getSalesforceId(), consortiumData.getId());
         });
-        memberService.removeParentFromMembersNoLongerPartOfConsortium(consortiumData.getMemberId(), consortiumData.getConsortiumMembers().stream().map(ConsortiumMember::getMemberId));
+
+        Set<String> activeConsortiumIds = consortiumData.getConsortiumMembers().stream()
+                .map(ConsortiumMember::getSalesforceId)
+                .collect(Collectors.toSet());
+
+        memberService.removeParentFromMembersNoLongerPartOfConsortium(consortiumData.getMemberId(), activeConsortiumIds);
     }
 
     private void removeParentFromConsortiumMembers(ConsortiumLeadDetails consortiumData) {
@@ -255,7 +261,7 @@ public class SalesforceService {
     }
 
     private Member updateMemberMetadata(Member member, MemberDetails salesforceMemberData, boolean consortiumLead) {
-        LOG.info("Updating member {} name to {}", member.getId(), salesforceMemberData.getName());
+        LOG.debug("SF sync setting member {} name to {}", member.getId(), salesforceMemberData.getName());
         member.setClientName(salesforceMemberData.getName());
         member.setIsConsortiumLead(consortiumLead);
         return member;

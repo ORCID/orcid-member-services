@@ -31,6 +31,16 @@
 		<spring-security.version>6.5.9</spring-security.version>
 		<thymeleaf.version>3.1.5.RELEASE</thymeleaf.version>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>io.mongock</groupId>
+				<artifactId>mongock-bom</artifactId>
+				<version>5.4.1</version> <type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -116,6 +126,14 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.mongock</groupId>
+			<artifactId>mongock-springboot</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.mongock</groupId>
+			<artifactId>mongodb-springdata-v4-driver</artifactId>
 		</dependency>
 	</dependencies>
 
