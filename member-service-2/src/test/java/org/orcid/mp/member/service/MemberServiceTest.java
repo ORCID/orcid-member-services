@@ -117,17 +117,20 @@ class MemberServiceTest {
         });
 
         Member member = getMember();
-        member.setClientName("new name");
         member.setId("id");
+        member.setActive(true);
+        member.setClientName("something different");
+
         Member updated = memberService.updateMember(member, "user");
         assertNotNull(updated.getLastModifiedBy());
         assertNotNull(updated.getLastModifiedDate());
         assertEquals(member.getClientName(), updated.getClientName());
-        assertNotEquals(getMember().getClientName(), updated.getClientName());
+        assertEquals("something different", updated.getClientName());
         assertEquals(member.getClientId(), updated.getClientId());
         assertEquals(member.getSalesforceId(), updated.getSalesforceId());
         assertEquals(member.getAssertionServiceEnabled(), updated.getAssertionServiceEnabled());
         assertEquals(member.getIsConsortiumLead(), updated.getIsConsortiumLead());
+        assertTrue(updated.isActive());
     }
 
     @Test

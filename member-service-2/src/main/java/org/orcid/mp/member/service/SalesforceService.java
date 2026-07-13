@@ -185,7 +185,7 @@ public class SalesforceService {
     }
 
     private void syncMember(MemberDetails salesforceMemberData) {
-        LOG.info("Syncing member with SF ID {} : {}", salesforceMemberData.getId());
+        LOG.info("Syncing member with SF ID {}", salesforceMemberData.getId());
         try {
             ConsortiumLeadDetails consortiumData = getConsortiumLeadDetails(salesforceMemberData.getId());
             Optional<Member> existingMemberRecord = memberService.getMember(salesforceMemberData.getId());
@@ -206,7 +206,7 @@ public class SalesforceService {
                 }
             }
         } catch (Exception e) {
-            LOG.error("Failed to sync member {} : {}", salesforceMemberData.getId(), e.getMessage());
+            LOG.error("Failed to sync member {}", salesforceMemberData.getId(), e);
         }
     }
 
