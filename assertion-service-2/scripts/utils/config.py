@@ -4,7 +4,7 @@ Handles loading configuration from environment variables with sensible defaults.
 """
 
 import os
-from typing import Dict, Optional
+from typing import Dict
 
 
 class Config:
@@ -20,7 +20,6 @@ class Config:
         self.mongo_uri = self._get_mongo_uri()
         self.mongo_database = self._get_env('MONGO_DATABASE', 'assertionservice')
         self.mongo_collection = self._get_env('MONGO_COLLECTION', 'assertion')
-        self.file_name = self._get_env('FILE_NAME', 'json/delete.json')
 
     def _get_mongo_uri(self) -> str:
         return (
