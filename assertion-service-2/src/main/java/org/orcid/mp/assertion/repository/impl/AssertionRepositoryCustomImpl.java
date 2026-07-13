@@ -32,48 +32,63 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
     @Override
     public List<Assertion> findAllToUpdateInOrcidRegistry(Pageable pageable) {
-        AddFieldsOperation timeModifiedAfterSync = Aggregation.addFields()
-                .addField("timeModifiedAfterAddingToOrcid").withValueOfExpression("modified - added_to_orcid")
-                .addField("timeModifiedAfterUpdatingInOrcid").withValueOfExpression("modified - updated_in_orcid")
-                .build();
+        Criteria addedToOrcidSet = new Criteria().andOperator(
+                Criteria.where("added_to_orcid").exists(true),
+                Criteria.where("added_to_orcid").ne(null)
+        );
 
-        Criteria addedToOrcidSet = new Criteria();
-        addedToOrcidSet.andOperator(Criteria.where("added_to_orcid").exists(true), Criteria.where("added_to_orcid").ne(null));
+        Criteria updatedInOrcidSet = new Criteria().andOperator(
+                Criteria.where("updated_in_orcid").exists(true),
+                Criteria.where("updated_in_orcid").ne(null)
+        );
 
-        Criteria updatedInOrcidSet = new Criteria();
-        updatedInOrcidSet.andOperator(Criteria.where("updated_in_orcid").exists(true), Criteria.where("updated_in_orcid").ne(null));
+        Criteria updatedInOrcidNotSet = new Criteria().orOperator(
+                Criteria.where("updated_in_orcid").exists(false),
+                Criteria.where("updated_in_orcid").is(null)
+        );
 
-        Criteria updatedInOrcidNotSet = new Criteria();
-        updatedInOrcidNotSet.orOperator(Criteria.where("updated_in_orcid").exists(false), Criteria.where("updated_in_orcid").is(null));
+        // 1. Spring Data native $expr for: modified > updated_in_orcid
+        AggregationExpression modifiedAfterUpdated = ComparisonOperators.valueOf("modified")
+                .greaterThan("updated_in_orcid");
 
-        Criteria modifiedAfterUpdateInOrcid = new Criteria();
-        modifiedAfterUpdateInOrcid.andOperator(updatedInOrcidSet, Criteria.where("timeModifiedAfterUpdatingInOrcid").gt(0));
+        Criteria modifiedAfterUpdateInOrcid = new Criteria().andOperator(
+                updatedInOrcidSet,
+                Criteria.expr(modifiedAfterUpdated)
+        );
 
-        Criteria modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet = new Criteria();
-        modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet.andOperator(addedToOrcidSet, updatedInOrcidNotSet, Criteria.where("timeModifiedAfterAddingToOrcid").gt(0));
+        // 2. Spring Data native $expr for: modified > added_to_orcid
+        AggregationExpression modifiedAfterAdded = ComparisonOperators.valueOf("modified")
+                .greaterThan("added_to_orcid");
 
-        Criteria needsUpdatingInOrcid = new Criteria();
-        needsUpdatingInOrcid.orOperator(modifiedAfterUpdateInOrcid, modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet);
+        Criteria modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet = new Criteria().andOperator(
+                addedToOrcidSet,
+                updatedInOrcidNotSet,
+                Criteria.expr(modifiedAfterAdded)
+        );
 
-        Criteria notDeprecatedOrDeactivated = new Criteria();
-        notDeprecatedOrDeactivated.andOperator(Criteria.where("status").ne(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name()));
+        Criteria needsUpdatingInOrcid = new Criteria().orOperator(
+                modifiedAfterUpdateInOrcid,
+                modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet
+        );
 
-        Criteria notDeletedInOrcid = new Criteria();
-        notDeletedInOrcid.andOperator(Criteria.where("status").ne(AssertionStatus.USER_DELETED_FROM_ORCID.name()));
+        Criteria notDeprecatedOrDeactivated = Criteria.where("status").ne(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name());
+        Criteria notDeletedInOrcid = Criteria.where("status").ne(AssertionStatus.USER_DELETED_FROM_ORCID.name());
 
-        Criteria needsUpdatingInOrcidAndNotDeprecatedOrDeactivatedAndNotDeleted = new Criteria();
-        needsUpdatingInOrcidAndNotDeprecatedOrDeactivatedAndNotDeleted.andOperator(needsUpdatingInOrcid, notDeprecatedOrDeactivated, notDeletedInOrcid);
+        Criteria needsUpdatingInOrcidAndNotDeprecatedOrDeactivatedAndNotDeleted = new Criteria().andOperator(
+                needsUpdatingInOrcid,
+                notDeprecatedOrDeactivated,
+                notDeletedInOrcid
+        );
 
-        MatchOperation matchUpdatedAfterSync = Aggregation.match(needsUpdatingInOrcidAndNotDeprecatedOrDeactivatedAndNotDeleted);
+        MatchOperation initialMatch = Aggregation.match(needsUpdatingInOrcidAndNotDeprecatedOrDeactivatedAndNotDeleted);
 
         SortOperation sort = new SortOperation(pageable.getSort());
         SkipOperation skip = new SkipOperation(pageable.getOffset());
         LimitOperation limit = new LimitOperation(pageable.getPageSize());
 
         List<AggregationOperation> operations = new ArrayList<>();
-        operations.add(timeModifiedAfterSync);
-        operations.add(matchUpdatedAfterSync);
-        operations.addAll(buildOrcidRecordValidationStages()); // <-- Inject common logic
+        operations.add(initialMatch);
+        operations.addAll(buildOrcidRecordValidationStages()); // Uses the existing lookup logic
         operations.add(sort);
         operations.add(skip);
         operations.add(limit);
