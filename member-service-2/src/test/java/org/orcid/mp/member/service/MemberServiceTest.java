@@ -27,6 +27,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -423,7 +424,7 @@ class MemberServiceTest {
 
         memberService.removeParentFromMembersNoLongerPartOfConsortium(
                 "parentSalesforceId",
-                Arrays.asList("salesforceId").stream()
+                Set.of("salesforceId")
         );
 
         verify(memberRepository).save(memberCaptor.capture());
@@ -446,7 +447,7 @@ class MemberServiceTest {
 
         memberService.removeParentFromMembersNoLongerPartOfConsortium(
                 "parentMemberId",
-                Arrays.asList("memberId").stream()
+                Set.of("memberId")
         );
 
         verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));

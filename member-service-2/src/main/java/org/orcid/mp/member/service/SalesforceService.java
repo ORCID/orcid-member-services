@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class SalesforceService {
@@ -214,7 +215,12 @@ public class SalesforceService {
         consortiumData.getConsortiumMembers().forEach(consortiumMember -> {
             memberService.addParent(consortiumMember.getSalesforceId(), consortiumData.getId());
         });
-        memberService.removeParentFromMembersNoLongerPartOfConsortium(consortiumData.getMemberId(), consortiumData.getConsortiumMembers().stream().map(ConsortiumMember::getSalesforceId));
+
+        Set<String> activeConsortiumIds = consortiumData.getConsortiumMembers().stream()
+                .map(ConsortiumMember::getSalesforceId)
+                .collect(Collectors.toSet());
+
+        memberService.removeParentFromMembersNoLongerPartOfConsortium(consortiumData.getMemberId(), activeConsortiumIds);
     }
 
     private void removeParentFromConsortiumMembers(ConsortiumLeadDetails consortiumData) {

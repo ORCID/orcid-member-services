@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -166,10 +167,10 @@ public class MemberService {
         }
     }
 
-    public void removeParentFromMembersNoLongerPartOfConsortium(String salesforceId, Stream<String> consortiumSalesforceIds) {
+    public void removeParentFromMembersNoLongerPartOfConsortium(String salesforceId, Set<String> consortiumSalesforceIds) {
         List<Member> members = memberRepository.findAllByParentSalesforceId(salesforceId);
         members.forEach(m -> {
-            if (consortiumSalesforceIds.noneMatch(id -> id.equals(m.getSalesforceId()))) {
+            if (!consortiumSalesforceIds.contains(m.getSalesforceId())) {
                 LOG.info("Removing parent from member {}", m.getId());
                 m.setParentSalesforceId(null);
                 memberRepository.save(m);
