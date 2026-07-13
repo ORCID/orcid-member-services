@@ -103,9 +103,7 @@ public class BackfillTokenAvailable {
 
         for (OrcidToken token : orcidRecord.getTokens()) {
             if (Objects.equals(token.getMemberId(), assertion.getMemberId()) &&
-                    token.getTokenId() != null &&
-                    token.getRevokedDate() == null &&
-                    token.getDeniedDate() == null) {
+                    token.getTokenId() != null) {
                 return true;
             }
         }
