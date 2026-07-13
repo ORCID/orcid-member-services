@@ -19,7 +19,7 @@ spring:
             token-uri: http://localhost:9000/oauth2/token
 
 mongock:
-  migration-scan-package: org.orcid.mp.member.data.migration
+  enabled: false
 
 application:
   encrypt:
