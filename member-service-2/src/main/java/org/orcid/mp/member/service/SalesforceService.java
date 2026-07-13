@@ -255,7 +255,7 @@ public class SalesforceService {
     }
 
     private Member updateMemberMetadata(Member member, MemberDetails salesforceMemberData, boolean consortiumLead) {
-        LOG.info("Updating member {} name to {}", member.getId(), salesforceMemberData.getName());
+        LOG.debug("SF sync setting member {} name to {}", member.getId(), salesforceMemberData.getName());
         member.setClientName(salesforceMemberData.getName());
         member.setIsConsortiumLead(consortiumLead);
         return member;
