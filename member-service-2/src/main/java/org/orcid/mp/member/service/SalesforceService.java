@@ -214,7 +214,7 @@ public class SalesforceService {
         consortiumData.getConsortiumMembers().forEach(consortiumMember -> {
             memberService.addParent(consortiumMember.getSalesforceId(), consortiumData.getId());
         });
-        memberService.removeParentFromMembersNoLongerPartOfConsortium(consortiumData.getMemberId(), consortiumData.getConsortiumMembers().stream().map(ConsortiumMember::getMemberId));
+        memberService.removeParentFromMembersNoLongerPartOfConsortium(consortiumData.getMemberId(), consortiumData.getConsortiumMembers().stream().map(ConsortiumMember::getSalesforceId));
     }
 
     private void removeParentFromConsortiumMembers(ConsortiumLeadDetails consortiumData) {
