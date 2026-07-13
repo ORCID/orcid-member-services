@@ -17,7 +17,7 @@ import java.util.Locale;
 
 @Document(collection = "assertion")
 @CompoundIndexes({
-        @CompoundIndex(name = "status_1_created_1", def = "{'status': 1, 'created': 1}")
+        @CompoundIndex(name = "status_1_token_available_1_created_1", def = "{'status': 1, 'token_available': 1, 'created': 1}")
 })
 public class Assertion implements Serializable {
     private static final long serialVersionUID = 1845971448687999429L;
@@ -146,6 +146,9 @@ public class Assertion implements Serializable {
     private String orcidId;
 
     private String status;
+
+    @Field("token_available")
+    private boolean tokenAvailable;
 
     @Transient
     private String prettyStatus;
@@ -495,6 +498,14 @@ public class Assertion implements Serializable {
         this.invitationLastSent = invitationLastSent;
     }
 
+    public boolean isTokenAvailable() {
+        return tokenAvailable;
+    }
+
+    public void setTokenAvailable(boolean tokenAvailable) {
+        this.tokenAvailable = tokenAvailable;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -709,6 +720,13 @@ public class Assertion implements Serializable {
             return false;
         if (notificationSent == null) {
             return other.notificationSent == null;
-        } else return notificationSent.equals(other.notificationSent);
+        } else if (!notificationSent.equals(other.notificationSent)) {
+            return false;
+        }
+        if (tokenAvailable != other.tokenAvailable) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

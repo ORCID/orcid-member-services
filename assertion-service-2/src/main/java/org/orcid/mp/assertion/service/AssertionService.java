@@ -131,6 +131,7 @@ public class AssertionService {
                             LOG.warn("Setting empty orcid id '{}' in affiliation {} for email {} when creating assertion", record.getOrcid(), assertion.getId(), email);
                         }
                         assertion.setOrcidId(record.getOrcid());
+                        assertion.setTokenAvailable(true);
                     }
                 }
             }
@@ -475,7 +476,7 @@ public class AssertionService {
         storedFileService.storeAssertionsCsvFile(file.getInputStream(), file.getOriginalFilename(), user);
     }
 
-    public void updateOrcidIdsForEmailAndMemberId(String email, String memberId) {
+    public void updateOrcidIdsAndTokenAvailableFlagForEmailAndMemberId(String email, String memberId) {
         Optional<OrcidRecord> record = orcidRecordService.findByEmail(email);
         if (record.isEmpty()) {
             throw new IllegalArgumentException("Can't find orcid record for email " + email);
@@ -487,6 +488,7 @@ public class AssertionService {
                 LOG.warn("Setting empty orcid id '{}' in affiliation {} for email {} after granting permission", orcid, a.getId(), email);
             }
             a.setOrcidId(orcid);
+            a.setTokenAvailable(true);
             assertionRepository.save(a);
         });
     }
@@ -572,7 +574,7 @@ public class AssertionService {
         }
 
         refreshed.setLastSyncAttempt(assertion.getLastSyncAttempt());
-        assertionRepository.save(refreshed);
+        refreshed = assertionRepository.save(refreshed);
 
         if (StringUtils.equals(assertion.getStatus(), AssertionStatus.USER_REVOKED_ACCESS.name())) {
             LOG.info("Assertion status set to USER_REVOKED_ACCESS, updating id token accordingly");

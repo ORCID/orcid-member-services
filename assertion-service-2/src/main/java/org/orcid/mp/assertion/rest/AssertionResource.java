@@ -48,7 +48,6 @@ import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.net.*;
 import java.text.ParseException;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -278,7 +277,7 @@ public class AssertionResource {
 
             if (!org.apache.commons.lang3.StringUtils.isBlank(emailInStatus) && !org.apache.commons.lang3.StringUtils.isBlank(orcidIdInJWT)) {
                 orcidRecordService.storeIdToken(emailInStatus, idToken, orcidIdInJWT, memberId);
-                assertionService.updateOrcidIdsForEmailAndMemberId(emailInStatus, memberId);
+                assertionService.updateOrcidIdsAndTokenAvailableFlagForEmailAndMemberId(emailInStatus, memberId);
             } else {
                 if (org.apache.commons.lang3.StringUtils.isBlank(emailInStatus)) {
                     LOG.warn("Not storing token for user {} - emailInStatus is empty in the state key: {}", emailInStatus, state);

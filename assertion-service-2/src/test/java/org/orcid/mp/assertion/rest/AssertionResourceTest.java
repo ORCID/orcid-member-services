@@ -384,7 +384,7 @@ class AssertionResourceTest {
         Mockito.verify(assertionService, never()).postAssertionToOrcid(Mockito.any(Assertion.class));
         Mockito.verify(assertionService, never()).putAssertionInOrcid(Mockito.any(Assertion.class));
         Mockito.verify(assertionService, never()).updateAssertion(Mockito.any(Assertion.class), Mockito.any(User.class));
-        Mockito.verify(assertionService).updateOrcidIdsForEmailAndMemberId(eq(email), eq(DEFAULT_MEMBER_ID));
+        Mockito.verify(assertionService).updateOrcidIdsAndTokenAvailableFlagForEmailAndMemberId(eq(email), eq(DEFAULT_MEMBER_ID));
     }
 
     @Test

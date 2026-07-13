@@ -32,48 +32,62 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
     @Override
     public List<Assertion> findAllToUpdateInOrcidRegistry(Pageable pageable) {
-        AddFieldsOperation timeModifiedAfterSync = Aggregation.addFields()
-                .addField("timeModifiedAfterAddingToOrcid").withValueOfExpression("modified - added_to_orcid")
-                .addField("timeModifiedAfterUpdatingInOrcid").withValueOfExpression("modified - updated_in_orcid")
-                .build();
+        Criteria addedToOrcidSet = new Criteria().andOperator(
+                Criteria.where("added_to_orcid").exists(true),
+                Criteria.where("added_to_orcid").ne(null)
+        );
 
-        Criteria addedToOrcidSet = new Criteria();
-        addedToOrcidSet.andOperator(Criteria.where("added_to_orcid").exists(true), Criteria.where("added_to_orcid").ne(null));
+        Criteria updatedInOrcidSet = new Criteria().andOperator(
+                Criteria.where("updated_in_orcid").exists(true),
+                Criteria.where("updated_in_orcid").ne(null)
+        );
 
-        Criteria updatedInOrcidSet = new Criteria();
-        updatedInOrcidSet.andOperator(Criteria.where("updated_in_orcid").exists(true), Criteria.where("updated_in_orcid").ne(null));
+        Criteria updatedInOrcidNotSet = new Criteria().orOperator(
+                Criteria.where("updated_in_orcid").exists(false),
+                Criteria.where("updated_in_orcid").is(null)
+        );
 
-        Criteria updatedInOrcidNotSet = new Criteria();
-        updatedInOrcidNotSet.orOperator(Criteria.where("updated_in_orcid").exists(false), Criteria.where("updated_in_orcid").is(null));
+        AggregationExpression modifiedAfterUpdated = ComparisonOperators.valueOf("modified")
+                .greaterThan("updated_in_orcid");
 
-        Criteria modifiedAfterUpdateInOrcid = new Criteria();
-        modifiedAfterUpdateInOrcid.andOperator(updatedInOrcidSet, Criteria.where("timeModifiedAfterUpdatingInOrcid").gt(0));
+        Criteria modifiedAfterUpdateInOrcid = new Criteria().andOperator(
+                updatedInOrcidSet,
+                Criteria.expr(modifiedAfterUpdated)
+        );
 
-        Criteria modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet = new Criteria();
-        modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet.andOperator(addedToOrcidSet, updatedInOrcidNotSet, Criteria.where("timeModifiedAfterAddingToOrcid").gt(0));
+        AggregationExpression modifiedAfterAdded = ComparisonOperators.valueOf("modified")
+                .greaterThan("added_to_orcid");
 
-        Criteria needsUpdatingInOrcid = new Criteria();
-        needsUpdatingInOrcid.orOperator(modifiedAfterUpdateInOrcid, modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet);
+        Criteria modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet = new Criteria().andOperator(
+                addedToOrcidSet,
+                updatedInOrcidNotSet,
+                Criteria.expr(modifiedAfterAdded)
+        );
 
-        Criteria notDeprecatedOrDeactivated = new Criteria();
-        notDeprecatedOrDeactivated.andOperator(Criteria.where("status").ne(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name()));
+        Criteria needsUpdatingInOrcid = new Criteria().orOperator(
+                modifiedAfterUpdateInOrcid,
+                modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet
+        );
 
-        Criteria notDeletedInOrcid = new Criteria();
-        notDeletedInOrcid.andOperator(Criteria.where("status").ne(AssertionStatus.USER_DELETED_FROM_ORCID.name()));
+        Criteria notDeprecatedOrDeactivated = Criteria.where("status").ne(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name());
+        Criteria notDeletedInOrcid = Criteria.where("status").ne(AssertionStatus.USER_DELETED_FROM_ORCID.name());
+        Criteria hasValidToken = Criteria.where("token_available").is(true);
 
-        Criteria needsUpdatingInOrcidAndNotDeprecatedOrDeactivatedAndNotDeleted = new Criteria();
-        needsUpdatingInOrcidAndNotDeprecatedOrDeactivatedAndNotDeleted.andOperator(needsUpdatingInOrcid, notDeprecatedOrDeactivated, notDeletedInOrcid);
+        Criteria finalCriteria = new Criteria().andOperator(
+                needsUpdatingInOrcid,
+                notDeprecatedOrDeactivated,
+                notDeletedInOrcid,
+                hasValidToken
+        );
 
-        MatchOperation matchUpdatedAfterSync = Aggregation.match(needsUpdatingInOrcidAndNotDeprecatedOrDeactivatedAndNotDeleted);
+        MatchOperation initialMatch = Aggregation.match(finalCriteria);
 
         SortOperation sort = new SortOperation(pageable.getSort());
         SkipOperation skip = new SkipOperation(pageable.getOffset());
         LimitOperation limit = new LimitOperation(pageable.getPageSize());
 
         List<AggregationOperation> operations = new ArrayList<>();
-        operations.add(timeModifiedAfterSync);
-        operations.add(matchUpdatedAfterSync);
-        operations.addAll(buildOrcidRecordValidationStages()); // <-- Inject common logic
+        operations.add(initialMatch);
         operations.add(sort);
         operations.add(skip);
         operations.add(limit);
@@ -95,10 +109,15 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
         Criteria notAddedToOrcid = new Criteria();
         notAddedToOrcid.orOperator(Criteria.where("added_to_orcid").exists(false), Criteria.where("added_to_orcid").is(null));
 
-        Criteria notAddedToOrcidAndNotDeprecatedOrDeactivated = new Criteria();
-        notAddedToOrcidAndNotDeprecatedOrDeactivated.andOperator(applicableStatus, notAddedToOrcid);
+        Criteria hasValidToken = Criteria.where("token_available").is(true);
 
-        MatchOperation initialMatch = Aggregation.match(notAddedToOrcidAndNotDeprecatedOrDeactivated);
+        Criteria finalCriteria = new Criteria().andOperator(
+                applicableStatus,
+                notAddedToOrcid,
+                hasValidToken
+        );
+
+        MatchOperation initialMatch = Aggregation.match(finalCriteria);
 
         SortOperation sort = new SortOperation(pageable.getSort());
         SkipOperation skip = new SkipOperation(pageable.getOffset());
@@ -106,7 +125,6 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
         List<AggregationOperation> operations = new ArrayList<>();
         operations.add(initialMatch);
-        operations.addAll(buildOrcidRecordValidationStages()); // <-- Inject common logic
         operations.add(sort);
         operations.add(skip);
         operations.add(limit);
@@ -114,56 +132,6 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
         Aggregation aggregation = Aggregation.newAggregation(operations);
         AggregationResults<Assertion> results = mongoTemplate.aggregate(aggregation, "assertion", Assertion.class);
         return results.getMappedResults();
-    }
-
-    private List<AggregationOperation> buildOrcidRecordValidationStages() {
-        LookupOperation lookupRecord = Aggregation.lookup("orcid_record", "email", "email", "linked_record");
-        UnwindOperation unwindRecord = Aggregation.unwind("linked_record", false);
-
-        // Bypass Spring Data's Criteria builder entirely with a custom pipeline stage
-        AggregationOperation matchValidTokenAndOrcid = ctx -> {
-
-            org.bson.Document andConditions = new org.bson.Document("$and", java.util.Arrays.asList(
-                    // 1. member_id must perfectly match the root document's member_id
-                    new org.bson.Document("$eq", java.util.Arrays.asList("$$token.member_id", "$member_id")),
-
-                    // 2. token_id must exist and not be empty (ifNull defaults missing fields to "")
-                    new org.bson.Document("$ne", java.util.Arrays.asList(
-                            new org.bson.Document("$ifNull", java.util.Arrays.asList("$$token.token_id", "")), ""
-                    )),
-
-                    // 3. revoked_date must be missing/null
-                    new org.bson.Document("$eq", java.util.Arrays.asList(
-                            new org.bson.Document("$ifNull", java.util.Arrays.asList("$$token.revoked_date", null)), null
-                    )),
-
-                    // 4. denied_date must be missing/null
-                    new org.bson.Document("$eq", java.util.Arrays.asList(
-                            new org.bson.Document("$ifNull", java.util.Arrays.asList("$$token.denied_date", null)), null
-                    ))
-            ));
-
-            // Safely handle if linked_record.tokens is entirely missing
-            org.bson.Document filterInput = new org.bson.Document("$ifNull",
-                    java.util.Arrays.asList("$linked_record.tokens", java.util.Collections.emptyList()));
-
-            org.bson.Document filter = new org.bson.Document("$filter", new org.bson.Document("input", filterInput)
-                    .append("as", "token")
-                    .append("cond", andConditions));
-
-            org.bson.Document size = new org.bson.Document("$size", filter);
-            org.bson.Document expr = new org.bson.Document("$expr", new org.bson.Document("$gt", java.util.Arrays.asList(size, 0)));
-
-            // Combine the standard orcid check with the raw $expr array check
-            org.bson.Document matchLogic = new org.bson.Document()
-                    .append("linked_record.orcid", new org.bson.Document("$exists", true).append("$ne", null).append("$nin", java.util.Arrays.asList("")))
-                    .append("$expr", expr.get("$expr"));
-
-            // Return the pure $match stage
-            return new org.bson.Document("$match", matchLogic);
-        };
-
-        return java.util.Arrays.asList(lookupRecord, unwindRecord, matchValidTokenAndOrcid);
     }
 
     @Override
