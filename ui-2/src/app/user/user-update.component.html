@@ -98,7 +98,7 @@
           >
           <fieldset [disabled]="isExistentMember()">
             @if (memberList().length > 0) {
-              <select class="form-select" name="memberId" id="field_memberId" formControlName="memberId">
+              <select class="form-select mb-3" name="memberId" id="field_memberId" formControlName="memberId">
                 @for (member of memberList(); track member) {
                   <option [ngValue]="member.id">{{ member.clientName }}</option>
                 }
