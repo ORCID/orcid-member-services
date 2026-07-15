@@ -43,4 +43,8 @@ public class UserService {
     public void updateUsersMemberNames(String salesforceId, String newClientName) {
         internalUserServiceClient.updateUsersMemberNames(salesforceId, newClientName);
     }
+
+    public void createMainContactUser(User user) {
+        internalUserServiceClient.createMainContactUser(user);
+    }
 }

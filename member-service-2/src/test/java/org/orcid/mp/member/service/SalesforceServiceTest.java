@@ -23,10 +23,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -53,6 +50,9 @@ public class SalesforceServiceTest {
 
     @Captor
     private ArgumentCaptor<Member> salesforceUpdateCaptor;
+
+    @Captor
+    private ArgumentCaptor<User> userCaptor;
 
     private SalesforceService salesforceService;
 
@@ -349,6 +349,7 @@ public class SalesforceServiceTest {
         when(salesforceClient.getMembers()).thenReturn(getFileContent("src/test/resources/salesforce/members.json"));
         when(salesforceClient.getConsortium(anyString())).thenReturn("{}");
         doAnswer(invocation -> invocation.getArgument(0)).when(memberService).updateMember(Mockito.any(), anyString());
+        when(salesforceClient.getMemberContacts(anyString())).thenReturn("{}");
         when(memberService.getMember(Mockito.eq("0011000001XYZ01"))).thenReturn(Optional.of(getMember("0011000001XYZ01", false)));
         when(memberService.getMember(Mockito.eq("0011000002XYZ02"))).thenReturn(Optional.of(getMember("0011000002XYZ02", true)));
         when(memberService.getMember(Mockito.eq("0011000003XYZ03"))).thenReturn(Optional.of(getMember("0011000003XYZ03", true)));
@@ -394,9 +395,6 @@ public class SalesforceServiceTest {
 
     @Test
     void testSyncMembers_updateMemberToCL() throws IOException {
-        Member nonCL = getMember("0011000001XYZ01", true);
-        nonCL.setIsConsortiumLead(false);
-
         when(salesforceClient.getMembers()).thenReturn(getFileContent("src/test/resources/salesforce/members.json"));
         when(salesforceClient.getConsortium(eq("0011000001XYZ01"))).thenReturn(getFileContent("src/test/resources/salesforce/consortium.json"));
         when(memberService.getMember(eq("0011000001XYZ01"))).thenReturn(Optional.of(getMember("0011000001XYZ01", false)));
@@ -414,8 +412,46 @@ public class SalesforceServiceTest {
     }
 
     @Test
-    void testSyncMembers_updateCLToMember() {
+    void testSyncMembers_updateCLToMember() throws IOException {
+        Member cl = getMember("0011000001XYZ01", true);
+        cl.setIsConsortiumLead(true);
 
+        when(salesforceClient.getMembers()).thenReturn(getFileContent("src/test/resources/salesforce/members.json"));
+        when(salesforceClient.getConsortium(eq("0011000001XYZ01"))).thenReturn("{}");
+        when(memberService.getMember(eq("0011000001XYZ01"))).thenReturn(Optional.of(cl));
+        when(salesforceClient.getMemberDetails(eq("0011000001XYZ01"))).thenReturn(getFileContent("src/test/resources/salesforce/consortiumLead.json"));
+
+        salesforceService.syncMembers();
+
+        verify(memberService).updateMember(salesforceUpdateCaptor.capture(), anyString());
+
+        Member updatedMember = salesforceUpdateCaptor.getValue();
+        assertThat(updatedMember).isNotNull();
+        assertThat(updatedMember.getSalesforceId()).isEqualTo("0011000001XYZ01");
+        assertThat(updatedMember.getIsConsortiumLead()).isFalse();
+    }
+
+    @Test
+    void testSyncMembers_updateWithMainContact() throws IOException {
+        when(salesforceClient.getMembers()).thenReturn(getFileContent("src/test/resources/salesforce/members.json"));
+        when(salesforceClient.getConsortium(anyString())).thenReturn("{}");
+        doAnswer(invocation -> invocation.getArgument(0)).when(memberService).createMember(Mockito.any(), anyString());
+
+        when(memberService.getMember(eq("0011000001XYZ01"))).thenReturn(Optional.empty()).thenReturn(Optional.of(getMember("0011000001XYZ01", false)));
+        when(userService.getUsersByMemberId(anyString())).thenReturn(new ArrayList<>());
+        when(salesforceClient.getMemberContacts(Mockito.eq("0011000001XYZ01"))).thenReturn(getFileContent("src/test/resources/salesforce/memberContactRoles.json"));
+        when(salesforceClient.getMemberContactData(eq("1"))).thenReturn(getFileContent("src/test/resources/salesforce/memberContactName1.json"));
+        when(salesforceClient.getMemberContactData(eq("2"))).thenReturn(getFileContent("src/test/resources/salesforce/memberContactName2.json"));
+        when(salesforceClient.getMemberContactData(eq("3"))).thenReturn(getFileContent("src/test/resources/salesforce/memberContactName3.json"));
+        when(salesforceClient.getMemberContactData(eq("4"))).thenReturn(getFileContent("src/test/resources/salesforce/memberContactName4.json"));
+
+        salesforceService.syncMembers();
+
+        verify(userService).createMainContactUser(userCaptor.capture());
+
+        User captured = userCaptor.getValue();
+        assertThat(captured.getCreatedBy()).isEqualTo(SalesforceService.SALESFORCE_SYNC_USERNAME);
+        assertThat(captured.getMainContact()).isTrue();
     }
 
     @Test
@@ -488,6 +524,29 @@ public class SalesforceServiceTest {
         assertThat(createdCL).isNotNull();
         assertThat(createdCL.getSalesforceId()).isEqualTo("0011000001XYZ01");
         assertThat(createdCL.getIsConsortiumLead()).isTrue();
+    }
+
+    @Test
+    void testSyncMembers_createWithMainContact() throws IOException {
+        when(salesforceClient.getMembers()).thenReturn(getFileContent("src/test/resources/salesforce/members.json"));
+        when(salesforceClient.getConsortium(anyString())).thenReturn("{}");
+        doAnswer(invocation -> invocation.getArgument(0)).when(memberService).createMember(Mockito.any(), anyString());
+
+        when(memberService.getMember(eq("0011000001XYZ01"))).thenReturn(Optional.of(getMember("0011000001XYZ01", false)));
+        when(userService.getUsersByMemberId(anyString())).thenReturn(new ArrayList<>());
+        when(salesforceClient.getMemberContacts(Mockito.eq("0011000001XYZ01"))).thenReturn(getFileContent("src/test/resources/salesforce/memberContactRoles.json"));
+        when(salesforceClient.getMemberContactData(eq("1"))).thenReturn(getFileContent("src/test/resources/salesforce/memberContactName1.json"));
+        when(salesforceClient.getMemberContactData(eq("2"))).thenReturn(getFileContent("src/test/resources/salesforce/memberContactName2.json"));
+        when(salesforceClient.getMemberContactData(eq("3"))).thenReturn(getFileContent("src/test/resources/salesforce/memberContactName3.json"));
+        when(salesforceClient.getMemberContactData(eq("4"))).thenReturn(getFileContent("src/test/resources/salesforce/memberContactName4.json"));
+
+        salesforceService.syncMembers();
+
+        verify(userService).createMainContactUser(userCaptor.capture());
+
+        User captured = userCaptor.getValue();
+        assertThat(captured.getCreatedBy()).isEqualTo(SalesforceService.SALESFORCE_SYNC_USERNAME);
+        assertThat(captured.getMainContact()).isTrue();
     }
 
     private List<Country> getSalesforceCountries() {

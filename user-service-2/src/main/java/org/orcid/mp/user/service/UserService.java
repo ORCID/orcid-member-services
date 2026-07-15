@@ -39,8 +39,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -172,7 +170,7 @@ public class UserService {
         return true;
     }
 
-    public UserDTO createUser(UserDTO userDTO) {
+    public UserDTO createUser(UserDTO userDTO, String createdBy) {
         if (!StringUtils.isBlank(userDTO.getId())) {
             throw new BadRequestAlertException("A new user cannot already have an ID");
         }
@@ -183,34 +181,33 @@ public class UserService {
             throw new BadRequestAlertException("Member does not exist");
         }
         checkAdminAllowedForMember(userDTO, member);
-        String createdBy = SecurityUtil.getCurrentUserLogin().get();
 
-        // change the auth if the logged in user is org owner and this is set as
-        // mainContact
-        boolean owner = userDTO.getMainContact();
         List<User> owners = userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndMemberId(userDTO.getMemberId());
-        if (owner) {
+        if (userDTO.getMainContact()) {
             for (User prevOwner : owners) {
                 if (!StringUtils.equals(prevOwner.getId(), userDTO.getId())) {
+                    // only one main contact allowed
                     removeOwnershipFromUser(prevOwner.getEmail());
                 }
             }
             userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
+            userDTO.setManageApiCredsEnabled(true);
         } else {
             if (owners.isEmpty()) {
                 userDTO.setMainContact(true);
+                userDTO.setManageApiCredsEnabled(true);
                 userDTO.getAuthorities().add(AuthoritiesConstants.ORG_OWNER);
             }
         }
 
-        User newUser = createUserRecord(userDTO);
+        User newUser = createUserRecord(userDTO, createdBy);
         mailService.sendActivationEmail(newUser);
 
-        if (owner) {
+        if (userDTO.getMainContact()) {
             mailService.sendOrganizationOwnerChangedMail(newUser, member.getClientName());
         }
 
-        if (!owner && newUser.getManageApiCredsEnabled() != null && newUser.getManageApiCredsEnabled() && PortalFeatures.MANAGE_API_CREDENTIALS.isActive()) {
+        if (!userDTO.getMainContact() && newUser.getManageApiCredsEnabled() != null && newUser.getManageApiCredsEnabled() && PortalFeatures.MANAGE_API_CREDENTIALS.isActive()) {
             mailService.sendApiCredsEnabledEmail(newUser);
         }
         return userMapper.toUserDTO(newUser);
@@ -222,7 +219,7 @@ public class UserService {
         }
     }
 
-    private User createUserRecord(UserDTO userDTO) {
+    private User createUserRecord(UserDTO userDTO, String createdBy) {
         User user = userMapper.toUser(userDTO);
         user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
         user.setPassword("placeholder");
@@ -230,7 +227,6 @@ public class UserService {
         user.setResetDate(Instant.now());
         user.setActivated(false);
 
-        String createdBy = SecurityUtil.getCurrentUserLogin().get();
         Instant now = Instant.now();
         user.setCreatedBy(createdBy);
         user.setCreatedDate(now);
@@ -247,11 +243,10 @@ public class UserService {
      *
      * @param firstName first name of user.
      * @param lastName  last name of user.
-     * @param email     email id of user.
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateAccount(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateAccount(String firstName, String lastName, String langKey, String imageUrl) {
         User user = getCurrentUser();
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -402,6 +397,7 @@ public class UserService {
 
         User user = existing.get();
         user.setMainContact(false);
+        user.setManageApiCredsEnabled(false);
         userRepository.save(user);
     }
 
@@ -446,7 +442,7 @@ public class UserService {
             Optional<User> existing = getUserByLogin(userDTO.getEmail());
             if (!existing.isPresent() && !userRepository.findOneByMemberIdAndMainContactIsTrue(memberId).isPresent()) {
                 userDTO.setMainContact(true);
-                createUser(userDTO);
+                createUser(userDTO, SecurityUtil.getCurrentUserLogin().get());
             }
         });
         return usersUpload;

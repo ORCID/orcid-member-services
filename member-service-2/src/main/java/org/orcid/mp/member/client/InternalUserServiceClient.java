@@ -1,5 +1,6 @@
 package org.orcid.mp.member.client;
 
+import org.orcid.mp.member.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -19,4 +20,7 @@ public class InternalUserServiceClient {
         return internalUserServiceRestClient.put().uri("/internal/users/memberName/" + memberId + "/" + newMemberName).retrieve().toEntity(String.class).getBody();
     }
 
+    public String createMainContactUser(User user) {
+        return internalUserServiceRestClient.post().uri("/internal/users").body(user).retrieve().toEntity(String.class).getBody();
+    }
 }

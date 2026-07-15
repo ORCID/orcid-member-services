@@ -25,6 +25,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class InternalResourceTest {
@@ -55,7 +57,7 @@ public class InternalResourceTest {
 
     @Test
     void testGetUserByLoginOrId_login() {
-        when(userService.getUserByLogin(Mockito.eq("some@email.com"))).thenReturn(getUser());
+        when(userService.getUserByLogin(eq("some@email.com"))).thenReturn(getUser());
         when(userMapper.toUserDTO(Mockito.any())).thenReturn(new UserDTO());
 
         ResponseEntity<UserDTO> response = internalResource.getUserByLoginOrId("some@email.com");
@@ -65,8 +67,8 @@ public class InternalResourceTest {
 
     @Test
     void testGetUserByLoginOrId_notFound() {
-        when(userService.getUserByLogin(Mockito.eq("some@email.com"))).thenReturn(Optional.empty());
-        when(userService.getUser(Mockito.eq("some@email.com"))).thenReturn(Optional.empty());
+        when(userService.getUserByLogin(eq("some@email.com"))).thenReturn(Optional.empty());
+        when(userService.getUser(eq("some@email.com"))).thenReturn(Optional.empty());
 
         ResponseEntity<UserDTO> response = internalResource.getUserByLoginOrId("some@email.com");
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
@@ -74,8 +76,8 @@ public class InternalResourceTest {
 
     @Test
     void testGetUserByLoginOrId_id() {
-        when(userService.getUserByLogin(Mockito.eq("some@email.com"))).thenReturn(Optional.empty());
-        when(userService.getUser(Mockito.eq("some@email.com"))).thenReturn(getUser());
+        when(userService.getUserByLogin(eq("some@email.com"))).thenReturn(Optional.empty());
+        when(userService.getUser(eq("some@email.com"))).thenReturn(getUser());
         when(userMapper.toUserDTO(Mockito.any())).thenReturn(new UserDTO());
 
         ResponseEntity<UserDTO> response = internalResource.getUserByLoginOrId("some@email.com");
@@ -84,9 +86,21 @@ public class InternalResourceTest {
 
     @Test
     void testUpdateUsersMemberName() {
-        when(userService.updateUsersMemberName(Mockito.eq("member-id"), Mockito.eq("newName"))).thenReturn(true);
+        when(userService.updateUsersMemberName(eq("member-id"), eq("newName"))).thenReturn(true);
         ResponseEntity<Void> response = internalResource.updateUsersMemberName("member-id", "newName");
         assertTrue(response.getStatusCode().is2xxSuccessful());
+    }
+
+    @Test
+    void testCreateMainContactUser() {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setCreatedBy("createdBy");
+        when(userMapper.toUserDTO(Mockito.any())).thenReturn(userDTO);
+        when(userService.createUser(Mockito.any(UserDTO.class), eq("createdBy"))).thenReturn(userDTO);
+        ResponseEntity<String> response = internalResource.createMainContactUser(new User());
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+        assertThat(response.getBody()).isEqualTo("success");
+        verify(userService).createUser(Mockito.any(UserDTO.class), eq("createdBy"));
     }
 
     private Optional<User> getUser() {

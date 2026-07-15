@@ -39,10 +39,7 @@ import java.io.InputStream;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -146,7 +143,7 @@ public class UserServiceTest {
         when(userMapper.toUser(Mockito.any(UserDTO.class))).thenReturn(new User());
 
         UserDTO userDTO = getUserDTO();
-        userService.createUser(userDTO);
+        userService.createUser(userDTO, "currentUser");
 
         verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
         verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
@@ -154,7 +151,7 @@ public class UserServiceTest {
 
         User user = userCaptor.getValue();
         assertNotNull(user);
-        assertNotNull(user.getCreatedBy());
+        assertEquals("currentUser",user.getCreatedBy());
         assertNotNull(user.getCreatedDate());
         assertNotNull(user.getLastModifiedBy());
         assertNotNull(user.getLastModifiedDate());
@@ -171,14 +168,16 @@ public class UserServiceTest {
         });
         Mockito.doNothing().when(mailService).sendActivationEmail(Mockito.any(User.class));
         Mockito.doNothing().when(mailService).sendApiCredsEnabledEmail(Mockito.any(User.class));
+        when(userRepository.findAllByMainContactIsTrueAndDeletedIsFalseAndMemberId(Mockito.anyString())).thenReturn(List.of(getNonAdminUser()));
 
         User mappedUser = new User();
         mappedUser.setManageApiCredsEnabled(true);
         when(userMapper.toUser(Mockito.any(UserDTO.class))).thenReturn(mappedUser);
 
         UserDTO userDTO = getUserDTO();
+        userDTO.setMainContact(false);
         userDTO.setManageApiCredsEnabled(true);
-        userService.createUser(userDTO);
+        userService.createUser(userDTO, "currentUser");
 
         verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
         verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
@@ -187,7 +186,7 @@ public class UserServiceTest {
 
         User user = userCaptor.getValue();
         assertNotNull(user);
-        assertNotNull(user.getCreatedBy());
+        assertEquals("currentUser",user.getCreatedBy());
         assertNotNull(user.getCreatedDate());
         assertNotNull(user.getLastModifiedBy());
         assertNotNull(user.getLastModifiedDate());
@@ -208,14 +207,14 @@ public class UserServiceTest {
         when(userMapper.toUser(Mockito.any(UserDTO.class))).thenReturn(new User());
 
         UserDTO userDTO = getUserDTO();
-        userService.createUser(userDTO);
+        userService.createUser(userDTO, "currentUser");
 
         verify(userRepository, Mockito.times(1)).save(userCaptor.capture());
         verify(mailService, Mockito.times(1)).sendActivationEmail(Mockito.any(User.class));
 
         User user = userCaptor.getValue();
         assertNotNull(user);
-        assertNotNull(user.getCreatedBy());
+        assertEquals("currentUser",user.getCreatedBy());
         assertNotNull(user.getCreatedDate());
         assertNotNull(user.getLastModifiedBy());
         assertNotNull(user.getLastModifiedDate());
@@ -442,7 +441,7 @@ public class UserServiceTest {
         user.setEmail("some@email.com");
         when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(user));
 
-        userService.updateAccount("new first name", "new last name", "no@change.com", "en", "hmmmm");
+        userService.updateAccount("new first name", "new last name", "en", "hmmmm");
 
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         verify(userRepository).save(userCaptor.capture());
@@ -830,7 +829,7 @@ public class UserServiceTest {
         UserDTO userDTO = getUserDTO();
         userDTO.setIsAdmin(true);
 
-        assertThrows(BadRequestAlertException.class, () -> userService.createUser(userDTO));
+        assertThrows(BadRequestAlertException.class, () -> userService.createUser(userDTO, "currentUser"));
         verify(userRepository, Mockito.never()).save(Mockito.any(User.class));
     }
 

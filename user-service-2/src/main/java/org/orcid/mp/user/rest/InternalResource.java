@@ -47,7 +47,7 @@ public class InternalResource {
     }
 
     /**
-     * {@code PUT /users/memberName/:oldMemberName/:newMemberName} : Updates memberName
+     * {@code PUT /internal/users/memberName/:oldMemberName/:newMemberName} : Updates memberName
      * for existing Users.
      *
      * @param memberId  the memberId for finding users to update
@@ -61,6 +61,22 @@ public class InternalResource {
         if (success) {
             return ResponseEntity.ok().build();
         } else {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+    /**
+     * {@code POST /internal/users} : Creates main contact user
+     */
+    @PostMapping("/users")
+    public ResponseEntity<String> createMainContactUser(@RequestBody User user) {
+        LOG.info("Internal request to create main contact user for member {}", user.getMemberId());
+        try {
+            UserDTO userDTO = userMapper.toUserDTO(user);
+            userService.createUser(userDTO, userDTO.getCreatedBy());
+            return ResponseEntity.ok("success");
+        } catch (Exception e) {
+            LOG.error("Error creating main contact user", e);
             return ResponseEntity.status(500).build();
         }
     }
