@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 @Service
 public class SalesforceService {
 
+    static final String MAIN_CONTACT_ROLE = "Main relationship contact (OFFICIAL)";
+
     static final String SALESFORCE_SYNC_USERNAME = "salesforce-sync";
 
     private static final Logger LOG = LoggerFactory.getLogger(SalesforceService.class);
@@ -188,26 +190,79 @@ public class SalesforceService {
     private void syncMember(MemberDetails salesforceMemberData) {
         LOG.info("Syncing member with SF ID {}", salesforceMemberData.getId());
         try {
-            ConsortiumLeadDetails consortiumData = getConsortiumLeadDetails(salesforceMemberData.getId());
-            Optional<Member> existingMemberRecord = memberService.getMember(salesforceMemberData.getId());
-            if (existingMemberRecord.isPresent()) {
-                LOG.debug("Found existing member {}", salesforceMemberData.getId());
-                updateExistingMemberWithSalesforceData(existingMemberRecord.get(), salesforceMemberData, consortiumData != null);
-                if (consortiumData != null) {
-                    updateParentForConsortiumMembers(consortiumData);
-                } else if (consortiumData == null && existingMemberRecord.get().getIsConsortiumLead()) {
-                    // member no longer consortium lead
-                    removeParentFromConsortiumMembers(consortiumData);
-                }
-            } else {
-                LOG.debug("Member {} not found", salesforceMemberData.getId());
-                createNewMemberWithSalesforceData(salesforceMemberData, consortiumData != null);
-                if (consortiumData != null) {
-                    updateParentForConsortiumMembers(consortiumData);
-                }
-            }
+            processSalesforceMemberData(salesforceMemberData);
+            processSalesforceContactData(salesforceMemberData);
         } catch (Exception e) {
             LOG.error("Failed to sync member {}", salesforceMemberData.getId(), e);
+        }
+    }
+
+    private void processSalesforceContactData(MemberDetails salesforceMemberData) {
+        Optional<Member> member = memberService.getMember(salesforceMemberData.getId());
+        if (member.isPresent()) {
+            List<User> users = userService.getUsersByMemberId(member.get().getId());
+            if (users == null || users.isEmpty()) {
+                LOG.info("No users found for salesforce id {}", salesforceMemberData.getId());
+                MemberContact mainContact = getMainContact(salesforceMemberData.getId());
+
+                if (mainContact != null) {
+                    LOG.info("Found main contact in salesforce for id {}", salesforceMemberData.getId());
+                    User user = getUserForMainContact(mainContact, member.get().getId());
+
+                    LOG.info("Creating user account for {}", user.getEmail());
+                    userService.createMainContactUser(user);
+                } else {
+                    LOG.info("No main contact found for salesforce id {}", salesforceMemberData.getId());
+                }
+            }
+        } else {
+            LOG.warn("Cannot process member contacts for {} because member record has not been created", salesforceMemberData.getId());
+        }
+    }
+
+    private User getUserForMainContact(MemberContact mainContact, String memberId) {
+        User user = new User();
+        user.setMemberId(memberId);
+        user.setFirstName(mainContact.getName().split(" ")[0]);
+        user.setLastName(mainContact.getName().split(" ")[1]);
+        user.setEmail(mainContact.getEmail());
+        user.setMainContact(true);
+        user.setCreatedBy(SALESFORCE_SYNC_USERNAME);
+        user.setCreatedDate(Instant.now());
+        user.setLastModifiedBy(SALESFORCE_SYNC_USERNAME);
+        user.setLastModifiedDate(Instant.now());
+        return user;
+    }
+
+    private MemberContact getMainContact(String id) {
+        MemberContacts memberContacts = getMemberContacts(id);
+        if (memberContacts != null && memberContacts.getRecords() != null) {
+            return memberContacts.getRecords().stream()
+                    .filter(contact -> MAIN_CONTACT_ROLE.equals(contact.getRole()))
+                    .findFirst()
+                    .orElse(null);
+        }
+        return null;
+    }
+
+    private void processSalesforceMemberData(MemberDetails salesforceMemberData) {
+        ConsortiumLeadDetails consortiumData = getConsortiumLeadDetails(salesforceMemberData.getId());
+        Optional<Member> existingMemberRecord = memberService.getMember(salesforceMemberData.getId());
+        if (existingMemberRecord.isPresent()) {
+            LOG.debug("Found existing member {}", salesforceMemberData.getId());
+            updateExistingMemberWithSalesforceData(existingMemberRecord.get(), salesforceMemberData, consortiumData != null);
+            if (consortiumData != null) {
+                updateParentForConsortiumMembers(consortiumData);
+            } else if (consortiumData == null && existingMemberRecord.get().getIsConsortiumLead()) {
+                // member no longer consortium lead
+                removeParentFromConsortiumMembers(consortiumData);
+            }
+        } else {
+            LOG.debug("Member {} not found", salesforceMemberData.getId());
+            createNewMemberWithSalesforceData(salesforceMemberData, consortiumData != null);
+            if (consortiumData != null) {
+                updateParentForConsortiumMembers(consortiumData);
+            }
         }
     }
 

@@ -2,15 +2,19 @@ package org.orcid.mp.user.rest;
 
 import org.orcid.mp.user.domain.User;
 import org.orcid.mp.user.dto.UserDTO;
+import org.orcid.mp.user.error.BadRequestAlertException;
 import org.orcid.mp.user.mapper.UserMapper;
 import org.orcid.mp.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/internal/users")
@@ -47,7 +51,19 @@ public class InternalResource {
     }
 
     /**
-     * {@code PUT /users/memberName/:oldMemberName/:newMemberName} : Updates memberName
+     * {@code GET /users/member/:memberId} : get users by member id.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
+     * body all users.
+     */
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<List<User>> getUsersByMemberId(@PathVariable String memberId) {
+        List<User> users = userService.getAllUsersByMemberId(memberId).stream().map(userMapper::toUser).collect(Collectors.toList());
+        return ResponseEntity.ok(users);
+    }
+
+    /**
+     * {@code PUT /internal/users/memberName/:oldMemberName/:newMemberName} : Updates memberName
      * for existing Users.
      *
      * @param memberId  the memberId for finding users to update
@@ -61,6 +77,22 @@ public class InternalResource {
         if (success) {
             return ResponseEntity.ok().build();
         } else {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+    /**
+     * {@code POST /internal/users} : Creates main contact user
+     */
+    @PostMapping()
+    public ResponseEntity<String> createMainContactUser(@RequestBody User user) {
+        LOG.info("Internal request to create main contact user for member {}", user.getMemberId());
+        try {
+            UserDTO userDTO = userMapper.toUserDTO(user);
+            userService.createUser(userDTO, userDTO.getCreatedBy());
+            return ResponseEntity.ok("success");
+        } catch (Exception e) {
+            LOG.error("Error creating main contact user", e);
             return ResponseEntity.status(500).build();
         }
     }

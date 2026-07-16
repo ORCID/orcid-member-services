@@ -33,7 +33,7 @@ public class UserService {
     }
 
     public List<User> getUsersByMemberId(String memberId) {
-        return userServiceClient.getUsersByMemberId(memberId);
+        return internalUserServiceClient.getUsersByMemberId(memberId);
     }
 
     public void updateUser(User user) {
@@ -42,5 +42,9 @@ public class UserService {
 
     public void updateUsersMemberNames(String salesforceId, String newClientName) {
         internalUserServiceClient.updateUsersMemberNames(salesforceId, newClientName);
+    }
+
+    public void createMainContactUser(User user) {
+        internalUserServiceClient.createMainContactUser(user);
     }
 }

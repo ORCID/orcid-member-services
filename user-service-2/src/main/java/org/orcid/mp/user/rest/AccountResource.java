@@ -69,7 +69,7 @@ public class AccountResource {
             throw new BadRequestAlertException("Updating email is not allowed");
         }
 
-        userService.updateAccount(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(), userDTO.getLangKey(), userDTO.getImageUrl());
+        userService.updateAccount(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getLangKey(), userDTO.getImageUrl());
     }
 
     /**

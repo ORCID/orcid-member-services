@@ -226,7 +226,7 @@ public class UserResource {
         if (!userValidator.validate(userDTO, getCurrentUser().getLangKey()).isValid()) {
             return ResponseEntity.badRequest().body(userDTO);
         }
-        UserDTO user = userService.createUser(userDTO);
+        UserDTO user = userService.createUser(userDTO, SecurityUtil.getCurrentUserLogin().get());
         return ResponseEntity.created(new URI("/api/users/" + user.getEmail())).body(user);
     }
 
