@@ -33,7 +33,7 @@ public class UserService {
     }
 
     public List<User> getUsersByMemberId(String memberId) {
-        return userServiceClient.getUsersByMemberId(memberId);
+        return internalUserServiceClient.getUsersByMemberId(memberId);
     }
 
     public void updateUser(User user) {

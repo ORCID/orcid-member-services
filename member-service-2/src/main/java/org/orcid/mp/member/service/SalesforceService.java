@@ -202,9 +202,18 @@ public class SalesforceService {
         if (member.isPresent()) {
             List<User> users = userService.getUsersByMemberId(member.get().getId());
             if (users == null || users.isEmpty()) {
+                LOG.info("No users found for salesforce id {}", salesforceMemberData.getId());
                 MemberContact mainContact = getMainContact(salesforceMemberData.getId());
-                User user = getUserForMainContact(mainContact, member.get().getId());
-                userService.createMainContactUser(user);
+
+                if (mainContact != null) {
+                    LOG.info("Found main contact in salesforce for id {}", salesforceMemberData.getId());
+                    User user = getUserForMainContact(mainContact, member.get().getId());
+
+                    LOG.info("Creating user account for {}", user.getEmail());
+                    userService.createMainContactUser(user);
+                } else {
+                    LOG.info("No main contact found for salesforce id {}", salesforceMemberData.getId());
+                }
             }
         } else {
             LOG.warn("Cannot process member contacts for {} because member record has not been created", salesforceMemberData.getId());

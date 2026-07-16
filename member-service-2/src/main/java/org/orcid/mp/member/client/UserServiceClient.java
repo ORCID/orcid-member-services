@@ -21,11 +21,6 @@ public class UserServiceClient {
         return restClient.get().uri("/users/" + loginOrId).retrieve().toEntity(User.class).getBody();
     }
 
-    public List<User> getUsersByMemberId(String memberId) {
-        return restClient.get().uri("/users/member/" + memberId).retrieve().body(new ParameterizedTypeReference<List<User>>() {
-        });
-    }
-
     public String updateUser(User user) {
         return restClient.put().uri("/users").body(user).retrieve().toEntity(String.class).getBody();
     }
