@@ -146,12 +146,10 @@ public class AccountResource {
      * password of the user.
      *
      * @param mail the mail of the user.
-     * @throws EmailNotFoundException {@code 400 (Bad Request)} if the email address is not
-     *                                registered.
      */
     @PostMapping(path = "/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail) {
-        mailService.sendPasswordResetMail(userService.requestPasswordReset(mail).orElseThrow(EmailNotFoundException::new));
+        userService.requestPasswordReset(mail).ifPresent(mailService::sendPasswordResetMail);
     }
 
     /**
