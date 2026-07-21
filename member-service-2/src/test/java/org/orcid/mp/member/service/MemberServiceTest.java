@@ -395,9 +395,9 @@ class MemberServiceTest {
     void testRemoveParent() {
         Member member = getMember();
         assertThat(member.getParentSalesforceId()).isEqualTo("parentSalesforceId");
-        when(memberRepository.findBySalesforceId(eq("salesforceId"))).thenReturn(Optional.of(member));
+        when(memberRepository.findById(eq("some-id"))).thenReturn(Optional.of(member));
 
-        memberService.removeParent("salesforceId");
+        memberService.removeParent("some-id");
 
         verify(memberRepository).save(memberCaptor.capture());
 

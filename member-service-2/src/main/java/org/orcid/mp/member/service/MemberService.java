@@ -159,14 +159,14 @@ public class MemberService {
         }
     }
 
-    public void removeParent(String salesforceId) {
-        LOG.info("Removing parent from member {}", salesforceId);
-        Optional<Member> member = memberRepository.findBySalesforceId(salesforceId);
+    public void removeParent(String memberId) {
+        LOG.info("Removing parent from member {}", memberId);
+        Optional<Member> member = memberRepository.findById(memberId);
         if (member.isPresent()) {
             member.get().setParentSalesforceId(null);
             memberRepository.save(member.get());
         } else {
-            LOG.warn("Child member {} not found", salesforceId);
+            LOG.warn("Child member {} not found", memberId);
         }
     }
 
