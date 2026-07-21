@@ -19,9 +19,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 
 /**
  * Service class for managing members.
@@ -92,20 +92,23 @@ public class MemberService {
         Optional<Member> optional = memberRepository.findById(member.getId());
         validateMemberUpdate(member, optional);
 
-        Member existingMember = optional.get();
-        existingMember.setClientId(member.getClientId());
-        existingMember.setParentSalesforceId(member.getParentSalesforceId());
-        existingMember.setLastModifiedBy(updatedBy);
-        existingMember.setLastModifiedDate(Instant.now());
-        existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
-        existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
-        existingMember.setActive(member.isActive());
-        existingMember.setActivatedDate(member.getActivatedDate());
-        existingMember.setDeactivatedDate(member.getDeactivatedDate());
+        Member dbCopy = optional.get();
+        if (memberBasBeenUpdated(member, dbCopy)) {
+            Member existingMember = optional.get();
+            existingMember.setClientId(member.getClientId());
+            existingMember.setParentSalesforceId(member.getParentSalesforceId());
+            existingMember.setLastModifiedBy(updatedBy);
+            existingMember.setLastModifiedDate(Instant.now());
+            existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
+            existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
+            existingMember.setActive(member.isActive());
+            existingMember.setActivatedDate(member.getActivatedDate());
+            existingMember.setDeactivatedDate(member.getDeactivatedDate());
+            propagateUpdatesAndSave(member, existingMember);
+            return memberRepository.save(existingMember);
+        }
 
-        propagateUpdatesAndSave(member, existingMember);
-
-        return memberRepository.save(existingMember);
+        return member;
     }
 
     public MemberValidation validateMember(Member member) {
@@ -206,8 +209,24 @@ public class MemberService {
         if (!existingMember.get().getSalesforceId().equals(member.getSalesforceId())) {
             Optional<Member> optionalSalesforceId = memberRepository.findBySalesforceId(member.getSalesforceId());
             if (optionalSalesforceId.isPresent()) {
-                throw new BadRequestAlertException("Invalid salesForceId");
+                throw new BadRequestAlertException("Invalid salesforceId");
             }
         }
     }
+
+    private boolean memberBasBeenUpdated(Member latestCopy, Member dbCopy) {
+        return !Objects.equals(latestCopy.getClientId(), dbCopy.getClientId())
+                || !Objects.equals(latestCopy.getSalesforceId(), dbCopy.getSalesforceId())
+                || !Objects.equals(latestCopy.getParentSalesforceId(), dbCopy.getParentSalesforceId())
+                || !Objects.equals(latestCopy.getAssertionServiceEnabled(), dbCopy.getAssertionServiceEnabled())
+                || !Objects.equals(latestCopy.getIsConsortiumLead(), dbCopy.getIsConsortiumLead())
+                || !Objects.equals(latestCopy.getSuperadminEnabled(), dbCopy.getSuperadminEnabled())
+                || !Objects.equals(latestCopy.getClientName(), dbCopy.getClientName())
+                || latestCopy.isActive() != dbCopy.isActive() // primitive boolean, safe to compare directly
+                || !Objects.equals(latestCopy.getActivatedDate(), dbCopy.getActivatedDate())
+                || !Objects.equals(latestCopy.getDeactivatedDate(), dbCopy.getDeactivatedDate())
+                || !Objects.equals(latestCopy.getDefaultLanguage(), dbCopy.getDefaultLanguage())
+                || !Objects.equals(latestCopy.getType(), dbCopy.getType());
+    }
+
 }
