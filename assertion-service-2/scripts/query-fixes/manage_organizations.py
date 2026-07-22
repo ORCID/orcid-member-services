@@ -11,6 +11,7 @@ This script accepts the following parameters:
 - Force update member SF id (--force_update)
 
 All references to the organization being updated (including users and assertions) are reassigned to the Target Salesforce Organization ID.
+For merge/update operations the internal member_id (member._id) on the related records (assertions, orcid_record tokens, send_notifications_request and users) is also updated to the target member, so records stay linked to the correct member.
 
 If the --merge flag is provided, the script deletes the updated (now obsolete) Salesforce Organization record from the member collection after all references have been successfully updated.
 If the --force_update flag is provided, the script update the SF id of the source member.
@@ -197,13 +198,19 @@ class UpdateOrganizationMember:
 
 class UpdateOrganizationsAssertions:
 
-    def __init__(self, connection_to_db: MongoDBConnection, target: str, source: str):
+    def __init__(self, connection_to_db: MongoDBConnection, target: str, source: str, member_target: Any):
         self.connection_to_db = connection_to_db
         self.collection_assertion = connection_to_db.get_collection('assertion')
         self.collection_orcid_record = connection_to_db.get_collection('orcid_record')
         self.collection_send_notifications_request = connection_to_db.get_collection('send_notifications_request')
         self.target = target
         self.source = source
+        self.member_target = member_target
+        self.member_id_target = (
+            str(member_target.get('_id'))
+            if member_target and member_target.get('_id') is not None
+            else None
+        )
 
     def find_problematic_assertions(self) -> List[Dict[str, Any]]:
         """
@@ -356,9 +363,13 @@ class UpdateOrganizationsAssertions:
 
         try:
 
+            update_fields = {'salesforce_id': self.target}
+            if self.member_id_target:
+                update_fields['member_id'] = self.member_id_target
+
             result = self.collection_assertion.update_many(
                 {'salesforce_id': self.source},
-                {'$set': {'salesforce_id': self.target}}
+                {'$set': update_fields}
             )
 
             logger.info(f" Successfully updated {result.modified_count} affiliations")
@@ -398,13 +409,15 @@ class UpdateOrganizationsAssertions:
                     salesforce_id_update = self.source
                     salesforce_id_target = self.target
                     if salesforce_id_update == t.get("salesforce_id"):
+                        token_set_fields = {
+                            "tokens.$[token].salesforce_id": salesforce_id_target,
+                        }
+                        if self.member_id_target:
+                            token_set_fields["tokens.$[token].member_id"] = self.member_id_target
+
                         result = self.collection_orcid_record.update_one(
                             {"_id": orcid_record["_id"]},
-                            {
-                                "$set": {
-                                    "tokens.$[token].salesforce_id": salesforce_id_target,
-                                }
-                            },
+                            {"$set": token_set_fields},
                             array_filters=[
                                 {"token.salesforce_id": salesforce_id_update}
                             ]
@@ -441,9 +454,13 @@ class UpdateOrganizationsAssertions:
 
         try:
 
+            update_fields = {'salesforce_id': self.target}
+            if self.member_id_target:
+                update_fields['member_id'] = self.member_id_target
+
             result = self.collection_send_notifications_request.update_many(
                 {'salesforce_id': self.source},
-                {'$set': {'salesforce_id': self.target}}
+                {'$set': update_fields}
             )
 
             logger.info(f" Successfully updated {result.modified_count} send notifications request")
@@ -505,6 +522,11 @@ class UpdateOrganizationsUser:
         self.owner_from_source_users = None
         self.remove_owner_from_source_users = False
         self.member_target = member_target
+        self.member_id_target = (
+            str(member_target.get('_id'))
+            if member_target and member_target.get('_id') is not None
+            else None
+        )
 
     def find_problematic_users(self) -> Tuple[List[Dict[str, Any]], bool]:
         """
@@ -605,9 +627,16 @@ class UpdateOrganizationsUser:
                         self.source
                     )
 
+            update_fields = {
+                'salesforce_id': self.target,
+                'member_name': self.member_target.get('client_name')
+            }
+            if self.member_id_target:
+                update_fields['member_id'] = self.member_id_target
+
             result = self.collection_users.update_many(
                 {'salesforce_id': self.source},
-                {'$set': {'salesforce_id': self.target, 'member_name': self.member_target.get('client_name')}}
+                {'$set': update_fields}
             )
 
             logger.info(f" Successfully updated salesforce id and member name in {result.modified_count} users")
@@ -711,7 +740,7 @@ def main():
 
         member_target = fixer_memberservice.find_problematic_members()
 
-        fixer_assertionservice = UpdateOrganizationsAssertions(connection_assertionservice, target, source)
+        fixer_assertionservice = UpdateOrganizationsAssertions(connection_assertionservice, target, source, member_target)
 
         assertions = fixer_assertionservice.find_problematic_assertions()
 
