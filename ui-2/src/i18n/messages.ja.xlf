@@ -18,7 +18,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">23</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
@@ -31,10 +31,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
           <context context-type="linenumber">24</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">26</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
@@ -105,6 +101,14 @@
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="reset.request.messages.info.string" datatype="html">
+        <source> Enter the email address associated with your Member Portal account </source>
+        <target state="new"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="reset.request.messages.spam.string" datatype="html">
         <source> If you do not receive the email, please check your spam folder and that the email address used is associated with a Member Portal account. </source>
         <target state="new"/>
@@ -126,7 +130,7 @@
         <target>あなたのEメールが必要です。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.messages.validate.email.invalid.string" datatype="html">
@@ -134,7 +138,7 @@
         <target>Eメールが無効です。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.messages.validate.email.minlength.string" datatype="html">
@@ -142,7 +146,7 @@
         <target>e メールには少なくとも 5 文字必要です。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.messages.validate.email.maxlength.string" datatype="html">
@@ -150,15 +154,23 @@
         <target>Eメールを50文字超にはできません。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.form.button.string" datatype="html">
-        <source> Reset </source>
-        <target>パスワードのリセット</target>
+        <source> Send password reset email </source>
+        <target state="new">パスワードのリセット</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">80</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.request.form.email.placeholder.string" datatype="html">
+        <source>Enter an email address</source>
+        <target state="new"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="password.title.string" datatype="html">
@@ -1442,7 +1454,7 @@
         <target> 所有権を本当に移転しますか。こちらの組織アカウントの所有権を移転しようとしています。所有権移転後にも組織の所有者である場合には、ユーザー管理といった管理機能にアクセスすることはもうできなくなります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.ts</context>
-          <context context-type="linenumber">262</context>
+          <context context-type="linenumber">266</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.delete.question.string" datatype="html">
