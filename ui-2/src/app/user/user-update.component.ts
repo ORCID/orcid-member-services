@@ -14,7 +14,7 @@ import { faBan, faCheckCircle, faSave } from '@fortawesome/free-solid-svg-icons'
 import moment from 'moment'
 import { Observable } from 'rxjs'
 
-import { map } from 'rxjs/operators'
+import { map, finalize } from 'rxjs/operators'
 import { AccountService } from '../account'
 import { IAccount } from '../account/model/account.model'
 import { AlertMessage, AlertType, DATE_TIME_FORMAT, emailValidator } from '../app.constants'
@@ -239,14 +239,18 @@ export class UserUpdateComponent implements OnInit {
     this.isSaving.set(true)
     const memberId = this.editForm.get('memberId')?.value
     if (memberId) {
-      this.userService.hasOwner(memberId).subscribe((value) => {
-        this.isSaving.set(false)
+      this.userService.hasOwner(memberId).pipe(
+        finalize(() => this.isSaving.set(false))
+      ).subscribe((value) => {
         if (!this.editForm.get('mainContact')?.value) {
           this.hasOwner.set(false)
         } else {
           this.hasOwner.set(value)
         }
       })
+    } else {
+      this.isSaving.set(false)
+      this.hasOwner.set(false)
     }
     if (event) {
       const checked = (event.target as HTMLInputElement).checked

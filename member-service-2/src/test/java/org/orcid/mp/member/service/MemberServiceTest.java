@@ -111,8 +111,11 @@ class MemberServiceTest {
 
     @Test
     void testUpdateMember() {
+        Instant orinalLastModifiedDate = Instant.now().minusSeconds(1000);
+
         Member existingMember = getMember();
         existingMember.setActive(false);
+        existingMember.setLastModifiedDate(orinalLastModifiedDate);
 
         when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
         when(memberRepository.findById(anyString())).thenReturn(Optional.of(existingMember));
@@ -132,6 +135,7 @@ class MemberServiceTest {
         Member updated = memberService.updateMember(member, "user");
         assertNotNull(updated.getLastModifiedBy());
         assertNotNull(updated.getLastModifiedDate());
+        assertThat(updated.getLastModifiedDate()).isAfter(orinalLastModifiedDate);
         assertEquals(member.getClientName(), updated.getClientName());
         assertEquals("something different", updated.getClientName());
         assertEquals(member.getClientId(), updated.getClientId());
@@ -140,6 +144,25 @@ class MemberServiceTest {
         assertEquals(member.getIsConsortiumLead(), updated.getIsConsortiumLead());
         assertTrue(updated.isActive());
         assertNotNull(updated.getActivatedDate());
+    }
+
+    @Test
+    void testUpdateMemberWithNoChanges() {
+        Member existingMember = getMember();
+
+        when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
+        when(memberRepository.findById(anyString())).thenReturn(Optional.of(existingMember));
+        when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+            @Override
+            public Member answer(InvocationOnMock invocation) throws Throwable {
+                return (Member) invocation.getArgument(0);
+            }
+        });
+
+        Member member = getMember();
+
+        Member updated = memberService.updateMember(member, "user");
+        verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
     }
 
     @Test
@@ -309,13 +332,23 @@ class MemberServiceTest {
 
     @Test
     void testUploadMemberCSV() throws IOException {
-        when(membersUploadReader.readMemberUpload(Mockito.any(), Mockito.any(User.class))).thenReturn(getMemberUpload());
+        Member existingOne = getMember();
+        existingOne.setId("two");
+        existingOne.setSalesforceId("two");
+        existingOne.setClientName("some old name that's going to get changed");
+
+        Member existingTwo = getMember();
+        existingTwo.setId("two");
+        existingTwo.setSalesforceId("two");
+        existingTwo.setParentSalesforceId("anOldParentSalesforceId");
+
+        MemberUpload memberUpload = getMemberUpload();
+
+        when(membersUploadReader.readMemberUpload(Mockito.any(), Mockito.any(User.class))).thenReturn(memberUpload);
         when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
         when(memberRepository.findBySalesforceId(eq("one"))).thenReturn(Optional.empty());
-        Member existing = getMember();
-        existing.setId("two");
-        when(memberRepository.findBySalesforceId(eq("two"))).thenReturn(Optional.of(existing));
-        when(memberRepository.findById(eq("two"))).thenReturn(Optional.of(getMemberUpload().getMembers().get(1)));
+        when(memberRepository.findBySalesforceId(eq("two"))).thenReturn(Optional.of(existingOne));
+        when(memberRepository.findById(eq("two"))).thenReturn(Optional.of(existingTwo));
         when(memberRepository.findBySalesforceId(eq("three"))).thenReturn(Optional.empty());
         memberService.uploadMemberCSV(null);
         verify(memberRepository, Mockito.times(3)).save(Mockito.any(Member.class));
@@ -367,7 +400,7 @@ class MemberServiceTest {
     void testRemoveParent() {
         Member member = getMember();
         assertThat(member.getParentSalesforceId()).isEqualTo("parentSalesforceId");
-        when(memberRepository.findBySalesforceId(eq("salesforceId"))).thenReturn(Optional.of(member));
+        when(memberRepository.findById(eq("some-id"))).thenReturn(Optional.of(member));
 
         memberService.removeParent("salesforceId", SalesforceService.SALESFORCE_SYNC_USERNAME);
 

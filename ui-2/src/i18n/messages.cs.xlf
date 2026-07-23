@@ -6,7 +6,7 @@
         <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Přihlášení se nezdařilo!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Zkontrolujte prosím své přihlašovací údaje a zkuste to znovu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.form.email.label.string" datatype="html">
@@ -14,11 +14,11 @@
         <target>E-mail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">18</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">23</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
@@ -30,11 +30,7 @@
         <target>Váš e-mail</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">16</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">24</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
@@ -46,7 +42,7 @@
         <target>Heslo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="login.form.password.placeholder.string" datatype="html">
@@ -54,7 +50,7 @@
         <target>Vaše heslo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="login.form.mfaCode.prompt.string" datatype="html">
@@ -62,7 +58,7 @@
         <target>Zadejte prosím MFA kód z aplikace pro ověřování</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="login.form.mfaCode.error.string" datatype="html">
@@ -70,7 +66,7 @@
         <target>Neplatný MFA kód</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="login.form.mfaCode.label.string" datatype="html">
@@ -78,7 +74,7 @@
         <target>MFA kód</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
       <trans-unit id="login.form.button.string" datatype="html">
@@ -86,7 +82,7 @@
         <target>Přihlásit se</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="login.password.forgot.string" datatype="html">
@@ -94,7 +90,7 @@
         <target> Zapomněli jste heslo? </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.title.string" datatype="html">
@@ -105,28 +101,28 @@
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="reset.request.messages.notfound.string" datatype="html">
-        <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Email address isn&apos;t registered!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Please check and try again. </source>
-        <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>E-mailová adresa není zaregistrovaná!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Zkontrolujte ji prosím a zkuste to znovu</target>
+      <trans-unit id="reset.request.messages.info.string" datatype="html">
+        <source> Enter the email address associated with your Member Portal account </source>
+        <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="reset.request.messages.info.string" datatype="html">
-        <source>Enter the email address you used to register.</source>
-        <target>Vložte e-mailovou adresu, kterou jste použili při registraci</target>
+      <trans-unit id="reset.request.messages.spam.string" datatype="html">
+        <source> If you do not receive the email, please check your spam folder and that the email address used is associated with a Member Portal account. </source>
+        <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.messages.success.string" datatype="html">
-        <source> Check your emails for details on how to reset your password. </source>
-        <target>Podrobnosti o tom, jak obnovit heslo, najdete v e-mailu.</target>
+        <source> We have sent a password reset email to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ resetRequestForm.get(&apos;email&apos;)?.value }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
+        <target state="new">Podrobnosti o tom, jak obnovit heslo, najdete v e-mailu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.messages.validate.email.required.string" datatype="html">
@@ -134,7 +130,7 @@
         <target>Váš e-mail je povinný.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.messages.validate.email.invalid.string" datatype="html">
@@ -142,7 +138,7 @@
         <target>Váš email je neplatný.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.messages.validate.email.minlength.string" datatype="html">
@@ -150,7 +146,7 @@
         <target>Váš email musí mít alespoň 5 znaků.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.messages.validate.email.maxlength.string" datatype="html">
@@ -158,15 +154,23 @@
         <target>Váš e-mail nesmí být delší než 50 znaků.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.form.button.string" datatype="html">
-        <source> Reset </source>
-        <target>Obnovit heslo</target>
+        <source> Send password reset email </source>
+        <target state="new">Obnovit heslo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="reset.request.form.email.placeholder.string" datatype="html">
+        <source>Enter an email address</source>
+        <target state="new"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="password.title.string" datatype="html">
@@ -796,6 +800,10 @@
           <context context-type="sourcefile">src/app/member/members.component.html</context>
           <context context-type="linenumber">68</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/user/users.component.html</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.logout.string" datatype="html">
         <source>Sign out</source>
@@ -954,7 +962,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">229</context>
+          <context context-type="linenumber">236</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.back.string" datatype="html">
@@ -1034,7 +1042,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">251</context>
+          <context context-type="linenumber">258</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.edit.string" datatype="html">
@@ -1070,7 +1078,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">240</context>
+          <context context-type="linenumber">247</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.save.string" datatype="html">
@@ -1110,7 +1118,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">141</context>
+          <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.createdDate.string" datatype="html">
@@ -1142,7 +1150,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.firstName.string" datatype="html">
@@ -1158,7 +1166,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.home.createLabel.string" datatype="html">
@@ -1182,7 +1190,7 @@
         <target>Žádní uživatelé k zobrazení</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.home.title.string" datatype="html">
@@ -1222,7 +1230,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.lastName.string" datatype="html">
@@ -1238,7 +1246,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.mainContact.string" datatype="html">
@@ -1254,7 +1262,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">112</context>
+          <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.manageApiCredentialsEnabled.string" datatype="html">
@@ -1266,7 +1274,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">121</context>
+          <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.memberId.string" datatype="html">
@@ -1282,7 +1290,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">149</context>
+          <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.salesforceId.string" datatype="html">
@@ -1294,7 +1302,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">130</context>
+          <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.sendActivate.error.string" datatype="html">
@@ -1446,7 +1454,7 @@
         <target>Opravdu chcete převést vlastnictví? Chystáte se převést vlastnictví tohoto účtu organizace. Jste-li vlastníkem organizace, po převodu vlastnictví již nebudete mít přístup k administrátorským funkcím, jako je správa uživatelů.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.ts</context>
-          <context context-type="linenumber">259</context>
+          <context context-type="linenumber">266</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.delete.question.string" datatype="html">
