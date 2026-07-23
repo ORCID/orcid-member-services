@@ -410,8 +410,6 @@ public class SalesforceServiceTest {
         assertThat(updatedMember).isNotNull();
         assertThat(updatedMember.getSalesforceId()).isEqualTo("0011000001XYZ01");
         assertThat(updatedMember.getIsConsortiumLead()).isTrue();
-        assertThat(updatedMember.getLastModifiedDate()).isNotNull();
-        assertThat(updatedMember.getLastModifiedBy()).isEqualTo(SalesforceService.SALESFORCE_SYNC_USERNAME);
     }
 
     @Test
@@ -479,8 +477,6 @@ public class SalesforceServiceTest {
         assertThat(updatedMembers.get(1).getClientName()).isEqualTo("Consortium Sub-Member A");
         assertThat(updatedMembers.get(1).isActive()).isTrue();
         assertThat(updatedMembers.get(1).getActivatedDate()).isNull(); // hasn't just been activated
-        assertThat(updatedMembers.get(1).getLastModifiedDate()).isNotNull();
-        assertThat(updatedMembers.get(1).getLastModifiedBy()).isEqualTo(SalesforceService.SALESFORCE_SYNC_USERNAME);
         assertThat(updatedMembers.get(1).getDeactivatedDate()).isNull();
         assertThat(updatedMembers.get(2)).isNotNull();
         assertThat(updatedMembers.get(2).getSalesforceId()).isEqualTo("0011000003XYZ03");

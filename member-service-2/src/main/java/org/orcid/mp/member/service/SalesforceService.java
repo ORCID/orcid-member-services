@@ -270,9 +270,6 @@ public class SalesforceService {
 
     private void updateCosortiumLeadMetadata(Member member, boolean consortiumLead) {
         member.setIsConsortiumLead(consortiumLead);
-        member.setLastUpdatedWithSalesforceData(Instant.now());
-        member.setLastModifiedDate(Instant.now());
-        member.setLastModifiedBy(SALESFORCE_SYNC_USERNAME);
         memberService.updateMember(member, SALESFORCE_SYNC_USERNAME);
     }
 
@@ -308,7 +305,6 @@ public class SalesforceService {
     private void updateExistingMemberWithSalesforceData(Member member, MemberDetails salesforceMemberData, boolean consortiumLead) {
         member = updateMemberMetadata(member, salesforceMemberData, consortiumLead);
         member = updateMemberStatus(member, salesforceMemberData);
-        member.setLastUpdatedWithSalesforceData(Instant.now());
         memberService.updateMember(member, SALESFORCE_SYNC_USERNAME);
     }
 
