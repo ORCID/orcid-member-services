@@ -402,10 +402,11 @@ public class SalesforceServiceTest {
 
         salesforceService.syncMembers();
 
-        verify(memberService).updateMember(salesforceUpdateCaptor.capture(), anyString());
-        verify(memberService).addParent(eq("some-consortium-member-id"), eq("0011000001XYZ01"));
+        verify(memberService, Mockito.times(2)).updateMember(salesforceUpdateCaptor.capture(), anyString());
+        verify(memberService).addParent(eq("some-consortium-member-id"), eq("0011000001XYZ01"), anyString());
 
-        Member updatedMember = salesforceUpdateCaptor.getValue();
+        List<Member> updatedMembers = salesforceUpdateCaptor.getAllValues();
+        Member updatedMember = updatedMembers.get(1); // get last updated
         assertThat(updatedMember).isNotNull();
         assertThat(updatedMember.getSalesforceId()).isEqualTo("0011000001XYZ01");
         assertThat(updatedMember.getIsConsortiumLead()).isTrue();
@@ -516,7 +517,7 @@ public class SalesforceServiceTest {
         salesforceService.syncMembers();
 
         verify(memberService, times(5)).createMember(salesforceUpdateCaptor.capture(), anyString());
-        verify(memberService).addParent(eq("some-consortium-member-id"), eq("0011000001XYZ01"));
+        verify(memberService).addParent(eq("some-consortium-member-id"), eq("0011000001XYZ01"), anyString());
 
         List<Member> createdMembers = salesforceUpdateCaptor.getAllValues();
         Member createdCL = createdMembers.get(0);
@@ -547,6 +548,8 @@ public class SalesforceServiceTest {
         User captured = userCaptor.getValue();
         assertThat(captured.getCreatedBy()).isEqualTo(SalesforceService.SALESFORCE_SYNC_USERNAME);
         assertThat(captured.getMainContact()).isTrue();
+        assertThat(captured.getLastModifiedDate()).isNotNull();
+        assertThat(captured.getLastModifiedBy()).isEqualTo(SalesforceService.SALESFORCE_SYNC_USERNAME);
     }
 
     private List<Country> getSalesforceCountries() {

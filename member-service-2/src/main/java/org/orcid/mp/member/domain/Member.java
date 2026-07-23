@@ -60,9 +60,6 @@ public class Member implements Serializable {
     @Field
     private boolean active;
 
-    @Field("last_updated_with_salesforce_data")
-    private Instant lastUpdatedWithSalesforceData;
-
     @Field("deactivated_date")
     private Instant deactivatedDate;
 
@@ -196,14 +193,6 @@ public class Member implements Serializable {
         this.active = active;
     }
 
-    public Instant getLastUpdatedWithSalesforceData() {
-        return lastUpdatedWithSalesforceData;
-    }
-
-    public void setLastUpdatedWithSalesforceData(Instant lastUpdatedWithSalesforceData) {
-        this.lastUpdatedWithSalesforceData = lastUpdatedWithSalesforceData;
-    }
-
     public Instant getDeactivatedDate() {
         return deactivatedDate;
     }
@@ -240,7 +229,6 @@ public class Member implements Serializable {
         result = prime * result + ((defaultLanguage == null) ? 0 : defaultLanguage.hashCode());
         result = prime * result + ((deactivatedDate == null) ? 0 : deactivatedDate.hashCode());
         result = prime * result + ((activatedDate == null) ? 0 : activatedDate.hashCode());
-        result = prime * result + ((lastUpdatedWithSalesforceData == null) ? 0 : lastUpdatedWithSalesforceData.hashCode());
         return result;
     }
 
@@ -333,12 +321,6 @@ public class Member implements Serializable {
             if (other.activatedDate != null)
                 return false;
         } else if (!activatedDate.equals(other.activatedDate)) {
-            return false;
-        }
-        if (lastUpdatedWithSalesforceData == null) {
-            if (other.lastUpdatedWithSalesforceData != null)
-                return false;
-        } else if (!lastUpdatedWithSalesforceData.equals(other.lastUpdatedWithSalesforceData)) {
             return false;
         }
         if (active != other.active) {

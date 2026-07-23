@@ -11,7 +11,9 @@ import org.orcid.mp.member.domain.User;
 import org.orcid.mp.member.error.BadRequestAlertException;
 import org.orcid.mp.member.error.UnauthorizedMemberAccessException;
 import org.orcid.mp.member.repository.MemberRepository;
-import org.orcid.mp.member.salesforce.*;
+import org.orcid.mp.member.salesforce.ConsortiumLeadDetails;
+import org.orcid.mp.member.salesforce.ConsortiumMember;
+import org.orcid.mp.member.salesforce.MemberDetails;
 import org.orcid.mp.member.security.MockSecurityContext;
 import org.orcid.mp.member.upload.MemberCsvReader;
 import org.orcid.mp.member.upload.MemberUpload;
@@ -372,6 +374,9 @@ class MemberServiceTest {
     @Test
     void testUpdateMemberDefaultLanguage() throws UnauthorizedMemberAccessException {
         Member member = getMember();
+        Instant previouslyLastModified = Instant.now();
+        member.setLastModifiedDate(previouslyLastModified);
+
         memberService.updateMemberDefaultLanguage("memberId", "en");
         verify(memberRepository).save(memberCaptor.capture());
         Member captured = memberCaptor.getValue();
@@ -381,8 +386,8 @@ class MemberServiceTest {
         assertThat(captured.getCreatedBy()).isEqualTo(member.getCreatedBy());
         assertThat(captured.getCreatedDate()).isEqualTo(member.getCreatedDate());
         assertThat(captured.getIsConsortiumLead()).isEqualTo(member.getIsConsortiumLead());
-        assertThat(captured.getLastModifiedBy()).isEqualTo(member.getLastModifiedBy());
-        assertThat(captured.getLastModifiedDate()).isEqualTo(member.getLastModifiedDate());
+        assertThat(captured.getLastModifiedBy()).isEqualTo("me");
+        assertThat(captured.getLastModifiedDate()).isAfter(previouslyLastModified);
         assertThat(captured.getParentSalesforceId()).isEqualTo(member.getParentSalesforceId());
         assertThat(captured.getSalesforceId()).isEqualTo(member.getSalesforceId());
         assertThat(captured.getSuperadminEnabled()).isEqualTo(member.getSuperadminEnabled());
@@ -397,7 +402,7 @@ class MemberServiceTest {
         assertThat(member.getParentSalesforceId()).isEqualTo("parentSalesforceId");
         when(memberRepository.findById(eq("some-id"))).thenReturn(Optional.of(member));
 
-        memberService.removeParent("some-id");
+        memberService.removeParent("salesforceId", SalesforceService.SALESFORCE_SYNC_USERNAME);
 
         verify(memberRepository).save(memberCaptor.capture());
 
@@ -409,7 +414,7 @@ class MemberServiceTest {
     @Test
     void testRemoveParentWhenMemberNotFound() {
         when(memberRepository.findBySalesforceId(eq("missingSalesforceId"))).thenReturn(Optional.empty());
-        memberService.removeParent("missingSalesforceId");
+        memberService.removeParent("missingSalesforceId", SalesforceService.SALESFORCE_SYNC_USERNAME);
         verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
     }
 
@@ -423,7 +428,7 @@ class MemberServiceTest {
         when(memberRepository.findBySalesforceId(eq("salesforceId"))).thenReturn(Optional.of(childMember));
         when(memberRepository.findBySalesforceId(eq("parentSalesforceId"))).thenReturn(Optional.of(parentMember));
 
-        memberService.addParent("salesforceId", "parentSalesforceId");
+        memberService.addParent("salesforceId", "parentSalesforceId", SalesforceService.SALESFORCE_SYNC_USERNAME);
 
         verify(memberRepository).save(memberCaptor.capture());
 
@@ -436,12 +441,11 @@ class MemberServiceTest {
     void testAddParentWhenChildMemberNotFound() {
         when(memberRepository.findBySalesforceId(eq("missingSalesforceId"))).thenReturn(Optional.empty());
 
-        memberService.addParent("missingSalesforceId", "parentSalesforceId");
+        memberService.addParent("missingSalesforceId", "parentSalesforceId", SalesforceService.SALESFORCE_SYNC_USERNAME);
 
         verify(memberRepository, Mockito.never()).findById(eq("parentSalesforceId"));
         verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
     }
-
 
 
     @Test
@@ -457,7 +461,7 @@ class MemberServiceTest {
 
         memberService.removeParentFromMembersNoLongerPartOfConsortium(
                 "parentSalesforceId",
-                Set.of("salesforceId")
+                Set.of("salesforceId"), SalesforceService.SALESFORCE_SYNC_USERNAME
         );
 
         verify(memberRepository).save(memberCaptor.capture());
@@ -480,7 +484,7 @@ class MemberServiceTest {
 
         memberService.removeParentFromMembersNoLongerPartOfConsortium(
                 "parentMemberId",
-                Set.of("memberId")
+                Set.of("memberId"), SalesforceService.SALESFORCE_SYNC_USERNAME
         );
 
         verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
@@ -605,7 +609,8 @@ class MemberServiceTest {
         member.setClientName("clientname");
         member.setIsConsortiumLead(true);
         member.setSalesforceId("parentSalesforceId");
-        member.setId("parentMemberId");;
+        member.setId("parentMemberId");
+        ;
         return member;
     }
 
