@@ -139,40 +139,56 @@ public class MemberService {
         if (optional.isPresent()) {
             Member member = optional.get();
             member.setDefaultLanguage(language);
+            member.setLastModifiedDate(Instant.now());
+            member.setLastModifiedBy(SecurityUtils.getCurrentUserLogin().get());
             memberRepository.save(member);
         } else {
             throw new RuntimeException("Member " + memberId + " not found");
         }
     }
 
-    public void addParent(String childSalesforceId, String parentSalesforceId) {
+    public void addParent(String childSalesforceId, String parentSalesforceId, String lastModifiedBy) {
         LOG.info("Adding parent {} to member {}", parentSalesforceId, childSalesforceId);
         Optional<Member> childMember = memberRepository.findBySalesforceId(childSalesforceId);
         if (!childMember.isPresent()) {
             LOG.warn("Child member {} not found", childSalesforceId);
-        } else {
-            childMember.get().setParentSalesforceId(parentSalesforceId);
-            memberRepository.save(childMember.get());
+            return;
         }
+
+        Member consortiumMember = childMember.get();
+        if (parentSalesforceId.equals(consortiumMember.getParentSalesforceId())) {
+            LOG.debug("Parent {} already set for consortium member {}", childSalesforceId);
+            return;
+        }
+
+        consortiumMember.setParentSalesforceId(parentSalesforceId);
+        consortiumMember.setLastModifiedDate(Instant.now());
+        consortiumMember.setLastModifiedBy(lastModifiedBy);
+        memberRepository.save(consortiumMember);
     }
 
-    public void removeParent(String salesforceId) {
+    public void removeParent(String salesforceId, String lastModifiedBy) {
         LOG.info("Removing parent from member {}", salesforceId);
         Optional<Member> member = memberRepository.findBySalesforceId(salesforceId);
         if (member.isPresent()) {
-            member.get().setParentSalesforceId(null);
-            memberRepository.save(member.get());
+            Member child = member.get();
+            child.setParentSalesforceId(null);
+            child.setLastModifiedDate(Instant.now());
+            child.setLastModifiedBy(lastModifiedBy);
+            memberRepository.save(child);
         } else {
             LOG.warn("Child member {} not found", salesforceId);
         }
     }
 
-    public void removeParentFromMembersNoLongerPartOfConsortium(String salesforceId, Set<String> consortiumSalesforceIds) {
+    public void removeParentFromMembersNoLongerPartOfConsortium(String salesforceId, Set<String> consortiumSalesforceIds, String lastModifiedBy) {
         List<Member> members = memberRepository.findAllByParentSalesforceId(salesforceId);
         members.forEach(m -> {
             if (!consortiumSalesforceIds.contains(m.getSalesforceId())) {
                 LOG.info("Removing parent from member {}", m.getId());
                 m.setParentSalesforceId(null);
+                m.setLastModifiedDate(Instant.now());
+                m.setLastModifiedBy(lastModifiedBy);
                 memberRepository.save(m);
             }
         });

@@ -252,9 +252,11 @@ public class SalesforceService {
             LOG.debug("Found existing member {}", salesforceMemberData.getId());
             updateExistingMemberWithSalesforceData(existingMemberRecord.get(), salesforceMemberData, consortiumData != null);
             if (consortiumData != null) {
+                updateCosortiumLeadMetadata(existingMemberRecord.get(), true);
                 updateParentForConsortiumMembers(consortiumData);
             } else if (consortiumData == null && existingMemberRecord.get().getIsConsortiumLead()) {
                 // member no longer consortium lead
+                updateCosortiumLeadMetadata(existingMemberRecord.get(), false);
                 removeParentFromConsortiumMembers(consortiumData);
             }
         } else {
@@ -266,21 +268,29 @@ public class SalesforceService {
         }
     }
 
+    private void updateCosortiumLeadMetadata(Member member, boolean consortiumLead) {
+        member.setIsConsortiumLead(consortiumLead);
+        member.setLastUpdatedWithSalesforceData(Instant.now());
+        member.setLastModifiedDate(Instant.now());
+        member.setLastModifiedBy(SALESFORCE_SYNC_USERNAME);
+        memberService.updateMember(member, SALESFORCE_SYNC_USERNAME);
+    }
+
     private void updateParentForConsortiumMembers(ConsortiumLeadDetails consortiumData) {
         consortiumData.getConsortiumMembers().forEach(consortiumMember -> {
-            memberService.addParent(consortiumMember.getSalesforceId(), consortiumData.getId());
+            memberService.addParent(consortiumMember.getSalesforceId(), consortiumData.getId(), SALESFORCE_SYNC_USERNAME);
         });
 
         Set<String> activeConsortiumIds = consortiumData.getConsortiumMembers().stream()
                 .map(ConsortiumMember::getSalesforceId)
                 .collect(Collectors.toSet());
 
-        memberService.removeParentFromMembersNoLongerPartOfConsortium(consortiumData.getMemberId(), activeConsortiumIds);
+        memberService.removeParentFromMembersNoLongerPartOfConsortium(consortiumData.getMemberId(), activeConsortiumIds, SALESFORCE_SYNC_USERNAME);
     }
 
     private void removeParentFromConsortiumMembers(ConsortiumLeadDetails consortiumData) {
         consortiumData.getConsortiumMembers().forEach(consortiumMember -> {
-            memberService.removeParent(consortiumMember.getMemberId());
+            memberService.removeParent(consortiumMember.getMemberId(), SALESFORCE_SYNC_USERNAME);
         });
     }
 
