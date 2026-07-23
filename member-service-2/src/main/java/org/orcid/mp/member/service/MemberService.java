@@ -151,7 +151,6 @@ public class MemberService {
     }
 
     public void addParent(String childSalesforceId, String parentSalesforceId, String lastModifiedBy) {
-        LOG.info("Adding parent {} to member {}", parentSalesforceId, childSalesforceId);
         Optional<Member> childMember = memberRepository.findBySalesforceId(childSalesforceId);
         if (!childMember.isPresent()) {
             LOG.warn("Child member {} not found", childSalesforceId);
@@ -164,6 +163,7 @@ public class MemberService {
             return;
         }
 
+        LOG.info("Adding parent {} to member {}", parentSalesforceId, childSalesforceId);
         consortiumMember.setParentSalesforceId(parentSalesforceId);
         consortiumMember.setLastModifiedDate(Instant.now());
         consortiumMember.setLastModifiedBy(lastModifiedBy);
@@ -188,7 +188,7 @@ public class MemberService {
         List<Member> members = memberRepository.findAllByParentSalesforceId(salesforceId);
         members.forEach(m -> {
             if (!consortiumSalesforceIds.contains(m.getSalesforceId())) {
-                LOG.info("Removing parent from member {}", m.getId());
+                LOG.info("Removing consortium parent from leaving member {}", m.getId());
                 m.setParentSalesforceId(null);
                 m.setLastModifiedDate(Instant.now());
                 m.setLastModifiedBy(lastModifiedBy);

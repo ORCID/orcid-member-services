@@ -282,7 +282,7 @@ public class SalesforceService {
                 .map(ConsortiumMember::getSalesforceId)
                 .collect(Collectors.toSet());
 
-        memberService.removeParentFromMembersNoLongerPartOfConsortium(consortiumData.getMemberId(), activeConsortiumIds, SALESFORCE_SYNC_USERNAME);
+        memberService.removeParentFromMembersNoLongerPartOfConsortium(consortiumData.getId(), activeConsortiumIds, SALESFORCE_SYNC_USERNAME);
     }
 
     private void removeParentFromConsortiumMembers(ConsortiumLeadDetails consortiumData) {
