@@ -249,7 +249,7 @@ class UpdateOrganizationsAssertions:
                         {
                             '$size': {
                                 '$filter': {
-                                    'input': '$tokens',
+                                    'input': {'$ifNull': ['$tokens', []]},
                                     'as': 'token',
                                     'cond': {
                                         '$and': [
