@@ -52,6 +52,16 @@ logging:
     format:
       console: logstash
 
+management:
+  endpoints:
+    web:
+      base-path: "/"
+      exposure:
+        include: "health"
+  endpoint:
+    health:
+      show-details: always
+
 mongock:
   migration-scan-package: org.orcid.mp.assertion.data.migration
 
