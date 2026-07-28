@@ -200,6 +200,7 @@ public class AssertionService {
             LOG.debug("Found ID token and orcid id");
             Instant now = Instant.now();
             assertion.setLastSyncAttempt(now);
+            assertionRepository.save(assertion);
 
             try {
                 String putCode = postToOrcidRegistry(orcid, assertion, idToken);
@@ -252,6 +253,7 @@ public class AssertionService {
             String idToken = orcidRecord.getToken(assertion.getMemberId(), false);
             Instant now = Instant.now();
             assertion.setLastSyncAttempt(now);
+            assertionRepository.save(assertion);
 
             try {
                 putInOrcidRegistry(orcid, assertion, idToken);
