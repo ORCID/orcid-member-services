@@ -101,6 +101,7 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
     public List<Assertion> findAllToCreateInOrcidRegistry(Pageable pageable) {
         Criteria applicableStatus = Criteria.where("status").in(
                 AssertionStatus.PENDING.name(),
+                AssertionStatus.PENDING_RETRY.name(),
                 AssertionStatus.NOTIFICATION_SENT.name(),
                 AssertionStatus.NOTIFICATION_FAILED.name(),
                 AssertionStatus.USER_REVOKED_ACCESS.name()
