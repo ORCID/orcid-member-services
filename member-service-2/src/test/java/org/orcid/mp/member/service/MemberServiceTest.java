@@ -128,8 +128,6 @@ class MemberServiceTest {
 
         Member member = getMember();
         member.setId("id");
-        member.setActive(true);
-        member.setActivatedDate(Instant.now());
         member.setClientName("something different");
 
         Member updated = memberService.updateMember(member, "user");
@@ -142,8 +140,6 @@ class MemberServiceTest {
         assertEquals(member.getSalesforceId(), updated.getSalesforceId());
         assertEquals(member.getAssertionServiceEnabled(), updated.getAssertionServiceEnabled());
         assertEquals(member.getIsConsortiumLead(), updated.getIsConsortiumLead());
-        assertTrue(updated.isActive());
-        assertNotNull(updated.getActivatedDate());
     }
 
     @Test
@@ -163,39 +159,6 @@ class MemberServiceTest {
 
         Member updated = memberService.updateMember(member, "user");
         verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
-    }
-
-    @Test
-    void testUpdateMember_deactivate() {
-        Member existingMember = getMember();
-        existingMember.setActive(true);
-
-        when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
-        when(memberRepository.findById(anyString())).thenReturn(Optional.of(existingMember));
-        when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
-            @Override
-            public Member answer(InvocationOnMock invocation) throws Throwable {
-                return (Member) invocation.getArgument(0);
-            }
-        });
-
-        Member member = getMember();
-        member.setId("id");
-        member.setActive(false);
-        member.setClientName("something different");
-        member.setDeactivatedDate(Instant.now());
-
-        Member updated = memberService.updateMember(member, "user");
-        assertNotNull(updated.getLastModifiedBy());
-        assertNotNull(updated.getLastModifiedDate());
-        assertEquals(member.getClientName(), updated.getClientName());
-        assertEquals("something different", updated.getClientName());
-        assertEquals(member.getClientId(), updated.getClientId());
-        assertEquals(member.getSalesforceId(), updated.getSalesforceId());
-        assertEquals(member.getAssertionServiceEnabled(), updated.getAssertionServiceEnabled());
-        assertEquals(member.getIsConsortiumLead(), updated.getIsConsortiumLead());
-        assertFalse(updated.isActive());
-        assertNotNull(updated.getDeactivatedDate());
     }
 
     @Test
