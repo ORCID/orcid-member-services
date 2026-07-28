@@ -33,6 +33,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/members/authorized/**").permitAll()
+                        .requestMatchers("/status", "/health", "/health/**").permitAll()
                         .requestMatchers("/internal/**").hasAuthority("SCOPE_internal")
                         .anyRequest().authenticated()
                 )
