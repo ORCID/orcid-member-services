@@ -101,9 +101,6 @@ public class MemberService {
             existingMember.setLastModifiedDate(Instant.now());
             existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
             existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
-            existingMember.setActive(member.isActive());
-            existingMember.setActivatedDate(member.getActivatedDate());
-            existingMember.setDeactivatedDate(member.getDeactivatedDate());
             propagateUpdatesAndSave(member, existingMember);
             return memberRepository.save(existingMember);
         }
