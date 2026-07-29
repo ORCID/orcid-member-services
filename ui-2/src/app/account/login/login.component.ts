@@ -39,6 +39,7 @@ export class LoginComponent implements AfterViewInit {
 
   protected readonly authenticationErrorState = signal(false)
   protected readonly backendErrorMessageState = signal<string | null>(null)
+  protected readonly backendErrorCodeState = signal<string | null>(null)
   protected readonly showMfaState = signal(false)
   protected readonly mfaErrorState = signal(false)
 
@@ -54,6 +55,10 @@ export class LoginComponent implements AfterViewInit {
 
   protected get backendErrorMessage(): string | null {
     return this.backendErrorMessageState()
+  }
+
+  protected get backendErrorCode(): string | null {
+    return this.backendErrorCodeState()
   }
 
   protected get showMfa(): boolean {
@@ -100,6 +105,8 @@ export class LoginComponent implements AfterViewInit {
 
   protected login() {
     this.authenticationErrorState.set(false)
+    this.backendErrorMessageState.set(null)
+    this.backendErrorCodeState.set(null)
     this.mfaErrorState.set(false)
 
     const credentials: ILoginCredentials = {
@@ -127,19 +134,21 @@ export class LoginComponent implements AfterViewInit {
         }
       },
       error: (err) => {
+        const bodyErrorCode = err.error?.error || null
         const bodyMessage = typeof err.error === 'string' ? err.error : err.error?.message || err.error?.detail || null
 
         if (err.status === 401) {
-          if (err.error?.error === 'mfa_required' || err.error?.error === 'mfa_invalid') {
-            if (err.error?.error === 'mfa_required') {
+          if (bodyErrorCode === 'mfa_required' || bodyErrorCode === 'mfa_invalid') {
+            if (bodyErrorCode === 'mfa_required') {
               this.showMfaState.set(true)
             }
-            if (err.error?.error === 'mfa_invalid') {
+            if (bodyErrorCode === 'mfa_invalid') {
               this.showMfaState.set(true)
               this.mfaErrorState.set(true)
             }
           } else {
             this.authenticationErrorState.set(true)
+            this.backendErrorCodeState.set(bodyErrorCode)
             this.backendErrorMessageState.set(bodyMessage)
           }
         } else {

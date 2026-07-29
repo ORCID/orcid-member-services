@@ -1,10 +1,20 @@
 <div class="modal-body login-page">
   <div class="login-panel">
         @if (authenticationError) {
-          @if (backendErrorMessage) {
+          @if (backendErrorCode === 'deactivated_member') {
+            <div class="alert alert-danger">
+              Your organization is not an active ORCID member. Please contact
+              <a href="mailto:membership@orcid.org">membership@orcid.org</a>
+              to reactivate your membership.
+            </div>
+          } @else if (backendErrorCode === 'invalid_credentials' || backendErrorCode === 'bad_credentials') {
+            <div class="alert alert-danger">
+              Invalid sign in credentials. Please check your email and password and try again.
+            </div>
+          } @else if (backendErrorMessage) {
             <!-- If we have a body message, show it (bypasses the static i18n) -->
             <div class="alert alert-danger">
-              <strong>Failed to sign in!</strong> {{ backendErrorMessage }}
+              {{ backendErrorMessage }}
             </div>
           } @else {
             <!-- Your original, completely untouched block for perfect i18n compatibility -->
