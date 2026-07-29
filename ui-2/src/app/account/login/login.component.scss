@@ -14,13 +14,12 @@
 	width: min(100%, 36rem);
 }
 
-.forgot-password-btn {
-	background: none;
-	border: none;
-	padding: 0;
-	font: inherit;
-	font-weight: 700;
-	color: inherit;
+.forgot-password-link {
+	color: #0d6efd;
 	cursor: pointer;
 	text-decoration: underline;
+
+	&:hover {
+		color: #0a58ca;
+	}
 }

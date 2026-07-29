@@ -55,15 +55,15 @@
           </button>
         </form>
         <p></p>
-        <div class="alert alert-warning">
-          <button
-            type="button"
-            class="forgot-password-btn"
-            (click)="requestResetPassword()"
-            i18n="@@login.password.forgot.string"
-          >
-            Did you forget your password?
-          </button>
-        </div>
+        <a
+          role="button"
+          class="forgot-password-link"
+          (click)="requestResetPassword()"
+          (keydown.enter)="requestResetPassword()"
+          tabindex="0"
+          i18n="@@login.password.forgot.string"
+        >
+          Did you forget your password?
+        </a>
   </div>
 </div>
