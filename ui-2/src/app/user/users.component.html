@@ -6,15 +6,6 @@
         <fa-icon [icon]="faPlus" />
         <span i18n="@@gatewayApp.msUserServiceMSUser.home.createLabel.string">Add user </span>
       </button>
-      <button
-        *appHasAnyAuthority="'ROLE_ADMIN'"
-        id="jh-upload-entities"
-        class="btn btn-primary jh-create-entity create-ms-user ms-1"
-        [routerLink]="['/' + 'users', { outlets: { popup: 'import' } }]"
-      >
-        <fa-icon [icon]="faPlus" />
-        <span i18n="@@gatewayApp.msUserServiceMSUser.home.uploadLabel.string">Import users from CSV </span>
-      </button>
     </div>
   </div>
   <div class="row">
