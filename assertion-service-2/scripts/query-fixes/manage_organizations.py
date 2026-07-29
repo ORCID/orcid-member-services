@@ -206,7 +206,7 @@ class UpdateOrganizationMember:
 
 class UpdateOrganizationsAssertions:
 
-    def __init__(self, connection_to_db: MongoDBConnection, target: str, source: str, member_target: Any, merge: bool = False, member_source: Any = None):
+    def __init__(self, connection_to_db: MongoDBConnection, target: str, source: str, member_target: Any, merge: bool = False):
         self.connection_to_db = connection_to_db
         self.collection_assertion = connection_to_db.get_collection('assertion')
         self.collection_orcid_record = connection_to_db.get_collection('orcid_record')
@@ -223,18 +223,6 @@ class UpdateOrganizationsAssertions:
         self.salesforce_id_target = (
             member_target.get('salesforce_id')
             if member_target and member_target.get('salesforce_id') is not None
-            else None
-        )
-        self.member_name_target = (
-            member_target.get('client_name')
-            if member_target and member_target.get('client_name') is not None
-            else None
-        )
-        # On merge the source org's client_id is the winning value and is
-        # applied to every record that ends up under the target org.
-        self.client_id_source = (
-            member_source.get('client_id')
-            if member_source and member_source.get('client_id') is not None
             else None
         )
 
@@ -392,8 +380,6 @@ class UpdateOrganizationsAssertions:
             update_fields = {'member_id': self.member_id_target}
             if self.salesforce_id_target:
                 update_fields['salesforce_id'] = self.salesforce_id_target
-            if self.member_name_target:
-                update_fields['member_name'] = self.member_name_target
 
             result = self.collection_assertion.update_many(
                 {'member_id': self.source},
@@ -403,15 +389,6 @@ class UpdateOrganizationsAssertions:
             logger.info(f" Successfully updated {result.modified_count} affiliations")
             logger.info(f"   Matched: {result.matched_count}")
             logger.info(f"   Modified: {result.modified_count}")
-
-            if self.merge and self.client_id_source:
-                client_result = self.collection_assertion.update_many(
-                    {'member_id': self.target},
-                    {'$set': {'client_id': self.client_id_source}}
-                )
-                logger.info(
-                    f"   client_id set to {self.client_id_source} on {client_result.modified_count} assertions"
-                )
 
             return result.modified_count
 
@@ -504,15 +481,6 @@ class UpdateOrganizationsAssertions:
             logger.info(f"   Matched: {result.matched_count}")
             logger.info(f"   Modified: {result.modified_count}")
 
-            if self.merge and self.client_id_source:
-                client_result = self.collection_send_notifications_request.update_many(
-                    {'member_id': self.target},
-                    {'$set': {'client_id': self.client_id_source}}
-                )
-                logger.info(
-                    f"   client_id set to {self.client_id_source} on {client_result.modified_count} send notifications request"
-                )
-
             return result.modified_count
 
         except OperationFailure as e:
@@ -558,7 +526,7 @@ class UpdateOrganizationsAssertions:
 
 class UpdateOrganizationsUser:
 
-    def __init__(self, connection_to_db: MongoDBConnection, collection: str, target: str, source: str, member_target: Any, merge: bool, force_update: bool, member_source: Any = None):
+    def __init__(self, connection_to_db: MongoDBConnection, collection: str, target: str, source: str, member_target: Any, merge: bool, force_update: bool):
         self.connection_to_db = connection_to_db
         self.collection_users = connection_to_db.get_collection(collection)
         self.target = target
@@ -576,13 +544,6 @@ class UpdateOrganizationsUser:
         self.salesforce_id_target = (
             member_target.get('salesforce_id')
             if member_target and member_target.get('salesforce_id') is not None
-            else None
-        )
-        # On merge the source org's client_id is the winning value and is
-        # applied to every user that ends up under the target org.
-        self.client_id_source = (
-            member_source.get('client_id')
-            if member_source and member_source.get('client_id') is not None
             else None
         )
 
@@ -703,15 +664,6 @@ class UpdateOrganizationsUser:
             logger.info(f"   Matched: {result.matched_count}")
             logger.info(f"   Modified: {result.modified_count}")
 
-            if self.merge and self.client_id_source:
-                client_result = self.collection_users.update_many(
-                    {'member_id': self.target},
-                    {'$set': {'client_id': self.client_id_source}}
-                )
-                logger.info(
-                    f"   client_id set to {self.client_id_source} on {client_result.modified_count} users"
-                )
-
             return result.modified_count
 
         except OperationFailure as e:
@@ -810,7 +762,7 @@ def main():
         member_target = fixer_memberservice.find_problematic_members()
         member_source = fixer_memberservice.source_member
 
-        fixer_assertionservice = UpdateOrganizationsAssertions(connection_assertionservice, target, source, member_target, merge, member_source)
+        fixer_assertionservice = UpdateOrganizationsAssertions(connection_assertionservice, target, source, member_target, merge)
 
         assertions = fixer_assertionservice.find_problematic_assertions()
 
@@ -824,7 +776,7 @@ def main():
 
         fixer_assertionservice.print_send_notifications_request_report(send_notifications_request)
 
-        fixer_userservice = UpdateOrganizationsUser(connection_userservice, 'jhi_user', target, source, member_target, merge, force_update, member_source)
+        fixer_userservice = UpdateOrganizationsUser(connection_userservice, 'jhi_user', target, source, member_target, merge, force_update)
 
         users_list, remove_owner_flag = fixer_userservice.find_problematic_users()
 
