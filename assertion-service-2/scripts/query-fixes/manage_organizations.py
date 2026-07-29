@@ -4,29 +4,32 @@ Script to Update or Merge Organizations
 
 This script accepts the following parameters:
 
-- Target Salesforce Organization ID (--target)
-
-- Salesforce Organization ID to update (--source)
+- Target member id (--target) internal member._id (24-char hex ObjectId)
+- Source member id (--source) internal member._id to reassign records from
 - Merge member flag (--merge)
-- Force update member SF id (--force_update)
 
-All references to the organization being updated (including users and assertions) are reassigned to the Target Salesforce Organization ID.
-For merge/update operations the internal member_id (member._id) on the related records (assertions, orcid_record tokens, send_notifications_request and users) is also updated to the target member, so records stay linked to the correct member.
+Records are matched by the internal member_id field (not salesforce_id), because
+some records may not have a salesforce_id. All related records (assertions,
+orcid_record tokens, send_notifications_request and users) whose member_id equals
+the source are reassigned to the target member: member_id is set to the target and
+salesforce_id is set to the target member's salesforce_id (when it has one).
 
-If the --merge flag is provided, the script deletes the updated (now obsolete) Salesforce Organization record from the member collection after all references have been successfully updated.
-If the --force_update flag is provided, the script update the SF id of the source member.
-
+If the --merge flag is provided, the script deletes the source member document from
+the member collection after all references have been successfully reassigned, and
+the source member's client_id becomes the surviving (target) member's client_id.
 
 Related to: https://app.clickup.com/t/9014437828/PD-3781
 
 Usage:
-    python manage_organizations.py --target=0012i00000eiI3CAAU --source=0012i00000aQxlxAAC
+    python manage_organizations.py --target=<target_member_id> --source=<source_member_id>
 """
 
 import argparse
 import sys
 from pathlib import Path
 from typing import List, Dict, Any, Tuple
+from bson import ObjectId
+from bson.errors import InvalidId
 from pymongo.errors import OperationFailure
 
 CURRENT_DIR = Path(__file__).resolve().parent
@@ -60,6 +63,8 @@ class UpdateOrganizationMember:
     def find_problematic_members(self) -> Any:
         """
         Find members to update.
+
+        Members are looked up by their internal _id (member_id).
         """
 
         try:
@@ -67,9 +72,9 @@ class UpdateOrganizationMember:
             logger.info("Searching for members to update...")
             logger.info("="*80)
 
-            if len(self.target) != 18:
+            if self.force_update:
                 raise ValueError(
-                    f"Error! Target should be 18 characters: target={self.target}"
+                    "Error! --force_update is not supported when keying by member_id"
                 )
 
             if self.target == self.source:
@@ -77,19 +82,24 @@ class UpdateOrganizationMember:
                     f"Error! Source and target member cannot be the same source={self.source} target={self.target}"
                 )
 
+            try:
+                source_object_id = ObjectId(self.source)
+                target_object_id = ObjectId(self.target)
+            except (InvalidId, TypeError):
+                raise ValueError(
+                    f"Error! source and target must be valid member_id values "
+                    f"(24-char hex ObjectId): source={self.source}, target={self.target}"
+                )
+
             source = self.collection_member.find_one(
-                {"salesforce_id": self.source}
+                {"_id": source_object_id}
             )
 
             target = self.collection_member.find_one(
-                {"salesforce_id": self.target}
+                {"_id": target_object_id}
             )
 
             if self.merge:
-                if not source and not target:
-                    raise ValueError(
-                        f"Error! Members to merge not found: source={self.source}, target={self.target}"
-                    )
                 if not target:
                     raise ValueError(
                         f"Error! Member to merge not found: target={self.target}"
@@ -97,17 +107,6 @@ class UpdateOrganizationMember:
                 if not source:
                     raise ValueError(
                         f"Error! Member to merge not found: source={self.source}"
-                    )
-
-            if self.force_update:
-                if not source:
-                    raise ValueError(
-                        f"Error! Member to update not found: source={self.source}"
-                    )
-
-                if target:
-                    raise ValueError(
-                        f"Error! Member to update already exist: target={self.target}"
                     )
             else:
                 if not target:
@@ -119,28 +118,30 @@ class UpdateOrganizationMember:
 
             if source:
                 logger.info(
-                    "Found source member to %s salesforce_id=%s, client_name=%s",
+                    "Found source member to %s member_id=%s, salesforce_id=%s, client_name=%s",
                     action,
+                    self.source,
                     source.get("salesforce_id"),
                     source.get("client_name"),
                 )
             else:
                 logger.info(
-                    "Source member not found %s salesforce_id=%s",
+                    "Source member not found %s member_id=%s",
                     action,
                     self.source
                 )
 
             if target:
                 logger.info(
-                    "Found target member %s salesforce_id=%s, client_name=%s",
+                    "Found target member %s member_id=%s, salesforce_id=%s, client_name=%s",
                     action,
+                    self.target,
                     target.get("salesforce_id"),
                     target.get("client_name"),
                 )
             else:
                 logger.info(
-                    "Target member %s not found salesforce_id=%s",
+                    "Target member %s not found member_id=%s",
                     action,
                     self.target
                 )
@@ -149,8 +150,6 @@ class UpdateOrganizationMember:
             self.source_member = source
             self.target_member = target
 
-            if self.force_update:
-                return source
             return target
 
         except OperationFailure as e:
@@ -162,7 +161,7 @@ class UpdateOrganizationMember:
 
     def update_member(self):
         try:
-            logger.info("Updating member salesforce_id=%s", self.source)
+            logger.info("Updating member member_id=%s", self.source)
 
             if self.merge:
                 source_client_id = (
@@ -171,23 +170,23 @@ class UpdateOrganizationMember:
                 )
                 if source_client_id:
                     member_result = self.collection_member.update_one(
-                        {"salesforce_id": self.target},
+                        {"_id": ObjectId(self.target)},
                         {"$set": {"client_id": source_client_id}}
                     )
                     if member_result.modified_count == 1:
                         logger.info(
-                            "Updated target member salesforce_id=%s client_id to %s",
+                            "Updated target member member_id=%s client_id to %s",
                             self.target,
                             source_client_id
                         )
                     else:
                         logger.info(
-                            "Target member salesforce_id=%s client_id already %s",
+                            "Target member member_id=%s client_id already %s",
                             self.target,
                             source_client_id
                         )
 
-                result = self.collection_member.delete_one({"salesforce_id": self.source})
+                result = self.collection_member.delete_one({"_id": ObjectId(self.source)})
 
                 if result.deleted_count == 1:
                     logger.info(
@@ -196,25 +195,7 @@ class UpdateOrganizationMember:
                     )
                 else:
                     logger.error(
-                        "Failed to delete member salesforce_id=%s",
-                        self.source
-                    )
-
-            if self.force_update:
-                result = self.collection_member.update_one(
-                    {"salesforce_id": self.source},
-                    {"$set": {"salesforce_id": self.target}}
-                )
-
-                if result.modified_count == 1:
-                    logger.info(
-                        "Updated member salesforce_id from %s to %s",
-                        self.source,
-                        self.target
-                    )
-                else:
-                    logger.warning(
-                        "Member salesforce_id=%s already up to date",
+                        "Failed to delete member member_id=%s",
                         self.source
                     )
 
@@ -239,6 +220,16 @@ class UpdateOrganizationsAssertions:
             if member_target and member_target.get('_id') is not None
             else None
         )
+        self.salesforce_id_target = (
+            member_target.get('salesforce_id')
+            if member_target and member_target.get('salesforce_id') is not None
+            else None
+        )
+        self.member_name_target = (
+            member_target.get('client_name')
+            if member_target and member_target.get('client_name') is not None
+            else None
+        )
         # On merge the source org's client_id is the winning value and is
         # applied to every record that ends up under the target org.
         self.client_id_source = (
@@ -257,7 +248,7 @@ class UpdateOrganizationsAssertions:
 
         try:
             logger.info("Searching for assertions to update...")
-            assertions = list(self.collection_assertion.find({ 'salesforce_id': self.source }))
+            assertions = list(self.collection_assertion.find({ 'member_id': self.source }))
             logger.info(f"Found {len(assertions)} assertions to fix")
             return assertions
         except OperationFailure as e:
@@ -290,13 +281,13 @@ class UpdateOrganizationsAssertions:
                                         '$and': [
                                             {
                                                 '$eq': [
-                                                    {'$type': '$$token.salesforce_id'},
+                                                    {'$type': '$$token.member_id'},
                                                     'string'
                                                 ]
                                             },
                                             {
                                                 '$eq': [
-                                                    '$$token.salesforce_id',
+                                                    '$$token.member_id',
                                                     self.source
                                                 ]
                                             }
@@ -330,7 +321,7 @@ class UpdateOrganizationsAssertions:
 
         try:
             logger.info("Searching for send notifications request to update...")
-            send_notifications_request = list(self.collection_send_notifications_request.find({ 'salesforce_id': self.source }))
+            send_notifications_request = list(self.collection_send_notifications_request.find({ 'member_id': self.source }))
             logger.info(f"Found {len(send_notifications_request)} send notifications request to fix")
             return send_notifications_request
         except OperationFailure as e:
@@ -351,7 +342,7 @@ class UpdateOrganizationsAssertions:
         logger.info("="*80)
 
         for i, rec in enumerate(assertions, 1):
-            logger.info(f" Email: {rec.get('email')}, Salesforce Id: {rec.get('salesforce_id')}")
+            logger.info(f" Email: {rec.get('email')}, Member Id: {rec.get('member_id')}, Salesforce Id: {rec.get('salesforce_id')}")
 
         logger.info("\n" + "="*80)
 
@@ -379,7 +370,7 @@ class UpdateOrganizationsAssertions:
         logger.info("="*80)
 
         for i, rec in enumerate(send_notifications_request, 1):
-            logger.info(f" Email: {rec.get('email')} Salesforce Id: {rec.get('salesforce_id')}")
+            logger.info(f" Email: {rec.get('email')} Member Id: {rec.get('member_id')} Salesforce Id: {rec.get('salesforce_id')}")
 
         logger.info("\n" + "="*80)
 
@@ -398,12 +389,14 @@ class UpdateOrganizationsAssertions:
 
         try:
 
-            update_fields = {'salesforce_id': self.target}
-            if self.member_id_target:
-                update_fields['member_id'] = self.member_id_target
+            update_fields = {'member_id': self.member_id_target}
+            if self.salesforce_id_target:
+                update_fields['salesforce_id'] = self.salesforce_id_target
+            if self.member_name_target:
+                update_fields['member_name'] = self.member_name_target
 
             result = self.collection_assertion.update_many(
-                {'salesforce_id': self.source},
+                {'member_id': self.source},
                 {'$set': update_fields}
             )
 
@@ -413,7 +406,7 @@ class UpdateOrganizationsAssertions:
 
             if self.merge and self.client_id_source:
                 client_result = self.collection_assertion.update_many(
-                    {'salesforce_id': self.target},
+                    {'member_id': self.target},
                     {'$set': {'client_id': self.client_id_source}}
                 )
                 logger.info(
@@ -450,25 +443,25 @@ class UpdateOrganizationsAssertions:
                 tokens = orcid_record.get("tokens", [])
 
                 for t in tokens:
-                    salesforce_id_update = self.source
-                    salesforce_id_target = self.target
-                    if salesforce_id_update == t.get("salesforce_id"):
+                    member_id_update = self.source
+                    member_id_target = self.member_id_target
+                    if member_id_update == t.get("member_id"):
                         token_set_fields = {
-                            "tokens.$[token].salesforce_id": salesforce_id_target,
+                            "tokens.$[token].member_id": member_id_target,
                         }
-                        if self.member_id_target:
-                            token_set_fields["tokens.$[token].member_id"] = self.member_id_target
+                        if self.salesforce_id_target:
+                            token_set_fields["tokens.$[token].salesforce_id"] = self.salesforce_id_target
 
                         result = self.collection_orcid_record.update_one(
                             {"_id": orcid_record["_id"]},
                             {"$set": token_set_fields},
                             array_filters=[
-                                {"token.salesforce_id": salesforce_id_update}
+                                {"token.member_id": member_id_update}
                             ]
                         )
                         modified_count += result.modified_count
                         logger.info(
-                            f"Updated SF iD: source={salesforce_id_update}, target={salesforce_id_target}"
+                            f"Updated member_id: source={member_id_update}, target={member_id_target}"
                         )
 
             logger.info(f" Successfully updated {modified_count} orcid records")
@@ -498,12 +491,12 @@ class UpdateOrganizationsAssertions:
 
         try:
 
-            update_fields = {'salesforce_id': self.target}
-            if self.member_id_target:
-                update_fields['member_id'] = self.member_id_target
+            update_fields = {'member_id': self.member_id_target}
+            if self.salesforce_id_target:
+                update_fields['salesforce_id'] = self.salesforce_id_target
 
             result = self.collection_send_notifications_request.update_many(
-                {'salesforce_id': self.source},
+                {'member_id': self.source},
                 {'$set': update_fields}
             )
 
@@ -513,7 +506,7 @@ class UpdateOrganizationsAssertions:
 
             if self.merge and self.client_id_source:
                 client_result = self.collection_send_notifications_request.update_many(
-                    {'salesforce_id': self.target},
+                    {'member_id': self.target},
                     {'$set': {'client_id': self.client_id_source}}
                 )
                 logger.info(
@@ -580,6 +573,11 @@ class UpdateOrganizationsUser:
             if member_target and member_target.get('_id') is not None
             else None
         )
+        self.salesforce_id_target = (
+            member_target.get('salesforce_id')
+            if member_target and member_target.get('salesforce_id') is not None
+            else None
+        )
         # On merge the source org's client_id is the winning value and is
         # applied to every user that ends up under the target org.
         self.client_id_source = (
@@ -603,8 +601,8 @@ class UpdateOrganizationsUser:
             logger.info("Searching for users to update...")
             logger.info("="*80)
 
-            users_source = list(self.collection_users.find({ 'salesforce_id': self.source }))
-            users_target = list(self.collection_users.find({ 'salesforce_id': self.target }))
+            users_source = list(self.collection_users.find({ 'member_id': self.source }))
+            users_target = list(self.collection_users.find({ 'member_id': self.target }))
 
             logger.info(f"Found {len(users_source)} users to fix")
             owner_target = False
@@ -619,7 +617,7 @@ class UpdateOrganizationsUser:
                 for user in users_target:
                     if user.get("main_contact"):
                         logger.info(
-                            "User email=%s is the organization owner of the target salesforce_id=%s",
+                            "User email=%s is the organization owner of the target member_id=%s",
                             user.get("email"),
                             self.target,
                         )
@@ -653,7 +651,7 @@ class UpdateOrganizationsUser:
         logger.info("="*80)
 
         for i, rec in enumerate(users, 1):
-            logger.info(f" email: {rec.get('email')} Salesforce Id: {rec.get('salesforce_id')} Main contact {rec.get('main_contact')}")
+            logger.info(f" email: {rec.get('email')} Member Id: {rec.get('member_id')} Salesforce Id: {rec.get('salesforce_id')} Main contact {rec.get('main_contact')}")
 
         logger.info("\n" + "="*80)
 
@@ -680,24 +678,24 @@ class UpdateOrganizationsUser:
 
                 if result_owner.modified_count == 1:
                     logger.info(
-                        "Removing organization owner flag from source member salesforce_id %s",
+                        "Removing organization owner flag from source member member_id %s",
                         self.source
                     )
                 else:
                     logger.info(
-                        "Error updating organization owner flag from source member salesforce_id %s",
+                        "Error updating organization owner flag from source member member_id %s",
                         self.source
                     )
 
             update_fields = {
-                'salesforce_id': self.target,
+                'member_id': self.member_id_target,
                 'member_name': self.member_target.get('client_name')
             }
-            if self.member_id_target:
-                update_fields['member_id'] = self.member_id_target
+            if self.salesforce_id_target:
+                update_fields['salesforce_id'] = self.salesforce_id_target
 
             result = self.collection_users.update_many(
-                {'salesforce_id': self.source},
+                {'member_id': self.source},
                 {'$set': update_fields}
             )
 
@@ -707,7 +705,7 @@ class UpdateOrganizationsUser:
 
             if self.merge and self.client_id_source:
                 client_result = self.collection_users.update_many(
-                    {'salesforce_id': self.target},
+                    {'member_id': self.target},
                     {'$set': {'client_id': self.client_id_source}}
                 )
                 logger.info(
@@ -748,8 +746,8 @@ Examples:
     )
 
     parser.add_argument('--mongo-uri', help='MongoDB URI (overrides env)')
-    parser.add_argument('--target', help='Target organization SF iD')
-    parser.add_argument('--source', help='Organization SF iD to update')
+    parser.add_argument('--target', help='Target member_id (member._id)')
+    parser.add_argument('--source', help='Source member_id (member._id) to reassign records from')
     parser.add_argument(
         "--merge",
         action="store_true",
@@ -758,7 +756,7 @@ Examples:
     parser.add_argument(
         "--force_update",
         action="store_true",
-        help="Update the source member salesforce id"
+        help="Deprecated: not supported when keying by member_id"
     )
 
     return parser.parse_args()
@@ -784,8 +782,8 @@ def main():
     logger.info(f"Databases: {database_assertionservice}, {database_userservice} and {database_memberservice} ")
     logger.info(f"Collections: assertion, orcid_record, send_notifications_request, jhi_user and member")
     logger.info(f"MongoDB URI: {mongo_uri[:20]}..." if len(mongo_uri) > 20 else f"MongoDB URI: {mongo_uri}")
-    logger.info(f"Target SF iD: {target}")
-    logger.info(f"Source SF iD: {source}")
+    logger.info(f"Target member_id: {target}")
+    logger.info(f"Source member_id: {source}")
     logger.info(f"Merge option: {merge}")
     logger.info(f"Force update member option: {force_update}")
     logger.info("="*80 + "\n")
