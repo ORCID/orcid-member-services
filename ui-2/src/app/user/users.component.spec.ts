@@ -220,4 +220,22 @@ describe('UsersComponent', () => {
       .filter((el) => el.nativeElement.textContent.includes('API credentials'))
     expect(apiCredentialsHeaders.length).toEqual(0)
   })
+
+  it('should render create user button', () => {
+    component.ngOnInit()
+    fixture.detectChanges()
+
+    const createButton = fixture.debugElement.query(By.css('#jh-create-entity'))
+    expect(createButton).toBeTruthy()
+    expect(createButton.nativeElement.textContent).toContain('Add user')
+  })
+
+  it('should not render csv upload button after upload feature removal', () => {
+    component.ngOnInit()
+    fixture.detectChanges()
+
+    const uploadButton = fixture.debugElement.query(By.css('#jh-upload-entities'))
+    expect(uploadButton).toBeNull()
+    expect(fixture.nativeElement.textContent).not.toContain('Import users from CSV')
+  })
 })
