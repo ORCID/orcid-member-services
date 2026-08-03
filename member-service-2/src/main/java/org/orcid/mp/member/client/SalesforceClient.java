@@ -216,8 +216,7 @@ public class SalesforceClient {
 
     private String getSFMembers() {
         String query = "SELECT Account.Id, Account.Consortium_Lead__c, Account.OwnerId, Account.Name, Account.Public_Display_Name__c, Account.Website, Account.BillingCountry, Account.Research_Community__c, Account.Consortia_Member__c, RecordTypeId, "
-                + "Account.Public_Display_Description__c, Account.Logo_Description__c, Account.Public_Display_Email__c, Account.Last_membership_start_date__c, Account.Last_membership_end_date__c, Account.Active_Member__c FROM Account "
-                + "WHERE Active_Member__c=TRUE";
+                + "Account.Public_Display_Description__c, Account.Logo_Description__c, Account.Public_Display_Email__c, Account.Last_membership_start_date__c, Account.Last_membership_end_date__c, Account.Active_Member__c FROM Account";
         return query(query);
     }
 

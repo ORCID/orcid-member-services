@@ -329,18 +329,18 @@ public class SalesforceService {
     }
 
     private List<MemberDetails> getAllMembers() throws JsonProcessingException {
-        List<MemberDetails> activeMembers = new ArrayList<>();
-        String activeMembersJson = salesforceClient.getMembers();
+        List<MemberDetails> members = new ArrayList<>();
+        String membersJson = salesforceClient.getMembers();
 
-        MembersPage membersPage = objectMapper.readValue(activeMembersJson, MembersPage.class);
-        activeMembers.addAll(membersPage.getRecords());
+        MembersPage membersPage = objectMapper.readValue(membersJson, MembersPage.class);
+        members.addAll(membersPage.getRecords());
 
         while (!membersPage.isDone()) {
-            activeMembersJson = salesforceClient.fetchDataFromUrl(membersPage.getNextRecordsUrl());
-            membersPage = objectMapper.readValue(activeMembersJson, MembersPage.class);
-            activeMembers.addAll(membersPage.getRecords());
+            membersJson = salesforceClient.fetchDataFromUrl(membersPage.getNextRecordsUrl());
+            membersPage = objectMapper.readValue(membersJson, MembersPage.class);
+            members.addAll(membersPage.getRecords());
         }
-        return activeMembers;
+        return members;
     }
 
     private Map<String, Object> getDataMapForUpdate(MemberUpdateData memberData) {
