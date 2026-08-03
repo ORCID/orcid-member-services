@@ -364,33 +364,21 @@ public class SalesforceServiceTest {
         assertThat(updatedMembers.get(0)).isNotNull();
         assertThat(updatedMembers.get(0).getSalesforceId()).isEqualTo("0011000001XYZ01");
         assertThat(updatedMembers.get(0).getClientName()).isEqualTo("Global Research University");
-        assertThat(updatedMembers.get(0).isActive()).isTrue();
-        assertThat(updatedMembers.get(0).getActivatedDate()).isNotNull();
-        assertThat(updatedMembers.get(0).getDeactivatedDate()).isNull();
         assertThat(updatedMembers.get(1)).isNotNull();
         assertThat(updatedMembers.get(1).getSalesforceId()).isEqualTo("0011000002XYZ02");
         assertThat(updatedMembers.get(1).getClientName()).isEqualTo("Consortium Sub-Member A");
-        assertThat(updatedMembers.get(1).isActive()).isTrue();
-        assertThat(updatedMembers.get(1).getActivatedDate()).isNull(); // hasn't just been activated
-        assertThat(updatedMembers.get(1).getDeactivatedDate()).isNull();
         assertThat(updatedMembers.get(2)).isNotNull();
         assertThat(updatedMembers.get(2).getSalesforceId()).isEqualTo("0011000003XYZ03");
         assertThat(updatedMembers.get(2).getClientName()).isEqualTo("Consortium Sub-Member B");
-        assertThat(updatedMembers.get(2).isActive()).isTrue();
-        assertThat(updatedMembers.get(2).getActivatedDate()).isNull();
-        assertThat(updatedMembers.get(2).getDeactivatedDate()).isNull();
         assertThat(updatedMembers.get(3)).isNotNull();
         assertThat(updatedMembers.get(3).getSalesforceId()).isEqualTo("0011000004XYZ04");
         assertThat(updatedMembers.get(3).getClientName()).isEqualTo("Legacy Research Lab");
-        assertThat(updatedMembers.get(3).isActive()).isFalse();
-        assertThat(updatedMembers.get(3).getDeactivatedDate()).isNotNull();
-        assertThat(updatedMembers.get(3).getActivatedDate()).isNull();
         assertThat(updatedMembers.get(4)).isNotNull();
         assertThat(updatedMembers.get(4).getSalesforceId()).isEqualTo("0011000005XYZ05");
         assertThat(updatedMembers.get(4).getClientName()).isEqualTo("New Horizon Publisher");
-        assertThat(updatedMembers.get(4).isActive()).isTrue();
-        assertThat(updatedMembers.get(4).getActivatedDate()).isNotNull();
-        assertThat(updatedMembers.get(4).getDeactivatedDate()).isNull();
+
+        verify(memberService, times(2)).activateMember(anyString());
+        verify(memberService, times(1)).deactivateMember(anyString());
     }
 
     @Test
@@ -592,6 +580,7 @@ public class SalesforceServiceTest {
     private Member getMember(String salesforceId, boolean active) {
         Member member = new Member();
         member.setSalesforceId(salesforceId);
+        member.setId(salesforceId); // just so not null
         member.setActive(active);
         return member;
     }

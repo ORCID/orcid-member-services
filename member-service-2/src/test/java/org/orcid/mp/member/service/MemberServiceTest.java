@@ -110,6 +110,46 @@ class MemberServiceTest {
     }
 
     @Test
+    void testActivateMember() {
+        Member member = getMember();
+        when(memberRepository.findById(anyString())).thenReturn(Optional.of(member));
+        when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+            @Override
+            public Member answer(InvocationOnMock invocation) throws Throwable {
+                return (Member) invocation.getArgument(0);
+            }
+        });
+
+        memberService.activateMember("memberId");
+
+        verify(memberRepository).save(memberCaptor.capture());
+
+        Member updatedMember = memberCaptor.getValue();
+        assertThat(updatedMember.isActive()).isTrue();
+        assertThat(updatedMember.getActivatedDate()).isNotNull();
+    }
+
+    @Test
+    void testDeactivateMember() {
+        Member member = getMember();
+        when(memberRepository.findById(anyString())).thenReturn(Optional.of(member));
+        when(memberRepository.save(Mockito.any(Member.class))).thenAnswer(new Answer<Member>() {
+            @Override
+            public Member answer(InvocationOnMock invocation) throws Throwable {
+                return (Member) invocation.getArgument(0);
+            }
+        });
+
+        memberService.deactivateMember("memberId");
+
+        verify(memberRepository).save(memberCaptor.capture());
+
+        Member updatedMember = memberCaptor.getValue();
+        assertThat(updatedMember.isActive()).isFalse();
+        assertThat(updatedMember.getDeactivatedDate()).isNotNull();
+    }
+
+    @Test
     void testUpdateMember() {
         Instant orinalLastModifiedDate = Instant.now().minusSeconds(1000);
 
