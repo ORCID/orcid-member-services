@@ -303,29 +303,25 @@ public class SalesforceService {
     }
 
     private void updateExistingMemberWithSalesforceData(Member member, MemberDetails salesforceMemberData, boolean consortiumLead) {
-        member = updateMemberMetadata(member, salesforceMemberData, consortiumLead);
-        member = updateMemberStatus(member, salesforceMemberData);
-        memberService.updateMember(member, SALESFORCE_SYNC_USERNAME);
+        updateMemberMetadata(member, salesforceMemberData, consortiumLead);
+        updateMemberStatus(member, salesforceMemberData);
     }
 
-    private Member updateMemberStatus(Member member, MemberDetails salesforceMemberData) {
+    private void updateMemberStatus(Member member, MemberDetails salesforceMemberData) {
         if (salesforceMemberData.isActiveMember() && !member.isActive()) {
-            LOG.info("Activating member {}", member.getId());
-            member.setActive(true);
-            member.setActivatedDate(Instant.now());
+            LOG.info("Activating member {}", member.getSalesforceId());
+            memberService.activateMember(member.getId());
         } else if (!salesforceMemberData.isActiveMember() && member.isActive()) {
-            LOG.info("Deactivating member {}", member.getId());
-            member.setActive(false);
-            member.setDeactivatedDate(Instant.now());
+            LOG.info("Deactivating member {}", member.getSalesforceId());
+            memberService.deactivateMember(member.getId());
         }
-        return member;
     }
 
-    private Member updateMemberMetadata(Member member, MemberDetails salesforceMemberData, boolean consortiumLead) {
+    private void updateMemberMetadata(Member member, MemberDetails salesforceMemberData, boolean consortiumLead) {
         LOG.debug("SF sync setting member {} name to {}", member.getId(), salesforceMemberData.getName());
         member.setClientName(salesforceMemberData.getName());
         member.setIsConsortiumLead(consortiumLead);
-        return member;
+        memberService.updateMember(member, SALESFORCE_SYNC_USERNAME);
     }
 
     private List<MemberDetails> getAllMembers() throws JsonProcessingException {

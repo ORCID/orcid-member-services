@@ -88,6 +88,30 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    public void activateMember(String memberId) {
+        Optional<Member> optional = memberRepository.findById(memberId);
+        if (optional.isPresent()) {
+            Member member = optional.get();
+            member.setActivatedDate(Instant.now());
+            member.setActive(true);
+            memberRepository.save(member);
+        } else {
+            throw new RuntimeException("Member " + memberId + " not found");
+        }
+    }
+
+    public void deactivateMember(String memberId) {
+        Optional<Member> optional = memberRepository.findById(memberId);
+        if (optional.isPresent()) {
+            Member member = optional.get();
+            member.setDeactivatedDate(Instant.now());
+            member.setActive(false);
+            memberRepository.save(member);
+        } else {
+            throw new RuntimeException("Member " + memberId + " not found");
+        }
+    }
+
     public Member updateMember(Member member, String updatedBy) {
         Optional<Member> optional = memberRepository.findById(member.getId());
         validateMemberUpdate(member, optional);
@@ -235,7 +259,7 @@ public class MemberService {
                 || !Objects.equals(latestCopy.getIsConsortiumLead(), dbCopy.getIsConsortiumLead())
                 || !Objects.equals(latestCopy.getSuperadminEnabled(), dbCopy.getSuperadminEnabled())
                 || !Objects.equals(latestCopy.getClientName(), dbCopy.getClientName())
-                || latestCopy.isActive() != dbCopy.isActive() // primitive boolean, safe to compare directly
+                || latestCopy.isActive() != dbCopy.isActive()
                 || !Objects.equals(latestCopy.getActivatedDate(), dbCopy.getActivatedDate())
                 || !Objects.equals(latestCopy.getDeactivatedDate(), dbCopy.getDeactivatedDate())
                 || !Objects.equals(latestCopy.getDefaultLanguage(), dbCopy.getDefaultLanguage())
