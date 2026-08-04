@@ -111,10 +111,6 @@ public class Assertion implements Serializable {
     private String ownerId;
 
     @Indexed
-    @Field("salesforce_id")
-    private String salesforceId;
-
-    @Indexed
     @Field("member_id")
     private String memberId;
 
@@ -372,16 +368,6 @@ public class Assertion implements Serializable {
         this.ownerId = ownerId;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters
-    // and setters here, do not remove
-    public String getSalesforceId() {
-        return salesforceId;
-    }
-
-    public void setSalesforceId(String salesforceId) {
-        this.salesforceId = salesforceId;
-    }
-
     public String getMemberId() {
         return memberId;
     }
@@ -534,7 +520,6 @@ public class Assertion implements Serializable {
         result = prime * result + ((ownerId == null) ? 0 : ownerId.hashCode());
         result = prime * result + ((putCode == null) ? 0 : putCode.hashCode());
         result = prime * result + ((roleTitle == null) ? 0 : roleTitle.hashCode());
-        result = prime * result + ((salesforceId == null) ? 0 : salesforceId.hashCode());
         result = prime * result + ((memberId == null) ? 0 : memberId.hashCode());
         result = prime * result + ((startDay == null) ? 0 : startDay.hashCode());
         result = prime * result + ((startMonth == null) ? 0 : startMonth.hashCode());
@@ -672,11 +657,6 @@ public class Assertion implements Serializable {
             if (other.roleTitle != null)
                 return false;
         } else if (!roleTitle.equals(other.roleTitle))
-            return false;
-        if (salesforceId == null) {
-            if (other.salesforceId != null)
-                return false;
-        } else if (!salesforceId.equals(other.salesforceId))
             return false;
         if (memberId == null) {
             if (other.memberId != null)
