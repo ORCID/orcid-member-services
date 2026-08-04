@@ -31,22 +31,20 @@ Notes:
 
 ## Manage Organizations
 
-Use `manage_organizations.py` to update or merge organizations, reassigning all references (assertions, orcid records, send_notifications_request, users) from one Salesforce Organization ID to another.
+Use `manage_organizations.py` to update or merge organizations, reassigning all references (assertions, orcid records, send_notifications_request, users) from one member to another. Records are matched by the internal `member_id` (member `_id`), not by `salesforce_id`, because some records may not have a `salesforce_id`.
 
 ```bash
-# Update member without deleting source
-./run-script.sh --username <user> --server <host> --assertion-docker <container> --script query-fixes/manage_organizations.py -- --target=<target_sf_id> --source=<source_sf_id>
+# Reassign records without deleting source
+./run-script.sh --username <user> --server <host> --assertion-docker <container> --script query-fixes/manage_organizations.py -- --target=<target_member_id> --source=<source_member_id>
 
-# Merge organizations (deletes source member after updating all references)
-./run-script.sh --username <user> --server <host> --assertion-docker <container> --script query-fixes/manage_organizations.py -- --target=<target_sf_id> --source=<source_sf_id> --merge
-
-# Force update source member's salesforce_id
-./run-script.sh --username <user> --server <host> --assertion-docker <container> --script query-fixes/manage_organizations.py -- --target=<target_sf_id> --source=<source_sf_id> --force_update
+# Merge organizations (deletes source member after reassigning all references)
+./run-script.sh --username <user> --server <host> --assertion-docker <container> --script query-fixes/manage_organizations.py -- --target=<target_member_id> --source=<source_member_id> --merge
 ```
 
 Notes:
-- Use `--target` for the destination Salesforce Organization ID (must exist).
-- Use `--source` for the organization to update.
-- When `--merge` is used, the script also updates `client_id` on all related documents and deletes the source member after verification.
-- When `--force_update` is used, the script updates the source member's `salesforce_id` to the target.
+- Use `--target` for the destination member_id (member `_id`, must exist).
+- Use `--source` for the member_id whose records will be reassigned.
+- Records are matched by `member_id`; each record's `salesforce_id` is set to the target member's `salesforce_id` (when the target member has one).
+- When `--merge` is used, the source member's `client_id` becomes the surviving target member's `client_id` (applied to all related documents), and the source member is deleted after verification.
+- `--force_update` is not supported when keying by member_id.
 - The script will prompt for confirmation before modifying the database.
