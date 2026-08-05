@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core'
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http'
-import { interval } from 'rxjs'
 import { KEYUTIL, KJUR, RSAKey } from 'jsrsasign'
 import { LandingPageService } from './landing-page.service'
 import { MemberService } from '../member/service/member.service'
@@ -42,8 +40,6 @@ export class LandingPageComponent implements OnInit {
   protected readonly signedInIdTokenState = signal<any>(undefined)
   private readonly givenNameState = signal<string | undefined>(undefined)
   private readonly familyNameState = signal<string | undefined>(undefined)
-  private readonly progressbarValueState = signal(100)
-  private readonly curSecState = signal(0)
   protected readonly incorrectDataMessageState = signal('')
   protected readonly linkAlreadyUsedMessageState = signal('')
   protected readonly allowToUpdateRecordMessageState = signal('')
@@ -124,7 +120,11 @@ export class LandingPageComponent implements OnInit {
     }
   }
 
-  protected processRequest(state_param: string, id_token_fragment: string | null, access_token_fragment: string | null) {
+  protected processRequest(
+    state_param: string,
+    id_token_fragment: string | null,
+    access_token_fragment: string | null
+  ) {
     this.landingPageService.getOrcidConnectionRecord(state_param).subscribe({
       next: (result) => {
         this.landingPageService.getMemberId(state_param).subscribe({
@@ -137,12 +137,12 @@ export class LandingPageComponent implements OnInit {
                 this.memberIdState.set(res.id)
                 this.oauthUrlState.set(
                   this.oauthBaseUrl +
-                  '?response_type=token&redirect_uri=' +
-                  this.redirectUri +
-                  '&client_id=' +
-                  this.clientIdState() +
-                  '&scope=/read-limited /activities/update /person/update openid&prompt=login&state=' +
-                  state_param
+                    '?response_type=token&redirect_uri=' +
+                    this.redirectUri +
+                    '&client_id=' +
+                    this.clientIdState() +
+                    '&scope=/read-limited /activities/update /person/update openid&prompt=login&state=' +
+                    state_param
                 )
 
                 this.incorrectDataMessageState.set(
@@ -182,8 +182,6 @@ export class LandingPageComponent implements OnInit {
                     }
                   }
                 }
-
-                this.startTimer(600)
               },
               error: (err: HttpErrorResponse) => {
                 console.error('Error fetching member info for member id:', memberId, err)
@@ -274,14 +272,6 @@ export class LandingPageComponent implements OnInit {
       error: (err) => {
         this.showErrorElement(err)
       },
-    })
-  }
-
-  protected startTimer(seconds: number) {
-    const timer = interval(100)
-    timer.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((sec) => {
-      this.progressbarValueState.set((sec * 100) / seconds)
-      this.curSecState.set(sec)
     })
   }
 
