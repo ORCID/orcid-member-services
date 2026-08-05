@@ -212,7 +212,7 @@ export class ContactUpdateComponent implements OnInit {
       contact.contactName = this.contact()!.name
       contact.contactMember = this.memberData()!.name
     }
-    this.memberService.updateContact(contact, this.memberData()!.id!).subscribe({
+    this.memberService.updateContact(contact, this.memberData()!.memberId!).subscribe({
       next: (res) => {
         if (res) {
           this.onSaveSuccess()
