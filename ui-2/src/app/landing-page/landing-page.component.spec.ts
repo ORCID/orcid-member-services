@@ -12,11 +12,11 @@ import { LandingPageService } from './landing-page.service'
 type LandingPageInternals = {
   processRequest: (state: string, idToken: string, accessToken: string) => void
   checkSubmitToken: (token: string, state: string, accessToken: string) => void
-  oauthUrl: string
-  showError: boolean
-  showDenied: boolean
-  showConnectionExists: boolean
-  showConnectionExistsDifferentUser: boolean
+  oauthUrlState: () => string | undefined
+  showErrorState: () => boolean
+  showDeniedState: () => boolean
+  showConnectionExistsState: () => boolean
+  showConnectionExistsDifferentUserState: () => boolean
 }
 
 const internals = (component: LandingPageComponent): LandingPageInternals =>
@@ -86,7 +86,7 @@ describe('LandingPageComponent', () => {
     )
     internals(component).processRequest('someState', '', '')
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
-    expect(internals(component).oauthUrl).toBe(
+    expect(internals(component).oauthUrlState()).toBe(
       'https://qa.orcid.org/oauth/authorize?response_type=token&redirect_uri=http://localhost:9876/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
     )
     expect(landingPageService.getPublicKey).toHaveBeenCalledTimes(0)
@@ -104,14 +104,14 @@ describe('LandingPageComponent', () => {
     landingPageService.submitUserResponse.and.returnValue(of(''))
     internals(component).processRequest('someState', '', '')
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
-    expect(internals(component).oauthUrl).toBe(
+    expect(internals(component).oauthUrlState()).toBe(
       'https://qa.orcid.org/oauth/authorize?response_type=token&redirect_uri=http://localhost:9876/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
     )
     expect(landingPageService.getPublicKey).toHaveBeenCalledTimes(0)
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalledTimes(0)
     expect(landingPageService.submitUserResponse).toHaveBeenCalled()
-    expect(internals(component).showError).toBeFalsy()
-    expect(internals(component).showDenied).toBeTruthy()
+    expect(internals(component).showErrorState()).toBeFalsy()
+    expect(internals(component).showDeniedState()).toBeTruthy()
   })
 
   it('New record connection should fail (generic error)', () => {
@@ -125,13 +125,13 @@ describe('LandingPageComponent', () => {
     landingPageService.submitUserResponse.and.returnValue(of(''))
     internals(component).processRequest('someState', '', '')
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
-    expect(internals(component).oauthUrl).toBe(
+    expect(internals(component).oauthUrlState()).toBe(
       'https://qa.orcid.org/oauth/authorize?response_type=token&redirect_uri=http://localhost:9876/landing-page&client_id=name&scope=/read-limited /activities/update /person/update openid&prompt=login&state=someState'
     )
     expect(landingPageService.getPublicKey).toHaveBeenCalledTimes(0)
     expect(windowLocationService.updateWindowLocation).toHaveBeenCalledTimes(0)
-    expect(internals(component).showError).toBeTruthy()
-    expect(internals(component).showDenied).toBeFalsy()
+    expect(internals(component).showErrorState()).toBeTruthy()
+    expect(internals(component).showDeniedState()).toBeFalsy()
   })
 
   it('Existing record connection should be identified', () => {
@@ -146,8 +146,7 @@ describe('LandingPageComponent', () => {
     landingPageService.getUserInfo.and.returnValue(of({ givenName: 'givenName', familyName: 'familyName' }))
     spyOn(KEYUTIL.KEYUTIL, 'getKey').and.returnValue(new KEYUTIL.RSAKey())
     spyOn(KEYUTIL.KJUR.jws.JWS, 'verifyJWT').and.returnValue(true)
-
-    ;internals(component).processRequest('someState', 'it_token', '')
+    internals(component).processRequest('someState', 'it_token', '')
 
     expect(landingPageService.getOrcidConnectionRecord).toHaveBeenCalled()
     expect(landingPageService.getPublicKey).toHaveBeenCalled()
@@ -161,10 +160,10 @@ describe('LandingPageComponent', () => {
     landingPageService.getUserInfo.and.returnValue(of({ givenName: 'givenName', familyName: 'familyName' }))
     spyOn(KEYUTIL.KEYUTIL, 'getKey').and.returnValue(new KEYUTIL.RSAKey())
     spyOn(KEYUTIL.KJUR.jws.JWS, 'verifyJWT').and.returnValue(true)
-    ;internals(component).checkSubmitToken('token', 'state', 'access_token')
+    internals(component).checkSubmitToken('token', 'state', 'access_token')
     expect(landingPageService.submitUserResponse).toHaveBeenCalled()
-    expect(internals(component).showConnectionExists).toBeFalsy()
-    expect(internals(component).showConnectionExistsDifferentUser).toBeTruthy()
+    expect(internals(component).showConnectionExistsState()).toBeFalsy()
+    expect(internals(component).showConnectionExistsDifferentUserState()).toBeTruthy()
   })
 
   it('Check for existing connection', () => {
@@ -174,9 +173,9 @@ describe('LandingPageComponent', () => {
     landingPageService.getUserInfo.and.returnValue(of({ givenName: 'givenName', familyName: 'familyName' }))
     spyOn(KEYUTIL.KEYUTIL, 'getKey').and.returnValue(new KEYUTIL.RSAKey())
     spyOn(KEYUTIL.KJUR.jws.JWS, 'verifyJWT').and.returnValue(true)
-    ;internals(component).checkSubmitToken('token', 'state', 'access_token')
+    internals(component).checkSubmitToken('token', 'state', 'access_token')
     expect(landingPageService.submitUserResponse).toHaveBeenCalled()
-    expect(internals(component).showConnectionExists).toBeTruthy()
-    expect(internals(component).showConnectionExistsDifferentUser).toBeFalsy()
+    expect(internals(component).showConnectionExistsState()).toBeTruthy()
+    expect(internals(component).showConnectionExistsDifferentUserState()).toBeFalsy()
   })
 })
