@@ -1,13 +1,6 @@
 <div class="container">
   <div class="row justify-content-center mt-4">
     <div class="col-md-8 text-center">
-      @if (loadingState()) {
-        <div class="app-loading">
-          <div class="spinner-border text-secondary" style="width: 5rem; height: 5rem" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
-      } @else {
         <div>
           <div class="mt-5">
             @if (showConnectionExistsState()) {
@@ -79,7 +72,6 @@
             }
           </div>
         </div>
-      }
     </div>
   </div>
 </div>
