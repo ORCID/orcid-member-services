@@ -25,7 +25,6 @@ export class LandingPageComponent implements OnInit {
   protected readonly oauthBaseUrl = ORCID_BASE_URL + '/oauth/authorize'
   protected readonly redirectUri = BASE_URL + '/landing-page'
 
-  protected readonly loadingState = signal(true)
   protected readonly showConnectionExistsState = signal(false)
   protected readonly showConnectionExistsDifferentUserState = signal(false)
   protected readonly showDeniedState = signal(false)
@@ -220,7 +219,6 @@ export class LandingPageComponent implements OnInit {
     this.showErrorState.set(false)
     this.showSuccessState.set(false)
     this.showConnectionExistsState.set(true)
-    this.loadingState.set(false)
     this.showConnectionExistsDifferentUserState.set(false)
   }
 
@@ -229,7 +227,6 @@ export class LandingPageComponent implements OnInit {
     this.showErrorState.set(false)
     this.showSuccessState.set(false)
     this.showConnectionExistsState.set(false)
-    this.loadingState.set(false)
     this.showConnectionExistsDifferentUserState.set(true)
   }
 
@@ -238,7 +235,6 @@ export class LandingPageComponent implements OnInit {
     this.showDeniedState.set(false)
     this.showErrorState.set(true)
     this.showSuccessState.set(false)
-    this.loadingState.set(false)
     this.showConnectionExistsDifferentUserState.set(false)
   }
 
@@ -246,7 +242,6 @@ export class LandingPageComponent implements OnInit {
     this.showDeniedState.set(true)
     this.showErrorState.set(false)
     this.showSuccessState.set(false)
-    this.loadingState.set(false)
     this.showConnectionExistsDifferentUserState.set(false)
   }
 
@@ -254,7 +249,6 @@ export class LandingPageComponent implements OnInit {
     this.showDeniedState.set(false)
     this.showErrorState.set(false)
     this.showSuccessState.set(true)
-    this.loadingState.set(false)
     this.showConnectionExistsDifferentUserState.set(false)
   }
 }
