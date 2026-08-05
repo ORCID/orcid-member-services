@@ -46,66 +46,6 @@ export class LandingPageComponent implements OnInit {
   protected readonly successfullyGrantedMessageState = signal('')
   protected readonly thanksMessageState = signal('')
 
-  protected get loading(): boolean {
-    return this.loadingState()
-  }
-
-  protected get showConnectionExists(): boolean {
-    return this.showConnectionExistsState()
-  }
-
-  protected get showConnectionExistsDifferentUser(): boolean {
-    return this.showConnectionExistsDifferentUserState()
-  }
-
-  protected get showDenied(): boolean {
-    return this.showDeniedState()
-  }
-
-  protected get showError(): boolean {
-    return this.showErrorState()
-  }
-
-  protected get showSuccess(): boolean {
-    return this.showSuccessState()
-  }
-
-  protected get clientName(): string | undefined {
-    return this.clientNameState()
-  }
-
-  protected get oauthUrl(): string | undefined {
-    return this.oauthUrlState()
-  }
-
-  protected get orcidRecord(): OrcidRecord | undefined {
-    return this.orcidRecordState()
-  }
-
-  protected get signedInIdToken(): any {
-    return this.signedInIdTokenState()
-  }
-
-  protected get incorrectDataMessage(): string {
-    return this.incorrectDataMessageState()
-  }
-
-  protected get linkAlreadyUsedMessage(): string {
-    return this.linkAlreadyUsedMessageState()
-  }
-
-  protected get allowToUpdateRecordMessage(): string {
-    return this.allowToUpdateRecordMessageState()
-  }
-
-  protected get successfullyGrantedMessage(): string {
-    return this.successfullyGrantedMessageState()
-  }
-
-  protected get thanksMessage(): string {
-    return this.thanksMessageState()
-  }
-
   ngOnInit() {
     const fragmentString = this.route.snapshot.fragment
     const fragmentParams = new URLSearchParams(fragmentString || '')
