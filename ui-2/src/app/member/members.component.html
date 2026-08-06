@@ -87,30 +87,8 @@
               [attr.aria-sort]="sortColumn() === 'salesforceId' ? (ascending() ? 'ascending' : 'descending') : 'none'"
             >
               <button type="button" class="th-sort" (click)="updateSort('salesforceId')">
-                <span i18n="@@gatewayApp.msUserServiceMSMember.salesforceId.string">Salesforce Id</span>
+                <span i18n="@@gatewayApp.msUserServiceMSMember.salesforceId.string">SalesForce ID</span>
                 @if (sortColumn() === 'salesforceId') {
-                  <fa-icon class="ms-2" [icon]="ascending() ? faSortDown : faSortUp" />
-                }
-              </button>
-            </th>
-            <th
-              scope="col"
-              [attr.aria-sort]="sortColumn() === 'clientName' ? (ascending() ? 'ascending' : 'descending') : 'none'"
-            >
-              <button type="button" class="th-sort" (click)="updateSort('clientName')">
-                <span i18n="@@gatewayApp.msUserServiceMSMember.clientName.string">Member Name</span>
-                @if (sortColumn() === 'clientName') {
-                  <fa-icon class="ms-2" [icon]="ascending() ? faSortDown : faSortUp" />
-                }
-              </button>
-            </th>
-            <th
-              scope="col"
-              [attr.aria-sort]="sortColumn() === 'isConsortiumLead' ? (ascending() ? 'ascending' : 'descending') : 'none'"
-            >
-              <button type="button" class="th-sort" (click)="updateSort('isConsortiumLead')">
-                <span i18n="@@gatewayApp.msUserServiceMSMember.isConsortiumLead.string">Consortium Lead</span>
-                @if (sortColumn() === 'isConsortiumLead') {
                   <fa-icon class="ms-2" [icon]="ascending() ? faSortDown : faSortUp" />
                 }
               </button>
@@ -120,7 +98,7 @@
               [attr.aria-sort]="sortColumn() === 'parentSalesforceId' ? (ascending() ? 'ascending' : 'descending') : 'none'"
             >
               <button type="button" class="th-sort" (click)="updateSort('parentSalesforceId')">
-                <span i18n="@@gatewayApp.msUserServiceMSMember.parentSalesforceId.string">Parent Salesforce Id</span>
+                <span i18n="@@gatewayApp.msUserServiceMSMember.parentSalesforceId.string">Parent SalesForce ID</span>
                 @if (sortColumn() === 'parentSalesforceId') {
                   <fa-icon class="ms-2" [icon]="ascending() ? faSortDown : faSortUp" />
                 }
@@ -128,27 +106,20 @@
             </th>
             <th
               scope="col"
-              [attr.aria-sort]="
-                sortColumn() === 'assertionServiceEnabled' ? (ascending() ? 'ascending' : 'descending') : 'none'
-              "
+              [attr.aria-sort]="sortColumn() === 'clientName' ? (ascending() ? 'ascending' : 'descending') : 'none'"
             >
-              <button type="button" class="th-sort" (click)="updateSort('assertionServiceEnabled')">
-                <span i18n="@@gatewayApp.msUserServiceMSMember.assertionServiceEnabled.string">Assertions Enabled</span>
-                @if (sortColumn() === 'assertionServiceEnabled') {
+              <button type="button" class="th-sort" (click)="updateSort('clientName')">
+                <span i18n="@@gatewayApp.msUserServiceMSMember.organizationName.string">Organization Name</span>
+                @if (sortColumn() === 'clientName') {
                   <fa-icon class="ms-2" [icon]="ascending() ? faSortDown : faSortUp" />
                 }
               </button>
             </th>
-            <th
-              scope="col"
-              [attr.aria-sort]="sortColumn() === 'lastModifiedDate' ? (ascending() ? 'ascending' : 'descending') : 'none'"
-            >
-              <button type="button" class="th-sort" (click)="updateSort('lastModifiedDate')">
-                <span i18n="@@gatewayApp.msUserServiceMSMember.lastModifiedDate.string">Last Modified</span>
-                @if (sortColumn() === 'lastModifiedDate') {
-                  <fa-icon class="ms-2" [icon]="ascending() ? faSortDown : faSortUp" />
-                }
-              </button>
+            <th scope="col">
+              <span i18n="@@gatewayApp.msUserServiceMSMember.organizationType.string">Organization Type</span>
+            </th>
+            <th scope="col">
+              <span i18n="@@gatewayApp.msUserServiceMSMember.active.string">Active?</span>
             </th>
             <th></th>
           </tr>
@@ -159,27 +130,18 @@
               <td>
                 <a [routerLink]="['/members', member.id, 'view']">{{ member.salesforceId }}</a>
               </td>
+              <td>{{ member.parentSalesforceId || '-' }}</td>
               <td>{{ member.clientName }}</td>
+              <td>{{ getOrganizationType(member) }}</td>
               <td class="text-center">
-                <span class="visually-hidden">{{ member.isConsortiumLead }}</span>
-                @if (member.isConsortiumLead) {
+                <span class="visually-hidden">{{ member.active }}</span>
+                @if (member.active) {
                   <fa-icon aria-hidden="true" [icon]="faCheckCircle" [style.color]="'#28a745'" />
                 }
-                @if (!member.isConsortiumLead) {
+                @if (!member.active) {
                   <fa-icon aria-hidden="true" [icon]="faTimesCircle" [style.color]="'#f22112'" />
                 }
               </td>
-              <td>{{ member.parentSalesforceId }}</td>
-              <td class="text-center">
-                <span class="visually-hidden">{{ member.assertionServiceEnabled }}</span>
-                @if (member.assertionServiceEnabled) {
-                  <fa-icon aria-hidden="true" [icon]="faCheckCircle" [style.color]="'#28a745'" />
-                }
-                @if (!member.assertionServiceEnabled) {
-                  <fa-icon aria-hidden="true" [icon]="faTimesCircle" [style.color]="'#f22112'" />
-                }
-              </td>
-              <td>{{ member.lastModifiedDate?.toString() | date: 'medium' }}</td>
               <td class="text-end">
                 <div class="btn-group">
                   <button

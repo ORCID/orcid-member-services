@@ -24,8 +24,6 @@ describe('MemberDetailComponent', () => {
     id: 'default',
     clientId: '',
     clientName: '',
-    type: 'unset',
-    status: 'unset',
   } as IMember
 
   beforeEach(() => {
@@ -59,5 +57,25 @@ describe('MemberDetailComponent', () => {
     expect(internals(component).member()!.id).toEqual('id')
     expect(internals(component).member()!.clientId).toEqual('client-id')
     expect(internals(component).member()!.clientName).toEqual('client-name')
+  })
+
+  describe('getOrganizationType', () => {
+    it('should return "Consortium Lead" when the member is a consortium lead', () => {
+      expect(component.getOrganizationType({ isConsortiumLead: true } as IMember)).toEqual('Consortium Lead')
+    })
+
+    it('should return "Consortia Member" when parentSalesforceId differs from salesforceId', () => {
+      expect(component.getOrganizationType({ salesforceId: 'A', parentSalesforceId: 'B' } as IMember)).toEqual(
+        'Consortia Member'
+      )
+    })
+
+    it('should return "Direct" when it is not a lead and has no differing parent', () => {
+      expect(component.getOrganizationType({ salesforceId: 'A' } as IMember)).toEqual('Direct')
+    })
+
+    it('should return an empty string when the member is undefined', () => {
+      expect(component.getOrganizationType(undefined)).toEqual('')
+    })
   })
 })

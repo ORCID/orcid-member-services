@@ -41,16 +41,21 @@
           <label
             class="form-label fw-bold"
             i18n="@@gatewayApp.msUserServiceMSMember.salesforceId.string"
-            for="field_salesforceId.string"
-            >Salesforce Id</label
+            for="field_salesforceId"
+            >SalesForce ID</label
           >
-          <input
-            type="text"
-            class="form-control"
-            name="salesforceId"
-            id="field_salesforceId"
-            formControlName="salesforceId"
-          />
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              name="salesforceId"
+              id="field_salesforceId"
+              formControlName="salesforceId"
+            />
+            <span class="input-group-text">
+              <fa-icon [icon]="faLock" />
+            </span>
+          </div>
           @if (
             editForm.get('salesforceId')?.invalid &&
             (editForm.get('salesforceId')?.dirty || editForm.get('salesforceId')?.touched)
@@ -84,78 +89,69 @@
           <label
             class="form-label fw-bold"
             i18n="@@gatewayApp.msUserServiceMSMember.parentSalesforceId.string"
-            for="field_parentSalesforceId.string"
-            >Parent Salesforce Id</label
+            for="field_parentSalesforceId"
+            >Parent SalesForce ID</label
           >
-          <input
-            type="text"
-            class="form-control"
-            name="parentSalesforceId"
-            id="field_parentSalesforceId"
-            formControlName="parentSalesforceId"
-          />
-          @if (
-            editForm.get('parentSalesforceId')?.invalid &&
-            (editForm.get('parentSalesforceId')?.dirty || editForm.get('parentSalesforceId')?.touched)
-          ) {
-            <div>
-              @if (editForm.get('parentSalesforceId')?.hasError('pattern')) {
-                <small
-                  class="form-text text-danger"
-                  i18n="@@gatewayApp.msUserServiceMSMember.parentSalesforceId.validation.pattern.string"
-                  data-cy="parentSalesforceIdPatternInvalid"
-                >
-                  Must be exactly 18 alphanumeric characters.
-                </small>
-              }
-              @if (editForm.get('parentSalesforceId')?.hasError('validParentSalesforceIdValue')) {
-                <small
-                  class="form-text text-danger"
-                  i18n="@@gatewayApp.msUserServiceMSMember.parentSalesforceId.validation.consortiumLead.string"
-                  data-cy="parentSalesforceIdConsortiumLeadInvalid"
-                >
-                  Must match the organization's Salesforce ID for consortium leads.
-                </small>
-              }
-            </div>
-          }
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              name="parentSalesforceId"
+              id="field_parentSalesforceId"
+              formControlName="parentSalesforceId"
+              placeholder="-"
+            />
+            <span class="input-group-text">
+              <fa-icon [icon]="faLock" />
+            </span>
+          </div>
         </div>
         <div class="mb-3">
           <label
             class="form-label fw-bold"
-            i18n="@@gatewayApp.msUserServiceMSMember.clientName.string"
-            for="field_clientName.string"
-            >Member Name</label
+            i18n="@@gatewayApp.msUserServiceMSMember.organizationName.string"
+            for="field_clientName"
+            >Organization Name</label
           >
-          <input
-            type="text"
-            class="form-control"
-            name="clientName"
-            id="field_clientName"
-            formControlName="clientName"
-          />
-          @if (
-            editForm.get('clientName')?.invalid &&
-            (editForm.get('clientName')?.dirty || editForm.get('clientName')?.touched)
-          ) {
-            <div>
-              @if ((editForm.get('clientName')?.errors)!['required']) {
-                <small
-                  class="form-text text-danger"
-                  i18n="@@entity.validation.required.string"
-                  data-cy="fieldIsRequired"
-                >
-                  This field is required.
-                </small>
-              }
-            </div>
-          }
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              name="clientName"
+              id="field_clientName"
+              formControlName="clientName"
+            />
+            <span class="input-group-text">
+              <fa-icon [icon]="faLock" />
+            </span>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label
+            class="form-label fw-bold"
+            i18n="@@gatewayApp.msUserServiceMSMember.organizationType.string"
+            for="field_organizationType"
+            >Organization Type</label
+          >
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              name="organizationType"
+              id="field_organizationType"
+              [value]="formOrganizationType"
+              disabled
+            />
+            <span class="input-group-text">
+              <fa-icon [icon]="faLock" />
+            </span>
+          </div>
         </div>
         <div class="mb-3">
           <label
             class="form-label fw-bold"
             i18n="@@gatewayApp.msUserServiceMSMember.clientId.label.string"
-            for="field_clientId.string"
+            for="field_clientId"
             >Client ID</label
           >
           <p>
@@ -197,15 +193,15 @@
           <input
             type="checkbox"
             class="form-check-input"
-            name="isConsortiumLead"
-            id="field_isConsortiumLead"
-            formControlName="isConsortiumLead"
+            name="active"
+            id="field_active"
+            formControlName="active"
           />
           <label
             class="form-check-label fw-bold"
-            i18n="@@gatewayApp.msUserServiceMSMember.isConsortiumLead.string"
-            for="field_isConsortiumLead.string"
-            >Consortium Lead</label
+            i18n="@@gatewayApp.msUserServiceMSMember.active.string"
+            for="field_active"
+            >Active?</label
           >
         </div>
         <div class="form-check mb-3">
@@ -219,8 +215,8 @@
           <label
             class="form-check-label fw-bold"
             i18n="@@gatewayApp.msUserServiceMSMember.assertionServiceEnabled.string"
-            for="field_assertionServiceEnabled.string"
-            >Assertions Enabled</label
+            for="field_assertionServiceEnabled"
+            >Assertions enabled?</label
           >
         </div>
       </div>

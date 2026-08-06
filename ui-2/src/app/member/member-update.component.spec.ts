@@ -111,4 +111,47 @@ describe('MemberUpdateComponent', () => {
     expect(alertService.broadcast).toHaveBeenCalledWith(AlertType.TOAST, AlertMessage.MEMBER_CREATED)
     expect(router.navigate).toHaveBeenCalledWith(['/members'])
   })
+
+  describe('form restructure', () => {
+    it('should patch the active control from the member', () => {
+      activatedRoute.data = of({ member: { id: 'id', salesforceId: 'ABCDEFGHIJKLMNOPQR', active: true } as IMember })
+      fixture.detectChanges()
+      expect(component.editForm.get('active')?.value).toBeTrue()
+    })
+
+    it('should include active and the retained isConsortiumLead value in the saved member', () => {
+      activatedRoute.data = of({
+        member: { id: 'id', salesforceId: 'ABCDEFGHIJKLMNOPQR', isConsortiumLead: true, active: true } as IMember,
+      })
+      memberService.update.and.returnValue(of({ id: 'id' } as IMember))
+      fixture.detectChanges()
+      component.save()
+      const saved = memberService.validate.calls.mostRecent().args[0]
+      expect(saved.active).toBeTrue()
+      expect(saved.isConsortiumLead).toBeTrue()
+    })
+
+    it('should make salesforceId, parentSalesforceId and clientName read-only when editing an existing member', () => {
+      activatedRoute.data = of({
+        member: {
+          id: 'id',
+          salesforceId: 'ABCDEFGHIJKLMNOPQR',
+          parentSalesforceId: 'RQPONMLKJIHGFEDCBA',
+          clientName: 'Org',
+        } as IMember,
+      })
+      fixture.detectChanges()
+      expect(component.editForm.get('salesforceId')?.disabled).toBeTrue()
+      expect(component.editForm.get('parentSalesforceId')?.disabled).toBeTrue()
+      expect(component.editForm.get('clientName')?.disabled).toBeTrue()
+    })
+
+    it('formOrganizationType should reflect the member relationship', () => {
+      activatedRoute.data = of({
+        member: { id: 'id', salesforceId: 'ABCDEFGHIJKLMNOPQR', isConsortiumLead: true } as IMember,
+      })
+      fixture.detectChanges()
+      expect(component.formOrganizationType).toEqual('Consortium Lead')
+    })
+  })
 })

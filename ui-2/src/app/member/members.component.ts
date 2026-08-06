@@ -23,7 +23,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 import { ErrorAlertComponent } from '../error/error-alert.component'
 import { AlertComponent } from '../shared/alert/alert-toast.component'
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap'
-import { DatePipe } from '@angular/common'
 
 @Component({
   selector: 'app-members',
@@ -39,7 +38,6 @@ import { DatePipe } from '@angular/common'
     AlertComponent,
     NgbPaginationModule,
     RouterOutlet,
-    DatePipe,
   ],
 })
 export class MembersComponent implements OnInit {
@@ -195,5 +193,15 @@ export class MembersComponent implements OnInit {
       this.sortColumn.set(columnName)
     }
     this.loadPage()
+  }
+
+  getOrganizationType(member: IMember): string {
+    if (member.isConsortiumLead) {
+      return 'Consortium Lead'
+    }
+    if (member.parentSalesforceId && member.parentSalesforceId !== member.salesforceId) {
+      return 'Consortia Member'
+    }
+    return 'Direct'
   }
 }
