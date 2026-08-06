@@ -22,9 +22,9 @@ public class MfaAuthenticationFailureHandler implements AuthenticationFailureHan
         } else if (exception instanceof MfaInvalidCodeException) {
             response.getWriter().write("{\"error\": \"mfa_invalid\", \"message\": \"Invalid MFA code\"}");
         } else if (exception instanceof DeactivatedMemberException) {
-            response.getWriter().write("{\"error\": \"deactivated_member\", \"message\": \"Member is deactivated\"}");
+            response.getWriter().write("{\"error\": \"deactivated_member\", \"message\": \"Your organization is not an active ORCID member. Please contact membership@orcid.org to reactivate your membership.\"}");
         } else {
-            response.getWriter().write("{\"error\": \"invalid_credentials\", \"message\": \"Invalid Credentials\"}");
+            response.getWriter().write("{\"error\": \"invalid_credentials\", \"message\": \"Invalid sign in credentials. Please check your email and password and try again.\"}");
         }
         response.getWriter().flush();
     }

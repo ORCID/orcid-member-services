@@ -133,6 +133,52 @@ describe('LoginComponent', () => {
     expect(internals(component).authenticationError).toBe(true)
   }))
 
+  it('should show updated invalid credentials message', fakeAsync(() => {
+    const mockError = {
+      status: 401,
+      error: { error: 'invalid_credentials' },
+    }
+    loginService.login.and.returnValue(throwError(() => mockError))
+
+    internals(component).loginForm.patchValue({
+      username: 'testuser',
+      password: 'testpassword',
+      mfaCode: '',
+    })
+
+    internals(component).login()
+    tick()
+    fixture.detectChanges()
+
+    const alert = fixture.nativeElement.querySelector('.alert.alert-danger')
+    expect(alert?.textContent).toContain('Invalid sign in credentials. Please check your email and password and try again.')
+  }))
+
+  it('should show inactive membership message with support email link', fakeAsync(() => {
+    const mockError = {
+      status: 401,
+      error: { error: 'deactivated_member' },
+    }
+    loginService.login.and.returnValue(throwError(() => mockError))
+
+    internals(component).loginForm.patchValue({
+      username: 'testuser',
+      password: 'testpassword',
+      mfaCode: '',
+    })
+
+    internals(component).login()
+    tick()
+    fixture.detectChanges()
+
+    const alert = fixture.nativeElement.querySelector('.alert.alert-danger')
+    const supportEmailLink = alert?.querySelector('a[href="mailto:membership@orcid.org"]')
+
+    expect(alert?.textContent).toContain('Your organization is not an active ORCID member. Please contact')
+    expect(alert?.textContent).toContain('to reactivate your membership.')
+    expect(supportEmailLink?.textContent?.trim()).toBe('membership@orcid.org')
+  }))
+
   it('should handle MFA code error', fakeAsync(() => {
     const mockError = {
       status: 401,
