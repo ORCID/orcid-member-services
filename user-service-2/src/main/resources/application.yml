@@ -65,6 +65,9 @@ management:
     health:
       show-details: always
 
+mongock:
+  migration-scan-package: org.orcid.mp.user.data.migration
+
 logging:
   level:
     root: INFO

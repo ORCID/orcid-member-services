@@ -78,9 +78,6 @@ public class User implements Serializable {
     @Field("reset_date")
     private Instant resetDate = null;
 
-    @Field("salesforce_id")
-    private String salesforceId;
-
     @Field("member_id")
     private String memberId;
 
@@ -229,14 +226,6 @@ public class User implements Serializable {
 
     public void setMemberName(String memberName) {
         this.memberName = memberName;
-    }
-
-    public String getSalesforceId() {
-        return salesforceId;
-    }
-
-    public void setSalesforceId(String salesforceId) {
-        this.salesforceId = salesforceId;
     }
 
     public String getMemberId() {

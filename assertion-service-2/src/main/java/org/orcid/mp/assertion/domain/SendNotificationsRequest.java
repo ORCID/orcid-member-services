@@ -18,9 +18,6 @@ public class SendNotificationsRequest implements Serializable {
     @Field("email")
     private String email;
 
-    @Field("salesforce_id")
-    private String salesforceId;
-
     @Field("member_id")
     private String memberId;
 
@@ -66,14 +63,6 @@ public class SendNotificationsRequest implements Serializable {
 
     public void setDateCompleted(Instant dateCompleted) {
         this.dateCompleted = dateCompleted;
-    }
-
-    public String getSalesforceId() {
-        return salesforceId;
-    }
-
-    public void setSalesforceId(String salesforceId) {
-        this.salesforceId = salesforceId;
     }
 
     public String getMemberId() {

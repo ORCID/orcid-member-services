@@ -15,6 +15,9 @@ spring:
         provider:
           myself:
             token-uri: http://localhost:9000/oauth2/token
+mongock:
+  enabled: false
+
 application:
   ui:
     baseUrl: http://localhost:4200
