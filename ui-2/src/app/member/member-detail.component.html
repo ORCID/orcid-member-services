@@ -11,42 +11,36 @@
             <dd class="col-md-9">
               {{ member()?.id }}
             </dd>
-            <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.salesforceId.string">Salesforce Id</dt>
+            <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.salesforceId.string">SalesForce ID</dt>
             <dd class="col-md-9">
               {{ member()?.salesforceId }}
             </dd>
             <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.parentSalesforceId.string">
-              Parent Salesforce Id
+              Parent SalesForce ID
             </dt>
             <dd class="col-md-9">
               {{ member()?.parentSalesforceId }}
             </dd>
-            <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.clientName.string">Member Name</dt>
+            <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.organizationName.string">Organization Name</dt>
             <dd class="col-md-9">
               {{ member()?.clientName }}
             </dd>
-            <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.clientId.label.string">Client ID</dt>
+            <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.organizationType.string">Organization Type</dt>
             <dd class="col-md-9">
-              {{ member()?.clientId }}
+              {{ getOrganizationType(member()) }}
             </dd>
-            <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.type.string">Type</dt>
+            <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.active.string">Active?</dt>
             <dd class="col-md-9">
-              {{ member()?.type }}
-            </dd>
-            <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.isConsortiumLead.string">
-              Is Consortium Lead
-            </dt>
-            <dd class="col-md-9">
-              <span class="visually-hidden">{{ member()?.isConsortiumLead }}</span>
-              @if (member()?.isConsortiumLead) {
-                <fa-icon aria-hidden="true" [icon]="faCheckCircle" [style.color]="{ color: '#28a745' }" />
+              <span class="visually-hidden">{{ member()?.active }}</span>
+              @if (member()?.active) {
+                <fa-icon aria-hidden="true" [icon]="faCheckCircle" [style.color]="'#28a745'" />
               }
-              @if (!member()?.isConsortiumLead) {
+              @if (!member()?.active) {
                 <fa-icon aria-hidden="true" [icon]="faTimesCircle" [style.color]="'#f22112'" />
               }
             </dd>
             <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.assertionServiceEnabled.string">
-              Assertion Service Enabled
+              Assertion Service Enabled?
             </dt>
             <dd class="col-md-9">
               <span class="visually-hidden">{{ member()?.assertionServiceEnabled }}</span>
@@ -57,9 +51,9 @@
                 <fa-icon aria-hidden="true" [icon]="faTimesCircle" [style.color]="'#f22112'" />
               }
             </dd>
-            <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.status.string">Status</dt>
+            <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.clientId.label.string">Client ID</dt>
             <dd class="col-md-9">
-              {{ member()?.active ? 'Active' : 'Deactivated' }}
+              {{ member()?.clientId }}
             </dd>
             <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.createdDate.string">Created Date</dt>
             <dd class="col-md-9">

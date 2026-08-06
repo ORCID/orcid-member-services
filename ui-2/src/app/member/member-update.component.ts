@@ -48,7 +48,8 @@ export class MemberUpdateComponent implements OnInit {
       salesforceIdFormatValidator(),
       parentSalesforceIdValidator(),
     ]),
-    isConsortiumLead: new FormControl<boolean | null>(null, [Validators.required]),
+    isConsortiumLead: new FormControl<boolean | null>(false),
+    active: new FormControl<boolean | null>(false),
     assertionServiceEnabled: new FormControl<boolean | null>(false),
     createdBy: new FormControl<string | null>(null),
     createdDate: new FormControl<string | null>(null),
@@ -58,6 +59,19 @@ export class MemberUpdateComponent implements OnInit {
 
   constructor() {
     this.validation = {}
+  }
+
+  get formOrganizationType(): string {
+    const isConsortiumLead = this.editForm.get('isConsortiumLead')?.value
+    const parentSalesforceId = this.editForm.get('parentSalesforceId')?.value
+    const salesforceId = this.editForm.get('salesforceId')?.value
+    if (isConsortiumLead) {
+      return 'Consortium Lead'
+    }
+    if (parentSalesforceId && parentSalesforceId !== salesforceId) {
+      return 'Consortia Member'
+    }
+    return 'Direct'
   }
 
   ngOnInit() {
@@ -98,7 +112,8 @@ export class MemberUpdateComponent implements OnInit {
       clientName: member.clientName,
       salesforceId: member.salesforceId,
       parentSalesforceId: member.parentSalesforceId,
-      isConsortiumLead: member.isConsortiumLead,
+      isConsortiumLead: member.isConsortiumLead ?? false,
+      active: member.active ?? false,
       assertionServiceEnabled: member.assertionServiceEnabled ? true : false,
       createdBy: member.createdBy,
       createdDate: member.createdDate != null ? member.createdDate.format(DATE_TIME_FORMAT) : null,
@@ -117,6 +132,7 @@ export class MemberUpdateComponent implements OnInit {
 
     if (sfId) {
       this.editForm.get('salesforceId')?.disable()
+      this.editForm.get('parentSalesforceId')?.disable()
       this.editForm.get('clientName')?.disable()
     }
   }
@@ -151,6 +167,7 @@ export class MemberUpdateComponent implements OnInit {
       salesforceId: this.editForm.get(['salesforceId'])?.value || null,
       parentSalesforceId: this.editForm.get(['parentSalesforceId'])?.value || null,
       isConsortiumLead: this.editForm.get(['isConsortiumLead'])?.value || false,
+      active: this.editForm.get(['active'])?.value ? true : false,
       assertionServiceEnabled: this.editForm.get(['assertionServiceEnabled'])?.value ? true : false,
       createdBy: this.editForm.get(['createdBy'])?.value,
       createdDate:

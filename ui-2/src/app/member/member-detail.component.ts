@@ -24,14 +24,21 @@ export class MemberDetailComponent implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.data.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ member }) => {
-      if (!member.type) {
-        member.type = 'unset'
-      }
-      if (!member.status) {
-        member.status = 'unset'
-      }
       this.member.set(member)
     })
+  }
+
+  getOrganizationType(member: IMember | undefined): string {
+    if (!member) {
+      return ''
+    }
+    if (member.isConsortiumLead) {
+      return 'Consortium Lead'
+    }
+    if (member.parentSalesforceId && member.parentSalesforceId !== member.salesforceId) {
+      return 'Consortia Member'
+    }
+    return 'Direct'
   }
 
   previousState() {

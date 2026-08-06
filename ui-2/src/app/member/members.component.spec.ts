@@ -10,7 +10,7 @@ import { AccountService } from '../account'
 import { RouterModule } from '@angular/router'
 import { MemberService } from './service/member.service'
 import { of } from 'rxjs'
-import { Member } from './model/member.model'
+import { IMember, Member } from './model/member.model'
 import { Router } from '@angular/router'
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 
@@ -140,5 +140,25 @@ describe('MembersComponent', () => {
 
     expect(internals(component).sortColumn()).toEqual('different column')
     expect(memberServiceSpy.query).toHaveBeenCalled()
+  })
+
+  describe('getOrganizationType', () => {
+    it('should return "Consortium Lead" when the member is a consortium lead', () => {
+      expect(component.getOrganizationType({ isConsortiumLead: true } as IMember)).toEqual('Consortium Lead')
+    })
+
+    it('should return "Consortia Member" when parentSalesforceId differs from salesforceId', () => {
+      expect(component.getOrganizationType({ salesforceId: 'A', parentSalesforceId: 'B' } as IMember)).toEqual(
+        'Consortia Member'
+      )
+    })
+
+    it('should return "Direct" when it is not a lead and has no differing parent', () => {
+      expect(component.getOrganizationType({ salesforceId: 'A' } as IMember)).toEqual('Direct')
+    })
+
+    it('should return "Direct" when parentSalesforceId equals salesforceId', () => {
+      expect(component.getOrganizationType({ salesforceId: 'A', parentSalesforceId: 'A' } as IMember)).toEqual('Direct')
+    })
   })
 })
