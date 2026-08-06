@@ -8,7 +8,7 @@ import { MemberService } from './service/member.service'
 import { AlertService } from '../shared/service/alert.service'
 import { AlertMessage, AlertType, BASE_URL, DATE_TIME_FORMAT, ORCID_BASE_URL } from '../app.constants'
 import { IMember, Member } from './model/member.model'
-import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
+import { faBan, faSave, faLock } from '@fortawesome/free-solid-svg-icons'
 import {
   clientIdValidator,
   parentSalesforceIdValidator,
@@ -38,6 +38,7 @@ export class MemberUpdateComponent implements OnInit {
   protected validation: any
   protected faBan = faBan
   protected faSave = faSave
+  protected faLock = faLock
 
   editForm = this.fb.group({
     id: new FormControl<string | null>(null),

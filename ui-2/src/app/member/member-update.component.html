@@ -44,13 +44,18 @@
             for="field_salesforceId"
             >SalesForce ID</label
           >
-          <input
-            type="text"
-            class="form-control"
-            name="salesforceId"
-            id="field_salesforceId"
-            formControlName="salesforceId"
-          />
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              name="salesforceId"
+              id="field_salesforceId"
+              formControlName="salesforceId"
+            />
+            <span class="input-group-text">
+              <fa-icon [icon]="faLock" />
+            </span>
+          </div>
           @if (
             editForm.get('salesforceId')?.invalid &&
             (editForm.get('salesforceId')?.dirty || editForm.get('salesforceId')?.touched)
@@ -87,13 +92,19 @@
             for="field_parentSalesforceId"
             >Parent SalesForce ID</label
           >
-          <input
-            type="text"
-            class="form-control"
-            name="parentSalesforceId"
-            id="field_parentSalesforceId"
-            formControlName="parentSalesforceId"
-          />
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              name="parentSalesforceId"
+              id="field_parentSalesforceId"
+              formControlName="parentSalesforceId"
+              placeholder="-"
+            />
+            <span class="input-group-text">
+              <fa-icon [icon]="faLock" />
+            </span>
+          </div>
         </div>
         <div class="mb-3">
           <label
@@ -102,13 +113,18 @@
             for="field_clientName"
             >Organization Name</label
           >
-          <input
-            type="text"
-            class="form-control"
-            name="clientName"
-            id="field_clientName"
-            formControlName="clientName"
-          />
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              name="clientName"
+              id="field_clientName"
+              formControlName="clientName"
+            />
+            <span class="input-group-text">
+              <fa-icon [icon]="faLock" />
+            </span>
+          </div>
         </div>
         <div class="mb-3">
           <label
@@ -117,14 +133,19 @@
             for="field_organizationType"
             >Organization Type</label
           >
-          <input
-            type="text"
-            class="form-control"
-            name="organizationType"
-            id="field_organizationType"
-            [value]="formOrganizationType"
-            disabled
-          />
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              name="organizationType"
+              id="field_organizationType"
+              [value]="formOrganizationType"
+              disabled
+            />
+            <span class="input-group-text">
+              <fa-icon [icon]="faLock" />
+            </span>
+          </div>
         </div>
         <div class="mb-3">
           <label

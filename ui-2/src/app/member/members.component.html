@@ -130,7 +130,7 @@
               <td>
                 <a [routerLink]="['/members', member.id, 'view']">{{ member.salesforceId }}</a>
               </td>
-              <td>{{ member.parentSalesforceId }}</td>
+              <td>{{ member.parentSalesforceId || '-' }}</td>
               <td>{{ member.clientName }}</td>
               <td>{{ getOrganizationType(member) }}</td>
               <td class="text-center">
