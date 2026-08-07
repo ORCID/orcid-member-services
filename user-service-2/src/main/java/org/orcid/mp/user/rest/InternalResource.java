@@ -2,13 +2,11 @@ package org.orcid.mp.user.rest;
 
 import org.orcid.mp.user.domain.User;
 import org.orcid.mp.user.dto.UserDTO;
-import org.orcid.mp.user.error.BadRequestAlertException;
 import org.orcid.mp.user.mapper.UserMapper;
 import org.orcid.mp.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

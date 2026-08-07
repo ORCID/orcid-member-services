@@ -15,8 +15,6 @@ import org.orcid.mp.member.salesforce.ConsortiumLeadDetails;
 import org.orcid.mp.member.salesforce.ConsortiumMember;
 import org.orcid.mp.member.salesforce.MemberDetails;
 import org.orcid.mp.member.security.MockSecurityContext;
-import org.orcid.mp.member.upload.MemberCsvReader;
-import org.orcid.mp.member.upload.MemberUpload;
 import org.orcid.mp.member.validation.MemberValidation;
 import org.orcid.mp.member.validation.MemberValidator;
 import org.springframework.data.domain.Page;
@@ -24,7 +22,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,9 +39,6 @@ class MemberServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
-
-    @Mock
-    private MemberCsvReader membersUploadReader;
 
     @Mock
     private UserService userService;
@@ -334,30 +328,6 @@ class MemberServiceTest {
     }
 
     @Test
-    void testUploadMemberCSV() throws IOException {
-        Member existingOne = getMember();
-        existingOne.setId("two");
-        existingOne.setSalesforceId("two");
-        existingOne.setClientName("some old name that's going to get changed");
-
-        Member existingTwo = getMember();
-        existingTwo.setId("two");
-        existingTwo.setSalesforceId("two");
-        existingTwo.setParentSalesforceId("anOldParentSalesforceId");
-
-        MemberUpload memberUpload = getMemberUpload();
-
-        when(membersUploadReader.readMemberUpload(Mockito.any(), Mockito.any(User.class))).thenReturn(memberUpload);
-        when(memberValidator.validate(Mockito.any(Member.class), anyString())).thenReturn(getValidValidation());
-        when(memberRepository.findBySalesforceId(eq("one"))).thenReturn(Optional.empty());
-        when(memberRepository.findBySalesforceId(eq("two"))).thenReturn(Optional.of(existingOne));
-        when(memberRepository.findById(eq("two"))).thenReturn(Optional.of(existingTwo));
-        when(memberRepository.findBySalesforceId(eq("three"))).thenReturn(Optional.empty());
-        memberService.uploadMemberCSV(null);
-        verify(memberRepository, Mockito.times(3)).save(Mockito.any(Member.class));
-    }
-
-    @Test
     void testGetMembers() {
         when(memberRepository.findAll(Mockito.any(Pageable.class))).thenReturn(new PageImpl<>(Arrays.asList(getMember(), getMember(), getMember())));
         Page<Member> page = memberService.getMembers(Mockito.mock(Pageable.class));
@@ -542,30 +512,6 @@ class MemberServiceTest {
 
         consortiumLeadDetails.setConsortiumMembers(Arrays.asList(member1, member2));
         return consortiumLeadDetails;
-    }
-
-    private MemberUpload getMemberUpload() {
-        Member one = getMember();
-        one.setSalesforceId("one");
-        one.setClientName("one");
-        one.setClientId("XXXX-XXXX-XXXX-XXX8");
-
-        Member two = getMember();
-        two.setSalesforceId("two");
-        two.setClientName("two");
-        two.setClientId("XXXX-XXXX-XXXX-XXX9");
-
-        Member three = getMember();
-        three.setSalesforceId("three");
-        three.setClientName("three");
-        three.setClientId("XXXX-XXXX-XXXX-XXX7");
-
-        MemberUpload upload = new MemberUpload();
-        upload.getMembers().add(one);
-        upload.getMembers().add(two);
-        upload.getMembers().add(three);
-
-        return upload;
     }
 
     private User getUser() {
