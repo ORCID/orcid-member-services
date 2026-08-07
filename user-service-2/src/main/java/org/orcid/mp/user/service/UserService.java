@@ -30,8 +30,6 @@ import org.orcid.mp.user.pojo.MfaSetup;
 import org.orcid.mp.user.security.AuthoritiesConstants;
 import org.orcid.mp.user.security.EncryptUtil;
 import org.orcid.mp.user.security.SecurityUtil;
-import org.orcid.mp.user.upload.UserCsvReader;
-import org.orcid.mp.user.upload.UserUpload;
 import org.orcid.mp.user.util.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,9 +70,6 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private UserCsvReader usersUploadReader;
 
     @Autowired
     private MemberServiceClient memberServiceClient;
@@ -426,26 +421,6 @@ public class UserService {
             u.setMemberName(member.getClientName());
             userRepository.save(u);
         });
-    }
-
-    public UserUpload uploadUserCSV(InputStream inputStream, User currentUser) {
-        UserUpload usersUpload = null;
-        try {
-            usersUpload = usersUploadReader.readUsersUpload(inputStream, currentUser);
-        } catch (IOException e) {
-            LOG.warn("Error reading user upload", e);
-            throw new RuntimeException(e);
-        }
-
-        usersUpload.getUserDTOs().forEach(userDTO -> {
-            String memberId = userDTO.getMemberId();
-            Optional<User> existing = getUserByLogin(userDTO.getEmail());
-            if (!existing.isPresent() && !userRepository.findOneByMemberIdAndMainContactIsTrue(memberId).isPresent()) {
-                userDTO.setMainContact(true);
-                createUser(userDTO, SecurityUtil.getCurrentUserLogin().get());
-            }
-        });
-        return usersUpload;
     }
 
     public List<UserDTO> getAllUsersByMemberId(String memberId) {
