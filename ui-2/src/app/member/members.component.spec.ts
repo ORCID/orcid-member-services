@@ -3,6 +3,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA, WritableSignal } from '@angular/core'
 import { ComponentFixture, TestBed, tick } from '@angular/core/testing'
 import { FormsModule } from '@angular/forms'
+import { By } from '@angular/platform-browser'
 
 import { MembersComponent } from './members.component'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
@@ -140,6 +141,22 @@ describe('MembersComponent', () => {
 
     expect(internals(component).sortColumn()).toEqual('different column')
     expect(memberServiceSpy.query).toHaveBeenCalled()
+  })
+
+  it('should render create member button', () => {
+    fixture.detectChanges()
+
+    const createButton = fixture.debugElement.query(By.css('#jh-create-entity'))
+    expect(createButton).toBeTruthy()
+    expect(createButton.nativeElement.textContent).toContain('Add member')
+  })
+
+  it('should not render csv upload button after upload feature removal', () => {
+    fixture.detectChanges()
+
+    const uploadButton = fixture.debugElement.query(By.css('#jh-upload-ms-member'))
+    expect(uploadButton).toBeNull()
+    expect(fixture.nativeElement.textContent).not.toContain('Import members from CSV')
   })
 
   describe('getOrganizationType', () => {
