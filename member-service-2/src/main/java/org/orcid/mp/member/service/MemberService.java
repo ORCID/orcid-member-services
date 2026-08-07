@@ -4,8 +4,6 @@ import org.orcid.mp.member.domain.Member;
 import org.orcid.mp.member.error.BadRequestAlertException;
 import org.orcid.mp.member.repository.MemberRepository;
 import org.orcid.mp.member.security.SecurityUtils;
-import org.orcid.mp.member.upload.MemberCsvReader;
-import org.orcid.mp.member.upload.MemberUpload;
 import org.orcid.mp.member.validation.MemberValidation;
 import org.orcid.mp.member.validation.MemberValidator;
 import org.slf4j.Logger;
@@ -15,8 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -35,43 +31,10 @@ public class MemberService {
     private MemberRepository memberRepository;
 
     @Autowired
-    private MemberCsvReader memberUploadReader;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
     private MemberValidator memberValidator;
-
-    public MemberUpload uploadMemberCSV(InputStream inputStream) {
-        LOG.info("Reading member CSV upload");
-        MemberUpload upload = null;
-        try {
-            upload = memberUploadReader.readMemberUpload(inputStream, userService.getLoggedInUser());
-        } catch (IOException e) {
-            LOG.warn("Error reading member CSV upload");
-            throw new RuntimeException(e);
-        }
-
-        if (upload.getErrors().length() > 0) {
-            return upload;
-        }
-
-        for (Member member : upload.getMembers()) {
-            createOrUpdateMember(member);
-        }
-        return upload;
-    }
-
-    public Member createOrUpdateMember(Member member) {
-        Optional<Member> optional = memberRepository.findBySalesforceId(member.getSalesforceId());
-        if (!optional.isPresent()) {
-            return createMember(member, SecurityUtils.getCurrentUserLogin().get());
-        } else {
-            member.setId(optional.get().getId());
-            return updateMember(member, SecurityUtils.getCurrentUserLogin().get());
-        }
-    }
 
     public Member createMember(Member member, String createdBy) {
         MemberValidation validation = memberValidator.validate(member, member.getDefaultLanguage() != null ? member.getDefaultLanguage() : "en");

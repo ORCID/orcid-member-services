@@ -17,7 +17,6 @@ import org.orcid.mp.member.service.UserService;
 import org.orcid.mp.member.validation.MemberValidation;
 import org.orcid.mp.member.salesforce.*;
 import org.orcid.mp.member.service.MemberService;
-import org.orcid.mp.member.upload.MemberUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
 import java.io.UnsupportedEncodingException;
@@ -87,23 +85,6 @@ public class MemberResource {
             throws URISyntaxException, JSONException {
         MemberValidation validation = memberService.validateMember(member);
         return ResponseEntity.ok(validation);
-    }
-
-    /**
-     * {@code POST  /members/upload} : Create a list of member settings.
-     *
-     * @param file: file containing the member to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and
-     *         with a map indicating if each user was created or not, or with
-     *         status {@code 400 (Bad Request)} if the file cannot be parsed.
-     * @throws Throwable
-     */
-    @PostMapping("/upload")
-    @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<String> uploadMember(@RequestParam("file") MultipartFile file) throws Throwable {
-        LOG.debug("Uploading member CSV");
-        MemberUpload upload = memberService.uploadMemberCSV(file.getInputStream());
-        return ResponseEntity.ok().body(upload.getErrors().toString());
     }
 
     /**
