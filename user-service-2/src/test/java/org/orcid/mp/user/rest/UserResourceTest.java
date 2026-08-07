@@ -8,12 +8,10 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.orcid.mp.user.domain.User;
 import org.orcid.mp.user.dto.UserDTO;
-import org.orcid.mp.user.mapper.UserMapper;
 import org.orcid.mp.user.repository.UserRepository;
 import org.orcid.mp.user.validation.UserValidation;
 import org.orcid.mp.user.validation.UserValidator;
 import org.orcid.mp.user.service.UserService;
-import org.orcid.mp.user.upload.UserUpload;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.core.Authentication;
@@ -21,9 +19,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -66,18 +62,6 @@ public class UserResourceTest {
         Mockito.doNothing().when(userService).resendActivationEmail(Mockito.anyString());
         userResource.resendActivation("key");
         Mockito.verify(userService, Mockito.times(1)).resendActivationEmail(Mockito.eq("key"));
-    }
-
-    @Test
-    public void testUploadUsers() throws Throwable {
-        Mockito.when(userService.uploadUserCSV(Mockito.any(InputStream.class), Mockito.any(User.class))).thenReturn(getUserUpload());
-        MultipartFile file = Mockito.mock(MultipartFile.class);
-        InputStream inputStream = Mockito.mock(InputStream.class);
-        Mockito.when(file.getInputStream()).thenReturn(inputStream);
-
-        userResource.uploadUsers(file);
-
-        Mockito.verify(userService, Mockito.times(1)).uploadUserCSV(Mockito.any(InputStream.class), Mockito.any(User.class));
     }
 
     @Test
@@ -169,11 +153,6 @@ public class UserResourceTest {
         validation.setValid(errors.isEmpty());
         validation.setErrors(errors);
         return validation;
-    }
-
-    private UserUpload getUserUpload() {
-        UserUpload upload = new UserUpload();
-        return upload;
     }
 
 }

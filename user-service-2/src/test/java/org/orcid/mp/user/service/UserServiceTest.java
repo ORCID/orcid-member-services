@@ -22,8 +22,6 @@ import org.orcid.mp.user.pojo.MfaSetup;
 import org.orcid.mp.user.security.AuthoritiesConstants;
 import org.orcid.mp.user.security.EncryptUtil;
 import org.orcid.mp.user.security.MockSecurityContext;
-import org.orcid.mp.user.upload.UserCsvReader;
-import org.orcid.mp.user.upload.UserUpload;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -34,8 +32,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.togglz.testing.TestFeatureManager;
 import org.togglz.testing.TestFeatureManagerProvider;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -56,9 +52,6 @@ public class UserServiceTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
-
-    @Mock
-    private UserCsvReader usersUploadReader;
 
     @Mock
     private MemberServiceClient memberServiceClient;
@@ -454,23 +447,6 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testUploadUserCSV() throws IOException {
-        when(memberServiceClient.getMember(eq("member-id"))).thenReturn(memberWithAMEnabled());
-        when(usersUploadReader.readUsersUpload(Mockito.any(InputStream.class), Mockito.any(User.class))).thenReturn(getUserUpload());
-        when(userRepository.findOneByEmailIgnoreCase(eq("user1@orcid.org"))).thenReturn(Optional.empty());
-        when(userRepository.findOneByEmailIgnoreCase(eq("user2@orcid.org"))).thenReturn(Optional.of(getUser("user2@orcid.org")));
-        when(userRepository.findOneById(eq("user2@orcid.org"))).thenReturn(Optional.of(getUser("user2@orcid.org")));
-        when(userMapper.toUser(Mockito.any(UserDTO.class))).thenReturn(new User());
-
-        InputStream inputStream = Mockito.mock(InputStream.class);
-        userService.uploadUserCSV(inputStream, getUser("some-user@orcid.org"));
-
-        // check only new users saved
-        verify(userRepository, Mockito.times(1)).save(Mockito.any(User.class));
-        verify(userMapper, Mockito.times(1)).toUser(Mockito.any(UserDTO.class));
-    }
-
-    @Test
     public void testExpiredResetKey() {
         User user = new User();
         user.setResetDate(Instant.now().minusSeconds(UserService.RESET_KEY_LIFESPAN_IN_SECONDS - 2000));
@@ -804,22 +780,6 @@ public class UserServiceTest {
         user.setId(login);
         user.setMemberId(login);
         return user;
-    }
-
-    private UserUpload getUserUpload() {
-        UserUpload upload = new UserUpload();
-        UserDTO user1 = new UserDTO();
-        user1.setEmail("user1@orcid.org");
-        user1.setMemberId("member-id");
-
-        UserDTO user2 = new UserDTO();
-        user2.setEmail("user2@orcid.org");
-        user2.setMemberId("member-id");
-
-        upload.addUserDTO(user1);
-        upload.addUserDTO(user2);
-
-        return upload;
     }
 
     @Test

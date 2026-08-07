@@ -23,7 +23,6 @@ import org.orcid.mp.user.pojo.ResendActivationResponse;
 import org.orcid.mp.user.security.AuthoritiesConstants;
 import org.orcid.mp.user.security.SecurityUtil;
 import org.orcid.mp.user.service.UserService;
-import org.orcid.mp.user.upload.UserUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +42,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
@@ -191,24 +189,6 @@ public class UserResource {
             user = userService.getUser(loginOrId);
         }
         return userOrNotFound(user);
-    }
-
-    /**
-     * {@code POST  /user/upload} : Create a list of users.
-     *
-     * @param file: file containing the users to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and
-     * with a map indicating if each user was created or not, or with
-     * status {@code 400 (Bad Request)} if the file cannot be parsed.
-     * @throws Throwable
-     */
-    @PostMapping("/upload")
-    @PreAuthorize("hasRole(\"ROLE_ADMIN\")")
-    public ResponseEntity<String> uploadUsers(@RequestParam("file") MultipartFile file) throws Throwable {
-        LOG.debug("Uploading users settings CSV");
-        User currentUser = getCurrentUser();
-        UserUpload upload = userService.uploadUserCSV(file.getInputStream(), currentUser);
-        return ResponseEntity.ok().body(upload.getErrors().toString());
     }
 
     /**
