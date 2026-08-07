@@ -23,7 +23,6 @@ import { AlertService } from '../shared/service/alert.service'
 import { Page } from '../shared/model/page.model'
 import { FeatureToggleService } from '../shared/service/feature-toggle.service'
 import { FaIconComponent } from '@fortawesome/angular-fontawesome'
-import { HasAnyAuthorityDirective } from '../shared/directive/has-any-authority.directive'
 import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 import { ErrorAlertComponent } from '../error/error-alert.component'
 import { AlertComponent } from '../shared/alert/alert-toast.component'
@@ -38,7 +37,6 @@ import { DatePipe } from '@angular/common'
   imports: [
     RouterLink,
     FaIconComponent,
-    HasAnyAuthorityDirective,
     ReactiveFormsModule,
     FormsModule,
     ErrorAlertComponent,
