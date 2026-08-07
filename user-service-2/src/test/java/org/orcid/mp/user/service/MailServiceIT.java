@@ -3,6 +3,9 @@ package org.orcid.mp.user.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.orcid.mp.user.config.togglz.PortalFeatures;
+import org.togglz.testing.TestFeatureManager;
+import org.togglz.testing.TestFeatureManagerProvider;
 import org.orcid.mp.user.UserServiceApplication;
 import org.orcid.mp.user.client.MailgunClient;
 import org.orcid.mp.user.config.Constants;
@@ -42,11 +45,16 @@ public class MailServiceIT {
 
     private MailService mailService;
 
+    private TestFeatureManager featureManager;
+
     @BeforeEach
     public void setup() throws MailException {
         MockitoAnnotations.initMocks(this);
         doNothing().when(mailgunClient).sendMail(anyString(), anyString(), anyString());
         mailService = new MailService(messageSource, templateEngine, mailgunClient);
+        featureManager = new TestFeatureManager(PortalFeatures.class);
+        featureManager.disableAll();
+        TestFeatureManagerProvider.setFeatureManager(featureManager);
     }
 
     @Test
@@ -58,6 +66,19 @@ public class MailServiceIT {
         verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
         assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
         assertThat(subjectCaptor.getValue()).isEqualTo("ORCID Member Portal activation");
+        assertThat(contentCaptor.getValue()).isNotNull();
+    }
+
+    @Test
+    public void testSendActivationEmailV2() throws Exception {
+        featureManager.enable(PortalFeatures.ACTIVATION_EMAIL_V2);
+        User user = new User();
+        user.setLangKey(Constants.DEFAULT_LANGUAGE);
+        user.setEmail("john.doe@example.com");
+        mailService.sendActivationEmail(user);
+        verify(mailgunClient, Mockito.times(1)).sendMail(recipientCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
+        assertThat(recipientCaptor.getValue()).isEqualTo("john.doe@example.com");
+        assertThat(subjectCaptor.getValue()).isEqualTo("ORCID Member Portal Activation");
         assertThat(contentCaptor.getValue()).isNotNull();
     }
 

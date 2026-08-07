@@ -11,7 +11,10 @@ import org.togglz.core.context.FeatureContext;
 public enum PortalFeatures implements Feature {
 
     @Label("Manage API credentials")
-    MANAGE_API_CREDENTIALS;
+    MANAGE_API_CREDENTIALS,
+
+    @Label("Activation email v2")
+    ACTIVATION_EMAIL_V2;
 
     public boolean isActive() {
         return FeatureContext.getFeatureManager().isActive(this);
