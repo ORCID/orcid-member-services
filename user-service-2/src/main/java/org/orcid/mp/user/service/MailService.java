@@ -57,7 +57,11 @@ public class MailService {
 
     public void sendActivationEmail(User user) {
         LOGGER.debug("Sending activation email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
+        if (PortalFeatures.ACTIVATION_EMAIL_V2.isActive()) {
+            sendEmailFromTemplate(user, "mail/activationEmail_v2", "email.activationv2.title");
+        } else {
+            sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
+        }
     }
 
     public void sendPasswordResetMail(User user) {
