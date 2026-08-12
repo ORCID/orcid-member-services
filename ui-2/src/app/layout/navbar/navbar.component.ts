@@ -64,6 +64,12 @@ export class NavbarComponent {
 
   protected canShowAdmin = computed(() => this.userIsOrgOwner() || this.userHasRoleAdmin())
   protected hasUserImage = computed(() => !!this.userImageUrl())
+  protected canShowToolsSection = computed(
+    () =>
+      this.userHasAssertionService() ||
+      (this.featureService.isEnabled('MANAGE_API_CREDENTIALS') &&
+        (this.userIsOrgOwner() || this.userCanManageApiCreds()))
+  )
 
   protected faBars = faBars
   protected faUser = faUser
