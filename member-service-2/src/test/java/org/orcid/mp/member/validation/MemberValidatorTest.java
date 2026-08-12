@@ -341,6 +341,7 @@ public class MemberValidatorTest {
         member.setClientId(null);
         member.setIsConsortiumLead(true);
         member.setParentSalesforceId(null);
+        member.setType(Member.MEMBERSHIP_TYPE_PREMIUM);
         return member;
     }
 
@@ -356,6 +357,7 @@ public class MemberValidatorTest {
         member.setParentSalesforceId("parent");
         member.setSalesforceId("salesforceId");
         member.setSuperadminEnabled(false);
+        member.setType(Member.MEMBERSHIP_TYPE_BASIC);
         return member;
     }
 
