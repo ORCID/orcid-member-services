@@ -106,7 +106,7 @@ public class AssertionService {
         assertion.setModified(now);
         assertion.setLastModifiedBy(owner.getEmail());
         assertion.setMemberId(owner.getMemberId());
-        assertion.setStatus(getAssertionStatus(assertion));
+        assertion.setStatus(getUpdatedAssertionStatus(assertion));
 
         String email = assertion.getEmail();
 
@@ -153,7 +153,7 @@ public class AssertionService {
         copyFieldsToUpdate(assertion, existingAssertion);
         existingAssertion.setModified(Instant.now());
         existingAssertion.setLastModifiedBy(user.getEmail());
-        existingAssertion.setStatus(getAssertionStatus(existingAssertion));
+        existingAssertion.setStatus(getUpdatedAssertionStatus(existingAssertion));
         assertion = assertionRepository.save(existingAssertion);
         setPrettyStatus(assertion);
         return assertion;
@@ -307,7 +307,7 @@ public class AssertionService {
         assertionRepository.save(refreshed);
     }
 
-    private String getAssertionStatus(Assertion assertion) {
+    private String getUpdatedAssertionStatus(Assertion assertion) {
         Optional<OrcidRecord> optionalRecord = orcidRecordService.findByEmail(assertion.getEmail());
         AssertionStatus tokenDeniedStatus = checkForTokenDeniedStatus(optionalRecord, assertion);
         if (tokenDeniedStatus != null) {

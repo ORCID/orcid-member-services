@@ -15,8 +15,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -32,107 +30,30 @@ public class AssertionRepositoryCustomImpl implements AssertionRepositoryCustom 
 
     @Override
     public List<Assertion> findAllToUpdateInOrcidRegistry(Pageable pageable) {
-        Criteria addedToOrcidSet = new Criteria().andOperator(
-                Criteria.where("added_to_orcid").exists(true),
-                Criteria.where("added_to_orcid").ne(null)
-        );
-
-        Criteria updatedInOrcidSet = new Criteria().andOperator(
-                Criteria.where("updated_in_orcid").exists(true),
-                Criteria.where("updated_in_orcid").ne(null)
-        );
-
-        Criteria updatedInOrcidNotSet = new Criteria().orOperator(
-                Criteria.where("updated_in_orcid").exists(false),
-                Criteria.where("updated_in_orcid").is(null)
-        );
-
-        AggregationExpression modifiedAfterUpdated = ComparisonOperators.valueOf("modified")
-                .greaterThan("updated_in_orcid");
-
-        Criteria modifiedAfterUpdateInOrcid = new Criteria().andOperator(
-                updatedInOrcidSet,
-                Criteria.expr(modifiedAfterUpdated)
-        );
-
-        AggregationExpression modifiedAfterAdded = ComparisonOperators.valueOf("modified")
-                .greaterThan("added_to_orcid");
-
-        Criteria modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet = new Criteria().andOperator(
-                addedToOrcidSet,
-                updatedInOrcidNotSet,
-                Criteria.expr(modifiedAfterAdded)
-        );
-
-        Criteria needsUpdatingInOrcid = new Criteria().orOperator(
-                modifiedAfterUpdateInOrcid,
-                modifiedAfterAddingToOrcidAndUpdateInOrcidNotSet
-        );
-
-        Criteria notDeprecatedOrDeactivated = Criteria.where("status").ne(AssertionStatus.RECORD_DEACTIVATED_OR_DEPRECATED.name());
-        Criteria notDeletedInOrcid = Criteria.where("status").ne(AssertionStatus.USER_DELETED_FROM_ORCID.name());
-        Criteria hasValidToken = Criteria.where("token_available").is(true);
-
-        Criteria finalCriteria = new Criteria().andOperator(
-                needsUpdatingInOrcid,
-                notDeprecatedOrDeactivated,
-                notDeletedInOrcid,
-                hasValidToken
-        );
-
-        MatchOperation initialMatch = Aggregation.match(finalCriteria);
-
-        SortOperation sort = new SortOperation(pageable.getSort());
-        SkipOperation skip = new SkipOperation(pageable.getOffset());
-        LimitOperation limit = new LimitOperation(pageable.getPageSize());
-
-        List<AggregationOperation> operations = new ArrayList<>();
-        operations.add(initialMatch);
-        operations.add(sort);
-        operations.add(skip);
-        operations.add(limit);
-
-        Aggregation aggregation = Aggregation.newAggregation(operations);
-        AggregationResults<Assertion> results = mongoTemplate.aggregate(aggregation, "assertion", Assertion.class);
-        return results.getMappedResults();
+        Query query = new Query();
+        query.addCriteria(Criteria.where("status").in(AssertionStatus.PENDING_RETRY.name(), AssertionStatus.PENDING_UPDATE.name()));
+        query.addCriteria(Criteria.where("token_available").is(true));
+        query.with(pageable);
+        return mongoTemplate.find(query, Assertion.class);
     }
 
     @Override
     public List<Assertion> findAllToCreateInOrcidRegistry(Pageable pageable) {
-        Criteria applicableStatus = Criteria.where("status").in(
+        Query query = new Query();
+        query.addCriteria(Criteria.where("status").in(
                 AssertionStatus.PENDING.name(),
                 AssertionStatus.PENDING_RETRY.name(),
                 AssertionStatus.NOTIFICATION_SENT.name(),
                 AssertionStatus.NOTIFICATION_FAILED.name(),
                 AssertionStatus.USER_REVOKED_ACCESS.name()
-        );
-
-        Criteria notAddedToOrcid = new Criteria();
-        notAddedToOrcid.orOperator(Criteria.where("added_to_orcid").exists(false), Criteria.where("added_to_orcid").is(null));
-
-        Criteria hasValidToken = Criteria.where("token_available").is(true);
-
-        Criteria finalCriteria = new Criteria().andOperator(
-                applicableStatus,
-                notAddedToOrcid,
-                hasValidToken
-        );
-
-        MatchOperation initialMatch = Aggregation.match(finalCriteria);
-
-        SortOperation sort = new SortOperation(pageable.getSort());
-        SkipOperation skip = new SkipOperation(pageable.getOffset());
-        LimitOperation limit = new LimitOperation(pageable.getPageSize());
-
-        List<AggregationOperation> operations = new ArrayList<>();
-        operations.add(initialMatch);
-        operations.add(sort);
-        operations.add(skip);
-        operations.add(limit);
-
-        Aggregation aggregation = Aggregation.newAggregation(operations);
-        AggregationResults<Assertion> results = mongoTemplate.aggregate(aggregation, "assertion", Assertion.class);
-        return results.getMappedResults();
+        ));
+        query.addCriteria(new Criteria().orOperator(
+                Criteria.where("added_to_orcid").exists(false),
+                Criteria.where("added_to_orcid").is(null)
+        ));
+        query.addCriteria(Criteria.where("token_available").is(true));
+        query.with(pageable);
+        return mongoTemplate.find(query, Assertion.class, "assertion");
     }
 
     @Override
