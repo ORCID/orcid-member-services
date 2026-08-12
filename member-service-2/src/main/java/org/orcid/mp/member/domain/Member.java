@@ -14,6 +14,12 @@ public class Member implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public static final String MEMBERSHIP_TYPE_BASIC = "basic";
+
+    public static final String MEMBERSHIP_TYPE_PREMIUM = "premium";
+
+    public static final String TYPE_UNKNOWN = "unkown";
+
     @Id
     private String id;
 

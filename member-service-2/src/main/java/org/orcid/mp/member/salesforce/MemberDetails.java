@@ -55,6 +55,9 @@ public class MemberDetails {
     @JsonProperty("Active_Member__c")
     private boolean activeMember;
 
+    @JsonProperty("Membership_type__c")
+    private String membershipType;
+
     private String memberId;
 
     private String parentMemberId;
@@ -201,5 +204,13 @@ public class MemberDetails {
 
     public void setActiveMember(boolean activeMember) {
         this.activeMember = activeMember;
+    }
+
+    public String getMembershipType() {
+        return membershipType;
+    }
+
+    public void setMembershipType(String membershipType) {
+        this.membershipType = membershipType;
     }
 }

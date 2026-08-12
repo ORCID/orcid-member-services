@@ -22,7 +22,8 @@
         "city": "Boston",
         "country": "US"
       },
-      "Active_Member__c": true
+      "Active_Member__c": true,
+      "Membership_type__c": "Basic Start-up"
     },
     {
       "Id": "0011000002XYZ02",
@@ -43,7 +44,8 @@
         "city": "London",
         "country": "UK"
       },
-      "Active_Member__c": true
+      "Active_Member__c": true,
+      "Membership_type__c": "Premium Large Non-profit"
     },
     {
       "Id": "0011000003XYZ03",
@@ -64,7 +66,8 @@
         "city": "Paris",
         "country": "FR"
       },
-      "Active_Member__c": true
+      "Active_Member__c": true,
+      "Membership_type__c": "Basic Non-profit"
     },
     {
       "Id": "0011000004XYZ04",
@@ -85,7 +88,8 @@
         "city": "Toronto",
         "country": "CA"
       },
-      "Active_Member__c": false
+      "Active_Member__c": false,
+      "Membership_type__c": "Basic"
     },
     {
       "Id": "0011000005XYZ05",
@@ -106,7 +110,8 @@
         "city": "Sydney",
         "country": "AU"
       },
-      "Active_Member__c": true
+      "Active_Member__c": true,
+      "Membership_type__c": "Premium Large"
     }
   ]
 }
