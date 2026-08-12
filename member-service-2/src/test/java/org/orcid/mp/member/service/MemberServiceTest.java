@@ -160,6 +160,7 @@ class MemberServiceTest {
         Member member = getMember();
         member.setId("id");
         member.setClientName("something different");
+        member.setType("some type");
 
         Member updated = memberService.updateMember(member, "user");
         assertNotNull(updated.getLastModifiedBy());
@@ -171,6 +172,7 @@ class MemberServiceTest {
         assertEquals(member.getSalesforceId(), updated.getSalesforceId());
         assertEquals(member.getAssertionServiceEnabled(), updated.getAssertionServiceEnabled());
         assertEquals(member.getIsConsortiumLead(), updated.getIsConsortiumLead());
+        assertEquals("some type", updated.getType());
     }
 
     @Test
