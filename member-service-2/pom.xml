@@ -30,6 +30,7 @@
 		<java.version>21</java.version>
 		<spring-security.version>6.5.9</spring-security.version>
 		<thymeleaf.version>3.1.5.RELEASE</thymeleaf.version>
+		<tomcat.version>10.1.52</tomcat.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
