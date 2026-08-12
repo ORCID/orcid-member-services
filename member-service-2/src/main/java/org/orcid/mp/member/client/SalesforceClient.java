@@ -295,7 +295,7 @@ public class SalesforceClient {
     }
 
     private String getAccessToken() {
-        LOG.info("Acquiring access token...");
+        LOG.debug("Acquiring access token...");
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("grant_type", "password");
         formData.add("client_id", clientId);
@@ -309,7 +309,7 @@ public class SalesforceClient {
                     .body(formData)
                     .retrieve().body(String.class);
 
-            LOG.info("Access token acquired successfully");
+            LOG.debug("Access token acquired successfully");
             JsonNode responseJson = objectMapper.readTree(responseString);
             return responseJson.get("access_token").textValue();
         } catch (Exception ex) {
