@@ -188,12 +188,12 @@ public class SalesforceService {
     }
 
     private void syncMember(MemberDetails salesforceMemberData) {
-        LOG.info("Syncing member with SF ID {}", salesforceMemberData.getId());
+        LOG.debug("Syncing member with SF ID {}", salesforceMemberData.getId());
         try {
             processSalesforceMemberData(salesforceMemberData);
             processSalesforceContactData(salesforceMemberData);
         } catch (Exception e) {
-            LOG.error("Failed to sync member {}", salesforceMemberData.getId(), e);
+            LOG.warn("Failed to sync member {}", salesforceMemberData.getId(), e);
         }
     }
 
@@ -202,17 +202,17 @@ public class SalesforceService {
         if (member.isPresent()) {
             List<User> users = userService.getUsersByMemberId(member.get().getId());
             if (users == null || users.isEmpty()) {
-                LOG.info("No users found for salesforce id {}", salesforceMemberData.getId());
+                LOG.debug("No users found for salesforce id {}", salesforceMemberData.getId());
                 MemberContact mainContact = getMainContact(salesforceMemberData.getId());
 
                 if (mainContact != null) {
-                    LOG.info("Found main contact in salesforce for id {}", salesforceMemberData.getId());
+                    LOG.debug("Found main contact in salesforce for id {}", salesforceMemberData.getId());
                     User user = getUserForMainContact(mainContact, member.get().getId());
 
                     LOG.info("Creating user account for {}", user.getEmail());
                     userService.createMainContactUser(user);
                 } else {
-                    LOG.info("No main contact found for salesforce id {}", salesforceMemberData.getId());
+                    LOG.debug("No main contact found for salesforce id {}", salesforceMemberData.getId());
                 }
             }
         } else {
@@ -325,6 +325,7 @@ public class SalesforceService {
     }
 
     private List<MemberDetails> getAllMembers() throws JsonProcessingException {
+        LOG.debug("Fetching all members from Salesforce");
         List<MemberDetails> members = new ArrayList<>();
         String membersJson = salesforceClient.getMembers();
 
@@ -336,6 +337,8 @@ public class SalesforceService {
             membersPage = objectMapper.readValue(membersJson, MembersPage.class);
             members.addAll(membersPage.getRecords());
         }
+
+        LOG.debug("Fetched {} members from Salesforce", members.size());
         return members;
     }
 
