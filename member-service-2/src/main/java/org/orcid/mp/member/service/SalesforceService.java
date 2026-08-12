@@ -254,10 +254,10 @@ public class SalesforceService {
             if (consortiumData != null) {
                 updateCosortiumLeadMetadata(existingMemberRecord.get(), true);
                 updateParentForConsortiumMembers(consortiumData);
-            } else if (consortiumData == null && existingMemberRecord.get().getIsConsortiumLead()) {
+            } else if (existingMemberRecord.get().getIsConsortiumLead()) {
                 // member no longer consortium lead
                 updateCosortiumLeadMetadata(existingMemberRecord.get(), false);
-                removeParentFromConsortiumMembers(consortiumData);
+                removeAsParent(existingMemberRecord.get().getSalesforceId());
             }
         } else {
             LOG.debug("Member {} not found", salesforceMemberData.getId());
@@ -285,10 +285,8 @@ public class SalesforceService {
         memberService.removeParentFromMembersNoLongerPartOfConsortium(consortiumData.getId(), activeConsortiumIds, SALESFORCE_SYNC_USERNAME);
     }
 
-    private void removeParentFromConsortiumMembers(ConsortiumLeadDetails consortiumData) {
-        consortiumData.getConsortiumMembers().forEach(consortiumMember -> {
-            memberService.removeParent(consortiumMember.getMemberId(), SALESFORCE_SYNC_USERNAME);
-        });
+    private void removeAsParent(String parentSalesforceId) {
+        memberService.removeParentFromMembers(parentSalesforceId, SALESFORCE_SYNC_USERNAME);
     }
 
     private void createNewMemberWithSalesforceData(MemberDetails salesforceMemberData, boolean consortiumLead) {

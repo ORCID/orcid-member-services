@@ -154,18 +154,15 @@ public class MemberService {
         memberRepository.save(consortiumMember);
     }
 
-    public void removeParent(String salesforceId, String lastModifiedBy) {
-        LOG.info("Removing parent from member {}", salesforceId);
-        Optional<Member> member = memberRepository.findBySalesforceId(salesforceId);
-        if (member.isPresent()) {
-            Member child = member.get();
-            child.setParentSalesforceId(null);
-            child.setLastModifiedDate(Instant.now());
-            child.setLastModifiedBy(lastModifiedBy);
-            memberRepository.save(child);
-        } else {
-            LOG.warn("Child member {} not found", salesforceId);
-        }
+    public void removeParentFromMembers(String salesforceId, String lastModifiedBy) {
+        LOG.info("Removing {} from all parent sf id fields", salesforceId);
+        List<Member> childOrgs = memberRepository.findAllByParentSalesforceId(salesforceId);
+        childOrgs.forEach(org -> {
+            org.setParentSalesforceId(null);
+            org.setLastModifiedDate(Instant.now());
+            org.setLastModifiedBy(lastModifiedBy);
+            memberRepository.save(org);
+        });
     }
 
     public void removeParentFromMembersNoLongerPartOfConsortium(String salesforceId, Set<String> consortiumSalesforceIds, String lastModifiedBy) {

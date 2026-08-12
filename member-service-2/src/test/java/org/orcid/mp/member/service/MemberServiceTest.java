@@ -23,10 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -373,9 +370,9 @@ class MemberServiceTest {
     void testRemoveParent() {
         Member member = getMember();
         assertThat(member.getParentSalesforceId()).isEqualTo("parentSalesforceId");
-        when(memberRepository.findById(eq("some-id"))).thenReturn(Optional.of(member));
+        when(memberRepository.findAllByParentSalesforceId(eq("parentSalesforceId"))).thenReturn(List.of(member));
 
-        memberService.removeParent("salesforceId", SalesforceService.SALESFORCE_SYNC_USERNAME);
+        memberService.removeParentFromMembers("parentSalesforceId", SalesforceService.SALESFORCE_SYNC_USERNAME);
 
         verify(memberRepository).save(memberCaptor.capture());
 
@@ -387,7 +384,7 @@ class MemberServiceTest {
     @Test
     void testRemoveParentWhenMemberNotFound() {
         when(memberRepository.findBySalesforceId(eq("missingSalesforceId"))).thenReturn(Optional.empty());
-        memberService.removeParent("missingSalesforceId", SalesforceService.SALESFORCE_SYNC_USERNAME);
+        memberService.removeParentFromMembers("missingSalesforceId", SalesforceService.SALESFORCE_SYNC_USERNAME);
         verify(memberRepository, Mockito.never()).save(Mockito.any(Member.class));
     }
 
