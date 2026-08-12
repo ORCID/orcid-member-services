@@ -1,19 +1,18 @@
 package org.orcid.mp.member.validation;
 
+import io.micrometer.common.util.StringUtils;
+import org.orcid.mp.member.domain.Member;
+import org.orcid.mp.member.repository.MemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import io.micrometer.common.util.StringUtils;
-import org.orcid.mp.member.domain.Member;
-import org.orcid.mp.member.domain.User;
-import org.orcid.mp.member.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Component;
 
 @Component
 public class MemberValidator {
@@ -23,8 +22,6 @@ public class MemberValidator {
     private static final String NEW_CLIENT_ID_REGEX = NEW_CLIENT_ID_PREFIX + "[A-Z0-9]{16}$";
     private static final Pattern OLD_CLIENT_ID_PATTERN = Pattern.compile(OLD_CLIENT_ID_REGEX);
     private static final Pattern NEW_CLIENT_ID_PATTERN = Pattern.compile(NEW_CLIENT_ID_REGEX);
-    private static final String MEMBER_TYPE_BASIC = "basic";
-    private static final String MEMBER_TYPE_PREMIUM = "premium";
 
     @Autowired
     private MessageSource messageSource;
@@ -106,7 +103,9 @@ public class MemberValidator {
 
     private void validateType(Member member, String langKey, List<String> errors) {
         if (member.getType() != null) {
-            if (!MEMBER_TYPE_BASIC.equals(member.getType()) && !MEMBER_TYPE_PREMIUM.equals(member.getType())) {
+            if (!Member.MEMBERSHIP_TYPE_BASIC.equals(member.getType()) &&
+                    !Member.MEMBERSHIP_TYPE_PREMIUM.equals(member.getType()) &&
+                    !Member.TYPE_UNKNOWN.equals(member.getType())) {
                 errors.add(getError("invalidMemberType", langKey));
             }
         }
@@ -117,7 +116,7 @@ public class MemberValidator {
     }
 
     private String getError(String code, String arg, String langKey) {
-        return messageSource.getMessage("member.validation.error." + code, arg != null ? new Object[] { arg } : null, Locale.forLanguageTag(langKey));
+        return messageSource.getMessage("member.validation.error." + code, arg != null ? new Object[]{arg} : null, Locale.forLanguageTag(langKey));
     }
 
 }
