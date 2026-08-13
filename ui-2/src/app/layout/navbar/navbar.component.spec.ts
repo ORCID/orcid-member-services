@@ -90,6 +90,8 @@ describe('NavbarComponent', () => {
   })
 
   it('should display reports menu', fakeAsync(() => {
+    featureToggleService.isEnabled.withArgs('MANAGE_API_CREDENTIALS').and.returnValue(false)
+
     accountService.isAuthenticated.and.returnValue(true)
     accountService.hasAnyAuthority.and.returnValue(false)
     accountService.hasAnyAuthority.withArgs(['ROLE_USER']).and.returnValue(true)
@@ -135,6 +137,16 @@ describe('NavbarComponent', () => {
 
     const affiliationManagerLink = fixture.debugElement.query(By.css('#affiliationManagerLink'))
     expect(affiliationManagerLink).toBeFalsy()
+
+    const dropdownHeaders = fixture.debugElement.queryAll(By.css('.dropdown-header'))
+    const toolsHeader = dropdownHeaders.find((el) => el.nativeElement.textContent.trim() === 'Tools')
+    expect(toolsHeader).toBeUndefined()
+
+    const dropdownDivider = fixture.debugElement.query(By.css('.dropdown-divider'))
+    expect(dropdownDivider).toBeFalsy()
+
+    const reportsHeader = dropdownHeaders.find((el) => el.nativeElement.textContent.trim() === 'Reports')
+    expect(reportsHeader).toBeTruthy()
   }))
 
   it('should display consortia report link', fakeAsync(() => {

@@ -43,7 +43,9 @@
               </span>
             </a>
             <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="tools-menu">
-              <h6 class="dropdown-header" i18n="@@global.menu.tools.main.string">Tools</h6>
+              @if (canShowToolsSection()) {
+                <h6 class="dropdown-header" i18n="@@global.menu.tools.main.string">Tools</h6>
+              }
               @if (userHasAssertionService()) {
                 <li>
                   <a
@@ -77,7 +79,9 @@
                   </a>
                 </li>
               }
-              <div class="dropdown-divider"></div>
+              @if (canShowToolsSection()) {
+                <div class="dropdown-divider"></div>
+              }
               <h6 class="dropdown-header" i18n="@@global.menu.reports.main.string">Reports</h6>
               <li>
                 <a
