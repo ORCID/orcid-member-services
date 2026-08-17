@@ -6,7 +6,7 @@
         <target><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> 登入失敗！<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 請檢查您的憑證並再試一次。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.form.email.label.string" datatype="html">
@@ -14,7 +14,7 @@
         <target>電子郵件</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">28</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/password/password-reset-init.component.html</context>
@@ -30,7 +30,7 @@
         <target>您的電子郵件</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">34</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/settings/settings.component.html</context>
@@ -42,7 +42,7 @@
         <target>密碼</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="login.form.password.placeholder.string" datatype="html">
@@ -50,7 +50,7 @@
         <target>您的密碼</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="login.form.mfaCode.prompt.string" datatype="html">
@@ -58,7 +58,7 @@
         <target>請輸入您身份驗證器應用程式中的 MFA 代碼</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="login.form.mfaCode.error.string" datatype="html">
@@ -66,7 +66,7 @@
         <target>無效的 MFA 代碼</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="login.form.mfaCode.label.string" datatype="html">
@@ -74,7 +74,7 @@
         <target>MFA 代碼</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
       <trans-unit id="login.form.button.string" datatype="html">
@@ -82,7 +82,7 @@
         <target>登入</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="login.password.forgot.string" datatype="html">
@@ -90,7 +90,7 @@
         <target> 您忘記密碼了嗎？ </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/account/login/login.component.html</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="reset.request.title.string" datatype="html">
@@ -638,7 +638,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.tools.manageApiCredentials.string" datatype="html">
@@ -646,7 +646,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.tools.assertionServiceAffiliationManager.string" datatype="html">
@@ -654,7 +654,7 @@
         <target>Affiliation Manager</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.member.string" datatype="html">
@@ -662,7 +662,7 @@
         <target>會員報告</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">92</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.reports.main.string" datatype="html">
@@ -670,7 +670,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.integration.string" datatype="html">
@@ -678,7 +678,7 @@
         <target>整合報告</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.consortium.string" datatype="html">
@@ -686,7 +686,7 @@
         <target>聯合報告</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.affiliation.string" datatype="html">
@@ -694,7 +694,7 @@
         <target>聯盟關係報告</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">131</context>
+          <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.report.consortiumMemberAffiliations.string" datatype="html">
@@ -702,7 +702,7 @@
         <target>聯盟成員所屬單位</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">145</context>
+          <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.main.string" datatype="html">
@@ -710,7 +710,7 @@
         <target>資源</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">162</context>
+          <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.accountManagementGuide.string" datatype="html">
@@ -718,7 +718,7 @@
         <target>帳號管理指南</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">173</context>
+          <context context-type="linenumber">177</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.affiliationManagerGuide.string" datatype="html">
@@ -726,7 +726,7 @@
         <target>Affiliation Manager 指南</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">183</context>
+          <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.memberReportingGuide.string" datatype="html">
@@ -734,7 +734,7 @@
         <target>會員通報指南</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">193</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.resources.applyForAffiliationManagerCreds.string" datatype="html">
@@ -742,7 +742,7 @@
         <target>申請 Affiliation Manager 憑證</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">203</context>
+          <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.adminMenu.main.string" datatype="html">
@@ -750,7 +750,7 @@
         <target>管理員</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">219</context>
+          <context context-type="linenumber">223</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.adminMenu.manageUsers.string" datatype="html">
@@ -758,7 +758,7 @@
         <target>管理使用者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">232</context>
+          <context context-type="linenumber">236</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.adminMenu.manageMembers.string" datatype="html">
@@ -766,7 +766,7 @@
         <target>管理會員</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">245</context>
+          <context context-type="linenumber">249</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.main.string" datatype="html">
@@ -774,7 +774,7 @@
         <target>帳號</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">262</context>
+          <context context-type="linenumber">266</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.settings.string" datatype="html">
@@ -782,7 +782,7 @@
         <target>設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">275</context>
+          <context context-type="linenumber">279</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.password.string" datatype="html">
@@ -790,7 +790,7 @@
         <target>密碼</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">281</context>
+          <context context-type="linenumber">285</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.loading.string" datatype="html">
@@ -798,11 +798,11 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="linenumber">60</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.menu.account.logout.string" datatype="html">
@@ -810,7 +810,7 @@
         <target>登出</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/layout/navbar/navbar.component.html</context>
-          <context context-type="linenumber">287</context>
+          <context context-type="linenumber">291</context>
         </context-group>
       </trans-unit>
       <trans-unit id="error.subtitle.string" datatype="html">
@@ -962,7 +962,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">236</context>
+          <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.back.string" datatype="html">
@@ -1001,20 +1001,12 @@
           <context context-type="linenumber">36</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/member/member-import-dialog.component.html</context>
-          <context context-type="linenumber">71</context>
-        </context-group>
-        <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
           <context context-type="linenumber">238</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
           <context context-type="linenumber">14</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
-          <context context-type="linenumber">80</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
@@ -1042,7 +1034,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">258</context>
+          <context context-type="linenumber">249</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.edit.string" datatype="html">
@@ -1070,7 +1062,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
-          <context context-type="linenumber">153</context>
+          <context context-type="linenumber">145</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-detail.component.html</context>
@@ -1078,7 +1070,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">247</context>
+          <context context-type="linenumber">238</context>
         </context-group>
       </trans-unit>
       <trans-unit id="entity.action.save.string" datatype="html">
@@ -1118,7 +1110,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">148</context>
+          <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.createdDate.string" datatype="html">
@@ -1150,7 +1142,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.firstName.string" datatype="html">
@@ -1166,7 +1158,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">97</context>
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.home.createLabel.string" datatype="html">
@@ -1190,7 +1182,7 @@
         <target>沒有可顯示的使用者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.home.title.string" datatype="html">
@@ -1199,14 +1191,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
           <context context-type="linenumber">2</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSUser.home.uploadLabel.string" datatype="html">
-        <source>Import users from CSV </source>
-        <target>由 CSV 檔案匯入使用者</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.isAdmin.string" datatype="html">
@@ -1230,7 +1214,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">164</context>
+          <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.lastName.string" datatype="html">
@@ -1246,7 +1230,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">108</context>
+          <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.mainContact.string" datatype="html">
@@ -1262,7 +1246,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">110</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.manageApiCredentialsEnabled.string" datatype="html">
@@ -1274,7 +1258,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">128</context>
+          <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.memberId.string" datatype="html">
@@ -1290,7 +1274,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">156</context>
+          <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.salesforceId.string" datatype="html">
@@ -1302,7 +1286,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSUser.sendActivate.error.string" datatype="html">
@@ -1370,11 +1354,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">35</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.form.search.string" datatype="html">
@@ -1394,27 +1378,27 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">24</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">25</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">45</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">19</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">20</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.item-count.string" datatype="html">
@@ -1430,7 +1414,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.ts</context>
-          <context context-type="linenumber">267</context>
+          <context context-type="linenumber">265</context>
         </context-group>
       </trans-unit>
       <trans-unit id="global.true.string" datatype="html">
@@ -1496,14 +1480,6 @@
           <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.html</context>
           <context context-type="linenumber">92</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/member/member-import-dialog.component.html</context>
-          <context context-type="linenumber">74</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
-          <context context-type="linenumber">83</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="entity.delete.title.string" datatype="html">
         <source>Confirm deletion</source>
@@ -1514,38 +1490,6 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
-          <context context-type="linenumber">3</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSUser.import.errors.label.string" datatype="html">
-        <source> Oops! There was a problem processing your data. Pleases fix the errors below and try again </source>
-        <target>糟糕！在處理您的資料時發生了問題。請修正下列錯誤並再試一次</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
-          <context context-type="linenumber">18</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSUser.import.filePath.string" datatype="html">
-        <source>File Path</source>
-        <target>檔案路經</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
-          <context context-type="linenumber">53</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSUser.import.label.string" datatype="html">
-        <source> Please select a CSV file to upload </source>
-        <target>請選擇欲上傳的 CSV 檔案</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
-          <context context-type="linenumber">45</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSUser.import.title.string" datatype="html">
-        <source>Import users</source>
-        <target>匯入使用者</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/user/user-import-dialog.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
@@ -4248,14 +4192,6 @@
           <context context-type="sourcefile">src/app/affiliation/affiliation-import-dialog.component.ts</context>
           <context context-type="linenumber">71</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/member/member-import-dialog.component.ts</context>
-          <context context-type="linenumber">69</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/user/user-import-dialog.component.ts</context>
-          <context context-type="linenumber">73</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="entity.validation.disambiguatedOrgId.string" datatype="html">
         <source> This field is required. GRID Organization ID should start with &quot;grid.&quot;, RINGGOLD Organization ID should be a number, ROR IDs must be 9 characters, beginning with 0 </source>
@@ -4742,11 +4678,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
-          <context context-type="linenumber">122</context>
+          <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.assertionEnabled.string" datatype="html">
-        <source> Assertions Enabled </source>
+        <source> Assertions Enabled? </source>
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
@@ -4826,7 +4762,7 @@
         <target>沒有可顯示的成員</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.home.title.string" datatype="html">
@@ -4835,14 +4771,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
           <context context-type="linenumber">2</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSMember.home.uploadLabel.string" datatype="html">
-        <source> Import members from CSV </source>
-        <target>由 CSV 檔案匯入成員</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/member/members.component.html</context>
-          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.lastModifiedDate.string" datatype="html">
@@ -4866,7 +4794,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
-          <context context-type="linenumber">112</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.organizationType.string" datatype="html">
@@ -4882,7 +4810,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.parentSalesforceId.string" datatype="html">
@@ -4898,7 +4826,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.salesforceId.string" datatype="html">
@@ -4914,7 +4842,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.connectionExists.differentUser.string" datatype="html">
@@ -4922,7 +4850,7 @@
         <target state="new">此認證連結已經用過了。請聯絡 <x id="PH" equiv-text="this.clientName"/> 取得新的認證連結。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
-          <context context-type="linenumber">152</context>
+          <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.connectionExists.permissionToUpdate.string" datatype="html">
@@ -4930,7 +4858,7 @@
         <target>更新您的 ORCID 記錄的權限</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.html</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.connectionExists.youHaveAlready.string" datatype="html">
@@ -4938,7 +4866,7 @@
         <target>您已允許過</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.html</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.denied.grantAccess.string" datatype="html">
@@ -4946,7 +4874,7 @@
         <target state="new">允許 <x id="PH" equiv-text="this.clientName"/> 更新我的 ORCID 紀錄</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
-          <context context-type="linenumber">155</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.denied.ifThisWas.string" datatype="html">
@@ -4954,7 +4882,7 @@
         <target>如果這是錯誤的操作，請點擊以下按鈕授予存取權限。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.html</context>
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.denied.willNotBeAble.string" datatype="html">
@@ -4962,7 +4890,7 @@
         <target>將無法更新您的 ORCID 紀錄。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.html</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.denied.youHaveDenied.string" datatype="html">
@@ -4970,7 +4898,7 @@
         <target>歐嗚，您已拒絕存取。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.error.somethingWentWrong.string" datatype="html">
@@ -4978,7 +4906,7 @@
         <target>糟糕，發生了一些錯誤，導致我們無法取得您的 ORCID 編碼</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.html</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.success.ifYouFind.string" datatype="html">
@@ -4986,7 +4914,7 @@
         <target state="new">如果您發現新增至您的 ORCID 紀錄的檔案並不正確，請聯繫 <x id="PH" equiv-text="this.clientName"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
-          <context context-type="linenumber">149</context>
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.success.thanks.string" datatype="html">
@@ -4994,7 +4922,7 @@
         <target state="new">感謝您， <x id="PH" equiv-text="this.givenName"/> <x id="PH_1" equiv-text="this.familyName"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
-          <context context-type="linenumber">245</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="landingPage.success.youHaveSuccessfully.string" datatype="html">
@@ -5002,7 +4930,7 @@
         <target state="new">您已經成功給予 <x id="PH" equiv-text="this.clientName"/> 更新您 ORCID 紀錄的權限，您的紀錄並會隨機關資訊更新。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/landing-page/landing-page.component.ts</context>
-          <context context-type="linenumber">158</context>
+          <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="memberServiceApp.member.created.string" datatype="html">
@@ -5019,38 +4947,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipe/localize.ts</context>
           <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSMember.import.errors.label.string" datatype="html">
-        <source> Oops! There was a problem processing your data. Pleases fix the errors below and try again </source>
-        <target>糟糕！在處理您的資料時發生了問題。請修正下列錯誤並再試一次</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/member/member-import-dialog.component.html</context>
-          <context context-type="linenumber">18</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSMember.import.filePath.string" datatype="html">
-        <source>File Path</source>
-        <target>檔案路徑</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/member/member-import-dialog.component.html</context>
-          <context context-type="linenumber">44</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSMember.import.label.string" datatype="html">
-        <source> Please select a CSV file to upload </source>
-        <target>請選擇欲上傳的 CSV 檔案</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/member/member-import-dialog.component.html</context>
-          <context context-type="linenumber">37</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSMember.import.title.string" datatype="html">
-        <source>Import members</source>
-        <target>匯入會員</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/member/member-import-dialog.component.html</context>
-          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="home.loggedIn.message.string" datatype="html">
@@ -5114,7 +5010,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/users.component.ts</context>
-          <context context-type="linenumber">252</context>
+          <context context-type="linenumber">250</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.salesforceId.validation.pattern.string" datatype="html">
