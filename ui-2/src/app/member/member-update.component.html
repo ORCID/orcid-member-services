@@ -105,6 +105,34 @@
               <fa-icon [icon]="faLock" />
             </span>
           </div>
+          @if (
+            editForm.get('parentSalesforceId')?.invalid &&
+            (editForm.get('parentSalesforceId')?.dirty || editForm.get('parentSalesforceId')?.touched)
+          ) {
+            <div>
+              @if (editForm.get('parentSalesforceId')?.hasError('pattern')) {
+                <small
+                  class="form-text text-danger"
+                  i18n="@@gatewayApp.msUserServiceMSMember.parentSalesforceId.validation.pattern.string"
+                  data-cy="fieldParentPatternInvalid"
+                >
+                  Must be exactly 18 alphanumeric characters.
+                </small>
+              }
+              @if (
+                !(editForm.get('parentSalesforceId')?.errors)!['pattern'] &&
+                editForm.get('parentSalesforceId')?.errors?.['validParentSalesforceIdValue'] !== undefined
+              ) {
+                <small
+                  class="form-text text-danger"
+                  i18n="@@gatewayApp.msUserServiceMSMember.parentSalesforceId.validation.match.string"
+                  data-cy="fieldParentSalesforceIdInvalid"
+                >
+                  Parent SalesForce ID must match SalesForce ID for consortium lead members.
+                </small>
+              }
+            </div>
+          }
         </div>
         <div class="mb-3">
           <label
@@ -125,6 +153,22 @@
               <fa-icon [icon]="faLock" />
             </span>
           </div>
+          @if (
+            editForm.get('clientName')?.invalid &&
+            (editForm.get('clientName')?.dirty || editForm.get('clientName')?.touched)
+          ) {
+            <div>
+              @if (editForm.get('clientName')?.hasError('required')) {
+                <small
+                  class="form-text text-danger"
+                  i18n="@@entity.validation.required.string"
+                  data-cy="fieldClientNameRequired"
+                >
+                  This field is required.
+                </small>
+              }
+            </div>
+          }
         </div>
         <div class="mb-3">
           <label

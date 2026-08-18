@@ -102,6 +102,85 @@ describe('MemberUpdateComponent', () => {
     })
   })
 
+  describe('parentSalesforceId validation messages', () => {
+    beforeEach(() => {
+      activatedRoute.data = of({ member: new Member() })
+      fixture.detectChanges()
+    })
+
+    it('should show "Must be exactly 18 alphanumeric characters" when parentSalesforceId format is invalid', () => {
+      const input = fixture.nativeElement.querySelector('#field_parentSalesforceId')
+      input.value = 'short'
+      input.dispatchEvent(new Event('input'))
+      component.editForm.get('parentSalesforceId')?.markAsTouched()
+      component.editForm.get('parentSalesforceId')?.updateValueAndValidity()
+      fixture.detectChanges()
+
+      const patternMsg = fixture.nativeElement.querySelector('[data-cy="fieldParentPatternInvalid"]')
+      expect(patternMsg).toBeTruthy()
+      expect(patternMsg.textContent.trim()).toBe('Must be exactly 18 alphanumeric characters.')
+    })
+
+    it('should show the mismatch message when consortium lead and parentSalesforceId does not match salesforceId', () => {
+      component.editForm.get('isConsortiumLead')?.setValue(true)
+      component.editForm.get('salesforceId')?.setValue('ABCDEFGHIJKLMNOPQR')
+
+      const input = fixture.nativeElement.querySelector('#field_parentSalesforceId')
+      input.value = 'RQPONMLKJIHGFEDCBA'
+      input.dispatchEvent(new Event('input'))
+      component.editForm.get('parentSalesforceId')?.markAsTouched()
+      component.editForm.get('parentSalesforceId')?.updateValueAndValidity()
+      fixture.detectChanges()
+
+      const matchMsg = fixture.nativeElement.querySelector('[data-cy="fieldParentSalesforceIdInvalid"]')
+      expect(matchMsg).toBeTruthy()
+      expect(matchMsg.textContent.trim()).toBe('Parent SalesForce ID must match SalesForce ID for consortium lead members.')
+    })
+
+    it('should not show any error messages when parentSalesforceId is valid', () => {
+      const input = fixture.nativeElement.querySelector('#field_parentSalesforceId')
+      input.value = 'ABCDEFGHIJKLMNOPQR'
+      input.dispatchEvent(new Event('input'))
+      component.editForm.get('parentSalesforceId')?.markAsTouched()
+      component.editForm.get('parentSalesforceId')?.updateValueAndValidity()
+      fixture.detectChanges()
+
+      expect(fixture.nativeElement.querySelector('[data-cy="fieldParentPatternInvalid"]')).toBeNull()
+      expect(fixture.nativeElement.querySelector('[data-cy="fieldParentSalesforceIdInvalid"]')).toBeNull()
+    })
+  })
+
+  describe('clientName validation messages', () => {
+    beforeEach(() => {
+      activatedRoute.data = of({ member: new Member() })
+      fixture.detectChanges()
+    })
+
+    it('should show "This field is required" when clientName is empty and touched', () => {
+      const input = fixture.nativeElement.querySelector('#field_clientName')
+      input.value = ''
+      input.dispatchEvent(new Event('input'))
+      component.editForm.get('clientName')?.markAsTouched()
+      component.editForm.get('clientName')?.updateValueAndValidity()
+      fixture.detectChanges()
+
+      const requiredMsg = fixture.nativeElement.querySelector('[data-cy="fieldClientNameRequired"]')
+      expect(requiredMsg).toBeTruthy()
+      expect(requiredMsg.textContent.trim()).toBe('This field is required.')
+    })
+
+    it('should not show an error message when clientName is provided', () => {
+      const input = fixture.nativeElement.querySelector('#field_clientName')
+      input.value = 'Org Name'
+      input.dispatchEvent(new Event('input'))
+      component.editForm.get('clientName')?.markAsTouched()
+      component.editForm.get('clientName')?.updateValueAndValidity()
+      fixture.detectChanges()
+
+      expect(fixture.nativeElement.querySelector('[data-cy="fieldClientNameRequired"]')).toBeNull()
+    })
+  })
+
   it('should create a new member', () => {
     activatedRoute.data = of({ member: new Member() })
     memberService.create.and.returnValue(of({ id: 'test' } as IMember))
