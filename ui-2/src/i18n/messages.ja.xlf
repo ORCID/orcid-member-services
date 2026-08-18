@@ -1002,7 +1002,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">238</context>
+          <context context-type="linenumber">282</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
@@ -1082,7 +1082,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">241</context>
+          <context context-type="linenumber">285</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
@@ -4266,7 +4266,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">180</context>
+          <context context-type="linenumber">167</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/member/member-update.component.html</context>
+          <context context-type="linenumber">224</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.day.string" datatype="html">
@@ -4674,7 +4678,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">204</context>
+          <context context-type="linenumber">248</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
@@ -4694,7 +4698,7 @@
         <target state="new">アサーションが有効化されました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">219</context>
+          <context context-type="linenumber">263</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.clientId.addedAsRedirect.string" datatype="html">
@@ -4702,7 +4706,7 @@
         <target>にリダイレクトURIとして追加されました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">164</context>
+          <context context-type="linenumber">208</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.clientId.label.string" datatype="html">
@@ -4714,7 +4718,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">155</context>
+          <context context-type="linenumber">199</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.clientId.note.string" datatype="html">
@@ -4722,7 +4726,7 @@
         <target>注： クライアントIDはメンバーOBOが有効になっている必要があり、および</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">160</context>
+          <context context-type="linenumber">204</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.createdDate.string" datatype="html">
@@ -4790,7 +4794,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">114</context>
+          <context context-type="linenumber">142</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
@@ -4806,7 +4810,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">134</context>
+          <context context-type="linenumber">178</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
@@ -4827,6 +4831,22 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
           <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSMember.parentSalesforceId.validation.match.string" datatype="html">
+        <source> Parent SalesForce ID must match SalesForce ID for consortium lead members. </source>
+        <target state="new"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/member/member-update.component.html</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSMember.parentSalesforceId.validation.pattern.string" datatype="html">
+        <source> Must be exactly 18 alphanumeric characters. </source>
+        <target state="new"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/member/member-update.component.html</context>
+          <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.salesforceId.string" datatype="html">
