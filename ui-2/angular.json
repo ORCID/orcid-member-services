@@ -138,6 +138,7 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
+            "port": 4300,
             "proxyConfig": "src/proxy.conf.mjs",
             "buildTarget": "ui:build",
             "allowedHosts": ["all"]
