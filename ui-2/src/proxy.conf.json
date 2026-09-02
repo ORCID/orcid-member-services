@@ -1,11 +1,11 @@
 {
   "/togglz-console*": {
-    "target": "http://localhost:9000",
+    "target": "http://localhost:9030",
     "secure": false,
     "changeOrigin": true
   },
   "/userservice/*": {
-    "target": "http://localhost:9000",
+    "target": "http://localhost:9030",
     "secure": false,
     "changeOrigin": true,
     "pathRewrite": {
@@ -13,12 +13,12 @@
     }
   },
   "/oauth2/*": {
-    "target": "http://localhost:9000",
+    "target": "http://localhost:9030",
     "secure": false,
     "changeOrigin": true
   },
   "/.well-known/*": {
-    "target": "http://localhost:9000",
+    "target": "http://localhost:9030",
     "secure": false,
     "changeOrigin": true
   },

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="(@{|${subject}|})">
+        Your CSV file
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+</head>
+<body
+    style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
+<div style="padding: 20px; padding-top: 10px; margin: auto;">
+    <div th:insert="~{mail/common :: emailHeader}"></div>
+    <p>
+        <span th:text="(@{|${text}|})">
+        	Please find your requested file attached.
+        </span>
+    </p>
+    <p>
+        <span th:text="#{email.common.warmRegards}">Warm Regards,</span> <br />
+        <span th:text="#{email.common.signature}">The ORCID Member Portal Team</span> <br />
+        <a href="mailto:membership@orcid.org">membership@orcid.org</a>
+    </p>
+    <p th:text="#{email.common.youHaveReceived}">You have received
+        this email as a service announcement related to your ORCID Member Portal account.</p>
+    <div th:insert="~{mail/common :: emailFooter}"></div>
+</div>
+</body>
+</html>

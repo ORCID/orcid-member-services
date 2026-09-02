@@ -1,0 +1,43 @@
+{
+  "groups": [
+    {
+      "name": "application",
+      "type": "io.github.jhipster.registry.config.ApplicationProperties",
+      "sourceType": "io.github.jhipster.registry.config.ApplicationProperties"
+    },
+    {
+      "name": "application.oauth2",
+      "type": "io.github.jhipster.registry.config.ApplicationProperties$Oauth2",
+      "sourceType": "io.github.jhipster.registry.config.ApplicationProperties",
+      "sourceMethod": "public io.github.jhipster.registry.config.ApplicationProperties.Oauth2 getOauth2() "
+    },
+    {
+      "name": "spring.cloud.config.server",
+      "type": "io.github.jhipster.registry.config.ConfigServerConfig",
+      "sourceType": "io.github.jhipster.registry.config.ConfigServerConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "application.app-version",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.registry.config.ApplicationProperties"
+    },
+    {
+      "name": "application.oauth2.authorities-attribute",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.registry.config.ApplicationProperties$Oauth2"
+    },
+    {
+      "name": "application.oauth2.principal-attribute",
+      "type": "java.lang.String",
+      "sourceType": "io.github.jhipster.registry.config.ApplicationProperties$Oauth2"
+    },
+    {
+      "name": "spring.cloud.config.server.composite",
+      "type": "java.util.List<java.util.Map<java.lang.String,java.lang.Object>>",
+      "sourceType": "io.github.jhipster.registry.config.ConfigServerConfig"
+    }
+  ],
+  "hints": []
+}

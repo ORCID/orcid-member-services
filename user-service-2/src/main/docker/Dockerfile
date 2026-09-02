@@ -8,7 +8,7 @@ RUN apt-get update && \
 
 ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
 
-EXPOSE 9000
+EXPOSE 9030
 
 # add orcid ca to allow Java application to trust other containers
 ADD src/main/docker/cacerts /opt/java/openjdk/lib/security/cacerts

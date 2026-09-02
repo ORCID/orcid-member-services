@@ -1,17 +1,17 @@
 export default {
   '/userservice': {
-    target: 'http://localhost:9000',
+    target: 'http://localhost:9030',
     secure: false,
     changeOrigin: true,
     rewrite: (path) => path.replace(/^\/userservice/, ''),
   },
   '/oauth2': {
-    target: 'http://localhost:9000',
+    target: 'http://localhost:9030',
     secure: false,
     changeOrigin: true,
   },
   '/.well-known': {
-    target: 'http://localhost:9000',
+    target: 'http://localhost:9030',
     secure: false,
     changeOrigin: true,
   },
