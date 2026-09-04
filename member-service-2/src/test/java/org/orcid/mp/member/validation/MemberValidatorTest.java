@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.orcid.mp.member.domain.Member;
-import org.orcid.mp.member.domain.User;
 import org.orcid.mp.member.repository.MemberRepository;
 import org.springframework.context.MessageSource;
 
@@ -257,7 +256,7 @@ public class MemberValidatorTest {
     @Test
     public void testValidateMemberWithInvalidMemberType() {
         Member member = getMemberWithValidNewClientId();
-        member.setType("invalid member type");
+        member.setApiAccessLevel("invalid access level");
         MemberValidation validation = memberValidator.validate(member, "en");
 
         List<String> errors = validation.getErrors();
@@ -265,17 +264,17 @@ public class MemberValidatorTest {
         assertEquals(1, errors.size());
         Mockito.verify(messageSource, Mockito.times(1)).getMessage(errorMessagePropertyCaptor.capture(), Mockito.any(), Mockito.any());
         String propertyName = errorMessagePropertyCaptor.getValue();
-        assertEquals("member.validation.error.invalidMemberType", propertyName);
+        assertEquals("member.validation.error.invalidMemberApiAccessLevel", propertyName);
     }
 
     @Test
     public void testValidateMemberWithValidMemberType() {
         Member member = getMemberWithValidNewClientId();
-        member.setType("basic");
+        member.setApiAccessLevel("basic");
         MemberValidation validation = memberValidator.validate(member, "en");
         assertTrue(validation.isValid());
 
-        member.setType("premium");
+        member.setApiAccessLevel("premium");
         validation = memberValidator.validate(member, "en");
         assertTrue(validation.isValid());
     }
@@ -341,7 +340,7 @@ public class MemberValidatorTest {
         member.setClientId(null);
         member.setIsConsortiumLead(true);
         member.setParentSalesforceId(null);
-        member.setType(Member.MEMBERSHIP_TYPE_PREMIUM);
+        member.setApiAccessLevel(Member.API_ACCESS_LEVEL_PREMIUM);
         return member;
     }
 
@@ -357,7 +356,7 @@ public class MemberValidatorTest {
         member.setParentSalesforceId("parent");
         member.setSalesforceId("salesforceId");
         member.setSuperadminEnabled(false);
-        member.setType(Member.MEMBERSHIP_TYPE_BASIC);
+        member.setApiAccessLevel(Member.API_ACCESS_LEVEL_BASIC);
         return member;
     }
 

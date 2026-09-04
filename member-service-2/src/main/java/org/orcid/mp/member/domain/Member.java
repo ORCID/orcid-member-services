@@ -14,11 +14,11 @@ public class Member implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static final String MEMBERSHIP_TYPE_BASIC = "basic";
+    public static final String API_ACCESS_LEVEL_BASIC = "basic";
 
-    public static final String MEMBERSHIP_TYPE_PREMIUM = "premium";
+    public static final String API_ACCESS_LEVEL_PREMIUM = "premium";
 
-    public static final String TYPE_UNKNOWN = "unkown";
+    public static final String API_ACCESS_LEVEL_UNKNOWN = "unkown";
 
     @Id
     private String id;
@@ -71,6 +71,9 @@ public class Member implements Serializable {
 
     @Field("activated_date")
     private Instant activatedDate;
+
+    @Field("api_access_level")
+    private String apiAccessLevel;
 
     @Field
     private String type;
@@ -215,6 +218,14 @@ public class Member implements Serializable {
         this.activatedDate = activatedDate;
     }
 
+    public String getApiAccessLevel() {
+        return apiAccessLevel;
+    }
+
+    public void setApiAccessLevel(String apiAccessLevel) {
+        this.apiAccessLevel = apiAccessLevel;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -235,6 +246,7 @@ public class Member implements Serializable {
         result = prime * result + ((defaultLanguage == null) ? 0 : defaultLanguage.hashCode());
         result = prime * result + ((deactivatedDate == null) ? 0 : deactivatedDate.hashCode());
         result = prime * result + ((activatedDate == null) ? 0 : activatedDate.hashCode());
+        result = prime * result + ((apiAccessLevel == null) ? 0 : apiAccessLevel.hashCode());
         return result;
     }
 
@@ -327,6 +339,13 @@ public class Member implements Serializable {
             if (other.activatedDate != null)
                 return false;
         } else if (!activatedDate.equals(other.activatedDate)) {
+            return false;
+        }
+        if (apiAccessLevel == null) {
+            if (other.apiAccessLevel != null) {
+                return false;
+            }
+        } else if (!apiAccessLevel.equals(other.apiAccessLevel)) {
             return false;
         }
         if (active != other.active) {

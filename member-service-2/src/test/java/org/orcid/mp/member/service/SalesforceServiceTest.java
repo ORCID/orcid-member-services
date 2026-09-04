@@ -362,23 +362,23 @@ public class SalesforceServiceTest {
         assertThat(updatedMembers.get(0)).isNotNull();
         assertThat(updatedMembers.get(0).getSalesforceId()).isEqualTo("0011000001XYZ01");
         assertThat(updatedMembers.get(0).getClientName()).isEqualTo("Global Research University");
-        assertThat(updatedMembers.get(0).getType()).isEqualTo(Member.MEMBERSHIP_TYPE_BASIC);
+        assertThat(updatedMembers.get(0).getApiAccessLevel()).isEqualTo(Member.API_ACCESS_LEVEL_BASIC);
         assertThat(updatedMembers.get(1)).isNotNull();
         assertThat(updatedMembers.get(1).getSalesforceId()).isEqualTo("0011000002XYZ02");
         assertThat(updatedMembers.get(1).getClientName()).isEqualTo("Consortium Sub-Member A");
-        assertThat(updatedMembers.get(1).getType()).isEqualTo(Member.MEMBERSHIP_TYPE_PREMIUM);
+        assertThat(updatedMembers.get(1).getApiAccessLevel()).isEqualTo(Member.API_ACCESS_LEVEL_PREMIUM);
         assertThat(updatedMembers.get(2)).isNotNull();
         assertThat(updatedMembers.get(2).getSalesforceId()).isEqualTo("0011000003XYZ03");
         assertThat(updatedMembers.get(2).getClientName()).isEqualTo("Consortium Sub-Member B");
-        assertThat(updatedMembers.get(2).getType()).isEqualTo(Member.MEMBERSHIP_TYPE_BASIC);
+        assertThat(updatedMembers.get(2).getApiAccessLevel()).isEqualTo(Member.API_ACCESS_LEVEL_BASIC);
         assertThat(updatedMembers.get(3)).isNotNull();
         assertThat(updatedMembers.get(3).getSalesforceId()).isEqualTo("0011000004XYZ04");
         assertThat(updatedMembers.get(3).getClientName()).isEqualTo("Legacy Research Lab");
-        assertThat(updatedMembers.get(3).getType()).isEqualTo(Member.MEMBERSHIP_TYPE_BASIC);
+        assertThat(updatedMembers.get(3).getApiAccessLevel()).isEqualTo(Member.API_ACCESS_LEVEL_BASIC);
         assertThat(updatedMembers.get(4)).isNotNull();
         assertThat(updatedMembers.get(4).getSalesforceId()).isEqualTo("0011000005XYZ05");
         assertThat(updatedMembers.get(4).getClientName()).isEqualTo("New Horizon Publisher");
-        assertThat(updatedMembers.get(4).getType()).isEqualTo(Member.MEMBERSHIP_TYPE_PREMIUM);
+        assertThat(updatedMembers.get(4).getApiAccessLevel()).isEqualTo(Member.API_ACCESS_LEVEL_PREMIUM);
 
         verify(memberService, times(2)).activateMember(anyString());
         verify(memberService, times(1)).deactivateMember(anyString());
@@ -401,7 +401,7 @@ public class SalesforceServiceTest {
         assertThat(updatedMember).isNotNull();
         assertThat(updatedMember.getSalesforceId()).isEqualTo("0011000001XYZ01");
         assertThat(updatedMember.getIsConsortiumLead()).isTrue();
-        assertThat(updatedMember.getType()).isEqualTo(Member.MEMBERSHIP_TYPE_BASIC);
+        assertThat(updatedMember.getApiAccessLevel()).isEqualTo(Member.API_ACCESS_LEVEL_BASIC);
     }
 
     @Test
@@ -422,7 +422,7 @@ public class SalesforceServiceTest {
         assertThat(updatedMember).isNotNull();
         assertThat(updatedMember.getSalesforceId()).isEqualTo("0011000001XYZ01");
         assertThat(updatedMember.getIsConsortiumLead()).isFalse();
-        assertThat(updatedMember.getType()).isEqualTo(Member.MEMBERSHIP_TYPE_BASIC); // DUE TO TEST DATA
+        assertThat(updatedMember.getApiAccessLevel()).isEqualTo(Member.API_ACCESS_LEVEL_BASIC); // DUE TO TEST DATA
     }
 
     @Test
@@ -467,28 +467,28 @@ public class SalesforceServiceTest {
         assertThat(updatedMembers.get(0).isActive()).isTrue();
         assertThat(updatedMembers.get(0).getActivatedDate()).isNull();
         assertThat(updatedMembers.get(0).getDeactivatedDate()).isNull();
-        assertThat(updatedMembers.get(0).getType()).isEqualTo(Member.MEMBERSHIP_TYPE_BASIC);
+        assertThat(updatedMembers.get(0).getApiAccessLevel()).isEqualTo(Member.API_ACCESS_LEVEL_BASIC);
         assertThat(updatedMembers.get(1)).isNotNull();
         assertThat(updatedMembers.get(1).getSalesforceId()).isEqualTo("0011000002XYZ02");
         assertThat(updatedMembers.get(1).getClientName()).isEqualTo("Consortium Sub-Member A");
         assertThat(updatedMembers.get(1).isActive()).isTrue();
         assertThat(updatedMembers.get(1).getActivatedDate()).isNull(); // hasn't just been activated
         assertThat(updatedMembers.get(1).getDeactivatedDate()).isNull();
-        assertThat(updatedMembers.get(1).getType()).isEqualTo(Member.MEMBERSHIP_TYPE_PREMIUM);
+        assertThat(updatedMembers.get(1).getApiAccessLevel()).isEqualTo(Member.API_ACCESS_LEVEL_PREMIUM);
         assertThat(updatedMembers.get(2)).isNotNull();
         assertThat(updatedMembers.get(2).getSalesforceId()).isEqualTo("0011000003XYZ03");
         assertThat(updatedMembers.get(2).getClientName()).isEqualTo("Consortium Sub-Member B");
         assertThat(updatedMembers.get(2).isActive()).isTrue();
         assertThat(updatedMembers.get(2).getActivatedDate()).isNull();
         assertThat(updatedMembers.get(2).getDeactivatedDate()).isNull();
-        assertThat(updatedMembers.get(2).getType()).isEqualTo(Member.MEMBERSHIP_TYPE_BASIC);
+        assertThat(updatedMembers.get(2).getApiAccessLevel()).isEqualTo(Member.API_ACCESS_LEVEL_BASIC);
         assertThat(updatedMembers.get(3)).isNotNull();
         assertThat(updatedMembers.get(3).getSalesforceId()).isEqualTo("0011000005XYZ05");
         assertThat(updatedMembers.get(3).getClientName()).isEqualTo("New Horizon Publisher");
         assertThat(updatedMembers.get(3).isActive()).isTrue();
         assertThat(updatedMembers.get(3).getActivatedDate()).isNull();
         assertThat(updatedMembers.get(3).getDeactivatedDate()).isNull();
-        assertThat(updatedMembers.get(3).getType()).isEqualTo(Member.MEMBERSHIP_TYPE_PREMIUM);
+        assertThat(updatedMembers.get(3).getApiAccessLevel()).isEqualTo(Member.API_ACCESS_LEVEL_PREMIUM);
     }
 
     @Test
@@ -519,7 +519,7 @@ public class SalesforceServiceTest {
         assertThat(createdMembers.get(0)).isNotNull();
         assertThat(createdMembers.get(0).getSalesforceId()).isEqualTo("0011000001XYZ01");
         assertThat(createdMembers.get(0).getIsConsortiumLead()).isTrue();
-        assertThat(createdMembers.get(0).getType()).isEqualTo(Member.MEMBERSHIP_TYPE_BASIC); // due to test data
+        assertThat(createdMembers.get(0).getApiAccessLevel()).isEqualTo(Member.API_ACCESS_LEVEL_BASIC); // due to test data
     }
 
     @Test

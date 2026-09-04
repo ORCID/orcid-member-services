@@ -36,7 +36,7 @@ public class MemberValidator {
         validateConsortiumLeadAndParentSalesforceId(member, langKey, errors);
         validateClientId(member, langKey, errors);
         validateClientName(member, langKey, errors);
-        validateType(member, langKey, errors);
+        validateApiAccessLevel(member, langKey, errors);
 
         MemberValidation validation = new MemberValidation();
         validation.setValid(errors.isEmpty());
@@ -101,12 +101,12 @@ public class MemberValidator {
         }
     }
 
-    private void validateType(Member member, String langKey, List<String> errors) {
-        if (member.getType() != null) {
-            if (!Member.MEMBERSHIP_TYPE_BASIC.equals(member.getType()) &&
-                    !Member.MEMBERSHIP_TYPE_PREMIUM.equals(member.getType()) &&
-                    !Member.TYPE_UNKNOWN.equals(member.getType())) {
-                errors.add(getError("invalidMemberType", langKey));
+    private void validateApiAccessLevel(Member member, String langKey, List<String> errors) {
+        if (member.getApiAccessLevel() != null) {
+            if (!Member.API_ACCESS_LEVEL_BASIC.equals(member.getApiAccessLevel()) &&
+                    !Member.API_ACCESS_LEVEL_PREMIUM.equals(member.getApiAccessLevel()) &&
+                    !Member.API_ACCESS_LEVEL_UNKNOWN.equals(member.getApiAccessLevel())) {
+                errors.add(getError("invalidMemberApiAccessLevel", langKey));
             }
         }
     }
