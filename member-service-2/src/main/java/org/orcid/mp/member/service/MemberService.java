@@ -224,7 +224,7 @@ public class MemberService {
                 || !Objects.equals(latestCopy.getActivatedDate(), dbCopy.getActivatedDate())
                 || !Objects.equals(latestCopy.getDeactivatedDate(), dbCopy.getDeactivatedDate())
                 || !Objects.equals(latestCopy.getDefaultLanguage(), dbCopy.getDefaultLanguage())
-                || !Objects.equals(latestCopy.getType(), dbCopy.getType());
+                || !Objects.equals(latestCopy.getApiAccessLevel(), dbCopy.getApiAccessLevel());
     }
 
 }
