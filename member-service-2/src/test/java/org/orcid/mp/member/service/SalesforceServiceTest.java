@@ -456,7 +456,9 @@ public class SalesforceServiceTest {
 
         salesforceService.syncMembers();
 
-        verify(memberService, times(5)).createMember(salesforceUpdateCaptor.capture(), anyString());
+        // 0011000004XYZ04 shouldn't be created because it is not active
+
+        verify(memberService, times(4)).createMember(salesforceUpdateCaptor.capture(), anyString());
 
         List<Member> updatedMembers = salesforceUpdateCaptor.getAllValues();
         assertThat(updatedMembers.get(0)).isNotNull();
@@ -481,19 +483,12 @@ public class SalesforceServiceTest {
         assertThat(updatedMembers.get(2).getDeactivatedDate()).isNull();
         assertThat(updatedMembers.get(2).getType()).isEqualTo(Member.MEMBERSHIP_TYPE_BASIC);
         assertThat(updatedMembers.get(3)).isNotNull();
-        assertThat(updatedMembers.get(3).getSalesforceId()).isEqualTo("0011000004XYZ04");
-        assertThat(updatedMembers.get(3).getClientName()).isEqualTo("Legacy Research Lab");
-        assertThat(updatedMembers.get(3).isActive()).isFalse();
-        assertThat(updatedMembers.get(3).getDeactivatedDate()).isNull();
+        assertThat(updatedMembers.get(3).getSalesforceId()).isEqualTo("0011000005XYZ05");
+        assertThat(updatedMembers.get(3).getClientName()).isEqualTo("New Horizon Publisher");
+        assertThat(updatedMembers.get(3).isActive()).isTrue();
         assertThat(updatedMembers.get(3).getActivatedDate()).isNull();
-        assertThat(updatedMembers.get(3).getType()).isEqualTo(Member.MEMBERSHIP_TYPE_BASIC);
-        assertThat(updatedMembers.get(4)).isNotNull();
-        assertThat(updatedMembers.get(4).getSalesforceId()).isEqualTo("0011000005XYZ05");
-        assertThat(updatedMembers.get(4).getClientName()).isEqualTo("New Horizon Publisher");
-        assertThat(updatedMembers.get(4).isActive()).isTrue();
-        assertThat(updatedMembers.get(4).getActivatedDate()).isNull();
-        assertThat(updatedMembers.get(4).getDeactivatedDate()).isNull();
-        assertThat(updatedMembers.get(4).getType()).isEqualTo(Member.MEMBERSHIP_TYPE_PREMIUM);
+        assertThat(updatedMembers.get(3).getDeactivatedDate()).isNull();
+        assertThat(updatedMembers.get(3).getType()).isEqualTo(Member.MEMBERSHIP_TYPE_PREMIUM);
     }
 
     @Test
@@ -514,7 +509,7 @@ public class SalesforceServiceTest {
 
         salesforceService.syncMembers();
 
-        verify(memberService, times(5)).createMember(salesforceUpdateCaptor.capture(), anyString());
+        verify(memberService, times(4)).createMember(salesforceUpdateCaptor.capture(), anyString());
         verify(memberService).addParent(eq("some-consortium-member-id"), eq("0011000001XYZ01"), anyString());
 
         List<Member> createdMembers = salesforceUpdateCaptor.getAllValues();

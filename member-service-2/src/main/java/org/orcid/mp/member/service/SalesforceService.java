@@ -259,7 +259,7 @@ public class SalesforceService {
                 updateCosortiumLeadMetadata(existingMemberRecord.get(), false);
                 removeAsParent(existingMemberRecord.get().getSalesforceId());
             }
-        } else {
+        } else if (salesforceMemberData.isActiveMember()) {
             LOG.debug("Member {} not found", salesforceMemberData.getId());
             createNewMemberWithSalesforceData(salesforceMemberData, consortiumData != null);
             if (consortiumData != null) {
