@@ -88,7 +88,7 @@ public class MemberService {
             existingMember.setLastModifiedDate(Instant.now());
             existingMember.setAssertionServiceEnabled(member.getAssertionServiceEnabled());
             existingMember.setIsConsortiumLead(member.getIsConsortiumLead());
-            existingMember.setType(member.getType());
+            existingMember.setApiAccessLevel(member.getApiAccessLevel());
             propagateUpdatesAndSave(member, existingMember);
             return memberRepository.save(existingMember);
         }

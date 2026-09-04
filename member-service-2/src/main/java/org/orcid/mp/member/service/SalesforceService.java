@@ -296,20 +296,20 @@ public class SalesforceService {
         member.setClientName(salesforceMemberData.getName());
         member.setAssertionServiceEnabled(false);
         member.setIsConsortiumLead(consortiumLead);
-        member.setType(getMembershipType(salesforceMemberData));
+        member.setApiAccessLevel(getMembershipType(salesforceMemberData));
         member = memberService.createMember(member, SALESFORCE_SYNC_USERNAME);
         LOG.info("Created new member {}", member.getId());
     }
 
     private String getMembershipType(MemberDetails salesforceMemberData) {
         // lower case constants in case they get changed!
-        if (salesforceMemberData.getMembershipType() != null && salesforceMemberData.getMembershipType().toLowerCase().contains(Member.MEMBERSHIP_TYPE_PREMIUM.toLowerCase())) {
-            return Member.MEMBERSHIP_TYPE_PREMIUM;
-        } else if (salesforceMemberData.getMembershipType() != null && salesforceMemberData.getMembershipType().toLowerCase().contains(Member.MEMBERSHIP_TYPE_BASIC.toLowerCase())) {
-            return Member.MEMBERSHIP_TYPE_BASIC;
+        if (salesforceMemberData.getMembershipType() != null && salesforceMemberData.getMembershipType().toLowerCase().contains(Member.API_ACCESS_LEVEL_PREMIUM.toLowerCase())) {
+            return Member.API_ACCESS_LEVEL_PREMIUM;
+        } else if (salesforceMemberData.getMembershipType() != null && salesforceMemberData.getMembershipType().toLowerCase().contains(Member.API_ACCESS_LEVEL_BASIC.toLowerCase())) {
+            return Member.API_ACCESS_LEVEL_BASIC;
         }
         LOG.warn("Unknown member type for salesforce id {}: {}", salesforceMemberData.getId(), salesforceMemberData.getMemberType());
-        return Member.TYPE_UNKNOWN;
+        return Member.API_ACCESS_LEVEL_UNKNOWN;
     }
 
     private void updateExistingMemberWithSalesforceData(Member member, MemberDetails salesforceMemberData, boolean consortiumLead) {
@@ -331,7 +331,7 @@ public class SalesforceService {
         LOG.debug("SF sync setting member {} name to {}", member.getId(), salesforceMemberData.getName());
         member.setClientName(salesforceMemberData.getName());
         member.setIsConsortiumLead(consortiumLead);
-        member.setType(getMembershipType(salesforceMemberData));
+        member.setApiAccessLevel(getMembershipType(salesforceMemberData));
         memberService.updateMember(member, SALESFORCE_SYNC_USERNAME);
     }
 
