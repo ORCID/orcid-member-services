@@ -27,13 +27,13 @@ public class ApiCredentialsServiceClient {
     private final AtomicReference<String> accessToken = new AtomicReference<>();
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Value("${application.newapi.apiBaseUrl}")
+    @Value("${application.apicreds.apiBaseUrl}")
     private String apiBaseUrl;
 
-    @Value("${application.newapi.clientId}")
+    @Value("${application.apicreds.clientId}")
     private String clientId;
 
-    @Value("${application.newapi.clientSecret}")
+    @Value("${application.apicreds.clientSecret}")
     private String clientSecret;
 
     @Autowired
