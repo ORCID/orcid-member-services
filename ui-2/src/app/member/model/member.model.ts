@@ -16,6 +16,7 @@ export interface IMember {
   lastModifiedDate?: Moment | undefined | null
   type?: string
   active?: boolean
+  apiAccessLevel?: string
   defaultLanguage?: string
 }
 
@@ -36,6 +37,7 @@ export class Member implements IMember {
     public lastModifiedDate?: Moment | undefined | null,
     public type?: string,
     public active?: boolean,
+    public apiAccessLevel?: string,
     public defaultLanguage?: string
   ) {
     this.isConsortiumLead = this.isConsortiumLead || false
