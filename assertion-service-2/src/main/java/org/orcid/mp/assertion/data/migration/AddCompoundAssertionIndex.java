@@ -11,23 +11,15 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.IndexOperations;
 
-@ChangeUnit(id = "update-assertion-indexes", order = "010", author = "George Nash")
-public class UpdateAssertionIndexes {
+@ChangeUnit(id = "add-new-compound-assertion-index", order = "010", author = "George Nash")
+public class AddCompoundAssertionIndex {
 
-    private static final Logger LOG = LoggerFactory.getLogger(UpdateAssertionIndexes.class);
-    private static final String OLD_INDEX_NAME = "added_to_orcid_1_created_1_status_1";
+    private static final Logger LOG = LoggerFactory.getLogger(AddCompoundAssertionIndex.class);
     private static final String NEW_INDEX_NAME = "token_status_updated_added_created_idx";
 
     @Execution
     public void execution(MongoTemplate mongoTemplate) {
         IndexOperations indexOps = mongoTemplate.indexOps(Assertion.class);
-
-        try {
-            indexOps.dropIndex(OLD_INDEX_NAME);
-            LOG.info("Successfully dropped legacy index: {}", OLD_INDEX_NAME);
-        } catch (Exception e) {
-            LOG.warn("Legacy index {} was not found or could not be dropped: {}", OLD_INDEX_NAME, e.getMessage());
-        }
 
         Index newIndex = new Index()
                 .on("token_available", Sort.Direction.ASC)
