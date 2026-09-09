@@ -20,7 +20,6 @@ import java.util.Locale;
         @CompoundIndex(name = "status_1_token_available_1_created_1", def = "{'status': 1, 'token_available': 1, 'created': 1}"),
         @CompoundIndex(name = "member_id_1_status_1_id_-1", def = "{'member_id': 1, 'status': 1, '_id': -1}"),
         @CompoundIndex(name = "member_id_1_email_1_id_1", def = "{'member_id': 1, 'email': 1, '_id': 1}"),
-        @CompoundIndex(name = "token_status_updated_added_created_idx", def = "{'token_available': 1, 'status': 1, 'updated_in_orcid': 1, 'added_to_orcid': 1, 'created': 1}")
 })
 public class Assertion implements Serializable {
     private static final long serialVersionUID = 1845971448687999429L;
@@ -29,6 +28,7 @@ public class Assertion implements Serializable {
     private String id;
 
     @NotNull
+    @Indexed(name = "email_idx")
     @Field("email")
     private String email;
 

@@ -1,4 +1,4 @@
-package org.orcid.mp.member.pojo;
+package org.orcid.mp.member.salesforce.request;
 
 import java.util.List;
 

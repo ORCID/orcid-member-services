@@ -11,22 +11,18 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.IndexOperations;
 
-@ChangeUnit(id = "add-new-compound-assertion-index", order = "010", author = "George Nash")
-public class AddCompoundAssertionIndex {
+@ChangeUnit(id = "add-assertion-email-index", order = "010", author = "George Nash")
+public class AddAssertionEmailIndex {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AddCompoundAssertionIndex.class);
-    private static final String NEW_INDEX_NAME = "token_status_updated_added_created_idx";
+    private static final Logger LOG = LoggerFactory.getLogger(AddAssertionEmailIndex.class);
+    private static final String NEW_INDEX_NAME = "email_idx";
 
     @Execution
     public void execution(MongoTemplate mongoTemplate) {
         IndexOperations indexOps = mongoTemplate.indexOps(Assertion.class);
 
         Index newIndex = new Index()
-                .on("token_available", Sort.Direction.ASC)
-                .on("status", Sort.Direction.ASC)
-                .on("updated_in_orcid", Sort.Direction.ASC)
-                .on("added_to_orcid", Sort.Direction.ASC)
-                .on("created", Sort.Direction.ASC)
+                .on("email", Sort.Direction.ASC)
                 .named(NEW_INDEX_NAME);
 
         indexOps.createIndex(newIndex);
