@@ -53,6 +53,12 @@ public class HttpClientConfig {
         return RestClient.builder().requestFactory(requestFactory).build();
     }
 
+    @Bean(name = "apiCredentialsServiceRestClient")
+    public RestClient apiCredentialsServiceRestClient(CloseableHttpClient httpClient) {
+        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+        return RestClient.builder().requestFactory(requestFactory).build();
+    }
+
     @Bean
     public PoolingHttpClientConnectionManager getConnectionManager() {
         PoolingHttpClientConnectionManager poolingConnManager = new PoolingHttpClientConnectionManager();

@@ -78,4 +78,11 @@ describe('MemberDetailComponent', () => {
       expect(component.getOrganizationType(undefined)).toEqual('')
     })
   })
+
+  it('should map apiAccessLevel to a capitalized label', () => {
+    expect(component.getApiAccessLevel({ apiAccessLevel: 'basic' } as IMember)).toBe('Basic')
+    expect(component.getApiAccessLevel({ apiAccessLevel: 'premium' } as IMember)).toBe('Premium')
+    expect(component.getApiAccessLevel({} as IMember)).toBe('-')
+    expect(component.getApiAccessLevel(undefined)).toBe('-')
+  })
 })

@@ -233,4 +233,33 @@ describe('MemberUpdateComponent', () => {
       expect(component.formOrganizationType).toEqual('Consortium Lead')
     })
   })
+
+  describe('apiAccessLevel', () => {
+    it('should disable the apiAccessLevel control when editing a member', () => {
+      activatedRoute.data = of({
+        member: { id: 'id', salesforceId: 'ABCDEFGHIJKLMNOPQR', apiAccessLevel: 'premium' } as IMember,
+      })
+      fixture.detectChanges()
+      expect(component.editForm.get('apiAccessLevel')?.disabled).toBeTrue()
+    })
+
+    it('should display the capitalized access level', () => {
+      activatedRoute.data = of({
+        member: { id: 'id', salesforceId: 'ABCDEFGHIJKLMNOPQR', apiAccessLevel: 'premium' } as IMember,
+      })
+      fixture.detectChanges()
+      expect(component.formApiAccessLevel).toBe('Premium')
+    })
+
+    it('should preserve apiAccessLevel (lowercase) when saving', () => {
+      activatedRoute.data = of({
+        member: { id: 'id', salesforceId: 'ABCDEFGHIJKLMNOPQR', apiAccessLevel: 'premium' } as IMember,
+      })
+      memberService.update.and.returnValue(of({ id: 'id' } as IMember))
+      fixture.detectChanges()
+      component.save()
+      const saved = memberService.validate.calls.mostRecent().args[0]
+      expect(saved.apiAccessLevel).toBe('premium')
+    })
+  })
 })
