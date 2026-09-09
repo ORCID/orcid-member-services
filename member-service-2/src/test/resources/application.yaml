@@ -59,3 +59,7 @@ application:
   cron:
     syncSalesforceMembers: 0 0 0 * * *
     enabled: true
+  apicreds:
+    apiBaseUrl: some-url
+    clientId: member-portal-client
+    clientSecret: member-portal-client-secret

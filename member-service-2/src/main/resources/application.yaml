@@ -101,3 +101,7 @@ application:
   cron:
     syncSalesforceMembers: ${APPLICATION_CRON_SF_SYNC:0 0 0 * * ?}
     enabled: ${ENABLE_SCHEDULER:true}
+  apicreds:
+    apiBaseUrl: http://localhost:9100
+    clientId: ${ORG_ORCID_MEMBERPORTALCLIENTID:member-portal-client}
+    clientSecret: ${ORG_ORCID_MEMBERPORTALCLIENTID:member-portal-client-secret}
