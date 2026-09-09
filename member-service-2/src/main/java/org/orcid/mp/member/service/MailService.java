@@ -3,9 +3,9 @@ package org.orcid.mp.member.service;
 
 import org.orcid.mp.member.client.MailgunClient;
 import org.orcid.mp.member.error.MailException;
-import org.orcid.mp.member.pojo.AddConsortiumMember;
-import org.orcid.mp.member.pojo.MemberContactUpdate;
-import org.orcid.mp.member.pojo.RemoveConsortiumMember;
+import org.orcid.mp.member.salesforce.request.AddConsortiumMember;
+import org.orcid.mp.member.salesforce.request.MemberContactUpdate;
+import org.orcid.mp.member.salesforce.request.RemoveConsortiumMember;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
