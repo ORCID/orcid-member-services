@@ -865,7 +865,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
-          <context context-type="linenumber">78</context>
+          <context context-type="linenumber">82</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-detail.component.html</context>
@@ -892,7 +892,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">282</context>
+          <context context-type="linenumber">303</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
@@ -946,7 +946,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">85</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
@@ -969,7 +969,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">285</context>
+          <context context-type="linenumber">306</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-update.component.html</context>
@@ -1181,11 +1181,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">64</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">74</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-detail.component.html</context>
@@ -3789,7 +3789,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">224</context>
+          <context context-type="linenumber">245</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.assertionServiceAssertion.day.string" datatype="html">
@@ -4145,61 +4145,72 @@
         <source>Active?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">36</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">248</context>
+          <context context-type="linenumber">269</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/members.component.html</context>
           <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSMember.assertionEnabled.string" datatype="html">
-        <source> Assertions Enabled? </source>
+      <trans-unit id="gatewayApp.msUserServiceMSMember.apiAccessLevel.string" datatype="html">
+        <source>API Access Level</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
-          <context context-type="linenumber">43</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSMember.assertionServiceEnabled.string" datatype="html">
-        <source>Assertions enabled?</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">263</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSMember.clientId.addedAsRedirect.string" datatype="html">
-        <source>added as a Redirect URI in</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">208</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="gatewayApp.msUserServiceMSMember.clientId.label.string" datatype="html">
-        <source>Client ID</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">32</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
           <context context-type="linenumber">199</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSMember.assertionEnabled.string" datatype="html">
+        <source> Affiliation Manager enabled? </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSMember.assertionServiceEnabled.string" datatype="html">
+        <source>Affiliation Manager enabled?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/member/member-update.component.html</context>
+          <context context-type="linenumber">284</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSMember.clientId.addedAsRedirect.string" datatype="html">
+        <source>added as a Redirect URI in</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/member/member-update.component.html</context>
+          <context context-type="linenumber">229</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="gatewayApp.msUserServiceMSMember.clientId.label.string" datatype="html">
+        <source>Affiliation Manager Client ID</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/member/member-update.component.html</context>
+          <context context-type="linenumber">220</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.clientId.note.string" datatype="html">
         <source>Note: Client ID must have member OBO enabled AND</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-update.component.html</context>
-          <context context-type="linenumber">204</context>
+          <context context-type="linenumber">225</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.createdDate.string" datatype="html">
         <source>Created Date</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.detail.title.string" datatype="html">
@@ -4241,7 +4252,7 @@
         <source> Last Modified Date </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.msUserServiceMSMember.organizationName.string" datatype="html">

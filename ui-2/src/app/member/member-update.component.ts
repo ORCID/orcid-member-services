@@ -51,6 +51,7 @@ export class MemberUpdateComponent implements OnInit {
     ]),
     isConsortiumLead: new FormControl<boolean | null>(false),
     active: new FormControl<boolean | null>(false),
+    apiAccessLevel: new FormControl<string | null>(null),
     assertionServiceEnabled: new FormControl<boolean | null>(false),
     createdBy: new FormControl<string | null>(null),
     createdDate: new FormControl<string | null>(null),
@@ -73,6 +74,17 @@ export class MemberUpdateComponent implements OnInit {
       return 'Consortia Member'
     }
     return 'Direct'
+  }
+
+  get formApiAccessLevel(): string {
+    switch (this.editForm.get('apiAccessLevel')?.value) {
+      case 'basic':
+        return 'Basic'
+      case 'premium':
+        return 'Premium'
+      default:
+        return '-'
+    }
   }
 
   ngOnInit() {
@@ -115,6 +127,7 @@ export class MemberUpdateComponent implements OnInit {
       parentSalesforceId: member.parentSalesforceId,
       isConsortiumLead: member.isConsortiumLead ?? false,
       active: member.active ?? false,
+      apiAccessLevel: member.apiAccessLevel ?? null,
       assertionServiceEnabled: member.assertionServiceEnabled ? true : false,
       createdBy: member.createdBy,
       createdDate: member.createdDate != null ? member.createdDate.format(DATE_TIME_FORMAT) : null,
@@ -136,6 +149,8 @@ export class MemberUpdateComponent implements OnInit {
       this.editForm.get('parentSalesforceId')?.disable()
       this.editForm.get('clientName')?.disable()
     }
+
+    this.editForm.get('apiAccessLevel')?.disable()
   }
 
   navigateToMembersList() {
@@ -169,6 +184,7 @@ export class MemberUpdateComponent implements OnInit {
       parentSalesforceId: this.editForm.get(['parentSalesforceId'])?.value || null,
       isConsortiumLead: this.editForm.get(['isConsortiumLead'])?.value || false,
       active: this.editForm.get(['active'])?.value ? true : false,
+      apiAccessLevel: this.editForm.get(['apiAccessLevel'])?.value || null,
       assertionServiceEnabled: this.editForm.get(['assertionServiceEnabled'])?.value ? true : false,
       createdBy: this.editForm.get(['createdBy'])?.value,
       createdDate:

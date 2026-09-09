@@ -41,6 +41,17 @@ export class MemberDetailComponent implements OnInit {
     return 'Direct'
   }
 
+  getApiAccessLevel(member: IMember | undefined): string {
+    switch (member?.apiAccessLevel) {
+      case 'basic':
+        return 'Basic'
+      case 'premium':
+        return 'Premium'
+      default:
+        return '-'
+    }
+  }
+
   previousState() {
     window.history.back()
   }

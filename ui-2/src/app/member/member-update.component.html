@@ -194,9 +194,30 @@
         <div class="mb-3">
           <label
             class="form-label fw-bold"
+            i18n="@@gatewayApp.msUserServiceMSMember.apiAccessLevel.string"
+            for="field_apiAccessLevel"
+            >API Access Level</label
+          >
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              name="apiAccessLevel"
+              id="field_apiAccessLevel"
+              [value]="formApiAccessLevel"
+              disabled
+            />
+            <span class="input-group-text">
+              <fa-icon [icon]="faLock" />
+            </span>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label
+            class="form-label fw-bold"
             i18n="@@gatewayApp.msUserServiceMSMember.clientId.label.string"
             for="field_clientId"
-            >Client ID</label
+            >Affiliation Manager Client ID</label
           >
           <p>
             <em
@@ -260,7 +281,7 @@
             class="form-check-label fw-bold"
             i18n="@@gatewayApp.msUserServiceMSMember.assertionServiceEnabled.string"
             for="field_assertionServiceEnabled"
-            >Assertions enabled?</label
+            >Affiliation Manager enabled?</label
           >
         </div>
       </div>

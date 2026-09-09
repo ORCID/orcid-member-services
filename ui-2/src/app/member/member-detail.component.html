@@ -29,6 +29,10 @@
             <dd class="col-md-9">
               {{ getOrganizationType(member()) }}
             </dd>
+            <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.apiAccessLevel.string">API Access Level</dt>
+            <dd class="col-md-9">
+              {{ getApiAccessLevel(member()) }}
+            </dd>
             <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.active.string">Active?</dt>
             <dd class="col-md-9">
               <span class="visually-hidden">{{ member()?.active }}</span>
@@ -40,7 +44,7 @@
               }
             </dd>
             <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.assertionEnabled.string">
-              Assertions Enabled?
+              Affiliation Manager enabled?
             </dt>
             <dd class="col-md-9">
               <span class="visually-hidden">{{ member()?.assertionServiceEnabled }}</span>
@@ -51,7 +55,7 @@
                 <fa-icon aria-hidden="true" [icon]="faTimesCircle" [style.color]="'#f22112'" />
               }
             </dd>
-            <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.clientId.label.string">Client ID</dt>
+            <dt class="col-md-3" i18n="@@gatewayApp.msUserServiceMSMember.clientId.label.string">Affiliation Manager Client ID</dt>
             <dd class="col-md-9">
               {{ member()?.clientId }}
             </dd>
