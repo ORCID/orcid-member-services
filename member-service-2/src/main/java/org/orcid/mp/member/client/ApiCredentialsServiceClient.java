@@ -55,12 +55,12 @@ public class ApiCredentialsServiceClient {
     }
 
     private ApiClientDetails getClientDetails(String clientDetailsId) {
-        String url = apiBaseUrl + "/" + clientDetailsId;
+        String url = apiBaseUrl + "/client-details/" + clientDetailsId;
         return get(url, ParameterizedTypeReference.forType(ApiClientDetails.class));
     }
 
     private ApiClientSummaryPage getApiClients(String memberId) {
-        String url = apiBaseUrl + "/?memberId=" + memberId + "&size=100";
+        String url = apiBaseUrl + "/client-details?memberId=" + memberId + "&size=100";
         ApiClientSummaryPage response = get(url, new ParameterizedTypeReference<ApiClientSummaryPage>() {});
         return response;
     }
