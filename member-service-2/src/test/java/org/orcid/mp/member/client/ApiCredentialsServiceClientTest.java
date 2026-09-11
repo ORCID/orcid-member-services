@@ -46,7 +46,7 @@ class ApiCredentialsServiceClientTest {
                 .andRespond(withSuccess("{\"access_token\": \"token-123\"}", MediaType.APPLICATION_JSON));
 
         // 2. Expect Data Request with the acquired token
-        String expectedUrl = "http://localhost:8080/api/?memberId=member-1&size=100";
+        String expectedUrl = "http://localhost:8080/api/client-details?memberId=member-1&size=100";
         String mockResponseJson = "{\"content\": [{\"clientDetailsId\": \"APP-1\", \"clientName\": \"Test\"}], \"totalElements\": 1, \"totalPages\": 1}";
 
         mockServer.expect(ExpectedCount.once(), requestTo(expectedUrl))
@@ -71,7 +71,7 @@ class ApiCredentialsServiceClientTest {
         setMockAccessToken("active-token");
 
         // Expect Data Request
-        String expectedUrl = "http://localhost:8080/api/APP-123";
+        String expectedUrl = "http://localhost:8080/api/client-details/APP-123";
         String mockResponseJson = "{\"clientDetailsId\": \"APP-123\", \"clientName\": \"Detailed Client\"}";
 
         mockServer.expect(ExpectedCount.once(), requestTo(expectedUrl))
@@ -94,7 +94,7 @@ class ApiCredentialsServiceClientTest {
         // Inject an explicitly expired/invalid token to trigger the 401
         setMockAccessToken("expired-token");
 
-        String expectedUrl = "http://localhost:8080/api/APP-123";
+        String expectedUrl = "http://localhost:8080/api/client-details/APP-123";
 
         // 1. Data Request fails with 401 Unauthorized
         mockServer.expect(ExpectedCount.once(), requestTo(expectedUrl))
@@ -127,7 +127,7 @@ class ApiCredentialsServiceClientTest {
         setMockAccessToken("active-token");
 
         // Request returns 404 Not Found (should be caught and return null)
-        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/APP-MISSING"))
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/client-details/APP-MISSING"))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.NOT_FOUND).body("Not Found"));
 
@@ -144,7 +144,7 @@ class ApiCredentialsServiceClientTest {
         setMockAccessToken("active-token");
 
         // Request returns 404 Not Found
-        String expectedUrl = "http://localhost:8080/api/?memberId=member-missing&size=100";
+        String expectedUrl = "http://localhost:8080/api/client-details?memberId=member-missing&size=100";
         mockServer.expect(ExpectedCount.once(), requestTo(expectedUrl))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.NOT_FOUND).body("Not Found"));
