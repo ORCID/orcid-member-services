@@ -5,14 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ApiClientDetails {
+public class ApiClientDetails extends ApiClientSummary {
 
-    private String memberId;
-    private String clientDetailsId;
     private Set<ApiClientRedirectUri> redirectUris = new HashSet<>();
-    private String name;
     private String description;
-    private boolean allowAutoDeprecate = false;
     private String website;
     private boolean allowMemberOBO = false;
     private boolean allowUserOBO = false;
@@ -22,28 +18,12 @@ public class ApiClientDetails {
     private String authenticationProviderId;
     private List<String> errors = new ArrayList<>();
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public boolean isAllowAutoDeprecate() {
-        return allowAutoDeprecate;
-    }
-
-    public void setAllowAutoDeprecate(boolean allowAutoDeprecate) {
-        this.allowAutoDeprecate = allowAutoDeprecate;
     }
 
     public String getWebsite() {
@@ -78,14 +58,6 @@ public class ApiClientDetails {
         this.allowResearcherConnect = allowResearcherConnect;
     }
 
-    public String getMemberId() {
-        return memberId;
-    }
-
-    public void setMemberId(String memberId) {
-        this.memberId = memberId;
-    }
-
     public Set<ApiClientRedirectUri> getRedirectUris() {
         return redirectUris;
     }
@@ -98,12 +70,8 @@ public class ApiClientDetails {
         return errors;
     }
 
-    public String getClientDetailsId() {
-        return clientDetailsId;
-    }
-
-    public void setClientDetailsId(String clientDetailsId) {
-        this.clientDetailsId = clientDetailsId;
+    public void setErrors(List<String> errors) {
+        this.errors = errors;
     }
 
     public String getMembershipType() {

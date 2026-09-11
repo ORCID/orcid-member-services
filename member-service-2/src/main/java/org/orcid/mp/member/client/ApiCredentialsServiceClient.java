@@ -2,11 +2,14 @@ package org.orcid.mp.member.client;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.orcid.mp.member.apicreds.ApiClientDetails;
+import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -16,6 +19,7 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -40,24 +44,39 @@ public class ApiCredentialsServiceClient {
     @Qualifier("apiCredentialsServiceRestClient")
     private RestClient restClient;
 
-    public String getOrcidRegistryApiClients(String memberId) {
+    public ApiClientSummaryPage getApiClientsForMember(String memberId) {
         LOG.debug("Fetching example data from new API...");
         return request(() -> getApiClients(memberId));
     }
 
-    private String getApiClients(String memberId) {
-        String url = apiBaseUrl + "/" + memberId;
+    public ApiClientDetails getApiClientDetails(String clientDetailsId) {
+        LOG.debug("Fetching api client {} from api credentials service", clientDetailsId);
+        return request(() -> getClientDetails(clientDetailsId));
+    }
 
+    private ApiClientDetails getClientDetails(String clientDetailsId) {
+        String url = apiBaseUrl + "/" + clientDetailsId;
+        return get(url, ParameterizedTypeReference.forType(ApiClientDetails.class));
+    }
+
+    private ApiClientSummaryPage getApiClients(String memberId) {
+        String url = apiBaseUrl + "/?memberId=" + memberId + "&size=100";
+        ApiClientSummaryPage response = get(url, new ParameterizedTypeReference<ApiClientSummaryPage>() {});
+        return response;
+    }
+
+    private <T> T get(String url, ParameterizedTypeReference<T> responseType) {
         LOG.debug("Sending GET request to API Credentials service: {}", url);
         try {
-            ResponseEntity<String> response = restClient.get()
+            ResponseEntity<T> response = restClient.get()
                     .uri(url)
                     .accept(MediaType.APPLICATION_JSON)
                     .headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken.get()))
                     .retrieve()
-                    .toEntity(String.class);
+                    .toEntity(responseType);
             return response.getBody();
         } catch (RestClientResponseException ex) {
+            LOG.error("GET error from API Credentials service: {}", ex.getMessage());
             if (ex.getStatusCode().value() == 401 || ex.getStatusCode().value() == 403) {
                 throw ex;
             }
@@ -68,6 +87,7 @@ public class ApiCredentialsServiceClient {
             return null;
         }
     }
+
     private <T> T request(Supplier<T> function) {
         initAccessToken();
         try {
@@ -123,4 +143,5 @@ public class ApiCredentialsServiceClient {
             throw new RuntimeException("Error while acquiring access token", ex);
         }
     }
+
 }

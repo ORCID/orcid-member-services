@@ -2,6 +2,8 @@ package org.orcid.mp.member.client;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.orcid.mp.member.apicreds.ApiClientDetails;
+import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,7 +32,6 @@ class ApiCredentialsServiceClientTest {
 
         client = new ApiCredentialsServiceClient();
 
-        // Inject the dependencies using Spring's ReflectionTestUtils
         ReflectionTestUtils.setField(client, "restClient", restClient);
         ReflectionTestUtils.setField(client, "apiBaseUrl", "http://localhost:8080/api");
         ReflectionTestUtils.setField(client, "clientId", "test-client");
@@ -38,36 +39,65 @@ class ApiCredentialsServiceClientTest {
     }
 
     @Test
-    void shouldFetchTokenAndDataSuccessfully() {
+    void getApiClientsForMember_ShouldFetchTokenAndDataSuccessfully() {
         // 1. Expect Token Request
         mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/oauth2/token"))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withSuccess("{\"access_token\": \"token-123\"}", MediaType.APPLICATION_JSON));
 
         // 2. Expect Data Request with the acquired token
-        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/member-1"))
+        String expectedUrl = "http://localhost:8080/api/?memberId=member-1&size=100";
+        String mockResponseJson = "{\"content\": [{\"clientDetailsId\": \"APP-1\", \"clientName\": \"Test\"}], \"totalElements\": 1, \"totalPages\": 1}";
+
+        mockServer.expect(ExpectedCount.once(), requestTo(expectedUrl))
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(header("Authorization", "Bearer token-123"))
-                .andRespond(withSuccess("{\"clients\": []}", MediaType.APPLICATION_JSON));
+                .andRespond(withSuccess(mockResponseJson, MediaType.APPLICATION_JSON));
 
         // Execute
-        String result = client.getOrcidRegistryApiClients("member-1");
+        ApiClientSummaryPage result = client.getApiClientsForMember("member-1");
 
         // Verify
-        assertEquals("{\"clients\": []}", result);
+        assertNotNull(result);
+        assertEquals(1, result.getContent().size());
+        assertEquals("APP-1", result.getContent().get(0).getClientDetailsId());
+        assertEquals(1, result.getTotalElements());
+        mockServer.verify();
+    }
+
+    @Test
+    void getApiClientDetails_ShouldFetchDataSuccessfully() {
+        // Inject an active token directly
+        setMockAccessToken("active-token");
+
+        // Expect Data Request
+        String expectedUrl = "http://localhost:8080/api/APP-123";
+        String mockResponseJson = "{\"clientDetailsId\": \"APP-123\", \"clientName\": \"Detailed Client\"}";
+
+        mockServer.expect(ExpectedCount.once(), requestTo(expectedUrl))
+                .andExpect(method(HttpMethod.GET))
+                .andExpect(header("Authorization", "Bearer active-token"))
+                .andRespond(withSuccess(mockResponseJson, MediaType.APPLICATION_JSON));
+
+        // Execute
+        ApiClientDetails result = client.getApiClientDetails("APP-123");
+
+        // Verify
+        assertNotNull(result);
+        assertEquals("APP-123", result.getClientDetailsId());
+        assertEquals("Detailed Client", result.getClientName());
         mockServer.verify();
     }
 
     @Test
     void shouldRefreshTokenAndRetryOn401() {
         // Inject an explicitly expired/invalid token to trigger the 401
-        @SuppressWarnings("unchecked")
-        AtomicReference<String> tokenRef = (AtomicReference<String>) ReflectionTestUtils.getField(client, "accessToken");
-        assertNotNull(tokenRef);
-        tokenRef.set("expired-token");
+        setMockAccessToken("expired-token");
+
+        String expectedUrl = "http://localhost:8080/api/APP-123";
 
         // 1. Data Request fails with 401 Unauthorized
-        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/member-1"))
+        mockServer.expect(ExpectedCount.once(), requestTo(expectedUrl))
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(header("Authorization", "Bearer expired-token"))
                 .andRespond(withStatus(HttpStatus.UNAUTHORIZED));
@@ -78,36 +108,51 @@ class ApiCredentialsServiceClientTest {
                 .andRespond(withSuccess("{\"access_token\": \"brand-new-token\"}", MediaType.APPLICATION_JSON));
 
         // 3. Retry Data Request with the NEW token
-        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/member-1"))
+        mockServer.expect(ExpectedCount.once(), requestTo(expectedUrl))
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(header("Authorization", "Bearer brand-new-token"))
-                .andRespond(withSuccess("{\"clients\": [\"test-client\"]}", MediaType.APPLICATION_JSON));
+                .andRespond(withSuccess("{\"clientDetailsId\": \"APP-123\"}", MediaType.APPLICATION_JSON));
 
         // Execute
-        String result = client.getOrcidRegistryApiClients("member-1");
+        ApiClientDetails result = client.getApiClientDetails("APP-123");
 
         // Verify
-        assertEquals("{\"clients\": [\"test-client\"]}", result);
+        assertNotNull(result);
+        assertEquals("APP-123", result.getClientDetailsId());
         mockServer.verify();
     }
 
     @Test
-    void shouldReturnNullOnNon2xxResponseExcept401And403() {
-        // Inject an active token
-        @SuppressWarnings("unchecked")
-        AtomicReference<String> tokenRef = (AtomicReference<String>) ReflectionTestUtils.getField(client, "accessToken");
-        assertNotNull(tokenRef);
-        tokenRef.set("active-token");
+    void getApiClientDetails_ShouldReturnNullOn404() {
+        setMockAccessToken("active-token");
 
         // Request returns 404 Not Found (should be caught and return null)
-        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/member-1"))
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/APP-MISSING"))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.NOT_FOUND).body("Not Found"));
 
         // Execute
-        String result = client.getOrcidRegistryApiClients("member-1");
+        ApiClientDetails result = client.getApiClientDetails("APP-MISSING");
 
         // Verify
+        assertNull(result, "Expected null response for 404 without throwing exception");
+        mockServer.verify();
+    }
+
+    @Test
+    void getApiClientsForMember_ShouldReturnNullOn404() {
+        setMockAccessToken("active-token");
+
+        // Request returns 404 Not Found
+        String expectedUrl = "http://localhost:8080/api/?memberId=member-missing&size=100";
+        mockServer.expect(ExpectedCount.once(), requestTo(expectedUrl))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withStatus(HttpStatus.NOT_FOUND).body("Not Found"));
+
+        // Execute
+        ApiClientSummaryPage result = client.getApiClientsForMember("member-missing");
+
+        // Verify - the client handles the 404 by catching the exception and returning null
         assertNull(result, "Expected null response for 404 without throwing exception");
         mockServer.verify();
     }
@@ -121,10 +166,18 @@ class ApiCredentialsServiceClientTest {
 
         // Execute & Verify Exception
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            client.getOrcidRegistryApiClients("member-1");
+            client.getApiClientsForMember("member-1");
         });
 
         assertTrue(exception.getMessage().contains("Error while acquiring access token"));
         mockServer.verify();
+    }
+
+    // Helper to inject a token directly, avoiding the token-fetch flow for isolated tests
+    private void setMockAccessToken(String tokenValue) {
+        @SuppressWarnings("unchecked")
+        AtomicReference<String> tokenRef = (AtomicReference<String>) ReflectionTestUtils.getField(client, "accessToken");
+        assertNotNull(tokenRef);
+        tokenRef.set(tokenValue);
     }
 }
