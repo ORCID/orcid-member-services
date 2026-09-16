@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.orcid.mp.member.apicreds.ApiClientDetails;
 import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
+import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
 import org.orcid.mp.member.domain.User;
 import org.orcid.mp.member.service.ApiCredentialsService;
 import org.orcid.mp.member.service.UserService;
@@ -156,5 +157,19 @@ class ApiCredentialsResourceTest {
         assertThatThrownBy(() -> apiCredentialsResource.getClientsForMember(memberId))
                 .isInstanceOf(AccessDeniedException.class)
                 .hasMessageContaining("User test@example.com can't access client details of MEMBER-TARGET");
+    }
+
+    @Test
+    void applyForApiCredentials_ShouldReturn200AndDelegateToService() {
+        // Arrange
+        ProductionCredentialsApplication application = new ProductionCredentialsApplication();
+        application.setNotes("some notes");
+
+        // Act
+        ResponseEntity<Void> response = apiCredentialsResource.applyForApiCredentials(application);
+
+        // Assert
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        verify(apiClientDetailsService).applyForApiCredentials(application);
     }
 }

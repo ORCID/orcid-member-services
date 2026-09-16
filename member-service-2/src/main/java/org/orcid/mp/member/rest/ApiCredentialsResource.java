@@ -2,6 +2,7 @@ package org.orcid.mp.member.rest;
 
 import org.orcid.mp.member.apicreds.ApiClientDetails;
 import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
+import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
 import org.orcid.mp.member.domain.User;
 import org.orcid.mp.member.service.ApiCredentialsService;
 import org.orcid.mp.member.service.UserService;
@@ -10,10 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/apicreds")
@@ -43,6 +41,13 @@ public class ApiCredentialsResource {
         ApiClientSummaryPage page = apiClientDetailsService.getApiClientsForMember(memberId);
         checkClientAccessForMember(memberId);
         return ResponseEntity.ok(page);
+    }
+
+    @PostMapping("/apply")
+    public ResponseEntity<Void> applyForApiCredentials(@RequestBody ProductionCredentialsApplication application) {
+        LOG.debug("REST request to apply for production credentials");
+        apiClientDetailsService.applyForApiCredentials(application);
+        return ResponseEntity.ok().build();
     }
 
     private void checkClientAccessForMember(String memberId) {
