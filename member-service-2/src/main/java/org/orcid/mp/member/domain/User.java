@@ -35,6 +35,8 @@ public class User {
 
     private String memberName;
 
+    private boolean admin;
+
     public String getId() {
         return id;
     }
@@ -153,6 +155,14 @@ public class User {
 
     public void setMemberName(String memberName) {
         this.memberName = memberName;
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
 }
