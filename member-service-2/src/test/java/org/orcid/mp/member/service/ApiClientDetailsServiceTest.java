@@ -21,7 +21,7 @@ class ApiClientDetailsServiceTest {
     private ApiCredentialsServiceClient apiCredentialsServiceClient;
 
     @InjectMocks
-    private ApiClientDetailsService apiClientDetailsService;
+    private ApiCredentialsService apiClientDetailsService;
 
     @Test
     void getApiClientDetails_ShouldReturnClientDetails() {

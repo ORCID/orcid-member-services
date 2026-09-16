@@ -9,7 +9,7 @@ import org.orcid.mp.member.apicreds.ApiClientDetails;
 import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
 import org.orcid.mp.member.domain.User;
 import org.orcid.mp.member.error.SimpleExceptionHandler;
-import org.orcid.mp.member.service.ApiClientDetailsService;
+import org.orcid.mp.member.service.ApiCredentialsService;
 import org.orcid.mp.member.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +18,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Collections;
@@ -47,7 +46,7 @@ public class ApiCredentialsResourceIT {
     private UserService mockedUserService;
 
     @Mock
-    private ApiClientDetailsService mockedApiClientDetailsService;
+    private ApiCredentialsService mockedApiClientDetailsService;
 
     private MockMvc restMockMvc;
 

@@ -9,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.orcid.mp.member.apicreds.ApiClientDetails;
 import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
 import org.orcid.mp.member.domain.User;
-import org.orcid.mp.member.service.ApiClientDetailsService;
+import org.orcid.mp.member.service.ApiCredentialsService;
 import org.orcid.mp.member.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 class ApiCredentialsResourceTest {
 
     @Mock
-    private ApiClientDetailsService apiClientDetailsService;
+    private ApiCredentialsService apiClientDetailsService;
 
     @Mock
     private UserService userService;

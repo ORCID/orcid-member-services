@@ -3,7 +3,7 @@ package org.orcid.mp.member.rest;
 import org.orcid.mp.member.apicreds.ApiClientDetails;
 import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
 import org.orcid.mp.member.domain.User;
-import org.orcid.mp.member.service.ApiClientDetailsService;
+import org.orcid.mp.member.service.ApiCredentialsService;
 import org.orcid.mp.member.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ public class ApiCredentialsResource {
     private static final Logger LOG = LoggerFactory.getLogger(ApiCredentialsResource.class);
 
     @Autowired
-    private ApiClientDetailsService apiClientDetailsService;
+    private ApiCredentialsService apiClientDetailsService;
 
     @Autowired
     private UserService userService;
