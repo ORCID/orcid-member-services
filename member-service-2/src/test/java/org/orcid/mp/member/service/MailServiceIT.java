@@ -153,4 +153,34 @@ class MailServiceIT {
         assertThat(contentCaptor.getValue()).contains("Test Org");
     }
 
+    @Test
+    void testSendApplyForProdCredsEmail_withCLEmail() throws MailException {
+        ProductionCredentialsApplication application = new ProductionCredentialsApplication();
+        application.setRequestedByEmail("requesting-user@email.com");
+        application.setOrgName("Test Org");
+        application.setIntegrationDescription("description");
+        application.setNotes("notes");
+        application.setSystemIntegrationType("something here");
+        application.setAuthenticateIdsAnswer("yes - some details here");
+        application.setRequestedByName("someone");
+        application.setIntegrationHomepageUrl("https://some.url");
+        application.setRedirectUris(List.of("https://some.url", "https://some-other.url"));
+        application.setConsortiumLeadEmail("cl@orcid.org");
+
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        mailService.sendApplyForProdCredsEmail(application);
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
+        assertThat(recipientCaptor.getValue()).isEqualTo("mp@orcid.org, cl@orcid.org");
+        assertThat(subjectCaptor.getValue()).isEqualTo(MailService.PROD_CREDS_SUBJECT_PREFIX + "Test Org");
+        assertThat(ccCaptor.getValue()).isEqualTo("requesting-user@email.com");
+        assertThat(contentCaptor.getValue()).contains("description");
+        assertThat(contentCaptor.getValue()).contains("something here");
+        assertThat(contentCaptor.getValue()).contains("yes - some details here");
+        assertThat(contentCaptor.getValue()).contains("notes");
+        assertThat(contentCaptor.getValue()).contains("https://some.url");
+        assertThat(contentCaptor.getValue()).contains("https://some-other.url");
+        assertThat(contentCaptor.getValue()).contains("someone (requesting-user@email.com)");
+        assertThat(contentCaptor.getValue()).contains("Test Org");
+    }
+
 }

@@ -174,12 +174,16 @@ public class MailService {
         context.setVariable("integrationDescription", productionCredentialsApplication.getIntegrationDescription());
         context.setVariable("integrationHomepageUrl", productionCredentialsApplication.getIntegrationHomepageUrl());
 
+        String recipient = contactUpdateRecipient;
+        if (productionCredentialsApplication.getConsortiumLeadEmail() != null) {
+            recipient += ", " + productionCredentialsApplication.getConsortiumLeadEmail();
+        }
 
         String content = templateEngine.process("mail/applyForProdCreds", context);
         try {
-            mailgunClient.sendMail(contactUpdateRecipient, productionCredentialsApplication.getRequestedByEmail(), PROD_CREDS_SUBJECT_PREFIX + productionCredentialsApplication.getOrgName(), content);
+            mailgunClient.sendMail(recipient, productionCredentialsApplication.getRequestedByEmail(), PROD_CREDS_SUBJECT_PREFIX + productionCredentialsApplication.getOrgName(), content);
         } catch (MailException e) {
-            LOGGER.error("Error sending remove consortium member email to {}", contactUpdateRecipient, e);
+            LOGGER.error("Error sending apply for prod credentials email to {}", recipient, e);
         }
     }
 

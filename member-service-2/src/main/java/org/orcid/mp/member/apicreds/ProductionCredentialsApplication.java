@@ -4,6 +4,8 @@ import java.util.List;
 
 public class ProductionCredentialsApplication {
 
+    private String consortiumLeadEmail;
+
     private List<String> redirectUris;
 
     private String requestedByName;
@@ -102,5 +104,13 @@ public class ProductionCredentialsApplication {
 
     public void setRequestedByEmail(String requestedByEmail) {
         this.requestedByEmail = requestedByEmail;
+    }
+
+    public String getConsortiumLeadEmail() {
+        return consortiumLeadEmail;
+    }
+
+    public void setConsortiumLeadEmail(String consortiumLeadEmail) {
+        this.consortiumLeadEmail = consortiumLeadEmail;
     }
 }

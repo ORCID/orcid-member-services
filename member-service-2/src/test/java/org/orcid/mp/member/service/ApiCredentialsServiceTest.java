@@ -12,11 +12,13 @@ import org.orcid.mp.member.client.ApiCredentialsServiceClient;
 import org.orcid.mp.member.domain.Member;
 import org.orcid.mp.member.domain.User;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -118,6 +120,45 @@ class ApiCredentialsServiceTest {
         assertThat(application.getRequestedByName()).isEqualTo("Jane Doe");
         assertThat(application.getRequestedByEmail()).isEqualTo("jane.doe@orcid.org");
         assertThat(application.getOrgName()).isEqualTo("Test Member");
+        verify(userService).getLoggedInUser();
+        verify(mailService).sendApplyForProdCredsEmail(application);
+    }
+
+    @Test
+    void applyForApiCredentials_ShouldSendToCLToo() {
+        // Arrange
+        User loggedInUser = new User();
+        loggedInUser.setFirstName("Jane");
+        loggedInUser.setLastName("Doe");
+        loggedInUser.setEmail("jane.doe@orcid.org");
+        when(userService.getLoggedInUser()).thenReturn(loggedInUser);
+
+        Member member = new Member();
+        member.setClientName("Test Member");
+        member.setParentSalesforceId("sf-id");
+        when(memberService.getMember(loggedInUser.getMemberId())).thenReturn(Optional.of(member));
+
+        Member cl = new Member();
+        cl.setId("1");
+        cl.setSalesforceId("sf-id");
+        when(memberService.getMember(eq("sf-id"))).thenReturn(Optional.of(cl));
+
+        User clMainContact = new User();
+        clMainContact.setMainContact(true);
+        clMainContact.setMemberId("1");
+        clMainContact.setEmail("clMainContact@orcid.org");
+        when(userService.getUsersByMemberId(eq("1"))).thenReturn(List.of(clMainContact));
+
+        ProductionCredentialsApplication application = new ProductionCredentialsApplication();
+
+        // Act
+        apiClientDetailsService.applyForApiCredentials(application);
+
+        // Assert
+        assertThat(application.getRequestedByName()).isEqualTo("Jane Doe");
+        assertThat(application.getRequestedByEmail()).isEqualTo("jane.doe@orcid.org");
+        assertThat(application.getOrgName()).isEqualTo("Test Member");
+        assertThat(application.getConsortiumLeadEmail()).isEqualTo("clMainContact@orcid.org");
         verify(userService).getLoggedInUser();
         verify(mailService).sendApplyForProdCredsEmail(application);
     }

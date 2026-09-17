@@ -36,6 +36,15 @@ public class ApiCredentialsService {
         User user = userService.getLoggedInUser();
         Member member = memberService.getMember(user.getMemberId()).orElseThrow();
 
+        if (member.getParentSalesforceId() != null) {
+            Member consortiumLead = memberService.getMember(member.getParentSalesforceId()).orElseThrow();
+            User clOrgOwner = userService.getUsersByMemberId(consortiumLead.getId()).stream()
+                    .filter(u -> Boolean.TRUE.equals(u.getMainContact()))
+                    .findFirst()
+                    .orElse(null);
+            application.setConsortiumLeadEmail(clOrgOwner.getEmail());
+        }
+
         application.setRequestedByName(user.getFirstName() + " " + user.getLastName());
         application.setRequestedByEmail(user.getEmail());
         application.setOrgName(member.getClientName());
