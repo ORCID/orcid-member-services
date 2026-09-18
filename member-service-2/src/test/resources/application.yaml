@@ -14,6 +14,11 @@ spring:
             client-id: test-id
             client-secret: test-secret
             authorization-grant-type: client_credentials
+          api-credentials-service-client:
+            provider: dummy-provider
+            client-id: test-id
+            client-secret: test-secret
+            authorization-grant-type: client_credentials
         provider:
           dummy-provider:
             token-uri: http://localhost:9000/oauth2/token
@@ -45,6 +50,8 @@ application:
     password: password
   userService:
     apiUrl: http://user.com/service
+  apiCredentialsService:
+    apiUrl: http://api-credentials.com/service
   reports:
     holisticsMemberDashboardUrl: http://holistics.com/member
     holisticsMemberDashboardSecret: some-secret
@@ -60,6 +67,6 @@ application:
     syncSalesforceMembers: 0 0 0 * * *
     enabled: true
   apicreds:
-    apiBaseUrl: some-url
+    apiBaseUrl: http://localhost:9100
     clientId: member-portal-client
     clientSecret: member-portal-client-secret

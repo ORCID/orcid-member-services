@@ -13,7 +13,9 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { FeatureToggleService } from 'src/app/shared/service/feature-toggle.service'
-import { RouterModule } from '@angular/router'
+import { Router, RouterModule } from '@angular/router'
+import { AlertMessage, AlertType } from 'src/app/app.constants'
+import { AlertService } from 'src/app/shared/service/alert.service'
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent
@@ -23,6 +25,8 @@ describe('NavbarComponent', () => {
   let memberService: jasmine.SpyObj<MemberService>
   let modalService: jasmine.SpyObj<NgbModal>
   let featureToggleService: jasmine.SpyObj<FeatureToggleService>
+  let alertService: jasmine.SpyObj<AlertService>
+  let router: Router
 
   beforeEach(() => {
     spyOn(console, 'warn').and.stub()
@@ -45,6 +49,7 @@ describe('NavbarComponent', () => {
     accountServiceSpy.getAccountData.and.returnValue(of(null))
     ;(accountServiceSpy as any).accountData = new BehaviorSubject(null)
     const modalServiceSpy = jasmine.createSpyObj('NgbModal', ['open'])
+    const alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
     const mockOidcSecurityService = {
       checkAuth: () => of({ isAuthenticated: true, userData: { email: 'test@email.com' } }),
       userData$: of({ email: 'test@email.com' }),
@@ -56,7 +61,7 @@ describe('NavbarComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
         ReactiveFormsModule,
-        RouterModule.forRoot([{ path: 'api-credentials', children: [] }]),
+        RouterModule.forRoot([{ path: 'api-credentials/:memberId', children: [] }]),
         NavbarComponent,
         HasAnyAuthorityDirective,
       ],
@@ -65,6 +70,7 @@ describe('NavbarComponent', () => {
         { provide: MemberService, useValue: memberServiceSpy },
         { provide: AccountService, useValue: accountServiceSpy },
         { provide: NgbModal, useValue: modalServiceSpy },
+        { provide: AlertService, useValue: alertServiceSpy },
         { provide: OidcSecurityService, useValue: mockOidcSecurityService },
         { provide: FeatureToggleService, useValue: featureToggleSpy },
         provideHttpClient(withInterceptorsFromDi()),
@@ -77,6 +83,9 @@ describe('NavbarComponent', () => {
     accountService = TestBed.inject(AccountService) as jasmine.SpyObj<AccountService>
     modalService = TestBed.inject(NgbModal) as jasmine.SpyObj<NgbModal>
     featureToggleService = TestBed.inject(FeatureToggleService) as jasmine.SpyObj<FeatureToggleService>
+    alertService = TestBed.inject(AlertService) as jasmine.SpyObj<AlertService>
+    router = TestBed.inject(Router)
+    spyOn(router, 'navigate').and.returnValue(Promise.resolve(true))
   })
 
   function createComponent() {
@@ -306,4 +315,26 @@ describe('NavbarComponent', () => {
       centered: true,
     })
   }))
+
+  it('should navigate to the member-scoped API credentials page when MFA is enabled', () => {
+    accountService.isMFAEnabled.and.returnValue(true)
+    accountService.getMemberId.and.returnValue('memberId')
+
+    component = TestBed.createComponent(NavbarComponent).componentInstance
+    component.manageApiCredentials()
+
+    expect(router.navigate).toHaveBeenCalledWith(['/api-credentials', 'memberId'])
+    expect(modalService.open).not.toHaveBeenCalled()
+  })
+
+  it('should show an error instead of navigating when MFA is enabled without a member id', () => {
+    accountService.isMFAEnabled.and.returnValue(true)
+    accountService.getMemberId.and.returnValue(null)
+
+    component = TestBed.createComponent(NavbarComponent).componentInstance
+    component.manageApiCredentials()
+
+    expect(router.navigate).not.toHaveBeenCalled()
+    expect(alertService.broadcast).toHaveBeenCalledWith(AlertType.TOAST, AlertMessage.API_CREDENTIAL_SEARCH_ERROR)
+  })
 })
