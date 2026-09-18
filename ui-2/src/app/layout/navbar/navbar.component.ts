@@ -21,6 +21,8 @@ import { OidcSecurityService } from 'angular-auth-oidc-client'
 import { IMember } from 'src/app/member/model/member.model'
 import { MemberService } from 'src/app/member/service/member.service'
 import { FeatureToggleService } from 'src/app/shared/service/feature-toggle.service'
+import { AlertMessage, AlertType } from 'src/app/app.constants'
+import { AlertService } from 'src/app/shared/service/alert.service'
 import { AccountService, LoginService } from '../../account'
 import { ApiCredentialsMfaEnabledDialogComponent } from './api-credentials-mfa-enabled-dialog/api-credentials-mfa-enabled-dialog.component'
 
@@ -46,6 +48,7 @@ export class NavbarComponent {
   protected featureService = inject(FeatureToggleService)
   private router = inject(Router)
   private modalService = inject(NgbModal)
+  private alertService = inject(AlertService)
   private destroyRef = inject(DestroyRef)
 
   protected isNavbarCollapsed = signal(true)
@@ -203,15 +206,22 @@ export class NavbarComponent {
   }
 
   manageApiCredentials() {
-    if (this.userIsMFAEnabled()) {
-      this.collapseNavbar()
-      this.router.navigate(['/api-credentials'])
-    } else {
+    if (!this.userIsMFAEnabled()) {
       this.modalService.open(ApiCredentialsMfaEnabledDialogComponent, {
         backdrop: 'static',
         centered: true,
       })
+      return
     }
+
+    const memberId = this.accountService.getMemberId()
+    if (!memberId) {
+      this.alertService.broadcast(AlertType.TOAST, AlertMessage.API_CREDENTIAL_SEARCH_ERROR)
+      return
+    }
+
+    this.collapseNavbar()
+    this.router.navigate(['/api-credentials', memberId])
   }
 
 }

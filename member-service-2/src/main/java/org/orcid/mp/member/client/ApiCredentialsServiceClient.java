@@ -3,6 +3,9 @@ package org.orcid.mp.member.client;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.orcid.mp.member.apicreds.ApiClientDetails;
+import org.orcid.mp.member.apicreds.ApiClientDetailsSummary;
+import org.orcid.mp.member.apicreds.ApiClientPagedResult;
+import org.orcid.mp.member.apicreds.ApiClientDetails;
 import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +20,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
@@ -49,15 +55,86 @@ public class ApiCredentialsServiceClient {
         return request(() -> getApiClients(memberId));
     }
 
-    public ApiClientDetails getApiClientDetails(String clientDetailsId) {
-        LOG.debug("Fetching api client {} from api credentials service", clientDetailsId);
-        return request(() -> getClientDetails(clientDetailsId));
+    public ApiClientDetails create(ApiClientDetails clientRequest) {
+        return request(() -> restClient.post()
+                .uri(apiBaseUrl + "/client-details")
+                .headers(headers -> headers.setBearerAuth(accessToken.get()))
+                .body(clientRequest)
+                .retrieve()
+                .body(ApiClientDetails.class));
     }
 
-    private ApiClientDetails getClientDetails(String clientDetailsId) {
-        String url = apiBaseUrl + "/client-details/" + clientDetailsId;
-        return get(url, ParameterizedTypeReference.forType(ApiClientDetails.class));
+    public ApiClientDetails update(String clientDetailsId, ApiClientDetails clientRequest) {
+        return request(() -> restClient.put()
+                .uri(apiBaseUrl + "/client-details/{id}", clientDetailsId)
+                .headers(headers -> headers.setBearerAuth(accessToken.get()))
+                .body(clientRequest)
+                .retrieve()
+                .body(ApiClientDetails.class));
     }
+
+    /**
+     * Fetches the complete details for one API client.  The Angular edit route
+     * uses this endpoint to populate the form before activation completes.
+     */
+    public ApiClientDetails get(String clientDetailsId) {
+        URI uri = UriComponentsBuilder
+                .fromUriString(apiBaseUrl)
+                .pathSegment("client-details", clientDetailsId)
+                .build()
+                .encode()
+                .toUri();
+
+        return request(() -> restClient.get()
+                .uri(uri)
+                .accept(MediaType.APPLICATION_JSON)
+                .headers(headers -> headers.setBearerAuth(accessToken.get()))
+                .retrieve()
+                .body(ApiClientDetails.class));
+    }
+
+    public ApiClientPagedResult<ApiClientDetailsSummary> search(String memberId, List<String> clientTypes, int page, int size, String sort) {
+        return request(() -> searchClients(memberId, clientTypes, page, size, sort));
+    }
+
+    public ApiClientPagedResult<ApiClientDetailsSummary> searchClients(
+            String memberId,
+            List<String> clientTypes,
+            int page,
+            int size,
+            String sort) {
+
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(apiBaseUrl)
+                .path("/client-details")
+                .queryParam("memberId", memberId)
+                .queryParam("page", page)
+                .queryParam("size", size)
+                .queryParam("sort", sort);
+
+        if (clientTypes != null && !clientTypes.isEmpty()) {
+            clientTypes.forEach(clientType ->
+                    uriBuilder.queryParam("clientType", clientType)
+            );
+        }
+
+        URI uri = uriBuilder
+                .build()
+                .encode()
+                .toUri();
+
+        return restClient.get()
+                .uri(uri)
+                .accept(MediaType.APPLICATION_JSON)
+                .headers(headers ->
+                        headers.setBearerAuth(accessToken.get())
+                )
+                .retrieve()
+                .body(new ParameterizedTypeReference<ApiClientPagedResult<ApiClientDetailsSummary>>() {});
+    }
+
+    private String getApiClients(String memberId) {
+        String url = apiBaseUrl + "/client-details/" + memberId;
 
     private ApiClientSummaryPage getApiClients(String memberId) {
         String url = apiBaseUrl + "/client-details?memberId=" + memberId + "&size=100";

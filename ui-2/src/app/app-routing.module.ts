@@ -6,6 +6,8 @@ import { routes as accountRoutes } from './account/account.route'
 import { routes as homeRoutes } from './home/home.route'
 import { errorRoutes } from './error/error.route'
 import { navbarRoute } from './layout/navbar/navbar.route'
+import { AuthGuard } from './account/auth.guard'
+import { ApiCredentialResolver } from './client/api-credentials.route'
 
 const routes: Routes = [
   {
@@ -36,8 +38,21 @@ const routes: Routes = [
     loadChildren: () => import('./report/report.route').then((m) => [m.REPORT_ROUTE]),
   },
   {
-    path: 'api-credentials',
-    loadChildren: () => import('./api-credentials/api-credentials.route').then((m) => m.routes),
+    path: 'api-credentials/:memberId',
+    loadChildren: () => import('./client/api-credentials.route').then((m) => m.routes),
+  },
+  {
+    path: 'api-credentials/:memberId/:clientId',
+    loadComponent: () =>
+      import('./client/api-credential-edit.component').then((m) => m.ApiCredentialEditComponent),
+    resolve: {
+      credential: ApiCredentialResolver,
+    },
+    data: {
+      authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER'],
+      pageTitle: 'gatewayApp.msUserServiceMSApiCredentials.home.title.string',
+    },
+    canActivate: [AuthGuard],
   },
   { path: 'login', component: LoginComponent },
 ]

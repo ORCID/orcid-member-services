@@ -25,6 +25,12 @@ export const AlertMessage = Object.freeze({
   AFFILIATION_UPDATED: 'Affiliation updated',
   AFFILIATION_DELETED: 'Affiliation deleted',
   AFFILIATION_DELETE_FAILURE: 'There was a problem deleting the affiliation',
+  API_CREDENTIAL_UPDATED: 'Client updated',
+  API_CREDENTIAL_SECRET_RESET: 'Client secret reset',
+  API_CREDENTIAL_SEARCH_ERROR: 'Unable to load API credentials',
+  API_CREDENTIAL_CREATED: 'Client created',
+  API_CREDENTIAL_SAVE_ERROR: 'Unable to save client',
+  API_CREDENTIAL_APPLICATION_SUBMITTED: 'Application submitted',
 } as const)
 export type AlertMessage = (typeof AlertMessage)[keyof typeof AlertMessage]
 

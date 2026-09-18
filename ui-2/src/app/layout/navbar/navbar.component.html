@@ -66,17 +66,15 @@
                 (userIsOrgOwner() || userCanManageApiCreds())
               ) {
                 <li>
-                  <a
+                  <button
+                    type="button"
                     id="manageApiCredentialsLink"
                     class="dropdown-item"
-                    routerLink="/api-credentials"
-                    routerLinkActive="active"
-                    [routerLinkActiveOptions]="{ exact: true }"
-                    (click)="manageApiCredentials(); $event.preventDefault()"
+                    (click)="manageApiCredentials()"
                   >
                     <fa-icon [icon]="faKey" [fixedWidth]="true" />
                     <span i18n="@@global.menu.tools.manageApiCredentials.string">Manage API credentials</span>
-                  </a>
+                  </button>
                 </li>
               }
               @if (canShowToolsSection()) {

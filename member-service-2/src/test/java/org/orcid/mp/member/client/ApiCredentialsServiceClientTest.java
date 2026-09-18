@@ -3,6 +3,7 @@ package org.orcid.mp.member.client;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.orcid.mp.member.apicreds.ApiClientDetails;
+import org.orcid.mp.member.apicreds.ApiClientDetails;
 import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -46,10 +47,7 @@ class ApiCredentialsServiceClientTest {
                 .andRespond(withSuccess("{\"access_token\": \"token-123\"}", MediaType.APPLICATION_JSON));
 
         // 2. Expect Data Request with the acquired token
-        String expectedUrl = "http://localhost:8080/api/client-details?memberId=member-1&size=100";
-        String mockResponseJson = "{\"content\": [{\"clientDetailsId\": \"APP-1\", \"clientName\": \"Test\"}], \"totalElements\": 1, \"totalPages\": 1}";
-
-        mockServer.expect(ExpectedCount.once(), requestTo(expectedUrl))
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/client-details/member-1"))
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(header("Authorization", "Bearer token-123"))
                 .andRespond(withSuccess(mockResponseJson, MediaType.APPLICATION_JSON));
@@ -140,20 +138,77 @@ class ApiCredentialsServiceClientTest {
     }
 
     @Test
-    void getApiClientsForMember_ShouldReturnNullOn404() {
-        setMockAccessToken("active-token");
+    void shouldInitAccessTokenBeforeSearching() {
+        // 1. Expect Token Request (search must trigger initAccessToken like the other authenticated calls)
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/oauth2/token"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withSuccess("{\"access_token\": \"token-123\"}", MediaType.APPLICATION_JSON));
 
-        // Request returns 404 Not Found
-        String expectedUrl = "http://localhost:8080/api/client-details?memberId=member-missing&size=100";
-        mockServer.expect(ExpectedCount.once(), requestTo(expectedUrl))
+        // 2. Expect Search Request with the acquired token
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/client-details?memberId=member-1&page=0&size=20&sort=dateCreated,DESC"))
                 .andExpect(method(HttpMethod.GET))
-                .andRespond(withStatus(HttpStatus.NOT_FOUND).body("Not Found"));
+                .andExpect(header("Authorization", "Bearer token-123"))
+                .andRespond(withSuccess("{\"content\": [], \"totalElements\": 0, \"totalPages\": 0, \"number\": 0, \"size\": 20}", MediaType.APPLICATION_JSON));
 
         // Execute
-        ApiClientSummaryPage result = client.getApiClientsForMember("member-missing");
+        var result = client.search("member-1", null, 0, 20, "dateCreated,DESC");
 
-        // Verify - the client handles the 404 by catching the exception and returning null
-        assertNull(result, "Expected null response for 404 without throwing exception");
+        // Verify
+        assertNotNull(result);
+        assertEquals(0, result.getTotalElements());
+        mockServer.verify();
+    }
+
+    @Test
+    void shouldFetchClientDetailsById() {
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/oauth2/token"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withSuccess("{\"access_token\": \"token-123\"}", MediaType.APPLICATION_JSON));
+
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/client-details/APP-123"))
+                .andExpect(method(HttpMethod.GET))
+                .andExpect(header("Authorization", "Bearer token-123"))
+                .andRespond(withSuccess(
+                        "{\"memberId\":\"member-1\",\"clientDetailsId\":\"APP-123\","
+                                + "\"name\":\"My App\",\"website\":\"https://example.org\","
+                                + "\"redirectUris\":[]}",
+                        MediaType.APPLICATION_JSON));
+
+        ApiClientDetails result = client.get("APP-123");
+
+        assertNotNull(result);
+        assertEquals("APP-123", result.getClientDetailsId());
+        assertEquals("My App", result.getName());
+        mockServer.verify();
+    }
+
+    @Test
+    void shouldParseNestedPagePaginationMetadata() {
+        // Inject an active token so we skip straight to the search request
+        @SuppressWarnings("unchecked")
+        AtomicReference<String> tokenRef = (AtomicReference<String>) ReflectionTestUtils.getField(client, "accessToken");
+        assertNotNull(tokenRef);
+        tokenRef.set("active-token");
+
+        // api-credentials-service (Spring Data 3.3+, VIA_DTO serialization mode) nests
+        // totalElements/totalPages/number/size under a "page" object instead of top-level
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/client-details?memberId=member-1&page=0&size=20&sort=dateCreated,DESC"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess(
+                        "{\"content\": [{\"clientDetailsId\": \"APP-1\", \"clientName\": \"Orcid MCP\"}], "
+                                + "\"page\": {\"size\": 20, \"number\": 0, \"totalElements\": 4, \"totalPages\": 1}}",
+                        MediaType.APPLICATION_JSON));
+
+        // Execute
+        var result = client.search("member-1", null, 0, 20, "dateCreated,DESC");
+
+        // Verify
+        assertNotNull(result);
+        assertEquals(1, result.getContent().size());
+        assertEquals(4, result.getTotalElements());
+        assertEquals(1, result.getTotalPages());
+        assertEquals(0, result.getNumber());
+        assertEquals(20, result.getSize());
         mockServer.verify();
     }
 
