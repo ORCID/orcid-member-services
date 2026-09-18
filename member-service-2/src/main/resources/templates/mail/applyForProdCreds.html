@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>
+        (+) ORCID MEMBER API CREDENTIALS REQUEST
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}"/>
+</head>
+<body
+    style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
+<div style="padding: 20px; padding-top: 10px; margin: auto;">
+    <div th:insert="~{mail/common :: emailHeader}"></div>
+    <p><strong>(+) ORCID MEMBER API CREDENTIALS REQUEST</strong></p>
+    <p>
+        <strong>Requested by</strong><br/>
+        <span th:text="(@{|${requestedBy}|})">Andrew User (a.user@aaf.edu.au)</span><br/>
+        <span th:text="(@{|${orgName}|})">Australian Access Federation - AAF</span>
+    </p>
+    <p>
+    <hr/>
+    <strong>About this integration</strong>
+    <hr/>
+    </p>
+    <p>
+        <strong>System integration type</strong><br/>
+        <span th:text="(@{|${systemIntegrationType}|})">In-house/bespoke/custom integration</span>
+    </p>
+
+    <p>
+        <strong>Authenticate IDs?</strong><br/>
+        <span th:text="(@{|${authenticateIdsAnswer}|})">Yes - We will be asking users to authenticate and grant permissions to our organisation</span>
+    </p>
+
+    <p>
+    <hr/>
+    <strong>Integration details</strong>
+    <hr/>
+    </p>
+
+    <p>
+        <strong>Display name</strong><br/>
+        <span th:text="(@{|${integrationDisplayName}|})">Test integration</span>
+    </p>
+
+    <p>
+        <strong>Homepage URL</strong><br/>
+        <span th:text="(@{|${integrationHomepageUrl}|})">https://test-integration.com</span>
+    </p>
+
+    <p>
+        <strong>Description</strong><br/>
+        <span th:text="(@{|${integrationDescription}|})">My great integration</span>
+    </p>
+
+    <p>
+        <strong>Redirect URIs</strong><br/>
+        <span th:each="redirectUri : ${redirectUris}">
+        <span th:text="${redirectUri}">https://whatever</span><br/>
+        </span>
+    </p>
+
+    <p>
+    <hr/>
+    <strong>Notes or comments</strong>
+    <hr/>
+    </p>
+
+    <p>
+        <span th:text="(@{|${notes}|})">I really want this to work properly</span>
+    </p>
+</div>
+</body>
+</html>

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.orcid.mp.member.MemberServiceApplication;
+import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
 import org.orcid.mp.member.client.MailgunClient;
 import org.orcid.mp.member.error.MailException;
 import org.orcid.mp.member.salesforce.request.AddConsortiumMember;
@@ -15,6 +16,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.io.File;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,6 +39,9 @@ class MailServiceIT {
 
     @Captor
     private ArgumentCaptor<String> ccCaptor;
+
+    @Captor
+    private ArgumentCaptor<String> contentCaptor;
 
     @Captor
     private ArgumentCaptor<File> fileCaptor;
@@ -117,6 +122,65 @@ class MailServiceIT {
         assertThat(recipientCaptor.getValue()).isEqualTo("mp@orcid.org");
         assertThat(subjectCaptor.getValue()).isEqualTo(MailService.REMOVE_ORG_SUBJECT);
         assertThat(ccCaptor.getValue()).isEqualTo("requesting-user@email.com");
+    }
+
+    @Test
+    void testSendApplyForProdCredsEmail() throws MailException {
+        ProductionCredentialsApplication application = new ProductionCredentialsApplication();
+        application.setRequestedByEmail("requesting-user@email.com");
+        application.setOrgName("Test Org");
+        application.setIntegrationDescription("description");
+        application.setNotes("notes");
+        application.setSystemIntegrationType("something here");
+        application.setAuthenticateIdsAnswer("yes - some details here");
+        application.setRequestedByName("someone");
+        application.setIntegrationHomepageUrl("https://some.url");
+        application.setRedirectUris(List.of("https://some.url", "https://some-other.url"));
+
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        mailService.sendApplyForProdCredsEmail(application);
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
+        assertThat(recipientCaptor.getValue()).isEqualTo("mp@orcid.org");
+        assertThat(subjectCaptor.getValue()).isEqualTo(MailService.PROD_CREDS_SUBJECT_PREFIX + "Test Org");
+        assertThat(ccCaptor.getValue()).isEqualTo("requesting-user@email.com");
+        assertThat(contentCaptor.getValue()).contains("description");
+        assertThat(contentCaptor.getValue()).contains("something here");
+        assertThat(contentCaptor.getValue()).contains("yes - some details here");
+        assertThat(contentCaptor.getValue()).contains("notes");
+        assertThat(contentCaptor.getValue()).contains("https://some.url");
+        assertThat(contentCaptor.getValue()).contains("https://some-other.url");
+        assertThat(contentCaptor.getValue()).contains("someone (requesting-user@email.com)");
+        assertThat(contentCaptor.getValue()).contains("Test Org");
+    }
+
+    @Test
+    void testSendApplyForProdCredsEmail_withCLEmail() throws MailException {
+        ProductionCredentialsApplication application = new ProductionCredentialsApplication();
+        application.setRequestedByEmail("requesting-user@email.com");
+        application.setOrgName("Test Org");
+        application.setIntegrationDescription("description");
+        application.setNotes("notes");
+        application.setSystemIntegrationType("something here");
+        application.setAuthenticateIdsAnswer("yes - some details here");
+        application.setRequestedByName("someone");
+        application.setIntegrationHomepageUrl("https://some.url");
+        application.setRedirectUris(List.of("https://some.url", "https://some-other.url"));
+        application.setConsortiumLeadEmail("cl@orcid.org");
+
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        mailService.sendApplyForProdCredsEmail(application);
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
+        assertThat(recipientCaptor.getValue()).isEqualTo("mp@orcid.org, cl@orcid.org");
+        assertThat(subjectCaptor.getValue()).isEqualTo(MailService.PROD_CREDS_SUBJECT_PREFIX + "Test Org");
+        assertThat(ccCaptor.getValue()).isEqualTo("requesting-user@email.com");
+        assertThat(contentCaptor.getValue()).contains("description");
+        assertThat(contentCaptor.getValue()).contains("something here");
+        assertThat(contentCaptor.getValue()).contains("yes - some details here");
+        assertThat(contentCaptor.getValue()).contains("notes");
+        assertThat(contentCaptor.getValue()).contains("https://some.url");
+        assertThat(contentCaptor.getValue()).contains("https://some-other.url");
+        assertThat(contentCaptor.getValue()).contains("someone (requesting-user@email.com)");
+        assertThat(contentCaptor.getValue()).contains("Test Org");
     }
 
 }

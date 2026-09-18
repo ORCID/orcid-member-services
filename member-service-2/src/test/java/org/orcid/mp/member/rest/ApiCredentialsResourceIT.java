@@ -7,9 +7,10 @@ import org.mockito.Mockito;
 import org.orcid.mp.member.MemberServiceApplication;
 import org.orcid.mp.member.apicreds.ApiClientDetails;
 import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
+import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
 import org.orcid.mp.member.domain.User;
 import org.orcid.mp.member.error.SimpleExceptionHandler;
-import org.orcid.mp.member.service.ApiClientDetailsService;
+import org.orcid.mp.member.service.ApiCredentialsService;
 import org.orcid.mp.member.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +19,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Collections;
@@ -26,6 +26,8 @@ import java.util.Collections;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 
 @SpringBootTest(classes = MemberServiceApplication.class)
 public class ApiCredentialsResourceIT {
@@ -47,7 +49,7 @@ public class ApiCredentialsResourceIT {
     private UserService mockedUserService;
 
     @Mock
-    private ApiClientDetailsService mockedApiClientDetailsService;
+    private ApiCredentialsService mockedApiClientDetailsService;
 
     private MockMvc restMockMvc;
 
@@ -143,6 +145,27 @@ public class ApiCredentialsResourceIT {
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden()); // AccessDeniedException mapped to 403 by SimpleExceptionHandler
+    }
+
+    @Test
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_ADMIN", "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
+    public void applyForApiCredentials_ShouldReturn200() throws Exception {
+        ProductionCredentialsApplication application = new ProductionCredentialsApplication();
+        application.setOrgName("Test Org");
+        application.setIntegrationDisplayName("Test Integration");
+
+        String requestBody = "{"
+                + "\"orgName\":\"Test Org\","
+                + "\"integrationDisplayName\":\"Test Integration\""
+                + "}";
+
+        restMockMvc.perform(post("/apicreds/apply")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk());
+
+        Mockito.verify(mockedApiClientDetailsService).applyForApiCredentials(Mockito.any(ProductionCredentialsApplication.class));
     }
 
     private User getLoggedInAdminUser() {

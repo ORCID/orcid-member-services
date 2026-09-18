@@ -1,6 +1,7 @@
 package org.orcid.mp.member.service;
 
 
+import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
 import org.orcid.mp.member.client.MailgunClient;
 import org.orcid.mp.member.error.MailException;
 import org.orcid.mp.member.salesforce.request.AddConsortiumMember;
@@ -36,8 +37,13 @@ public class MailService {
 
     static final String REMOVE_ORG_SUBJECT = "Remove member organization";
 
+    static final String PROD_CREDS_SUBJECT_PREFIX = "ORCID Member API Credentials Request - ";
+
     @Value("${application.mail.contactUpdateRecipient}")
     private String contactUpdateRecipient;
+
+    @Value("${application.mail.fromAddress}")
+    private String fromAddress;
 
     @Autowired
     private SpringTemplateEngine templateEngine;
@@ -152,6 +158,32 @@ public class MailService {
             mailgunClient.sendMail(contactUpdateRecipient, removeConsortiumMember.getRequestedByEmail(), REMOVE_ORG_SUBJECT, content);
         } catch (MailException e) {
             LOGGER.error("Error sending remove consortium member email to {}", contactUpdateRecipient, e);
+        }
+    }
+
+    public void sendApplyForProdCredsEmail(ProductionCredentialsApplication productionCredentialsApplication) {
+        LOGGER.debug("Sending apply for prod creds email '{}'", contactUpdateRecipient);
+        Context context = new Context(Locale.ENGLISH);
+        context.setVariable("requestedBy", productionCredentialsApplication.getRequestedByName() + " (" + productionCredentialsApplication.getRequestedByEmail() + ")");
+        context.setVariable("orgName", productionCredentialsApplication.getOrgName());
+        context.setVariable("redirectUris", productionCredentialsApplication.getRedirectUris());
+        context.setVariable("systemIntegrationType", productionCredentialsApplication.getSystemIntegrationType());
+        context.setVariable("notes", productionCredentialsApplication.getNotes());
+        context.setVariable("authenticateIdsAnswer", productionCredentialsApplication.getAuthenticateIdsAnswer());
+        context.setVariable("integrationDisplayName", productionCredentialsApplication.getIntegrationDisplayName());
+        context.setVariable("integrationDescription", productionCredentialsApplication.getIntegrationDescription());
+        context.setVariable("integrationHomepageUrl", productionCredentialsApplication.getIntegrationHomepageUrl());
+
+        String recipient = contactUpdateRecipient;
+        if (productionCredentialsApplication.getConsortiumLeadEmail() != null) {
+            recipient += ", " + productionCredentialsApplication.getConsortiumLeadEmail();
+        }
+
+        String content = templateEngine.process("mail/applyForProdCreds", context);
+        try {
+            mailgunClient.sendMail(recipient, productionCredentialsApplication.getRequestedByEmail(), PROD_CREDS_SUBJECT_PREFIX + productionCredentialsApplication.getOrgName(), content);
+        } catch (MailException e) {
+            LOGGER.error("Error sending apply for prod credentials email to {}", recipient, e);
         }
     }
 
