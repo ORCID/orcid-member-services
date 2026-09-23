@@ -31,6 +31,7 @@ export const AlertMessage = Object.freeze({
   API_CREDENTIAL_CREATED: 'Client created',
   API_CREDENTIAL_SAVE_ERROR: 'Unable to save client',
   API_CREDENTIAL_APPLICATION_SUBMITTED: 'Application submitted',
+  API_CREDENTIAL_APPLICATION_ERROR: 'Unable to submit application',
 } as const)
 export type AlertMessage = (typeof AlertMessage)[keyof typeof AlertMessage]
 

@@ -38,10 +38,10 @@ export class ApiCredentialsComponent implements OnInit {
     }
     this.memberId.set(memberId)
     this.apiCredentialsService
-      .search()
+      .getClientsForMember(memberId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (result) => this.productionCredentials.set(result.content),
+        next: (result) => this.productionCredentials.set(result),
         error: () => this.alertService.broadcast(AlertType.TOAST, AlertMessage.API_CREDENTIAL_SEARCH_ERROR),
       })
   }

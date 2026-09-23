@@ -3,9 +3,6 @@ package org.orcid.mp.member.client;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.orcid.mp.member.apicreds.ApiClientDetails;
-import org.orcid.mp.member.apicreds.ApiClientDetailsSummary;
-import org.orcid.mp.member.apicreds.ApiClientPagedResult;
-import org.orcid.mp.member.apicreds.ApiClientDetails;
 import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +21,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Collections;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -77,7 +72,7 @@ public class ApiCredentialsServiceClient {
      * Fetches the complete details for one API client.  The Angular edit route
      * uses this endpoint to populate the form before activation completes.
      */
-    public ApiClientDetails get(String clientDetailsId) {
+    public ApiClientDetails getApiClientDetails(String clientDetailsId) {
         URI uri = UriComponentsBuilder
                 .fromUriString(apiBaseUrl)
                 .pathSegment("client-details", clientDetailsId)
@@ -92,49 +87,6 @@ public class ApiCredentialsServiceClient {
                 .retrieve()
                 .body(ApiClientDetails.class));
     }
-
-    public ApiClientPagedResult<ApiClientDetailsSummary> search(String memberId, List<String> clientTypes, int page, int size, String sort) {
-        return request(() -> searchClients(memberId, clientTypes, page, size, sort));
-    }
-
-    public ApiClientPagedResult<ApiClientDetailsSummary> searchClients(
-            String memberId,
-            List<String> clientTypes,
-            int page,
-            int size,
-            String sort) {
-
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder
-                .fromUriString(apiBaseUrl)
-                .path("/client-details")
-                .queryParam("memberId", memberId)
-                .queryParam("page", page)
-                .queryParam("size", size)
-                .queryParam("sort", sort);
-
-        if (clientTypes != null && !clientTypes.isEmpty()) {
-            clientTypes.forEach(clientType ->
-                    uriBuilder.queryParam("clientType", clientType)
-            );
-        }
-
-        URI uri = uriBuilder
-                .build()
-                .encode()
-                .toUri();
-
-        return restClient.get()
-                .uri(uri)
-                .accept(MediaType.APPLICATION_JSON)
-                .headers(headers ->
-                        headers.setBearerAuth(accessToken.get())
-                )
-                .retrieve()
-                .body(new ParameterizedTypeReference<ApiClientPagedResult<ApiClientDetailsSummary>>() {});
-    }
-
-    private String getApiClients(String memberId) {
-        String url = apiBaseUrl + "/client-details/" + memberId;
 
     private ApiClientSummaryPage getApiClients(String memberId) {
         String url = apiBaseUrl + "/client-details?memberId=" + memberId + "&size=100";

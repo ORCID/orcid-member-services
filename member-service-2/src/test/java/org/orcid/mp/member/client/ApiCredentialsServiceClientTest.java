@@ -3,7 +3,6 @@ package org.orcid.mp.member.client;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.orcid.mp.member.apicreds.ApiClientDetails;
-import org.orcid.mp.member.apicreds.ApiClientDetails;
 import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 class ApiCredentialsServiceClientTest {
 
@@ -45,6 +45,9 @@ class ApiCredentialsServiceClientTest {
         mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/oauth2/token"))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withSuccess("{\"access_token\": \"token-123\"}", MediaType.APPLICATION_JSON));
+
+        String expectedUrl = "http://localhost:8080/api/client-details?memberId=member-1&size=100";
+        String mockResponseJson = "{\"content\": [{\"clientDetailsId\": \"APP-1\", \"clientName\": \"Test\"}], \"totalElements\": 1, \"totalPages\": 1}";
 
         // 2. Expect Data Request with the acquired token
         mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/client-details/member-1"))
@@ -174,11 +177,11 @@ class ApiCredentialsServiceClientTest {
                                 + "\"redirectUris\":[]}",
                         MediaType.APPLICATION_JSON));
 
-        ApiClientDetails result = client.get("APP-123");
+        ApiClientDetails result = client.getApiClientDetails("APP-123");
 
         assertNotNull(result);
         assertEquals("APP-123", result.getClientDetailsId());
-        assertEquals("My App", result.getName());
+        assertEquals("My App", result.getClientName());
         mockServer.verify();
     }
 

@@ -2,11 +2,12 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { Observable, map } from 'rxjs'
 import { Client } from '../model/client'
+import { ProductionCredentialsApplication } from '../model/production-credentials-application'
 
 // Raw shape returned by the external api-credentials-service search endpoint
 // (org.orcid.apicreds.dto.ClientDetailsSummaryDto) — not the same as the ui-2 Client model.
 interface ClientDetailsSummaryDto {
-  clientId: string
+  clientDetailsId: string
   clientName: string
   editable?: boolean
   homepageUrl?: string | null
@@ -21,7 +22,7 @@ interface ClientDetailsDto {
   memberId: string
   clientDetailsId: string
   redirectUris: { redirectUri: string; redirectUriType?: string }[]
-  name: string
+  clientName: string
   description?: string | null
   website?: string | null
   membershipType?: string
@@ -48,7 +49,7 @@ export interface ClientSearchResult {
 
 function toClientFromSummary(dto: ClientDetailsSummaryDto): Client {
   return {
-    clientId: dto.clientId,
+    clientId: dto.clientDetailsId,
     clientName: dto.clientName,
     editable: dto.editable ?? true,
     homepageUrl: dto.homepageUrl ?? undefined,
@@ -73,7 +74,7 @@ function toClientFromDetails(dto: ClientDetailsResponse): Client {
 
   return {
     clientId: dto.clientDetailsId,
-    clientName: dto.name,
+    clientName: dto.clientName,
     editable: true,
     homepageUrl: dto.website ?? undefined,
     description: dto.description ?? undefined,
@@ -86,7 +87,7 @@ function toClientDetailsDto(credential: Client): ClientDetailsDto {
   return {
     memberId: '',
     clientDetailsId: credential.clientId,
-    name: credential.clientName,
+    clientName: credential.clientName,
     description: credential.description,
     website: credential.homepageUrl,
     redirectUris: (credential.redirectUris ?? []).map((redirectUri) => ({ redirectUri, redirectUriType: 'default' })),
@@ -99,7 +100,13 @@ function toClientDetailsDto(credential: Client): ClientDetailsDto {
 export class ApiCredentialsService {
   private http = inject(HttpClient)
 
-  public resourceUrl = '/memberservice/api/clients'
+  public resourceUrl = '/memberservice/apicreds'
+
+  getClientsForMember(memberId: string): Observable<Client[]> {
+    return this.http
+      .get<RawPagedResult<ClientDetailsSummaryDto>>(`${this.resourceUrl}/member/${memberId}`)
+      .pipe(map((page) => page.content.map(toClientFromSummary)))
+  }
 
   get(clientId: string): Observable<Client> {
     return this.http
@@ -140,6 +147,10 @@ export class ApiCredentialsService {
 
   resetClientSecret(clientId: string): Observable<{ clientSecret: string }> {
     return this.http.post<{ clientSecret: string }>(`${this.resourceUrl}/${clientId}/reset-secret`, {})
+  }
+
+  submitProductionCredentialsApplication(application: ProductionCredentialsApplication): Observable<void> {
+    return this.http.post<void>(`${this.resourceUrl}/apply`, application)
   }
 }
 

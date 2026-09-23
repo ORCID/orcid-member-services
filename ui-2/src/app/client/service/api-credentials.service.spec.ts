@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing'
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
 import { ApiCredentialsService } from './api-credentials.service'
 import { Client } from '../model/client'
+import { ProductionCredentialsApplication } from '../model/production-credentials-application'
 
 describe('ApiCredentialsService', () => {
   let service: ApiCredentialsService
@@ -168,5 +169,24 @@ describe('ApiCredentialsService', () => {
     const req = httpMock.expectOne(`${service.resourceUrl}/abc123/reset-secret`)
     expect(req.request.method).toBe('POST')
     req.flush({ clientSecret: 'newSecret' })
+  })
+
+  it('should submit a production credentials application to the member-service endpoint', () => {
+    const application: ProductionCredentialsApplication = {
+      systemIntegrationType: 'IN_HOUSE',
+      authenticateIdsAnswer: 'YES',
+      integrationDisplayName: 'My integration',
+      integrationHomepageUrl: 'https://example.org',
+      integrationDescription: 'An integration description',
+      redirectUris: ['https://example.org/callback'],
+      notes: 'Additional context',
+    }
+
+    service.submitProductionCredentialsApplication(application).subscribe()
+
+    const req = httpMock.expectOne('/memberservice/apicreds/apply')
+    expect(req.request.method).toBe('POST')
+    expect(req.request.body).toEqual(application)
+    req.flush(null)
   })
 })

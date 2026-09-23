@@ -7,6 +7,8 @@ import { faBan, faSave } from '@fortawesome/free-solid-svg-icons'
 import { AlertMessage, AlertType } from '../app.constants'
 import { AlertService } from '../shared/service/alert.service'
 import { CLIENT_DESCRIPTION_MAX_LENGTH } from './model/client'
+import { ProductionCredentialsApplication } from './model/production-credentials-application'
+import { ApiCredentialsService } from './service/api-credentials.service'
 
 // TODO: values are placeholders (TBD) — confirm the real enum/labels with the product owner.
 interface IntegrationTypeOption {
@@ -27,6 +29,7 @@ export class ProductionCredentialsApplyComponent {
   private router = inject(Router)
   private activatedRoute = inject(ActivatedRoute)
   private alertService = inject(AlertService)
+  private apiCredentialsService = inject(ApiCredentialsService)
   private destroyRef = inject(DestroyRef)
 
   protected readonly descriptionMaxLength = CLIENT_DESCRIPTION_MAX_LENGTH
@@ -41,6 +44,7 @@ export class ProductionCredentialsApplyComponent {
 
   // Drives the conditional Redirect URIs block in the template.
   protected showRedirectUris = signal(true)
+  protected isSaving = signal(false)
 
   // TODO(TBD): confirm option values/labels.
   protected integrationTypeOptions: IntegrationTypeOption[] = [
@@ -91,24 +95,47 @@ export class ProductionCredentialsApplyComponent {
   }
 
   save() {
+    if (this.isSaving()) {
+      return
+    }
     if (this.applyForm.invalid) {
       this.applyForm.markAllAsTouched()
       return
     }
     const value = this.applyForm.getRawValue()
-    // Frontend-only for now: no submission endpoint is wired yet.
-    // Redirect URIs are entered one-per-line; split for the future payload.
-    const payload = {
-      ...value,
+    const { integrationType, authenticateOrcidIds, homepageUrl, description } = value
+    if (!integrationType || !authenticateOrcidIds || !homepageUrl || !description) {
+      return
+    }
+    // Redirect URIs are entered one per line in the form and sent as a list.
+    const payload: ProductionCredentialsApplication = {
+      systemIntegrationType: integrationType,
+      authenticateIdsAnswer: authenticateOrcidIds,
+      integrationDisplayName: value.displayName,
+      integrationHomepageUrl: homepageUrl,
+      integrationDescription: description,
       redirectUris: (value.redirectUris ?? '')
         .split('\n')
         .map((uri) => uri.trim())
         .filter((uri) => uri.length > 0),
+      ...(value.notes?.trim() ? { notes: value.notes.trim() } : {}),
     }
-    // eslint-disable-next-line no-console
-    console.log('Production credentials application submitted', payload)
-    this.alertService.broadcast(AlertType.TOAST, AlertMessage.API_CREDENTIAL_APPLICATION_SUBMITTED)
-    this.router.navigate(this.collectionRoute())
+
+    this.isSaving.set(true)
+    this.apiCredentialsService
+      .submitProductionCredentialsApplication(payload)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isSaving.set(false)
+          this.alertService.broadcast(AlertType.TOAST, AlertMessage.API_CREDENTIAL_APPLICATION_SUBMITTED)
+          this.router.navigate(this.collectionRoute())
+        },
+        error: () => {
+          this.isSaving.set(false)
+          this.alertService.broadcast(AlertType.TOAST, AlertMessage.API_CREDENTIAL_APPLICATION_ERROR)
+        },
+      })
   }
 
   cancel() {
