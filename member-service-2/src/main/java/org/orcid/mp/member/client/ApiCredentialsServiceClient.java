@@ -21,6 +21,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Collections;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -68,30 +70,19 @@ public class ApiCredentialsServiceClient {
                 .body(ApiClientDetails.class));
     }
 
-    /**
-     * Fetches the complete details for one API client.  The Angular edit route
-     * uses this endpoint to populate the form before activation completes.
-     */
     public ApiClientDetails getApiClientDetails(String clientDetailsId) {
-        URI uri = UriComponentsBuilder
-                .fromUriString(apiBaseUrl)
-                .pathSegment("client-details", clientDetailsId)
-                .build()
-                .encode()
-                .toUri();
+        LOG.debug("Fetching api client {} from api credentials service", clientDetailsId);
+        return request(() -> getClientDetails(clientDetailsId));
+    }
 
-        return request(() -> restClient.get()
-                .uri(uri)
-                .accept(MediaType.APPLICATION_JSON)
-                .headers(headers -> headers.setBearerAuth(accessToken.get()))
-                .retrieve()
-                .body(ApiClientDetails.class));
+    private ApiClientDetails getClientDetails(String clientDetailsId) {
+        String url = apiBaseUrl + "/client-details/" + clientDetailsId;
+        return get(url, ParameterizedTypeReference.forType(ApiClientDetails.class));
     }
 
     private ApiClientSummaryPage getApiClients(String memberId) {
         String url = apiBaseUrl + "/client-details?memberId=" + memberId + "&size=100";
-        ApiClientSummaryPage response = get(url, new ParameterizedTypeReference<ApiClientSummaryPage>() {});
-        return response;
+        return get(url, new ParameterizedTypeReference<ApiClientSummaryPage>() {});
     }
 
     private <T> T get(String url, ParameterizedTypeReference<T> responseType) {
