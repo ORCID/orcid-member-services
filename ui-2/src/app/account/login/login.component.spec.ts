@@ -20,8 +20,7 @@ type LoginInternals = {
   mfaError: boolean
 }
 
-const internals = (component: LoginComponent): LoginInternals =>
-  component as unknown as LoginInternals
+const internals = (component: LoginComponent): LoginInternals => component as unknown as LoginInternals
 
 describe('LoginComponent', () => {
   let component: LoginComponent
@@ -112,6 +111,40 @@ describe('LoginComponent', () => {
     expect(internals(component).authenticationError).toBe(false)
   }))
 
+  it('should focus the MFA code field after credentials are validated', fakeAsync(() => {
+    fixture.detectChanges()
+
+    const passwordField = fixture.nativeElement.querySelector('#password') as HTMLInputElement
+    passwordField.focus()
+
+    const mockError = {
+      status: 401,
+      error: { error: 'mfa_required' },
+    }
+    loginService.login.and.returnValue(throwError(() => mockError))
+
+    internals(component).loginForm.patchValue({
+      username: 'testuser',
+      password: 'testpassword',
+      mfaCode: '',
+    })
+
+    internals(component).login()
+    fixture.detectChanges()
+
+    const mfaCodeField = fixture.nativeElement.querySelector('#mfaCode') as HTMLInputElement | null
+    expect(mfaCodeField).not.toBeNull()
+    if (!mfaCodeField) {
+      return
+    }
+    const focusSpy = spyOn(mfaCodeField, 'focus').and.callThrough()
+
+    tick()
+
+    expect(focusSpy).toHaveBeenCalled()
+    expect(document.activeElement).toBe(mfaCodeField)
+  }))
+
   it('should set authenticationError when 401 is returned without mfa error', fakeAsync(() => {
     const mockError = {
       status: 401,
@@ -151,7 +184,9 @@ describe('LoginComponent', () => {
     fixture.detectChanges()
 
     const alert = fixture.nativeElement.querySelector('.alert.alert-danger')
-    expect(alert?.textContent).toContain('Invalid sign in credentials. Please check your email and password and try again.')
+    expect(alert?.textContent).toContain(
+      'Invalid sign in credentials. Please check your email and password and try again.'
+    )
   }))
 
   it('should show inactive membership message with support email link', fakeAsync(() => {
