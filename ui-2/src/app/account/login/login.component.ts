@@ -94,6 +94,15 @@ export class LoginComponent implements AfterViewInit {
     })
   }
 
+  private focusMfaCode() {
+    setTimeout(() => {
+      const mfaCodeField = (this.elementRef.nativeElement as HTMLElement).querySelector(
+        '#mfaCode'
+      ) as HTMLInputElement | null
+      mfaCodeField?.focus()
+    })
+  }
+
   protected cancel() {
     this.authenticationErrorState.set(false)
     this.loginForm.patchValue({
@@ -141,6 +150,7 @@ export class LoginComponent implements AfterViewInit {
           if (bodyErrorCode === 'mfa_required' || bodyErrorCode === 'mfa_invalid') {
             if (bodyErrorCode === 'mfa_required') {
               this.showMfaState.set(true)
+              this.focusMfaCode()
             }
             if (bodyErrorCode === 'mfa_invalid') {
               this.showMfaState.set(true)
