@@ -16,7 +16,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 class ApiCredentialsServiceClientTest {
 
@@ -45,10 +46,10 @@ class ApiCredentialsServiceClientTest {
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withSuccess("{\"access_token\": \"token-123\"}", MediaType.APPLICATION_JSON));
 
-        // 2. Expect Data Request with the acquired token
         String expectedUrl = "http://localhost:8080/api/client-details?memberId=member-1&size=100";
         String mockResponseJson = "{\"content\": [{\"clientDetailsId\": \"APP-1\", \"clientName\": \"Test\"}], \"totalElements\": 1, \"totalPages\": 1}";
 
+        // 2. Expect Data Request with the acquired token
         mockServer.expect(ExpectedCount.once(), requestTo(expectedUrl))
                 .andExpect(method(HttpMethod.GET))
                 .andExpect(header("Authorization", "Bearer token-123"))
@@ -140,20 +141,25 @@ class ApiCredentialsServiceClientTest {
     }
 
     @Test
-    void getApiClientsForMember_ShouldReturnNullOn404() {
-        setMockAccessToken("active-token");
+    void shouldFetchClientDetailsById() {
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/oauth2/token"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withSuccess("{\"access_token\": \"token-123\"}", MediaType.APPLICATION_JSON));
 
-        // Request returns 404 Not Found
-        String expectedUrl = "http://localhost:8080/api/client-details?memberId=member-missing&size=100";
-        mockServer.expect(ExpectedCount.once(), requestTo(expectedUrl))
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/client-details/APP-123"))
                 .andExpect(method(HttpMethod.GET))
-                .andRespond(withStatus(HttpStatus.NOT_FOUND).body("Not Found"));
+                .andExpect(header("Authorization", "Bearer token-123"))
+                .andRespond(withSuccess(
+                        "{\"memberId\":\"member-1\",\"clientDetailsId\":\"APP-123\","
+                                + "\"clientName\":\"My App\",\"website\":\"https://example.org\","
+                                + "\"redirectUris\":[]}",
+                        MediaType.APPLICATION_JSON));
 
-        // Execute
-        ApiClientSummaryPage result = client.getApiClientsForMember("member-missing");
+        ApiClientDetails result = client.getApiClientDetails("APP-123");
 
-        // Verify - the client handles the 404 by catching the exception and returning null
-        assertNull(result, "Expected null response for 404 without throwing exception");
+        assertNotNull(result);
+        assertEquals("APP-123", result.getClientDetailsId());
+        assertEquals("My App", result.getClientName());
         mockServer.verify();
     }
 

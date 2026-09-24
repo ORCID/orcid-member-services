@@ -19,12 +19,24 @@ spring:
             client-secret: ${APPLICATION_INTERNAL_MEMBER_SERVICE_CLIENT_SECRET}
             authorization-grant-type: client_credentials
             scope: internal
+          # Used by ApiCredentialsServiceClient to call the external api-credentials-service
+          api-credentials-service-client:
+            provider: api-credentials-service-provider
+            client-id: ${APPLICATION_API_CREDENTIALS_SERVICE_CLIENT_ID:member-portal}
+            client-secret: ${APPLICATION_API_CREDENTIALS_SERVICE_CLIENT_SECRET:member-portal-client-secret}
+            authorization-grant-type: client_credentials
+            scope:
+              - data.read
+              - data.write
         provider:
           user-service-provider:
             # The URL of your User Service (Auth Server)
             token-uri: ${APPLICATION_USER_SERVICE_URL}/oauth2/token
             # (Optional for client_credentials flow, but good to have)
             authorization-uri: ${APPLICATION_USER_SERVICE_URL}/oauth2/authorize
+          api-credentials-service-provider:
+            # The api-credentials-service is its own OAuth2 authorization server
+            token-uri: ${APPLICATION_API_CREDENTIALS_SERVICE_TOKEN_URI:http://localhost:9100/oauth2/token}
   data:
     mongodb:
       database: memberservice
@@ -87,6 +99,8 @@ application:
     password: ${APPLICATION_SALESFORCE_PASSWORD}
   userService:
     apiUrl: ${APPLICATION_USER_SERVICE_URL}
+  apiCredentialsService:
+    apiUrl: ${APPLICATION_API_CREDENTIALS_SERVICE_URL:http://localhost:9100}
   reports:
     holisticsMemberDashboardUrl: ${APPLICATION_REPORTS_MEMBER_DASHBOARD_URL}
     holisticsMemberDashboardSecret: ${APPLICATION_REPORTS_MEMBER_DASHBOARD_SECRET}

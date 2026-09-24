@@ -16,6 +16,12 @@ public class ApiClientRedirectUri {
     public ApiClientRedirectUri() {
     }
 
+    public ApiClientRedirectUri(String redirectUri) {
+        this.redirectUri = redirectUri;
+        this.redirectUriType = redirectUriType;
+        this.predefinedClientRedirectScope = predefinedClientRedirectScope;
+    }
+
     public ApiClientRedirectUri(String redirectUri, String redirectUriType, String predefinedClientRedirectScope) {
         this.redirectUri = redirectUri;
         this.redirectUriType = redirectUriType;

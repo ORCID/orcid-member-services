@@ -17,8 +17,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
@@ -49,6 +52,24 @@ public class ApiCredentialsServiceClient {
         return request(() -> getApiClients(memberId));
     }
 
+    public ApiClientDetails create(ApiClientDetails clientRequest) {
+        return request(() -> restClient.post()
+                .uri(apiBaseUrl + "/client-details")
+                .headers(headers -> headers.setBearerAuth(accessToken.get()))
+                .body(clientRequest)
+                .retrieve()
+                .body(ApiClientDetails.class));
+    }
+
+    public ApiClientDetails update(String clientDetailsId, ApiClientDetails clientRequest) {
+        return request(() -> restClient.put()
+                .uri(apiBaseUrl + "/client-details/{id}", clientDetailsId)
+                .headers(headers -> headers.setBearerAuth(accessToken.get()))
+                .body(clientRequest)
+                .retrieve()
+                .body(ApiClientDetails.class));
+    }
+
     public ApiClientDetails getApiClientDetails(String clientDetailsId) {
         LOG.debug("Fetching api client {} from api credentials service", clientDetailsId);
         return request(() -> getClientDetails(clientDetailsId));
@@ -61,8 +82,7 @@ public class ApiCredentialsServiceClient {
 
     private ApiClientSummaryPage getApiClients(String memberId) {
         String url = apiBaseUrl + "/client-details?memberId=" + memberId + "&size=100";
-        ApiClientSummaryPage response = get(url, new ParameterizedTypeReference<ApiClientSummaryPage>() {});
-        return response;
+        return get(url, new ParameterizedTypeReference<ApiClientSummaryPage>() {});
     }
 
     private <T> T get(String url, ParameterizedTypeReference<T> responseType) {
