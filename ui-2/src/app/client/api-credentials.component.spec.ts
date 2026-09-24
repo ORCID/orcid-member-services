@@ -23,10 +23,8 @@ describe('ManageApiCredentialsComponent', () => {
   const mockClients: Client[] = [{ clientId: 'abc123', clientName: 'Test', editable: true }]
 
   beforeEach(() => {
-    const apiCredentialsServiceSpy = jasmine.createSpyObj('ApiCredentialsService', ['search'])
-    apiCredentialsServiceSpy.search.and.returnValue(
-      of({ content: mockClients, totalElements: 1, totalPages: 1, number: 0, size: 20 })
-    )
+    const apiCredentialsServiceSpy = jasmine.createSpyObj('ApiCredentialsService', ['getClientsForMember'])
+    apiCredentialsServiceSpy.getClientsForMember.and.returnValue(of(mockClients))
     TestBed.configureTestingModule({
       imports: [RouterModule.forRoot([]), ApiCredentialsComponent],
       providers: [
@@ -45,13 +43,13 @@ describe('ManageApiCredentialsComponent', () => {
     expect(component).toBeTruthy()
   })
 
-  it('should populate production credentials from search results without sending a member id', () => {
-    expect(apiCredentialsService.search).toHaveBeenCalledWith()
+  it('should populate production credentials from the clients of the route member', () => {
+    expect(apiCredentialsService.getClientsForMember).toHaveBeenCalledWith('memberId')
     expect(internals(component).productionCredentials()).toEqual(mockClients)
   })
 
   it('should keep sandbox credentials empty when search fails', () => {
-    apiCredentialsService.search.and.returnValue(throwError(() => new Error('failed')))
+    apiCredentialsService.getClientsForMember.and.returnValue(throwError(() => new Error('failed')))
     fixture = TestBed.createComponent(ApiCredentialsComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
@@ -62,12 +60,12 @@ describe('ManageApiCredentialsComponent', () => {
   it('should not call search when no route member id is available', () => {
     const activatedRoute = TestBed.inject(ActivatedRoute)
     activatedRoute.snapshot = { paramMap: convertToParamMap({}) } as ActivatedRoute['snapshot']
-    apiCredentialsService.search.calls.reset()
+    apiCredentialsService.getClientsForMember.calls.reset()
     fixture = TestBed.createComponent(ApiCredentialsComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
 
-    expect(apiCredentialsService.search).not.toHaveBeenCalled()
+    expect(apiCredentialsService.getClientsForMember).not.toHaveBeenCalled()
   })
 })
 

@@ -28,7 +28,7 @@ describe('ApiCredentialsService', () => {
     const dto = {
       memberId: 'memberId',
       clientDetailsId: 'abc123',
-      name: 'Test',
+      clientName: 'Test',
       description: 'A test client',
       website: 'https://example.org',
       decryptedSecret: 'secret',
@@ -80,7 +80,7 @@ describe('ApiCredentialsService', () => {
       homepageUrl: 'https://example.org',
       redirectUris: ['https://example.org/callback'],
     } as Client
-    const updated = { memberId: 'memberId', clientDetailsId: 'abc123', name: 'Test', redirectUris: [] }
+    const updated = { memberId: 'memberId', clientDetailsId: 'abc123', clientName: 'Test', redirectUris: [] }
 
     service.update(credential).subscribe((res) => {
       expect(res.clientId).toEqual('abc123')
@@ -90,7 +90,7 @@ describe('ApiCredentialsService', () => {
     const req = httpMock.expectOne(`${service.resourceUrl}/abc123`)
     expect(req.request.method).toBe('PUT')
     expect(req.request.body.clientDetailsId).toEqual('abc123')
-    expect(req.request.body.name).toEqual('Test')
+    expect(req.request.body.clientName).toEqual('Test')
     expect(req.request.body.website).toEqual('https://example.org')
     expect(req.request.body.redirectUris).toEqual([{ redirectUri: 'https://example.org/callback', redirectUriType: 'default' }])
     req.flush(updated)
@@ -98,7 +98,7 @@ describe('ApiCredentialsService', () => {
 
   it('should create a client, sending the ClientDetailsDto request shape', () => {
     const credential = { clientName: 'Test' } as Client
-    const created = { memberId: 'memberId', clientDetailsId: 'abc123', name: 'Test', decryptedSecret: 'secret', redirectUris: [] }
+    const created = { memberId: 'memberId', clientDetailsId: 'abc123', clientName: 'Test', decryptedSecret: 'secret', redirectUris: [] }
 
     service.create(credential).subscribe((res) => {
       expect(res.clientId).toEqual('abc123')
@@ -107,13 +107,13 @@ describe('ApiCredentialsService', () => {
 
     const req = httpMock.expectOne(service.resourceUrl)
     expect(req.request.method).toBe('POST')
-    expect(req.request.body.name).toEqual('Test')
+    expect(req.request.body.clientName).toEqual('Test')
     req.flush(created)
   })
 
   it('should search clients without a member query parameter and map the response', () => {
     const summary = {
-      clientId: 'abc123',
+      clientDetailsId: 'abc123',
       clientName: 'Test',
       editable: true,
     }
@@ -148,7 +148,7 @@ describe('ApiCredentialsService', () => {
 
   it('should mark a client as non-editable when it has been deactivated', () => {
     const summary = {
-      clientId: 'abc123',
+      clientDetailsId: 'abc123',
       clientName: 'Test',
       editable: false,
     }
