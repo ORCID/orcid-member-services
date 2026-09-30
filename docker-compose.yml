@@ -48,6 +48,12 @@ services:
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
       - ${HOST_KEYSTORE_DIR:-./keystores}:/keystores
+    healthcheck:
+      test: curl --fail http://localhost:9000/status || exit 1
+      interval: 40s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
 
   assertionservice-2-app:
     restart: unless-stopped
@@ -101,6 +107,12 @@ services:
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
       - ${MEMBER_ASSERTION_STATS_VOLUME:-/files}:/files
+    healthcheck:
+      test: curl --fail http://localhost:9020/status || exit 1
+      interval: 40s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
 
   memberservice-2-app:
     restart: unless-stopped
@@ -153,6 +165,12 @@ services:
       - APPLICATION_INTERNAL_MEMBER_SERVICE_CLIENT_SECRET=${MEMBER_SERVICE_INTERNAL_CLIENT_SECRET}
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
+    healthcheck:
+      test: curl --fail http://localhost:9010/status || exit 1
+      interval: 40s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
 
 
   r7insight_docker:
