@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 
 @Component
 public class MailgunClient {
@@ -39,10 +40,13 @@ public class MailgunClient {
 
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("to", to);
-        formData.add("cc", cc);
         formData.add("from", getFrom());
         formData.add("subject", subject);
         formData.add("html", html);
+
+        if (cc != null && !cc.isBlank()) {
+            formData.add("cc", cc);
+        }
 
         if (testMode) {
             formData.add("o:testmode", "yes");
@@ -59,7 +63,11 @@ public class MailgunClient {
             if (!response.getStatusCode().is2xxSuccessful()) {
                 LOGGER.warn("Received response from mailgun {} - {}", response.getStatusCode().value(), response.getBody());
             }
-        } catch (Exception e) {
+        } catch (RestClientResponseException e) { // Or WebClientResponseException if using WebClient
+            LOGGER.warn("Received response from mailgun {} - {}", e.getStatusCode().value(), e.getResponseBodyAsString());
+            throw new MailException("Error posting mail to mailgun", e);
+        }
+        catch (Exception e) {
             throw new MailException("Error posting mail to mailgun", e);
         }
     }

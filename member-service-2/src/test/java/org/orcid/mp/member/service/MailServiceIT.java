@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.orcid.mp.member.MemberServiceApplication;
 import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
+import org.orcid.mp.member.apicreds.SlClientChangeRequest;
 import org.orcid.mp.member.client.MailgunClient;
 import org.orcid.mp.member.error.MailException;
 import org.orcid.mp.member.salesforce.request.AddConsortiumMember;
@@ -181,6 +182,33 @@ class MailServiceIT {
         assertThat(contentCaptor.getValue()).contains("https://some-other.url");
         assertThat(contentCaptor.getValue()).contains("someone (requesting-user@email.com)");
         assertThat(contentCaptor.getValue()).contains("Test Org");
+    }
+
+    @Test
+    void testRequestSLClientChangeEmail() throws MailException {
+        SlClientChangeRequest request = new SlClientChangeRequest();
+        request.setRequestedByName("Andrew User");
+        request.setRequestedByEmail("a.user@aaf.edu.au");
+        request.setOrgName("Australian Access Federation - AAF");
+        request.setHomepageUrl("http://updated-homepage-url.com");
+        request.setRedirectUris(List.of("https://redirect1.url", "https://redirect2.url"));
+
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+
+        mailService.requestSLClientChange(request);
+
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
+
+        assertThat(recipientCaptor.getValue()).isEqualTo("mp@orcid.org");
+        assertThat(subjectCaptor.getValue()).isEqualTo(MailService.SL_CLIENT_CHANGE_SUBJECT);
+        assertThat(ccCaptor.getValue()).isEqualTo("a.user@aaf.edu.au");
+
+        String content = contentCaptor.getValue();
+        assertThat(content).contains("Andrew User (a.user@aaf.edu.au)");
+        assertThat(content).contains("Australian Access Federation - AAF");
+        assertThat(content).contains("http://updated-homepage-url.com");
+        assertThat(content).contains("https://redirect1.url");
+        assertThat(content).contains("https://redirect2.url");
     }
 
 }
