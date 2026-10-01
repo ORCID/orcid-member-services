@@ -116,11 +116,6 @@ export class AccountService {
   clearAccountData() {
     this.accountData.next(null)
     this.authenticated = false
-    this.router.navigate(['/login'])
-
-    this.oidcSecurityService.logoff().subscribe(() => {
-      this.router.navigate(['/login'])
-    })
   }
 
   hasAnyAuthority(authorities: string[]): boolean {
