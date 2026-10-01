@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.orcid.mp.member.MemberServiceApplication;
+import org.orcid.mp.member.apicreds.AMCredentialsApplication;
 import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
 import org.orcid.mp.member.apicreds.SlClientChangeRequest;
 import org.orcid.mp.member.client.MailgunClient;
@@ -209,6 +210,34 @@ class MailServiceIT {
         assertThat(content).contains("http://updated-homepage-url.com");
         assertThat(content).contains("https://redirect1.url");
         assertThat(content).contains("https://redirect2.url");
+    }
+
+    @Test
+    void testApplyForAMCredsEmail() throws MailException {
+        AMCredentialsApplication application = new AMCredentialsApplication();
+        application.setRequestedByName("Sarah Smith");
+        application.setRequestedByEmail("sarah.smith@example.com");
+        application.setOrgName("Test AM Org");
+        application.setConsortiumLeadName("Lead Name");
+        application.setOrgHomePage("https://am-org.com");
+        application.setNotes("Please approve quickly.");
+
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+
+        mailService.applyForAMCreds(application);
+
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
+
+        assertThat(recipientCaptor.getValue()).isEqualTo("mp@orcid.org");
+        assertThat(subjectCaptor.getValue()).isEqualTo(MailService.AM_CREDENTIALS_APPLICATION);
+        assertThat(ccCaptor.getValue()).isEqualTo("sarah.smith@example.com");
+
+        String content = contentCaptor.getValue();
+        assertThat(content).contains("Sarah Smith (sarah.smith@example.com)");
+        assertThat(content).contains("Test AM Org");
+        assertThat(content).contains("Lead Name");
+        assertThat(content).contains("https://am-org.com");
+        assertThat(content).contains("Please approve quickly.");
     }
 
 }

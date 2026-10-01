@@ -5,10 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.orcid.mp.member.MemberServiceApplication;
-import org.orcid.mp.member.apicreds.ApiClientDetails;
-import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
-import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
-import org.orcid.mp.member.apicreds.SlClientChangeRequest;
+import org.orcid.mp.member.apicreds.*;
 import org.orcid.mp.member.domain.User;
 import org.orcid.mp.member.error.SimpleExceptionHandler;
 import org.orcid.mp.member.service.ApiCredentialsService;
@@ -24,6 +21,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Collections;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -166,7 +165,7 @@ public class ApiCredentialsResourceIT {
                         .content(requestBody))
                 .andExpect(status().isOk());
 
-        Mockito.verify(mockedApiClientDetailsService).applyForApiCredentials(Mockito.any(ProductionCredentialsApplication.class));
+        verify(mockedApiClientDetailsService).applyForApiCredentials(any(ProductionCredentialsApplication.class));
     }
 
     @Test
@@ -183,7 +182,23 @@ public class ApiCredentialsResourceIT {
                         .content(requestBody))
                 .andExpect(status().isOk());
 
-        Mockito.verify(mockedApiClientDetailsService).applyForApiCredentials(Mockito.any(ProductionCredentialsApplication.class));
+        verify(mockedApiClientDetailsService).applyForApiCredentials(any(ProductionCredentialsApplication.class));
+    }
+
+    @Test
+    void applyForApiCredentials_ReturnsOk_AndCallsService() throws Exception {
+        AMCredentialsApplication request = new AMCredentialsApplication();
+
+        String requestBody = "{"
+                + "\"orgHomePage\":\"https://orcid.org\""
+                + "}";
+
+        restMockMvc.perform(post("/applyForAMCreds")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk());
+
+        verify(mockedApiClientDetailsService).applyForAMCredentials(any(AMCredentialsApplication.class));
     }
 
     private User getLoggedInAdminUser() {

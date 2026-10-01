@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>
+        (+) REQUEST FOR AFFILIATION MANAGER CREDENTIALS
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}"/>
+</head>
+<body
+    style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
+<div style="padding: 20px; padding-top: 10px; margin: auto;">
+    <div th:insert="~{mail/common :: emailHeader}"></div>
+    <p><strong>(+) REQUEST FOR AFFILIATION MANAGER CREDENTIALS</strong></p>
+    <p>
+        <strong>Requested by</strong><br/>
+        <span th:text="(@{|${requestedBy}|})">Andrew User (a.user@aaf.edu.au)</span><br/>
+        <span th:text="(@{|${orgName}|})">Australian Access Federation - AAF</span>
+    </p>
+    <p>
+    <hr/>
+    <strong>Organization details</strong>
+    <hr/>
+    </p>
+    <p>
+        <strong>Name of your organization</strong><br/>
+        <span th:text="(@{|${orgName}|})">Orcid Inc</span>
+    </p>
+
+    <p>
+        <strong>Consortium Lead name</strong><br/>
+        <span th:text="(@{|${consortiumLeadName}|})">Consortium lead</span>
+    </p>
+
+    <p>
+        <strong>Technical Contact email address</strong><br/>
+        <span th:text="(@{|${contactAddress}|})">Consortium lead</span>
+    </p>
+
+    <p>
+        <strong>Institution Homepage</strong><br/>
+        <span th:text="(@{|${orgHomePage}|})">https://orcid.org</span>
+    </p>
+
+    <p>
+        <strong>Note to ORCID staff</strong><br/>
+        <span th:text="(@{|${notes}|})">Notes</span>
+    </p>
+</div>
+</body>
+</html>
