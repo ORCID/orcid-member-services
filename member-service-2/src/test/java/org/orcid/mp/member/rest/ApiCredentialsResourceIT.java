@@ -8,6 +8,7 @@ import org.orcid.mp.member.MemberServiceApplication;
 import org.orcid.mp.member.apicreds.ApiClientDetails;
 import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
 import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
+import org.orcid.mp.member.apicreds.SlClientChangeRequest;
 import org.orcid.mp.member.domain.User;
 import org.orcid.mp.member.error.SimpleExceptionHandler;
 import org.orcid.mp.member.service.ApiCredentialsService;
@@ -160,6 +161,23 @@ public class ApiCredentialsResourceIT {
                 + "}";
 
         restMockMvc.perform(post("/apicreds/apply")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk());
+
+        Mockito.verify(mockedApiClientDetailsService).applyForApiCredentials(Mockito.any(ProductionCredentialsApplication.class));
+    }
+
+    @Test
+    @WithMockUser(username = LOGGED_IN_EMAIL, authorities = { "ROLE_USER" }, password = LOGGED_IN_PASSWORD)
+    public void requestSLClientChange() throws Exception {
+        String requestBody = "{"
+                + "\"homepageURl\":\"https://orcid.org\""
+                + ",\"redirectUris\":\"[ \"https://orcid.org/callback\", \"https://orcid.org/callback2\"]\""
+                + "}";
+
+        restMockMvc.perform(post("/apicreds/requestSLClientChange")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))

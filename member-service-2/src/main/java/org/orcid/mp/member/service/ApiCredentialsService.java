@@ -3,6 +3,7 @@ package org.orcid.mp.member.service;
 import org.orcid.mp.member.apicreds.ApiClientDetails;
 import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
 import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
+import org.orcid.mp.member.apicreds.SlClientChangeRequest;
 import org.orcid.mp.member.client.ApiCredentialsServiceClient;
 import org.orcid.mp.member.domain.Member;
 import org.orcid.mp.member.domain.User;
@@ -49,5 +50,14 @@ public class ApiCredentialsService {
         application.setRequestedByEmail(user.getEmail());
         application.setOrgName(member.getClientName());
         mailService.sendApplyForProdCredsEmail(application);
+    }
+
+    public void requestSLClientChange(SlClientChangeRequest slClientChangeRequest) {
+        User user = userService.getLoggedInUser();
+        Member member = memberService.getMember(user.getMemberId()).orElseThrow();
+        slClientChangeRequest.setRequestedByName(user.getFirstName() + " " + user.getLastName());
+        slClientChangeRequest.setRequestedByEmail(user.getEmail());
+        slClientChangeRequest.setOrgName(member.getClientName());
+        mailService.requestSLClientChange(slClientChangeRequest);
     }
 }
