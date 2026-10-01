@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { Observable, map } from 'rxjs'
 import { Client } from '../model/client'
+import { AffiliationManagerCredentialsApplication } from '../model/affiliation-manager-credentials-application'
 import { ProductionCredentialsApplication } from '../model/production-credentials-application'
 
 // Raw shape returned by the external api-credentials-service search endpoint
@@ -151,6 +152,11 @@ export class ApiCredentialsService {
 
   submitProductionCredentialsApplication(application: ProductionCredentialsApplication): Observable<void> {
     return this.http.post<void>(`${this.resourceUrl}/apply`, application)
+  }
+
+  // TODO: endpoint is being built by the backend team — confirm the path before merging.
+  submitAffiliationManagerCredentialsApplication(application: AffiliationManagerCredentialsApplication): Observable<void> {
+    return this.http.post<void>(`${this.resourceUrl}/apply/affiliation-manager`, application)
   }
 }
 

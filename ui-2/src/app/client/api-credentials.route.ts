@@ -2,6 +2,7 @@ import { ActivatedRouteSnapshot, ResolveFn, Routes } from '@angular/router'
 import { inject } from '@angular/core'
 import { Observable, take, throwError } from 'rxjs'
 import { AuthGuard } from '../account/auth.guard'
+import { AffiliationManagerCredentialsApplyComponent } from './affiliation-manager-credentials-apply.component'
 import { ApiCredentialsComponent } from './api-credentials.component'
 import { ProductionCredentialsApplyComponent } from './production-credentials-apply.component'
 import { ApiCredentialsService } from './service/api-credentials.service'
@@ -22,6 +23,7 @@ export const routes: Routes = [
     component: ApiCredentialsComponent,
     data: {
       authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER'],
+      allowManageApiCredentials: true,
       pageTitle: 'gatewayApp.msUserServiceMSApiCredentials.home.title.string',
     },
     canActivate: [AuthGuard],
@@ -31,6 +33,17 @@ export const routes: Routes = [
     component: ProductionCredentialsApplyComponent,
     data: {
       authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER'],
+      allowManageApiCredentials: true,
+      pageTitle: 'gatewayApp.msUserServiceMSApiCredentials.home.title.string',
+    },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'affiliation-manager',
+    component: AffiliationManagerCredentialsApplyComponent,
+    data: {
+      authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER'],
+      allowManageApiCredentials: true,
       pageTitle: 'gatewayApp.msUserServiceMSApiCredentials.home.title.string',
     },
     canActivate: [AuthGuard],

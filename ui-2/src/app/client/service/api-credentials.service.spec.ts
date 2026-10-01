@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing'
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
 import { ApiCredentialsService } from './api-credentials.service'
 import { Client } from '../model/client'
+import { AffiliationManagerCredentialsApplication } from '../model/affiliation-manager-credentials-application'
 import { ProductionCredentialsApplication } from '../model/production-credentials-application'
 
 describe('ApiCredentialsService', () => {
@@ -185,6 +186,17 @@ describe('ApiCredentialsService', () => {
     service.submitProductionCredentialsApplication(application).subscribe()
 
     const req = httpMock.expectOne('/memberservice/apicreds/apply')
+    expect(req.request.method).toBe('POST')
+    expect(req.request.body).toEqual(application)
+    req.flush(null)
+  })
+
+  it('should POST an Affiliation Manager credentials application', () => {
+    const application: AffiliationManagerCredentialsApplication = { notes: 'Please get in touch' }
+
+    service.submitAffiliationManagerCredentialsApplication(application).subscribe()
+
+    const req = httpMock.expectOne('/memberservice/apicreds/apply/affiliation-manager')
     expect(req.request.method).toBe('POST')
     expect(req.request.body).toEqual(application)
     req.flush(null)

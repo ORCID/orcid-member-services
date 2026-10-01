@@ -5,6 +5,8 @@ import { Client } from './model/client'
 import { FaIconComponent } from '@fortawesome/angular-fontawesome'
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router'
 import { AlertMessage, AlertType } from '../app.constants'
+import { isConsortiumMember } from '../member/model/member.model'
+import { MemberService } from '../member/service/member.service'
 import { AlertService } from '../shared/service/alert.service'
 import { ApiCredentialsService } from './service/api-credentials.service'
 
@@ -21,6 +23,7 @@ export class ApiCredentialsComponent implements OnInit {
   protected faPlus = faPlus
 
   private apiCredentialsService = inject(ApiCredentialsService)
+  private memberService = inject(MemberService)
   private activatedRoute = inject(ActivatedRoute)
   private alertService = inject(AlertService)
   private destroyRef = inject(DestroyRef)
@@ -28,6 +31,7 @@ export class ApiCredentialsComponent implements OnInit {
   protected productionCredentials = signal<Client[]>([])
   protected sandboxCredentials = signal<Client[]>([])
   protected memberId = signal<string | null>(null)
+  protected canApplyForAffiliationManager = signal(false)
 
   ngOnInit(): void {
     const memberId =
@@ -37,6 +41,13 @@ export class ApiCredentialsComponent implements OnInit {
       return
     }
     this.memberId.set(memberId)
+    this.memberService
+      .find(memberId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (member) => this.canApplyForAffiliationManager.set(isConsortiumMember(member)),
+        error: () => this.canApplyForAffiliationManager.set(false),
+      })
     this.apiCredentialsService
       .getClientsForMember(memberId)
       .pipe(takeUntilDestroyed(this.destroyRef))

@@ -195,16 +195,21 @@
                   <span i18n="@@global.menu.resources.memberReportingGuide.string">Member Reporting Guide</span>
                 </a>
               </li>
-              <li>
-                <a
-                  class="dropdown-item"
-                  target="_blank"
-                  href="https://info.orcid.org/affiliation-manager-production-credentials-request-form/"
-                  (click)="collapseNavbar()"
-                >
-                  <span i18n="@@global.menu.resources.applyForAffiliationManagerCreds.string">Apply for Affiliation Manager Credentials</span>
-                </a>
-              </li>
+              @if (!featureService.isEnabled('MANAGE_API_CREDENTIALS')) {
+                <li>
+                  <a
+                    id="applyForAffiliationManagerCredsLink"
+                    class="dropdown-item"
+                    target="_blank"
+                    href="https://info.orcid.org/affiliation-manager-production-credentials-request-form/"
+                    (click)="collapseNavbar()"
+                  >
+                    <span i18n="@@global.menu.resources.applyForAffiliationManagerCreds.string"
+                      >Apply for Affiliation Manager Credentials</span
+                    >
+                  </a>
+                </li>
+              }
             </ul>
           </li>
         }

@@ -45,3 +45,15 @@ export class Member implements IMember {
     this.assertionServiceEnabled = this.assertionServiceEnabled || false
   }
 }
+
+// A consortium member belongs to a consortium lead; leads and direct members do not.
+export function isConsortiumMember(
+  member: IMember | null | undefined
+): member is IMember & { parentSalesforceId: string } {
+  return (
+    !!member &&
+    !member.isConsortiumLead &&
+    !!member.parentSalesforceId &&
+    member.parentSalesforceId !== member.salesforceId
+  )
+}
