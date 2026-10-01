@@ -117,5 +117,5 @@ application:
     enabled: ${ENABLE_SCHEDULER:true}
   apicreds:
     apiBaseUrl: http://localhost:9100
-    clientId: ${ORG_ORCID_MEMBERPORTALCLIENTID:member-portal-client}
-    clientSecret: ${ORG_ORCID_MEMBERPORTALCLIENTID:member-portal-client-secret}
+    clientId: ${ORG_ORCID_MEMBERPORTALCLIENTID:member-portal}
+    clientSecret: ${ORG_ORCID_MEMBERPORTALCLIENTSECRET:member-portal-client-secret}
