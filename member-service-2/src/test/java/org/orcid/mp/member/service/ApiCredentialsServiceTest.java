@@ -5,22 +5,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.orcid.mp.member.apicreds.ApiClientDetails;
-import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
-import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
+import org.orcid.mp.member.apicreds.*;
 import org.orcid.mp.member.client.ApiCredentialsServiceClient;
 import org.orcid.mp.member.domain.Member;
 import org.orcid.mp.member.domain.User;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ApiCredentialsServiceTest {
@@ -161,5 +159,84 @@ class ApiCredentialsServiceTest {
         assertThat(application.getConsortiumLeadEmail()).isEqualTo("clMainContact@orcid.org");
         verify(userService).getLoggedInUser();
         verify(mailService).sendApplyForProdCredsEmail(application);
+    }
+
+    @Test
+    void requestSLClientChange_MutatesRequestAndCallsMailService() {
+        // Arrange
+        User user = new User();
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setEmail("john.doe@example.com");
+        user.setMemberId("12345");
+
+        Member member = new Member();
+        member.setClientName("Test Org");
+
+        when(userService.getLoggedInUser()).thenReturn(user);
+        when(memberService.getMember(eq("12345"))).thenReturn(Optional.of(member));
+
+        SlClientChangeRequest request = new SlClientChangeRequest();
+
+        // Act
+        apiClientDetailsService.requestSLClientChange(request);
+
+        // Assert
+        assertThat("John Doe").isEqualTo(request.getRequestedByName());
+        assertThat("john.doe@example.com").isEqualTo(request.getRequestedByEmail());
+        assertThat("Test Org").isEqualTo(request.getOrgName());
+
+        verify(mailService).requestSLClientChange(request);
+    }
+
+    @Test
+    void requestSLClientChange_ThrowsExceptionWhenMemberNotFound() {
+        // Arrange
+        User user = new User();
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setEmail("john.doe@example.com");
+        user.setMemberId("12345");
+
+        when(userService.getLoggedInUser()).thenReturn(user);
+        when(memberService.getMember(eq("12345"))).thenReturn(Optional.empty());
+
+        SlClientChangeRequest request = new SlClientChangeRequest();
+
+        // Act & Assert
+        assertThrows(NoSuchElementException.class, () ->
+                apiClientDetailsService.requestSLClientChange(request)
+        );
+
+        verifyNoInteractions(mailService);
+    }
+
+    @Test
+    void applyForAMCredentials_MutatesRequestAndCallsMailService() {
+        // Arrange
+        User user = new User();
+        user.setMemberId("1");
+        user.setFirstName("Sarah");
+        user.setLastName("Smith");
+        user.setEmail("sarah.smith@example.com");
+        user.setMemberId("1");
+
+        Member member = new Member();
+        member.setClientName("Test AM Org");
+
+        when(userService.getLoggedInUser()).thenReturn(user);
+        when(memberService.getMember(eq("1"))).thenReturn(Optional.of(member));
+
+        AMCredentialsApplication request = new AMCredentialsApplication();
+
+        // Act
+        apiClientDetailsService.applyForAMCredentials(request);
+
+        // Assert
+        assertThat(request.getRequestedByName()).isEqualTo("Sarah Smith");
+        assertThat(request.getRequestedByEmail()).isEqualTo("sarah.smith@example.com");
+        assertThat(request.getOrgName()).isEqualTo("Test AM Org");
+
+        verify(mailService).applyForAMCreds(request);
     }
 }

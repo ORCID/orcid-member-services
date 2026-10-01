@@ -1,7 +1,9 @@
 package org.orcid.mp.member.service;
 
 
+import org.orcid.mp.member.apicreds.AMCredentialsApplication;
 import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
+import org.orcid.mp.member.apicreds.SlClientChangeRequest;
 import org.orcid.mp.member.client.MailgunClient;
 import org.orcid.mp.member.error.MailException;
 import org.orcid.mp.member.salesforce.request.AddConsortiumMember;
@@ -38,6 +40,10 @@ public class MailService {
     static final String REMOVE_ORG_SUBJECT = "Remove member organization";
 
     static final String PROD_CREDS_SUBJECT_PREFIX = "ORCID Member API Credentials Request - ";
+
+    static final String SL_CLIENT_CHANGE_SUBJECT = "Request changes to client";
+
+    static final String AM_CREDENTIALS_APPLICATION = "Request for Affiliation Manager Credentials";
 
     @Value("${application.mail.contactUpdateRecipient}")
     private String contactUpdateRecipient;
@@ -184,6 +190,44 @@ public class MailService {
             mailgunClient.sendMail(recipient, productionCredentialsApplication.getRequestedByEmail(), PROD_CREDS_SUBJECT_PREFIX + productionCredentialsApplication.getOrgName(), content);
         } catch (MailException e) {
             LOGGER.error("Error sending apply for prod credentials email to {}", recipient, e);
+        }
+    }
+
+    public void requestSLClientChange(SlClientChangeRequest slClientChangeRequest) {
+        LOGGER.debug("Sending request S&L client change request to '{}'", contactUpdateRecipient);
+        Context context = new Context(Locale.ENGLISH);
+        context.setVariable("requestedBy", slClientChangeRequest.getRequestedByName() + " (" + slClientChangeRequest.getRequestedByEmail() + ")");
+        context.setVariable("orgName", slClientChangeRequest.getOrgName());
+        context.setVariable("redirectUris", slClientChangeRequest.getRedirectUris());
+        context.setVariable("homepageUrl", slClientChangeRequest.getHomepageUrl());
+
+        String content = templateEngine.process("mail/requestSLClientChange", context);
+        String recipient = contactUpdateRecipient;
+
+        try {
+            mailgunClient.sendMail(recipient, slClientChangeRequest.getRequestedByEmail(), SL_CLIENT_CHANGE_SUBJECT, content);
+        } catch (MailException e) {
+            LOGGER.error("Error sending request to change S&L client", e);
+        }
+    }
+
+
+    public void applyForAMCreds(AMCredentialsApplication amCredentialsApplication) {
+        LOGGER.debug("Sending Affiliation Manager application to '{}'", contactUpdateRecipient);
+        Context context = new Context(Locale.ENGLISH);
+        context.setVariable("requestedBy", amCredentialsApplication.getRequestedByName() + " (" + amCredentialsApplication.getRequestedByEmail() + ")");
+        context.setVariable("orgName", amCredentialsApplication.getOrgName());
+        context.setVariable("consortiumLeadName", amCredentialsApplication.getConsortiumLeadName());
+        context.setVariable("contactAddress", amCredentialsApplication.getRequestedByEmail());
+        context.setVariable("orgHomePage", amCredentialsApplication.getOrgHomePage());
+        context.setVariable("notes", amCredentialsApplication.getNotes());
+
+        String content = templateEngine.process("mail/applyForAMCreds", context);
+
+        try {
+            mailgunClient.sendMail(contactUpdateRecipient, amCredentialsApplication.getRequestedByEmail(), AM_CREDENTIALS_APPLICATION, content);
+        } catch (MailException e) {
+            LOGGER.error("Error sending Affiliation Manager request", e);
         }
     }
 

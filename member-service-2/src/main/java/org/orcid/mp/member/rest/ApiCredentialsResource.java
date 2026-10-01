@@ -1,8 +1,6 @@
 package org.orcid.mp.member.rest;
 
-import org.orcid.mp.member.apicreds.ApiClientDetails;
-import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
-import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
+import org.orcid.mp.member.apicreds.*;
 import org.orcid.mp.member.domain.User;
 import org.orcid.mp.member.service.ApiCredentialsService;
 import org.orcid.mp.member.service.UserService;
@@ -47,6 +45,20 @@ public class ApiCredentialsResource {
     public ResponseEntity<Void> applyForApiCredentials(@RequestBody ProductionCredentialsApplication application) {
         LOG.debug("REST request to apply for production credentials");
         apiClientDetailsService.applyForApiCredentials(application);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/applyForAMCreds")
+    public ResponseEntity<Void> applyForApiCredentials(@RequestBody AMCredentialsApplication application) {
+        LOG.debug("REST request to apply for Affiliation Manager credentials");
+        apiClientDetailsService.applyForAMCredentials(application);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/requestSLClientChange")
+    public ResponseEntity<Void> requestSLClientChange(@RequestBody SlClientChangeRequest request) {
+        LOG.debug("REST request to change SL client");
+        apiClientDetailsService.requestSLClientChange(request);
         return ResponseEntity.ok().build();
     }
 
