@@ -5,10 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.orcid.mp.member.apicreds.ApiClientDetails;
-import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
-import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
-import org.orcid.mp.member.apicreds.SlClientChangeRequest;
+import org.orcid.mp.member.apicreds.*;
 import org.orcid.mp.member.client.ApiCredentialsServiceClient;
 import org.orcid.mp.member.domain.Member;
 import org.orcid.mp.member.domain.User;
@@ -212,5 +209,34 @@ class ApiCredentialsServiceTest {
         );
 
         verifyNoInteractions(mailService);
+    }
+
+    @Test
+    void applyForAMCredentials_MutatesRequestAndCallsMailService() {
+        // Arrange
+        User user = new User();
+        user.setMemberId("1");
+        user.setFirstName("Sarah");
+        user.setLastName("Smith");
+        user.setEmail("sarah.smith@example.com");
+        user.setMemberId("1");
+
+        Member member = new Member();
+        member.setClientName("Test AM Org");
+
+        when(userService.getLoggedInUser()).thenReturn(user);
+        when(memberService.getMember(eq("1"))).thenReturn(Optional.of(member));
+
+        AMCredentialsApplication request = new AMCredentialsApplication();
+
+        // Act
+        apiClientDetailsService.applyForAMCredentials(request);
+
+        // Assert
+        assertThat(request.getRequestedByName()).isEqualTo("Sarah Smith");
+        assertThat(request.getRequestedByEmail()).isEqualTo("sarah.smith@example.com");
+        assertThat(request.getOrgName()).isEqualTo("Test AM Org");
+
+        verify(mailService).applyForAMCreds(request);
     }
 }
