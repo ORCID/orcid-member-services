@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core'
 import { Observable, map } from 'rxjs'
 import { Client } from '../model/client'
 import { ProductionCredentialsApplication } from '../model/production-credentials-application'
+import { SlClientChangeRequest } from '../model/sl-client-change-request'
 
 // Raw shape returned by the external api-credentials-service search endpoint
 // (org.orcid.apicreds.dto.ClientDetailsSummaryDto) — not the same as the ui-2 Client model.
@@ -10,6 +11,7 @@ interface ClientDetailsSummaryDto {
   clientDetailsId: string
   clientName: string
   editable?: boolean
+  slClient?: boolean | null
   homepageUrl?: string | null
   description?: string | null
   clientSecret?: string | null
@@ -23,6 +25,7 @@ interface ClientDetailsDto {
   clientDetailsId: string
   redirectUris: { redirectUri: string; redirectUriType?: string }[]
   clientName: string
+  slClient?: boolean | null
   description?: string | null
   website?: string | null
   membershipType?: string
@@ -52,6 +55,7 @@ function toClientFromSummary(dto: ClientDetailsSummaryDto): Client {
     clientId: dto.clientDetailsId,
     clientName: dto.clientName,
     editable: dto.editable ?? true,
+    slClient: dto.slClient ?? undefined,
     homepageUrl: dto.homepageUrl ?? undefined,
     description: dto.description ?? undefined,
     clientSecret: dto.clientSecret ?? undefined,
@@ -65,6 +69,7 @@ function toClientFromDetails(dto: ClientDetailsResponse): Client {
       clientId: dto.clientId,
       clientName: dto.clientName,
       editable: dto.editable ?? true,
+      slClient: dto.slClient ?? undefined,
       homepageUrl: dto.homepageUrl ?? undefined,
       description: dto.description ?? undefined,
       clientSecret: dto.clientSecret ?? undefined,
@@ -76,6 +81,7 @@ function toClientFromDetails(dto: ClientDetailsResponse): Client {
     clientId: dto.clientDetailsId,
     clientName: dto.clientName,
     editable: true,
+    slClient: dto.slClient ?? undefined,
     homepageUrl: dto.website ?? undefined,
     description: dto.description ?? undefined,
     clientSecret: dto.decryptedSecret ?? undefined,
@@ -109,9 +115,7 @@ export class ApiCredentialsService {
   }
 
   get(clientId: string): Observable<Client> {
-    return this.http
-      .get<ClientDetailsResponse>(`${this.resourceUrl}/${clientId}`)
-      .pipe(map(toClientFromDetails))
+    return this.http.get<ClientDetailsResponse>(`${this.resourceUrl}/${clientId}`).pipe(map(toClientFromDetails))
   }
 
   create(credential: Client): Observable<Client> {
@@ -126,7 +130,12 @@ export class ApiCredentialsService {
       .pipe(map(toClientFromDetails))
   }
 
-  search(options?: { page?: number; size?: number; sort?: string; clientType?: string[] }): Observable<ClientSearchResult> {
+  search(options?: {
+    page?: number
+    size?: number
+    sort?: string
+    clientType?: string[]
+  }): Observable<ClientSearchResult> {
     let params = new HttpParams()
     if (options?.page != null) {
       params = params.set('page', options.page)
@@ -152,5 +161,8 @@ export class ApiCredentialsService {
   submitProductionCredentialsApplication(application: ProductionCredentialsApplication): Observable<void> {
     return this.http.post<void>(`${this.resourceUrl}/apply`, application)
   }
-}
 
+  requestSLClientChange(request: SlClientChangeRequest): Observable<void> {
+    return this.http.post<void>(`${this.resourceUrl}/requestSLClientChange`, request)
+  }
+}

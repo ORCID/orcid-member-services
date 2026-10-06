@@ -97,6 +97,25 @@ class ApiCredentialsServiceTest {
     }
 
     @Test
+    void getApiClientsForMember_ReturnsUpstreamSlClientFlagWithoutFetchingDetails() {
+        ApiClientSummary slSummary = new ApiClientSummary();
+        slSummary.setClientDetailsId("APP-SL");
+        slSummary.setSlClient(true);
+        ApiClientSummary normalSummary = new ApiClientSummary();
+        normalSummary.setClientDetailsId("APP-1");
+        ApiClientSummaryPage page = new ApiClientSummaryPage();
+        page.setContent(List.of(slSummary, normalSummary));
+        when(apiCredentialsServiceClient.getApiClientsForMember("MEMBER-1")).thenReturn(page);
+
+        ApiClientSummaryPage result = apiClientDetailsService.getApiClientsForMember("MEMBER-1");
+
+        assertSame(page, result);
+        assertTrue(slSummary.isSlClient());
+        assertFalse(normalSummary.isSlClient());
+        verify(apiCredentialsServiceClient, never()).getApiClientDetails(anyString());
+    }
+
+    @Test
     void applyForApiCredentials_ShouldSetRequesterDetailsAndSendEmail() {
         // Arrange
         User loggedInUser = new User();

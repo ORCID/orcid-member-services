@@ -9,6 +9,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome'
 import {
   faBan,
   faCopy,
+  faEnvelope,
   faEye,
   faEyeSlash,
   faLock,
@@ -19,7 +20,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { AlertMessage, AlertType } from '../app.constants'
 import { AlertService } from '../shared/service/alert.service'
-import { CLIENT_DESCRIPTION_MAX_LENGTH, Client } from './model/client'
+import { CLIENT_DESCRIPTION_MAX_LENGTH, Client, isSlClient } from './model/client'
+import { SlClientChangeRequest } from './model/sl-client-change-request'
 import { ApiCredentialsService } from './service/api-credentials.service'
 import { ResetClientSecretDialogComponent } from './reset-client-secret-dialog.component'
 
@@ -41,12 +43,12 @@ export class ApiCredentialEditComponent implements OnInit {
 
   protected readonly descriptionMaxLength = CLIENT_DESCRIPTION_MAX_LENGTH
 
-  protected resetSecretEnabled = true
-
   protected isSaving = signal(false)
   protected invalidForm = signal(false)
   protected validationErrors = signal<string[]>([])
   protected isCreateMode = signal(false)
+  protected isRequestMode = signal(false)
+  protected accessBlocked = signal(false)
   protected clientSecretRevealed = signal(true)
   protected secretReset = signal(false)
   protected clientId = signal('')
@@ -54,6 +56,7 @@ export class ApiCredentialEditComponent implements OnInit {
   protected faBan = faBan
   protected faSave = faSave
   protected faCopy = faCopy
+  protected faEnvelope = faEnvelope
   protected faEye = faEye
   protected faEyeSlash = faEyeSlash
   protected faLock = faLock
@@ -69,7 +72,10 @@ export class ApiCredentialEditComponent implements OnInit {
   editForm = this.fb.group({
     clientName: this.fb.control<string>('', [Validators.required]),
     homepageUrl: this.fb.control<string | null>(null, [Validators.required]),
-    description: this.fb.control<string | null>(null, [Validators.required, Validators.maxLength(CLIENT_DESCRIPTION_MAX_LENGTH)]),
+    description: this.fb.control<string | null>(null, [
+      Validators.required,
+      Validators.maxLength(CLIENT_DESCRIPTION_MAX_LENGTH),
+    ]),
     clientSecret: this.fb.control<string | null>({ value: null, disabled: true }),
     redirectUris: new FormArray<FormControl<string | null>>([], [Validators.required]),
   })
@@ -78,11 +84,30 @@ export class ApiCredentialEditComponent implements OnInit {
     this.activatedRoute.data.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
       const credential = data['credential'] as Client | undefined
       if (credential) {
+        this.applyAccess(credential)
         this.updateForm(credential)
       } else {
         this.isCreateMode.set(true)
       }
     })
+  }
+
+  // Only S&L clients go through the email request flow; a client with an unknown type must not be edited directly.
+  private applyAccess(credential: Client) {
+    const slClient = isSlClient(credential)
+    this.isRequestMode.set(slClient)
+    if (slClient) {
+      this.clientSecretRevealed.set(false)
+      // the S&L change request email only carries the homepage URL and redirect URIs
+      this.editForm.controls.description.disable()
+    } else if (credential.slClient === undefined || !credential.editable) {
+      this.accessBlocked.set(true)
+      this.validationErrors.set(['This client cannot be edited.'])
+    }
+  }
+
+  protected canResetSecret(): boolean {
+    return !this.isRequestMode() && !this.accessBlocked()
   }
 
   get redirectUris(): FormArray<FormControl<string | null>> {
@@ -134,6 +159,9 @@ export class ApiCredentialEditComponent implements OnInit {
   }
 
   openResetDialog() {
+    if (!this.canResetSecret()) {
+      return
+    }
     const ref = this.modalService.open(ResetClientSecretDialogComponent, { size: 'lg' })
     ref.componentInstance.clientId = this.clientId()
     ref.componentInstance.currentSecret = this.editForm.controls.clientSecret.value ?? ''
@@ -150,6 +178,9 @@ export class ApiCredentialEditComponent implements OnInit {
   }
 
   performReset() {
+    if (!this.canResetSecret()) {
+      return
+    }
     this.apiCredentialsService.resetClientSecret(this.clientId()).subscribe({
       next: (res) => {
         this.editForm.controls.clientSecret.setValue(res.clientSecret)
@@ -165,6 +196,9 @@ export class ApiCredentialEditComponent implements OnInit {
   }
 
   save() {
+    if (this.isSaving() || this.accessBlocked()) {
+      return
+    }
     if (this.editForm.invalid) {
       this.invalidForm.set(true)
       this.editForm.markAllAsTouched()
@@ -174,16 +208,28 @@ export class ApiCredentialEditComponent implements OnInit {
     this.invalidForm.set(false)
     this.validationErrors.set([])
     const value = this.editForm.getRawValue()
+    const redirectUris = value.redirectUris.filter((uri): uri is string => !!uri)
+
+    if (this.isRequestMode()) {
+      this.requestChanges({
+        homepageUrl: value.homepageUrl ?? '',
+        redirectUris,
+      })
+      return
+    }
+
     const payload: Client = {
       clientId: this.clientId(),
       clientName: value.clientName,
       editable: true,
       homepageUrl: value.homepageUrl ?? undefined,
       description: value.description ?? undefined,
-      redirectUris: value.redirectUris.filter((uri): uri is string => !!uri),
+      redirectUris,
     }
 
-    const request = this.isCreateMode() ? this.apiCredentialsService.create(payload) : this.apiCredentialsService.update(payload)
+    const request = this.isCreateMode()
+      ? this.apiCredentialsService.create(payload)
+      : this.apiCredentialsService.update(payload)
     request.subscribe({
       next: (result) => {
         this.isSaving.set(false)
@@ -210,9 +256,26 @@ export class ApiCredentialEditComponent implements OnInit {
     this.router.navigate(this.collectionRoute())
   }
 
-  private getErrorMessages(error: unknown): string[] {
+  private requestChanges(request: SlClientChangeRequest) {
+    this.apiCredentialsService.requestSLClientChange(request).subscribe({
+      next: () => {
+        this.isSaving.set(false)
+        this.alertService.broadcast(AlertType.TOAST, AlertMessage.API_CREDENTIAL_CHANGE_REQUESTED)
+        this.router.navigate(this.collectionRoute())
+      },
+      error: (error: unknown) => {
+        this.isSaving.set(false)
+        this.validationErrors.set(
+          this.getErrorMessages(error, 'Unable to submit the change request. Please try again.')
+        )
+        this.alertService.broadcast(AlertType.TOAST, AlertMessage.API_CREDENTIAL_CHANGE_REQUEST_ERROR)
+      },
+    })
+  }
+
+  private getErrorMessages(error: unknown, fallback = 'Unable to save this client. Please try again.'): string[] {
     if (!(error instanceof HttpErrorResponse)) {
-      return ['Unable to save this client. Please try again.']
+      return [fallback]
     }
 
     const body = error.error
@@ -244,6 +307,6 @@ export class ApiCredentialEditComponent implements OnInit {
     }
 
     const message = body?.detail || body?.message || body?.title
-    return typeof message === 'string' && message.trim() ? [message] : ['Unable to save this client. Please try again.']
+    return typeof message === 'string' && message.trim() ? [message] : [fallback]
   }
 }

@@ -36,8 +36,8 @@ public class ApiCredentialsResource {
     public ResponseEntity<ApiClientSummaryPage> getClientsForMember(@PathVariable String memberId) {
         LOG.debug("REST request to get api client details for member id {}", memberId);
 
-        ApiClientSummaryPage page = apiClientDetailsService.getApiClientsForMember(memberId);
         checkClientAccessForMember(memberId);
+        ApiClientSummaryPage page = apiClientDetailsService.getApiClientsForMember(memberId);
         return ResponseEntity.ok(page);
     }
 

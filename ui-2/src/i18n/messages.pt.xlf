@@ -1002,7 +1002,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
-          <context context-type="linenumber">241</context>
+          <context context-type="linenumber">259</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/production-credentials-apply.component.html</context>
@@ -1042,7 +1042,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
-          <context context-type="linenumber">217</context>
+          <context context-type="linenumber">224</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-delete.component.html</context>
@@ -1066,11 +1066,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">48</context>
+          <context context-type="linenumber">57</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">107</context>
+          <context context-type="linenumber">111</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
@@ -1098,7 +1098,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
-          <context context-type="linenumber">248</context>
+          <context context-type="linenumber">269</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/production-credentials-apply.component.html</context>
@@ -3818,7 +3818,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
-          <context context-type="linenumber">246</context>
+          <context context-type="linenumber">267</context>
         </context-group>
       </trans-unit>
       <trans-unit id="gatewayApp.AffiliationSection.DISTINCTION.string" datatype="html">
@@ -4294,11 +4294,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">79</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">105</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/production-credentials-apply.component.html</context>
@@ -4506,7 +4506,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.apply.about.heading.string" datatype="html">
@@ -4570,7 +4570,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/production-credentials-apply.component.ts</context>
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.apply.integrationType.cspListLink.string" datatype="html">
@@ -4586,7 +4586,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/production-credentials-apply.component.ts</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.apply.integrationType.label.string" datatype="html">
@@ -4602,7 +4602,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/production-credentials-apply.component.ts</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.apply.notes.heading.string" datatype="html">
@@ -4642,7 +4642,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
-          <context context-type="linenumber">194</context>
+          <context context-type="linenumber">201</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.edit.clientInfo.heading.string" datatype="html">
@@ -4650,7 +4650,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.edit.clientName.string" datatype="html">
@@ -4658,7 +4658,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.edit.clientSecret.heading.string" datatype="html">
@@ -4666,7 +4666,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
-          <context context-type="linenumber">135</context>
+          <context context-type="linenumber">142</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.edit.copySuccess.string" datatype="html">
@@ -4674,7 +4674,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.ts</context>
-          <context context-type="linenumber">132</context>
+          <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.edit.description.string" datatype="html">
@@ -4682,7 +4682,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
-          <context context-type="linenumber">109</context>
+          <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.edit.homepageUrl.string" datatype="html">
@@ -4690,7 +4690,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">90</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/production-credentials-apply.component.html</context>
@@ -4702,7 +4702,15 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">196</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="apiCredentials.edit.requestChanges.string" datatype="html">
+        <source>Request changes</source>
+        <target state="new"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
+          <context context-type="linenumber">263</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.edit.secretReset.notice.string" datatype="html">
@@ -4710,7 +4718,15 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
-          <context context-type="linenumber">177</context>
+          <context context-type="linenumber">184</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="apiCredentials.edit.slRequestNotice.string" datatype="html">
+        <source>It may take up to 24 hours before the client is updated in the Member Portal. Please contact your ORCID engagement lead for more information.</source>
+        <target state="new"/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
+          <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.edit.title.string" datatype="html">
@@ -4750,7 +4766,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
-          <context context-type="linenumber">185</context>
+          <context context-type="linenumber">192</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.new.title.string" datatype="html">
@@ -4798,7 +4814,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credential-edit.component.html</context>
-          <context context-type="linenumber">171</context>
+          <context context-type="linenumber">178</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/reset-client-secret-dialog.component.html</context>
@@ -4826,7 +4842,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.sandbox.heading.string" datatype="html">
@@ -4834,7 +4850,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.sandbox.noCredentials.string" datatype="html">
@@ -4842,7 +4858,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.sandbox.requestReview.string" datatype="html">
@@ -4850,7 +4866,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.table.clientId.string" datatype="html">
@@ -4862,7 +4878,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.table.clientName.string" datatype="html">
@@ -4874,7 +4890,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">82</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="assertionServiceApp.affiliation.created.string" datatype="html">

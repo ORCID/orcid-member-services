@@ -3,6 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { ApiCredentialsService } from './api-credentials.service'
 import { Client } from '../model/client'
 import { ProductionCredentialsApplication } from '../model/production-credentials-application'
+import { SlClientChangeRequest } from '../model/sl-client-change-request'
 
 describe('ApiCredentialsService', () => {
   let service: ApiCredentialsService
@@ -32,6 +33,7 @@ describe('ApiCredentialsService', () => {
       description: 'A test client',
       website: 'https://example.org',
       decryptedSecret: 'secret',
+      slClient: true,
       redirectUris: [{ redirectUri: 'https://example.org/callback', redirectUriType: 'default' }],
     }
 
@@ -40,6 +42,7 @@ describe('ApiCredentialsService', () => {
         clientId: 'abc123',
         clientName: 'Test',
         editable: true,
+        slClient: true,
         homepageUrl: 'https://example.org',
         description: 'A test client',
         clientSecret: 'secret',
@@ -57,6 +60,7 @@ describe('ApiCredentialsService', () => {
       clientName: 'Orcid MCP',
       clientId: 'APP-2W7DNBN7X5B2EAF9',
       editable: true,
+      slClient: false,
       homepageUrl: 'orcid.org',
       description: 'Orcid MCP testing area',
       clientSecret: null,
@@ -92,13 +96,21 @@ describe('ApiCredentialsService', () => {
     expect(req.request.body.clientDetailsId).toEqual('abc123')
     expect(req.request.body.clientName).toEqual('Test')
     expect(req.request.body.website).toEqual('https://example.org')
-    expect(req.request.body.redirectUris).toEqual([{ redirectUri: 'https://example.org/callback', redirectUriType: 'default' }])
+    expect(req.request.body.redirectUris).toEqual([
+      { redirectUri: 'https://example.org/callback', redirectUriType: 'default' },
+    ])
     req.flush(updated)
   })
 
   it('should create a client, sending the ClientDetailsDto request shape', () => {
     const credential = { clientName: 'Test' } as Client
-    const created = { memberId: 'memberId', clientDetailsId: 'abc123', clientName: 'Test', decryptedSecret: 'secret', redirectUris: [] }
+    const created = {
+      memberId: 'memberId',
+      clientDetailsId: 'abc123',
+      clientName: 'Test',
+      decryptedSecret: 'secret',
+      redirectUris: [],
+    }
 
     service.create(credential).subscribe((res) => {
       expect(res.clientId).toEqual('abc123')
@@ -116,6 +128,7 @@ describe('ApiCredentialsService', () => {
       clientDetailsId: 'abc123',
       clientName: 'Test',
       editable: true,
+      slClient: true,
     }
     const rawPage = { content: [summary], totalElements: 1, totalPages: 1, number: 0, size: 20 }
 
@@ -125,6 +138,7 @@ describe('ApiCredentialsService', () => {
           clientId: 'abc123',
           clientName: 'Test',
           editable: true,
+          slClient: true,
           homepageUrl: undefined,
           description: undefined,
           clientSecret: undefined,
@@ -135,10 +149,7 @@ describe('ApiCredentialsService', () => {
     })
 
     const req = httpMock.expectOne(
-      (r) =>
-        r.url === service.resourceUrl &&
-        r.params.get('page') === '0' &&
-        r.params.get('size') === '20'
+      (r) => r.url === service.resourceUrl && r.params.get('page') === '0' && r.params.get('size') === '20'
     )
     expect(req.request.method).toBe('GET')
     expect(req.request.params.get('sort')).toBe('dateCreated,DESC')
@@ -188,5 +199,37 @@ describe('ApiCredentialsService', () => {
     expect(req.request.method).toBe('POST')
     expect(req.request.body).toEqual(application)
     req.flush(null)
+  })
+
+  it('should submit an S&L client change request to the member-service endpoint', () => {
+    const request: SlClientChangeRequest = {
+      homepageUrl: 'https://example.org',
+      redirectUris: ['https://example.org/callback'],
+    }
+    let completed = false
+
+    service.requestSLClientChange(request).subscribe({ complete: () => (completed = true) })
+
+    const req = httpMock.expectOne('/memberservice/apicreds/requestSLClientChange')
+    expect(req.request.method).toBe('POST')
+    expect(req.request.body).toEqual(request)
+    req.flush(null)
+    expect(completed).toBeTrue()
+  })
+
+  it('should propagate S&L client change request errors', () => {
+    let status = 0
+
+    service
+      .requestSLClientChange({
+        homepageUrl: 'h',
+        redirectUris: [],
+      })
+      .subscribe({ error: (e) => (status = e.status) })
+
+    httpMock
+      .expectOne('/memberservice/apicreds/requestSLClientChange')
+      .flush('nope', { status: 403, statusText: 'Forbidden' })
+    expect(status).toBe(403)
   })
 })
