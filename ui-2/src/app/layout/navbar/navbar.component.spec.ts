@@ -263,7 +263,10 @@ describe('NavbarComponent', () => {
         manageApiCredsEnabled: true,
       })
     )
-    memberService.find.and.returnValue(of({ id: 'id', client_id: 'a', isConsortiumLead: false }))
+    accountService.getMemberId.and.returnValue('memberId')
+    memberService.find.and.returnValue(
+      of({ id: 'id', client_id: 'a', isConsortiumLead: false, superadminEnabled: false })
+    )
     createComponent()
     fixture.detectChanges()
     tick()
@@ -337,4 +340,46 @@ describe('NavbarComponent', () => {
     expect(router.navigate).not.toHaveBeenCalled()
     expect(alertService.broadcast).toHaveBeenCalledWith(AlertType.TOAST, AlertMessage.API_CREDENTIAL_SEARCH_ERROR)
   })
+
+  it('should not display manage API credentials link when member cannot manage API credentials', fakeAsync(() => {
+    featureToggleService.isEnabled.withArgs('MANAGE_API_CREDENTIALS').and.returnValue(true)
+
+    accountService.isAuthenticated.and.returnValue(true)
+    accountService.hasAnyAuthority.and.returnValue(false)
+    accountService.hasAnyAuthority.withArgs(['ROLE_USER']).and.returnValue(true)
+    accountService.isOrganizationOwner.and.returnValue(false)
+    accountService.isManageApiCredentialsEnabled.and.returnValue(true)
+    accountService.getImageUrl.and.returnValue(null)
+    accountService.getAccountData.and.returnValue(
+      of({
+        id: 'id',
+        activated: true,
+        authorities: ['ROLE_USER'],
+        email: 'email@email.com',
+        firstName: 'name',
+        langKey: 'en',
+        lastName: 'surname',
+        imageUrl: 'url',
+        salesforceId: 'sfid',
+        memberId: 'memberId',
+        loggedAs: false,
+        loginAs: 'sfid',
+        mainContact: false,
+        mfaEnabled: false,
+        manageApiCredsEnabled: true,
+      })
+    )
+
+    accountService.getMemberId.and.returnValue('memberId')
+    memberService.find.and.returnValue(
+      of({ id: 'id', client_id: 'a', isConsortiumLead: false, superadminEnabled: true })
+    )
+
+    createComponent()
+    fixture.detectChanges()
+    tick()
+
+    const manageApiCredentialsLink = fixture.debugElement.query(By.css('#manageApiCredentialsLink'))
+    expect(manageApiCredentialsLink).toBeFalsy()
+  }))
 })

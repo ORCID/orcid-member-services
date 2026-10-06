@@ -63,6 +63,7 @@
               }
               @if (
                 featureService.isEnabled('MANAGE_API_CREDENTIALS') &&
+                memberCanManageApiCreds() &&
                 (userIsOrgOwner() || userCanManageApiCreds())
               ) {
                 <li>

@@ -31,14 +31,7 @@ import { ApiCredentialsMfaEnabledDialogComponent } from './api-credentials-mfa-e
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    RouterLink,
-    FaIconComponent,
-    NgbDropdown,
-    RouterLinkActive,
-    NgbDropdownToggle,
-    NgbDropdownMenu,
-  ],
+  imports: [RouterLink, FaIconComponent, NgbDropdown, RouterLinkActive, NgbDropdownToggle, NgbDropdownMenu],
 })
 export class NavbarComponent {
   private loginService = inject(LoginService)
@@ -63,6 +56,7 @@ export class NavbarComponent {
   protected userIsOrgOwner = signal(false)
   protected userIsMFAEnabled = signal(false)
   protected userCanManageApiCreds = signal(false)
+  protected memberCanManageApiCreds = signal(false)
   protected userImageUrl = signal<string | null>(null)
 
   protected canShowAdmin = computed(() => this.userIsOrgOwner() || this.userHasRoleAdmin())
@@ -87,7 +81,6 @@ export class NavbarComponent {
   protected faKey = faKey
 
   constructor() {
-
     this.oidcSecurityService.isAuthenticated$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(({ isAuthenticated }) => {
@@ -100,7 +93,8 @@ export class NavbarComponent {
         }
       })
 
-    this.accountService.accountData.asObservable()
+    this.accountService.accountData
+      .asObservable()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((account) => {
         if (account) {
@@ -134,6 +128,9 @@ export class NavbarComponent {
             this.organizationName.set(res.clientName)
             this.consortiumLead.set(res.isConsortiumLead || false)
             this.consortiumMember.set(res.parentSalesforceId != null)
+
+            console.log('Member data:', res)
+            this.memberCanManageApiCreds.set(!res.superadminEnabled)
           }
         },
         error: (err) => console.error('Member fetch failed', err),
@@ -223,5 +220,4 @@ export class NavbarComponent {
     this.collapseNavbar()
     this.router.navigate(['/api-credentials', memberId])
   }
-
 }
