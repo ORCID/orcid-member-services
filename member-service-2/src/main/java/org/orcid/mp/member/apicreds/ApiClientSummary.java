@@ -11,6 +11,7 @@ public class ApiClientSummary {
     private LocalDateTime lastModified;
     private boolean allowAutoDeprecate;
     private LocalDateTime deactivatedDate;
+    private boolean slClient;
 
     public String getClientDetailsId() { return clientDetailsId; }
     public void setClientDetailsId(String clientDetailsId) { this.clientDetailsId = clientDetailsId; }
@@ -35,4 +36,7 @@ public class ApiClientSummary {
 
     public LocalDateTime getDeactivatedDate() { return deactivatedDate; }
     public void setDeactivatedDate(LocalDateTime deactivatedDate) { this.deactivatedDate = deactivatedDate; }
+
+    public boolean isSlClient() { return slClient; }
+    public void setSlClient(boolean slClient) { this.slClient = slClient; }
 }

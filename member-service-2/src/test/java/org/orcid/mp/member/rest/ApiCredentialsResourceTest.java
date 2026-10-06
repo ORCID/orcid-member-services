@@ -150,9 +150,6 @@ class ApiCredentialsResourceTest {
         mockUser.setMemberId("MEMBER-OTHER");
         when(userService.getLoggedInUser()).thenReturn(mockUser);
 
-        ApiClientSummaryPage mockPage = new ApiClientSummaryPage();
-        when(apiClientDetailsService.getApiClientsForMember(memberId)).thenReturn(mockPage);
-
         // Act & Assert
         assertThatThrownBy(() -> apiCredentialsResource.getClientsForMember(memberId))
                 .isInstanceOf(AccessDeniedException.class)

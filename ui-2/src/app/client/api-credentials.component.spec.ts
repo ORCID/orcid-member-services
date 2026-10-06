@@ -20,7 +20,7 @@ describe('ManageApiCredentialsComponent', () => {
   let fixture: ComponentFixture<ApiCredentialsComponent>
   let apiCredentialsService: jasmine.SpyObj<ApiCredentialsService>
 
-  const mockClients: Client[] = [{ clientId: 'abc123', clientName: 'Test', editable: true }]
+  const mockClients: Client[] = [{ clientId: 'abc123', clientName: 'Test', editable: true, slClient: false }]
 
   beforeEach(() => {
     const apiCredentialsServiceSpy = jasmine.createSpyObj('ApiCredentialsService', ['getClientsForMember'])
@@ -48,6 +48,30 @@ describe('ManageApiCredentialsComponent', () => {
     expect(internals(component).productionCredentials()).toEqual(mockClients)
   })
 
+  it('should link S&L clients to request changes and only offer Edit on editable typed clients', () => {
+    apiCredentialsService.getClientsForMember.and.returnValue(
+      of([
+        { clientId: 'SL-1', clientName: 'S&L', editable: true, slClient: true },
+        { clientId: 'N-1', clientName: 'Normal', editable: true, slClient: false },
+        { clientId: 'N-2', clientName: 'Inactive', editable: false, slClient: false },
+        { clientId: 'N-3', clientName: 'Untyped', editable: true },
+      ])
+    )
+    fixture = TestBed.createComponent(ApiCredentialsComponent)
+    fixture.detectChanges()
+
+    const rows: HTMLElement[] = Array.from(
+      fixture.nativeElement.querySelectorAll('.credentials-table')[0].querySelectorAll('tbody tr')
+    )
+    const action = (row: HTMLElement) => row.querySelector('.client-actions a')
+
+    expect(action(rows[0])?.textContent).toContain('Request changes')
+    expect(action(rows[0])?.getAttribute('href')).toBe('/api-credentials/memberId/SL-1')
+    expect(action(rows[1])?.textContent).toContain('Edit')
+    expect(action(rows[2])).toBeNull()
+    expect(action(rows[3])).toBeNull()
+  })
+
   it('should keep sandbox credentials empty when search fails', () => {
     apiCredentialsService.getClientsForMember.and.returnValue(throwError(() => new Error('failed')))
     fixture = TestBed.createComponent(ApiCredentialsComponent)
@@ -68,5 +92,3 @@ describe('ManageApiCredentialsComponent', () => {
     expect(apiCredentialsService.getClientsForMember).not.toHaveBeenCalled()
   })
 })
-
-
