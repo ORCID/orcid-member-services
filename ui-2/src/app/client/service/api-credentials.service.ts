@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { Observable, map } from 'rxjs'
 import { Client } from '../model/client'
+import { AffiliationManagerCredentialsApplication } from '../model/affiliation-manager-credentials-application'
 import { ProductionCredentialsApplication } from '../model/production-credentials-application'
 import { SlClientChangeRequest } from '../model/sl-client-change-request'
 
@@ -160,6 +161,10 @@ export class ApiCredentialsService {
 
   submitProductionCredentialsApplication(application: ProductionCredentialsApplication): Observable<void> {
     return this.http.post<void>(`${this.resourceUrl}/apply`, application)
+  }
+
+  submitAffiliationManagerCredentialsApplication(application: AffiliationManagerCredentialsApplication): Observable<void> {
+    return this.http.post<void>(`${this.resourceUrl}/apply/affiliation-manager`, application)
   }
 
   requestSLClientChange(request: SlClientChangeRequest): Observable<void> {

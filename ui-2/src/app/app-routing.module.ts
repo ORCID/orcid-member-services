@@ -50,6 +50,7 @@ const routes: Routes = [
     },
     data: {
       authorities: ['ROLE_ADMIN', 'ROLE_ORG_OWNER'],
+      allowManageApiCredentials: true,
       pageTitle: 'gatewayApp.msUserServiceMSApiCredentials.home.title.string',
     },
     canActivate: [AuthGuard],

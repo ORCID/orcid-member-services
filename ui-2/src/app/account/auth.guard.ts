@@ -37,7 +37,9 @@ export const AuthGuard = (route: ActivatedRouteSnapshot, state: RouterStateSnaps
         map((account) => {
           if (account) {
             const hasAnyAuthority = accountService.hasAnyAuthority(authorities)
-            if (hasAnyAuthority) {
+            const canManageApiCredentials =
+              route.data['allowManageApiCredentials'] === true && !!accountService.isManageApiCredentialsEnabled()
+            if (hasAnyAuthority || canManageApiCredentials) {
               return true
             } else {
               router.navigate(['accessdenied'])

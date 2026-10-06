@@ -341,15 +341,16 @@ describe('NavbarComponent', () => {
     expect(alertService.broadcast).toHaveBeenCalledWith(AlertType.TOAST, AlertMessage.API_CREDENTIAL_SEARCH_ERROR)
   })
 
-  it('should not display manage API credentials link when member cannot manage API credentials', fakeAsync(() => {
-    featureToggleService.isEnabled.withArgs('MANAGE_API_CREDENTIALS').and.returnValue(true)
+  it('should link to the info-site Affiliation Manager credentials form while the in-portal form is off', fakeAsync(() => {
+    featureToggleService.isEnabled.withArgs('MANAGE_API_CREDENTIALS').and.returnValue(false)
 
     accountService.isAuthenticated.and.returnValue(true)
     accountService.hasAnyAuthority.and.returnValue(false)
     accountService.hasAnyAuthority.withArgs(['ROLE_USER']).and.returnValue(true)
     accountService.isOrganizationOwner.and.returnValue(false)
-    accountService.isManageApiCredentialsEnabled.and.returnValue(true)
+    accountService.isManageApiCredentialsEnabled.and.returnValue(false)
     accountService.getImageUrl.and.returnValue(null)
+    accountService.getMemberId.and.returnValue('memberId')
     accountService.getAccountData.and.returnValue(
       of({
         id: 'id',
@@ -361,25 +362,58 @@ describe('NavbarComponent', () => {
         lastName: 'surname',
         imageUrl: 'url',
         salesforceId: 'sfid',
-        memberId: 'memberId',
         loggedAs: false,
         loginAs: 'sfid',
         mainContact: false,
         mfaEnabled: false,
-        manageApiCredsEnabled: true,
+        memberId: 'memberId',
+        manageApiCredsEnabled: false,
       })
     )
-
-    accountService.getMemberId.and.returnValue('memberId')
-    memberService.find.and.returnValue(
-      of({ id: 'id', client_id: 'a', isConsortiumLead: false, superadminEnabled: true })
-    )
+    memberService.find.and.returnValue(of({ id: 'id', client_id: 'a', isConsortiumLead: false }))
 
     createComponent()
     fixture.detectChanges()
     tick()
 
-    const manageApiCredentialsLink = fixture.debugElement.query(By.css('#manageApiCredentialsLink'))
-    expect(manageApiCredentialsLink).toBeFalsy()
+    expect(fixture.debugElement.query(By.css('#applyForAffiliationManagerCredsLink'))).toBeTruthy()
+  }))
+
+  it('should hide the info-site Affiliation Manager credentials link once the in-portal form is on', fakeAsync(() => {
+    featureToggleService.isEnabled.withArgs('MANAGE_API_CREDENTIALS').and.returnValue(true)
+
+    accountService.isAuthenticated.and.returnValue(true)
+    accountService.hasAnyAuthority.and.returnValue(false)
+    accountService.hasAnyAuthority.withArgs(['ROLE_USER']).and.returnValue(true)
+    accountService.isOrganizationOwner.and.returnValue(false)
+    accountService.isManageApiCredentialsEnabled.and.returnValue(false)
+    accountService.getImageUrl.and.returnValue(null)
+    accountService.getMemberId.and.returnValue('memberId')
+    accountService.getAccountData.and.returnValue(
+      of({
+        id: 'id',
+        activated: true,
+        authorities: ['ROLE_USER'],
+        email: 'email@email.com',
+        firstName: 'name',
+        langKey: 'en',
+        lastName: 'surname',
+        imageUrl: 'url',
+        salesforceId: 'sfid',
+        loggedAs: false,
+        loginAs: 'sfid',
+        mainContact: false,
+        mfaEnabled: false,
+        memberId: 'memberId',
+        manageApiCredsEnabled: false,
+      })
+    )
+    memberService.find.and.returnValue(of({ id: 'id', client_id: 'a', isConsortiumLead: false }))
+
+    createComponent()
+    fixture.detectChanges()
+    tick()
+
+    expect(fixture.debugElement.query(By.css('#applyForAffiliationManagerCredsLink'))).toBeNull()
   }))
 })
