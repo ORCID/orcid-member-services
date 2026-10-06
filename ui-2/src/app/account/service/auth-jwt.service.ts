@@ -40,14 +40,7 @@ export class AuthServerProvider {
       .pipe(take(1))
       .subscribe((idToken) => {
         if (idToken) {
-          const authOptions = {
-            customParams: {
-              id_token_hint: idToken,
-              post_logout_redirect_uri: window.location.origin,
-            },
-          }
-
-          this.oidcSecurityService.logoff(undefined, authOptions).subscribe()
+          this.oidcSecurityService.logoff().subscribe()
         } else {
           // Fallback: No token found
           console.warn('Logout: No ID Token found. Local log off only.')
