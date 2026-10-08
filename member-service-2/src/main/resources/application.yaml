@@ -116,6 +116,6 @@ application:
     syncSalesforceMembers: ${APPLICATION_CRON_SF_SYNC:0 0 0 * * ?}
     enabled: ${ENABLE_SCHEDULER:true}
   apicreds:
-    apiBaseUrl: http://localhost:9100
-    clientId: ${ORG_ORCID_MEMBERPORTALCLIENTID:member-portal}
-    clientSecret: ${ORG_ORCID_MEMBERPORTALCLIENTSECRET:member-portal-client-secret}
+    apiBaseUrl: ${API_CREDS_BASE_URL:http://localhost:9100}
+    clientId: ${MEMBER_PORTAL_CLIENT_ID:member-portal}
+    clientSecret: ${MEMBER_PORTAL_CLIENT_SECRET:member-portal-client-secret}
