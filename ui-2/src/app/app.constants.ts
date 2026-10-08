@@ -32,6 +32,7 @@ export const AlertMessage = Object.freeze({
   API_CREDENTIAL_SAVE_ERROR: 'Unable to save client',
   API_CREDENTIAL_APPLICATION_SUBMITTED: 'Application submitted',
   API_CREDENTIAL_APPLICATION_ERROR: 'Unable to submit application',
+  API_CREDENTIAL_MEMBER_LOAD_ERROR: 'Unable to load organization details',
   API_CREDENTIAL_CHANGE_REQUESTED: 'Change request submitted',
   API_CREDENTIAL_CHANGE_REQUEST_ERROR: 'Unable to submit change request',
 } as const)
