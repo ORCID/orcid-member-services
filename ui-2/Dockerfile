@@ -1,52 +1,36 @@
-FROM node:22-bullseye-slim AS ui-build-stage
+FROM node:22-bookworm-slim AS ui-build-stage
 
-# Create app directory
 WORKDIR /app
 
-# Install some useful utils for debug/test
-RUN \
-    apt-get update && \
-    apt -y install python3 make gcc g++ vim && \
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y python3 make gcc g++ vim && \
     rm -rf /var/lib/apt/lists/*
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
 COPY package*.json ./
 
-RUN \
-    npm config list && \
+RUN npm config list && \
     npm install
 
-# Bundle app source
 COPY . .
 
 RUN npm run build
 
-FROM nginx:1.24.0-bullseye
+FROM nginx:1.26-bookworm
 
-RUN \
-    apt-get update && \
-    apt -y install procps vim && \
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y procps vim && \
     rm -rf /var/lib/apt/lists/*
 
 COPY container-files/etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 
-# Copy files from the ui-build-stage into this new nginx stage
 COPY --from=ui-build-stage /app/dist/ /usr/share/nginx/html/
 
 EXPOSE 8090
 
-# --- NEW ENTRYPOINT CONFIGURATION ---
-
-# Copy the entrypoint script from your local project into the container
 COPY entrypoint.sh /entrypoint.sh
 
-# Make sure the script is executable
 RUN chmod +x /entrypoint.sh
 
-# Set the script as the main entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
 
-# Tell the entrypoint to start Nginx when it finishes injecting the URLs
 CMD ["nginx", "-g", "daemon off;"]
