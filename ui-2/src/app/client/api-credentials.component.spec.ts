@@ -10,7 +10,6 @@ import { MemberService } from '../member/service/member.service'
 
 type ApiCredentialsComponentInternals = {
   productionCredentials: () => Client[]
-  sandboxCredentials: () => Client[]
 }
 
 const internals = (component: ApiCredentialsComponent): ApiCredentialsComponentInternals =>
@@ -80,13 +79,20 @@ describe('ManageApiCredentialsComponent', () => {
     expect(action(rows[3])).toBeNull()
   })
 
-  it('should keep sandbox credentials empty when search fails', () => {
+  it('should keep production credentials empty when search fails', () => {
     apiCredentialsService.getClientsForMember.and.returnValue(throwError(() => new Error('failed')))
     fixture = TestBed.createComponent(ApiCredentialsComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
 
-    expect(internals(component).sandboxCredentials()).toEqual([])
+    expect(internals(component).productionCredentials()).toEqual([])
+  })
+
+  it('should not render the sandbox section', () => {
+    const page: HTMLElement = fixture.nativeElement
+    expect(page.querySelectorAll('.credentials-section').length).toBe(1)
+    expect(page.querySelectorAll('.credentials-table').length).toBe(1)
+    expect(page.textContent?.toLowerCase()).not.toContain('sandbox')
   })
 
   it('should not call search when no route member id is available', () => {
