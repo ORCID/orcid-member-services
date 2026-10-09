@@ -1070,11 +1070,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">64</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">63</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/member/member-detail.component.html</context>
@@ -4526,7 +4522,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.affiliationManager.consortiumLeadName.string" datatype="html">
@@ -4890,7 +4886,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.production.applyNew.string" datatype="html">
@@ -4898,15 +4894,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">10</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="apiCredentials.production.heading.string" datatype="html">
-        <source>Production</source>
-        <target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">6</context>
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.production.noCredentials.string" datatype="html">
@@ -4914,7 +4902,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.resetSecret.confirm.string" datatype="html">
@@ -4945,48 +4933,12 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="apiCredentials.sandbox.addNew.string" datatype="html">
-        <source><x id="START_TAG_FA_ICON" ctype="x-fa_icon" equiv-text="&lt;fa-icon [icon]=&quot;faPlus&quot; class=&quot;me-1&quot; /&gt;"/><x id="CLOSE_TAG_FA_ICON" ctype="x-fa_icon" equiv-text="&lt;fa-icon [icon]=&quot;faPlus&quot; class=&quot;me-1&quot; /&gt;"/> Add new Sandbox client </source>
-        <target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">81</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="apiCredentials.sandbox.heading.string" datatype="html">
-        <source>Sandbox</source>
-        <target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">77</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="apiCredentials.sandbox.noCredentials.string" datatype="html">
-        <source> No sandbox credentials found. </source>
-        <target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">102</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="apiCredentials.sandbox.requestReview.string" datatype="html">
-        <source><x id="START_TAG_FA_ICON" ctype="x-fa_icon" equiv-text="&lt;fa-icon [icon]=&quot;faEnvelope&quot; class=&quot;me-1&quot; /&gt;"/><x id="CLOSE_TAG_FA_ICON" ctype="x-fa_icon" equiv-text="&lt;fa-icon [icon]=&quot;faEnvelope&quot; class=&quot;me-1&quot; /&gt;"/> Request integration review </source>
-        <target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">85</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="apiCredentials.table.clientId.string" datatype="html">
         <source>Client ID</source>
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">30</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="apiCredentials.table.clientName.string" datatype="html">
@@ -4994,11 +4946,7 @@
         <target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">29</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/client/api-credentials.component.html</context>
-          <context context-type="linenumber">93</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="assertionServiceApp.affiliation.created.string" datatype="html">

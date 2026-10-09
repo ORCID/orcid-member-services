@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, DestroyRef, OnInit, inject, signal } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { faEnvelope, faPencilAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faPencilAlt } from '@fortawesome/free-solid-svg-icons'
 import { Client, isSlClient } from './model/client'
 import { FaIconComponent } from '@fortawesome/angular-fontawesome'
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router'
@@ -20,7 +20,6 @@ import { ApiCredentialsService } from './service/api-credentials.service'
 export class ApiCredentialsComponent implements OnInit {
   protected faEnvelope = faEnvelope
   protected faPencilAlt = faPencilAlt
-  protected faPlus = faPlus
   protected isSlClient = isSlClient
 
   private apiCredentialsService = inject(ApiCredentialsService)
@@ -30,7 +29,6 @@ export class ApiCredentialsComponent implements OnInit {
   private destroyRef = inject(DestroyRef)
 
   protected productionCredentials = signal<Client[]>([])
-  protected sandboxCredentials = signal<Client[]>([])
   protected memberId = signal<string | null>(null)
   protected canApplyForAffiliationManager = signal(false)
 
