@@ -142,6 +142,9 @@ public class ApiCredentialsServiceClient {
 
     private String getAccessToken() {
         LOG.debug("Acquiring access token...");
+        LOG.info("Api creds client id is {}", clientId);
+        LOG.info("Api creds client secret length {}", clientSecret.length());
+
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("grant_type", "client_credentials");
         formData.add("client_id", clientId);
