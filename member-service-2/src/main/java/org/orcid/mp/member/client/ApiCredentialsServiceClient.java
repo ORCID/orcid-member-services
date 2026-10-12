@@ -17,12 +17,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Collections;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -82,7 +78,8 @@ public class ApiCredentialsServiceClient {
 
     private ApiClientSummaryPage getApiClients(String memberId) {
         String url = apiBaseUrl + "/client-details?memberId=" + memberId + "&size=100";
-        return get(url, new ParameterizedTypeReference<ApiClientSummaryPage>() {});
+        return get(url, new ParameterizedTypeReference<ApiClientSummaryPage>() {
+        });
     }
 
     private <T> T get(String url, ParameterizedTypeReference<T> responseType) {
@@ -143,7 +140,7 @@ public class ApiCredentialsServiceClient {
     private String getAccessToken() {
         LOG.debug("Acquiring access token...");
         LOG.info("Api creds client id is {}", clientId);
-        LOG.info("Api creds client secret length {}", clientSecret.length());
+        LOG.info("Api creds client secret: {}", clientSecret.substring(0, 3) + "X".repeat(clientSecret.length() - 6) + clientSecret.substring(clientSecret.length() - 3));
 
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("grant_type", "client_credentials");
