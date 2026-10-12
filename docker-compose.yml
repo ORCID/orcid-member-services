@@ -163,8 +163,12 @@ services:
       - APPLICATION_CRON_SF_SYNC=${SALESFORCE_SYNC_CRON}
       - APPLICATION_INTERNAL_MEMBER_SERVICE_ID=member-service-internal
       - APPLICATION_INTERNAL_MEMBER_SERVICE_CLIENT_SECRET=${MEMBER_SERVICE_INTERNAL_CLIENT_SECRET}
-      - MEMBER_PORTAL_CLIENT_SECRET=${MEMBER_PORTAL_CLIENT_SECRET}
-      - MEMBER_PORTAL_CLIENT_ID=${MEMBER_PORTAL_CLIENT_ID}
+      - API_CREDS_BASE_URL=${API_CREDENTIALS_SERVICE_URL:-http://api-credentials-service:9100}
+      - MEMBER_PORTAL_CLIENT_ID=${MEMBER_PORTAL_CLIENT_ID:-member-portal}
+      - MEMBER_PORTAL_CLIENT_SECRET=${MEMBER_PORTAL_CLIENT_SECRET:-member-portal-client-secret}
+    networks:
+      - default
+      - orcid-shared
     volumes:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
     healthcheck:
@@ -197,6 +201,12 @@ services:
       - ${LOG_VOLUME:-/var/tmp/}:/logs
     ports:
       - 8091:8090
+
+networks:
+  # Shared with api-credentials-service; created by its up.sh
+  orcid-shared:
+    name: ${ORCID_NETWORK:-orcid-shared}
+    external: true
 
 
 
