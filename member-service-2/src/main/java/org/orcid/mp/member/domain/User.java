@@ -37,6 +37,8 @@ public class User {
 
     private boolean admin;
 
+    private Boolean manageApiCredsEnabled;
+
     public String getId() {
         return id;
     }
@@ -163,6 +165,14 @@ public class User {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    public Boolean getManageApiCredsEnabled() {
+        return manageApiCredsEnabled;
+    }
+
+    public void setManageApiCredsEnabled(Boolean manageApiCredsEnabled) {
+        this.manageApiCredsEnabled = manageApiCredsEnabled;
     }
 
 }
