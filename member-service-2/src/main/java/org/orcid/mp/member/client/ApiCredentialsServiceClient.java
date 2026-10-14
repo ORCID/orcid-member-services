@@ -3,7 +3,9 @@ package org.orcid.mp.member.client;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.orcid.mp.member.apicreds.ApiClientDetails;
+import org.orcid.mp.member.apicreds.ApiClientSecret;
 import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
+import org.orcid.mp.member.error.ApiClientValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +18,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientResponseException;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -58,12 +63,57 @@ public class ApiCredentialsServiceClient {
     }
 
     public ApiClientDetails update(String clientDetailsId, ApiClientDetails clientRequest) {
-        return request(() -> restClient.put()
-                .uri(apiBaseUrl + "/client-details/{id}", clientDetailsId)
+        try {
+            return request(() -> restClient.put()
+                    .uri(apiBaseUrl + "/client-details/{id}", clientDetailsId)
+                    .headers(headers -> headers.setBearerAuth(accessToken.get()))
+                    .body(clientRequest)
+                    .retrieve()
+                    .body(ApiClientDetails.class));
+        } catch (HttpClientErrorException.BadRequest e) {
+            throw new ApiClientValidationException(extractErrors(e.getResponseBodyAsString()));
+        }
+    }
+
+    public boolean resetClientSecret(String clientDetailsId) {
+        // upstream reads the raw request body as the client id, so it must not be JSON encoded
+        Boolean result = request(() -> restClient.post()
+                .uri(apiBaseUrl + "/client-details/resetClientSecret")
                 .headers(headers -> headers.setBearerAuth(accessToken.get()))
-                .body(clientRequest)
+                .contentType(MediaType.TEXT_PLAIN)
+                .body(clientDetailsId)
                 .retrieve()
-                .body(ApiClientDetails.class));
+                .body(Boolean.class));
+        return Boolean.TRUE.equals(result);
+    }
+
+    public String getClientSecret(String clientDetailsId) {
+        try {
+            ApiClientSecret secret = request(() -> restClient.get()
+                    .uri(apiBaseUrl + "/client-details/{id}/secret", clientDetailsId)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .headers(headers -> headers.setBearerAuth(accessToken.get()))
+                    .retrieve()
+                    .body(ApiClientSecret.class));
+            return secret != null ? secret.getClientSecret() : null;
+        } catch (HttpClientErrorException.NotFound e) {
+            return null;
+        }
+    }
+
+    private List<String> extractErrors(String body) {
+        List<String> errors = new ArrayList<>();
+        try {
+            JsonNode root = objectMapper.readTree(body);
+            root.path("errors").forEach(n -> errors.add(n.asText()));
+            root.path("redirectUris").forEach(uri -> uri.path("errors").forEach(n -> errors.add(n.asText())));
+        } catch (Exception ignored) {
+            // body was empty or not JSON, the generic message below is used
+        }
+        if (errors.isEmpty()) {
+            errors.add("Unable to save this client. Please check the values and try again.");
+        }
+        return errors;
     }
 
     public ApiClientDetails getApiClientDetails(String clientDetailsId) {
@@ -109,8 +159,11 @@ public class ApiCredentialsServiceClient {
         initAccessToken();
         try {
             return function.get();
-        } catch (Exception e) {
-            LOG.debug("Exception after API request, attempting token refresh", e);
+        } catch (RestClientResponseException e) {
+            if (e.getStatusCode().value() != 401) {
+                throw e;
+            }
+            LOG.debug("401 from API credentials service, refreshing token and retrying");
             synchronized (this) {
                 createAccessToken();
             }

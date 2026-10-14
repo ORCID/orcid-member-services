@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>
+        Update to your ORCID Member API Credentials
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}"/>
+</head>
+<body
+    style="font-family: arial, helvetica, sans-serif; font-size: 15px; color: #494A4C;">
+<div style="padding: 20px; padding-top: 10px; margin: auto;">
+    <div th:insert="~{mail/common :: emailHeader}"></div>
+    <p>A change has been made to your Member API Credentials for the client below:</p>
+
+    <p>
+        ------------------------------------------------------------<br/>
+        <strong>Client info</strong><br/>
+        ------------------------------------------------------------
+    </p>
+
+    <p>
+        <strong>Client Name</strong><br/>
+        <span th:text="${clientName}">Client application name</span>
+    </p>
+    <p>
+        <strong>Client ID</strong><br/>
+        <span th:text="${clientId}">APP-XXXXXXXXXXXXXXXX</span>
+    </p>
+
+    <p>
+        ------------------------------------------------------------<br/>
+        <strong>What has changed?</strong><br/>
+        ------------------------------------------------------------
+    </p>
+
+    <p th:if="${homepageUrl != null}">
+        <strong>Homepage URL</strong><br/>
+        <span th:text="${homepageUrl}">https://updated-homepage-url.org</span>
+    </p>
+
+    <p th:if="${description != null}">
+        <strong>Description</strong><br/>
+        <span th:text="${description}">Updated client description</span>
+    </p>
+
+    <p th:if="${!#lists.isEmpty(addedRedirectUris)}">
+        <strong>Redirect URIs added</strong><br/>
+        <span th:each="redirectUri : ${addedRedirectUris}">
+            <span th:text="${redirectUri}">https://added.example.org/callback</span><br/>
+        </span>
+    </p>
+
+    <p th:if="${!#lists.isEmpty(removedRedirectUris)}">
+        <strong>Redirect URIs removed</strong><br/>
+        <span th:each="redirectUri : ${removedRedirectUris}">
+            <span th:text="${redirectUri}">https://removed.example.org/callback</span><br/>
+        </span>
+    </p>
+
+    <p th:if="${secretReset}">
+        <strong>Client secret</strong><br/>
+        The client secret has been reset. The previous client secret will be discarded in the next 24 hours.
+    </p>
+
+    <p>
+        If you have any questions about this change please contact our
+        <a style="color: #2E7F9F;" th:href="|mailto:${memberSupportEmail}|">Member Support Team</a>.
+    </p>
+</div>
+</body>
+</html>
