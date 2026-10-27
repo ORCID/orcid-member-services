@@ -104,6 +104,54 @@ describe('ProductionCredentialsApplyComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/api-credentials', 'memberId'])
   })
 
+  it('should show an invalid URL message for the homepage and block submission', () => {
+    component.applyForm.controls.homepageUrl.setValue('example.org')
+    component.applyForm.controls.homepageUrl.markAsTouched()
+    fixture.detectChanges()
+
+    expect(component.applyForm.controls.homepageUrl.hasError('invalidUrl')).toBeTrue()
+    expect(fixture.nativeElement.querySelector('#field_homepageUrl ~ small').textContent).toContain(
+      'valid URL starting with http'
+    )
+    component.save()
+    expect(apiCredentialsService.submitProductionCredentialsApplication).not.toHaveBeenCalled()
+  })
+
+  it('should show the required message, not the invalid message, for an empty homepage', () => {
+    component.applyForm.controls.homepageUrl.markAsTouched()
+    fixture.detectChanges()
+
+    expect(fixture.nativeElement.querySelector('#field_homepageUrl ~ small').textContent).toContain('required')
+  })
+
+  it('should list the invalid redirect URIs and block submission', () => {
+    component.applyForm.controls.authenticateOrcidIds.setValue('YES')
+    component.applyForm.controls.redirectUris.setValue('https://example.org/cb\nnot-a-uri\nmyapp://x')
+    component.applyForm.controls.redirectUris.markAsTouched()
+    fixture.detectChanges()
+
+    const errorText = fixture.nativeElement.textContent as string
+    expect(component.applyForm.controls.redirectUris.hasError('invalidRedirectUris')).toBeTrue()
+    expect(errorText).toContain('not-a-uri')
+    expect(errorText).toContain('myapp://x')
+    component.save()
+    expect(apiCredentialsService.submitProductionCredentialsApplication).not.toHaveBeenCalled()
+  })
+
+  it('should not validate redirect URIs when authenticateOrcidIds is NO', () => {
+    component.applyForm.controls.authenticateOrcidIds.setValue('NO')
+
+    expect(component.applyForm.controls.redirectUris.errors).toBeNull()
+  })
+
+  it('should validate redirect URIs again after switching back to YES', () => {
+    component.applyForm.controls.authenticateOrcidIds.setValue('NO')
+    component.applyForm.controls.authenticateOrcidIds.setValue('YES')
+    component.applyForm.controls.redirectUris.setValue('bad')
+
+    expect(component.applyForm.controls.redirectUris.hasError('invalidRedirectUris')).toBeTrue()
+  })
+
   it('should leave the user on the form and show an error when submission fails', () => {
     apiCredentialsService.submitProductionCredentialsApplication.and.returnValue(
       throwError(() => new Error('The service is unavailable'))

@@ -89,6 +89,105 @@ describe('AffiliationManagerCredentialsApplyComponent', () => {
     expect(valueOf('#field_institutionHomepageUrl')).toBe('')
   })
 
+  const isReadOnly = (selector: string): boolean => fixture.nativeElement.querySelector(selector).readOnly
+
+  it('should keep prefilled fields read-only', () => {
+    createComponent()
+
+    expect(isReadOnly('#field_organizationName')).toBeTrue()
+    expect(isReadOnly('#field_consortiumLeadName')).toBeTrue()
+    expect(isReadOnly('#field_institutionHomepageUrl')).toBeTrue()
+    expect(isReadOnly('#field_requesterEmail')).toBeTrue()
+  })
+
+  it('should let the member fill in the homepage when none is on file', () => {
+    memberService.getMemberData.and.returnValue(of(null))
+    createComponent()
+    fixture.detectChanges()
+
+    expect(isReadOnly('#field_institutionHomepageUrl')).toBeFalse()
+    expect(isReadOnly('#field_organizationName')).toBeTrue()
+  })
+
+  it('should not make the homepage editable while member data is still loading', () => {
+    memberService.getMemberData.and.returnValue(new BehaviorSubject<undefined>(undefined))
+    createComponent()
+    fixture.detectChanges()
+
+    expect(isReadOnly('#field_institutionHomepageUrl')).toBeTrue()
+  })
+
+  it('should let the member fill in empty organisation and consortium lead names', () => {
+    memberService.find.withArgs('memberId').and.returnValue(of({ ...member, clientName: undefined }))
+    memberService.find.withArgs('leadId').and.returnValue(of({ ...consortiumLead, clientName: undefined }))
+    createComponent()
+    fixture.detectChanges()
+
+    expect(isReadOnly('#field_organizationName')).toBeFalse()
+    expect(isReadOnly('#field_consortiumLeadName')).toBeFalse()
+  })
+
+  it('should let the member fill in the names when the lookup fails', () => {
+    memberService.find.withArgs('memberId').and.returnValue(throwError(() => new Error('failed')))
+    createComponent()
+    fixture.detectChanges()
+
+    expect(isReadOnly('#field_organizationName')).toBeFalse()
+    expect(isReadOnly('#field_consortiumLeadName')).toBeFalse()
+  })
+
+  it('should let the member correct a prefilled homepage that is not a valid URL', () => {
+    memberService.getMemberData.and.returnValue(of({ website: 'www.member.example.org' }))
+    createComponent()
+    fixture.detectChanges()
+
+    expect(isReadOnly('#field_institutionHomepageUrl')).toBeFalse()
+    expect(component.applyForm.controls.institutionHomepageUrl.hasError('invalidUrl')).toBeTrue()
+  })
+
+  it('should show an invalid URL message and block submission for a bad homepage', () => {
+    memberService.getMemberData.and.returnValue(of(null))
+    createComponent()
+    component.applyForm.controls.institutionHomepageUrl.setValue('example.org')
+
+    component.save()
+    fixture.detectChanges()
+
+    expect(apiCredentialsService.submitAffiliationManagerCredentialsApplication).not.toHaveBeenCalled()
+    expect(fixture.nativeElement.querySelector('#field_institutionHomepageUrl + small').textContent).toContain(
+      'valid URL starting with http'
+    )
+  })
+
+  it('should submit the values the member filled in for empty fields', () => {
+    memberService.getMemberData.and.returnValue(of(null))
+    createComponent()
+    fixture.detectChanges()
+
+    component.applyForm.controls.institutionHomepageUrl.setValue('  https://typed.example.org ')
+    component.applyForm.controls.institutionHomepageUrl.markAsDirty()
+    component.save()
+
+    expect(apiCredentialsService.submitAffiliationManagerCredentialsApplication).toHaveBeenCalledWith({
+      orgName: 'Member Org',
+      consortiumLeadName: 'Lead Org',
+      orgHomePage: 'https://typed.example.org',
+    })
+  })
+
+  it('should not overwrite what the member typed when the lookup finishes later', () => {
+    const memberData = new BehaviorSubject<{ website?: string } | null | undefined>(undefined)
+    memberService.getMemberData.and.returnValue(memberData)
+    createComponent()
+    memberData.next(null)
+
+    component.applyForm.controls.institutionHomepageUrl.setValue('https://typed.example.org')
+    component.applyForm.controls.institutionHomepageUrl.markAsDirty()
+    memberData.next({ website: 'https://late.example.org' })
+
+    expect(component.applyForm.controls.institutionHomepageUrl.value).toBe('https://typed.example.org')
+  })
+
   it('should mark the pre-filled fields as required so a failed lookup cannot be submitted silently', () => {
     createComponent()
 
@@ -133,19 +232,26 @@ describe('AffiliationManagerCredentialsApplyComponent', () => {
     component.save()
 
     expect(apiCredentialsService.submitAffiliationManagerCredentialsApplication).toHaveBeenCalledWith({
+      orgName: 'Member Org',
+      consortiumLeadName: 'Lead Org',
+      orgHomePage: 'https://member.example.org',
       notes: 'Please call us',
     })
     expect(alertService.broadcast).toHaveBeenCalledWith(AlertType.TOAST, AlertMessage.API_CREDENTIAL_APPLICATION_SUBMITTED)
     expect(router.navigate).toHaveBeenCalledWith(['/api-credentials', 'memberId'])
   })
 
-  it('should submit an empty application when notes are blank', () => {
+  it('should submit the organisation details without notes when notes are blank', () => {
     createComponent()
     component.applyForm.controls.notes.setValue('   ')
 
     component.save()
 
-    expect(apiCredentialsService.submitAffiliationManagerCredentialsApplication).toHaveBeenCalledWith({})
+    expect(apiCredentialsService.submitAffiliationManagerCredentialsApplication).toHaveBeenCalledWith({
+      orgName: 'Member Org',
+      consortiumLeadName: 'Lead Org',
+      orgHomePage: 'https://member.example.org',
+    })
   })
 
   it('should stay on the form and show an error when submission fails', () => {

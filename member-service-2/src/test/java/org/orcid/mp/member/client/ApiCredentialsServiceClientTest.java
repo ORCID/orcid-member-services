@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.orcid.mp.member.apicreds.ApiClientDetails;
 import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
+import org.orcid.mp.member.error.ApiClientValidationException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,6 +12,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -176,6 +178,113 @@ class ApiCredentialsServiceClientTest {
         });
 
         assertTrue(exception.getMessage().contains("Error while acquiring access token"));
+        mockServer.verify();
+    }
+
+    @Test
+    void update_ShouldPutAndReturnBody() {
+        setMockAccessToken("active-token");
+
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/client-details/APP-123"))
+                .andExpect(method(HttpMethod.PUT))
+                .andExpect(header("Authorization", "Bearer active-token"))
+                .andRespond(withSuccess("{\"clientDetailsId\":\"APP-123\",\"clientName\":\"My App\"}", MediaType.APPLICATION_JSON));
+
+        ApiClientDetails request = new ApiClientDetails();
+        request.setClientDetailsId("APP-123");
+        ApiClientDetails result = client.update("APP-123", request);
+
+        assertEquals("My App", result.getClientName());
+        mockServer.verify();
+    }
+
+    @Test
+    void update_On400_ShouldThrowValidationExceptionWithUpstreamErrorsAndNotRetry() {
+        setMockAccessToken("active-token");
+
+        String body = "{\"errors\":[\"Invalid website\"],\"redirectUris\":[{\"redirectUri\":\"x\",\"errors\":[\"Invalid redirect uri\"]}]}";
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/client-details/APP-123"))
+                .andExpect(method(HttpMethod.PUT))
+                .andRespond(withStatus(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(body));
+
+        ApiClientValidationException ex = assertThrows(ApiClientValidationException.class,
+                () -> client.update("APP-123", new ApiClientDetails()));
+
+        assertTrue(ex.getErrors().contains("Invalid website"));
+        assertTrue(ex.getErrors().contains("Invalid redirect uri"));
+        mockServer.verify();
+    }
+
+    @Test
+    void update_On400WithoutJsonBody_ShouldUseGenericMessage() {
+        setMockAccessToken("active-token");
+
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/client-details/APP-123"))
+                .andRespond(withStatus(HttpStatus.BAD_REQUEST));
+
+        ApiClientValidationException ex = assertThrows(ApiClientValidationException.class,
+                () -> client.update("APP-123", new ApiClientDetails()));
+
+        assertEquals(1, ex.getErrors().size());
+    }
+
+    @Test
+    void resetClientSecret_ShouldPostRawClientIdAsTextPlain() {
+        setMockAccessToken("active-token");
+
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/client-details/resetClientSecret"))
+                .andExpect(method(HttpMethod.POST))
+                .andExpect(header("Authorization", "Bearer active-token"))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
+                .andExpect(content().string("APP-123"))
+                .andRespond(withSuccess("true", MediaType.APPLICATION_JSON));
+
+        assertTrue(client.resetClientSecret("APP-123"));
+        mockServer.verify();
+    }
+
+    @Test
+    void resetClientSecret_On500_ShouldNotRetry() {
+        setMockAccessToken("active-token");
+
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/client-details/resetClientSecret"))
+                .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
+
+        assertThrows(RestClientResponseException.class, () -> client.resetClientSecret("APP-123"));
+        mockServer.verify();
+    }
+
+    @Test
+    void getClientSecret_ShouldReturnSecret() {
+        setMockAccessToken("active-token");
+
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/client-details/APP-123/secret"))
+                .andExpect(method(HttpMethod.GET))
+                .andExpect(header("Authorization", "Bearer active-token"))
+                .andRespond(withSuccess("{\"clientSecret\":\"s3cret\"}", MediaType.APPLICATION_JSON));
+
+        assertEquals("s3cret", client.getClientSecret("APP-123"));
+        mockServer.verify();
+    }
+
+    @Test
+    void getClientSecret_On404_ShouldReturnNull() {
+        setMockAccessToken("active-token");
+
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/client-details/APP-404/secret"))
+                .andRespond(withStatus(HttpStatus.NOT_FOUND));
+
+        assertNull(client.getClientSecret("APP-404"));
+    }
+
+    @Test
+    void getClientSecret_On500_ShouldPropagateInsteadOfReturningNull() {
+        setMockAccessToken("active-token");
+
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/client-details/APP-123/secret"))
+                .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
+
+        assertThrows(RestClientResponseException.class, () -> client.getClientSecret("APP-123"));
         mockServer.verify();
     }
 
