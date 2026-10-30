@@ -275,6 +275,37 @@ class ApiCredentialsServiceClientTest {
                 .andRespond(withStatus(HttpStatus.NOT_FOUND));
 
         assertNull(client.getClientSecret("APP-404"));
+        mockServer.verify();
+    }
+
+    @Test
+    void getClientSecret_WhenResponseHasNoSecret_ShouldReturnNull() {
+        setMockAccessToken("active-token");
+
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/client-details/APP-123/secret"))
+                .andRespond(withSuccess("{\"clientSecret\":null}", MediaType.APPLICATION_JSON));
+
+        assertNull(client.getClientSecret("APP-123"));
+        mockServer.verify();
+    }
+
+    @Test
+    void getClientSecret_On401_ShouldRefreshTokenAndRetry() {
+        setMockAccessToken("expired-token");
+
+        String url = "http://localhost:8080/api/client-details/APP-123/secret";
+        mockServer.expect(ExpectedCount.once(), requestTo(url))
+                .andRespond(withStatus(HttpStatus.UNAUTHORIZED));
+        mockServer.expect(ExpectedCount.once(), requestTo("http://localhost:8080/api/oauth2/token"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withSuccess("{\"access_token\":\"new-token\"}", MediaType.APPLICATION_JSON));
+        mockServer.expect(ExpectedCount.once(), requestTo(url))
+                .andExpect(method(HttpMethod.GET))
+                .andExpect(header("Authorization", "Bearer new-token"))
+                .andRespond(withSuccess("{\"clientSecret\":\"s3cret\"}", MediaType.APPLICATION_JSON));
+
+        assertEquals("s3cret", client.getClientSecret("APP-123"));
+        mockServer.verify();
     }
 
     @Test
