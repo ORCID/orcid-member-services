@@ -48,3 +48,22 @@ Notes:
 - When `--merge` is used, the source member's `client_id` becomes the surviving target member's `client_id` (applied to all related documents), and the source member is deleted after verification.
 - `--force_update` is not supported when keying by member_id.
 - The script will prompt for confirmation before modifying the database.
+
+## Export members for api-credentials-service client_details backfill
+
+Use `migration/backfill_client_details_member_id_by_sfid.py` to export `memberservice.member`
+(`_id`, `salesforce_id`, `client_name`) to a JSON file. It is read-only: MongoDB is not
+modified. The api-credentials-service container cannot reach MongoDB, so its
+`client_details.member_id` backfill reads this file instead.
+
+```bash
+# Default output: /app/scripts/migration/logs/members_by_sfid.json (overwritten each run)
+./run-script.sh --username <user> --server <host> --assertion-docker <container> --script migration/backfill_client_details_member_id_by_sfid.py
+
+# Explicit output path
+./run-script.sh --username <user> --server <host> --assertion-docker <container> --script migration/backfill_client_details_member_id_by_sfid.py -- --output /tmp/members_by_sfid.json
+```
+
+Then follow the api-credentials-service `scripts/mongo-scripts-guide.md` section
+*Backfill client_details.member_id by Salesforce ID* for steps 2–3 (copy the file and run
+the import).
