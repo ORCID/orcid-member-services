@@ -36,12 +36,6 @@ public class SalesforceClient {
     @Value("${application.salesforce.apiBaseUrl}")
     private String salesforceAPIBaseUrl;
 
-    @Value("${application.salesforce.username}")
-    private String username;
-
-    @Value("${application.salesforce.password}")
-    private String password;
-
     @Value("${application.salesforce.clientId}")
     private String clientId;
 
@@ -297,11 +291,9 @@ public class SalesforceClient {
     private String getAccessToken() {
         LOG.debug("Acquiring access token...");
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
-        formData.add("grant_type", "password");
+        formData.add("grant_type", "client_credentials");
         formData.add("client_id", clientId);
         formData.add("client_secret", clientSecret);
-        formData.add("username", username);
-        formData.add("password", password);
 
         try {
             String responseString = restClient.post().uri(loginUrl + "/services/oauth2/token")
