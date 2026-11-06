@@ -43,8 +43,6 @@ class SalesforceClientTest {
         ReflectionTestUtils.setField(salesforceClient, "accessToken", new AtomicReference<>());
         ReflectionTestUtils.setField(salesforceClient, "restClient", restClient);
         ReflectionTestUtils.setField(salesforceClient, "salesforceAPIBaseUrl", BASE_URL);
-        ReflectionTestUtils.setField(salesforceClient, "username", "test-user");
-        ReflectionTestUtils.setField(salesforceClient, "password", "test-pass");
         ReflectionTestUtils.setField(salesforceClient, "clientId", "test-client-id");
         ReflectionTestUtils.setField(salesforceClient, "clientSecret", "test-client-secret");
         ReflectionTestUtils.setField(salesforceClient, "loginUrl", LOGIN_URL);
