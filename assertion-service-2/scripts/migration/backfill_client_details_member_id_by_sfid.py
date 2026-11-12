@@ -11,8 +11,10 @@ Output JSON:
     {
       "source": {"mongo_database": "memberservice", "collection": "member"},
       "stats": {"members_total": N, "members_exported": N, "members_skipped": N},
-      "members": [{"member_id": "<24-hex>", "salesforce_id": "<18 chars>", "member_name": "..."}]
+      "members": [{"member_id": "<24-hex>", "salesforce_id": "<15 or 18 chars>"}]
     }
+
+The import step matches on the first 15 characters of salesforce_id only.
 
 Next step: copy the file into the api-credentials-service container and run
     python3 /scripts/migration/backfill_client_details_member_id_by_sfid.py --members-file <file>
@@ -53,7 +55,7 @@ def fetch_members(connection: MongoDBConnection) -> Tuple[List[dict], int, int]:
     """Return (exported_members, total_read, skipped) in Mongo natural order."""
     collection = connection.get_collection(MONGO_COLLECTION)
     try:
-        raw_members = list(collection.find({}, {'_id': 1, 'salesforce_id': 1, 'client_name': 1}))
+        raw_members = list(collection.find({}, {'_id': 1, 'salesforce_id': 1}))
     except OperationFailure as e:
         logger.error(f"Failed to query members: {e}")
         raise
@@ -74,7 +76,6 @@ def fetch_members(connection: MongoDBConnection) -> Tuple[List[dict], int, int]:
         exported.append({
             'member_id': str(raw_id),
             'salesforce_id': sf,
-            'member_name': member.get('client_name'),
         })
     return exported, len(raw_members), skipped
 
@@ -91,7 +92,7 @@ def write_json(payload: dict, output_path: Path) -> None:
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
-        description='Export memberservice.member (member_id, salesforce_id, name) to JSON '
+        description='Export memberservice.member (member_id, salesforce_id) to JSON '
                     'for the api-credentials-service client_details.member_id backfill.',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
