@@ -1,0 +1,23 @@
+name: member-portal-mongo
+
+services:
+  mongo:
+    image: mongo:${MONGO_VERSION:-7.0}
+    container_name: member-portal-mongo
+    environment:
+      SEED_DB: ${SEED_DB:-orcid_db}
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    volumes:
+      - mongo-data:/data/db
+      - ./import.sh:/docker-entrypoint-initdb.d/import.sh:ro
+      - ${SEED_DIR:?SEED_DIR must be set}:/seed:ro
+    healthcheck:
+      # The init-time server that runs the seed binds to 127.0.0.1 only.
+      test: ["CMD-SHELL", "mongosh --quiet --host \"$(hostname -i)\" --eval 'db.adminCommand(\"ping\").ok'"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  mongo-data:
