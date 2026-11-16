@@ -1,0 +1,18 @@
+<div class="modal-header border-0 pb-0">
+  <h4 class="modal-title d-flex align-items-center" id="client-updated-title">
+    <fa-icon [icon]="faCheckCircle" class="success-icon me-2" />
+    <span i18n="@@apiCredentials.updated.title.string">Client updated</span>
+  </h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    data-cy="closeClientUpdated"
+    (click)="activeModal.dismiss()"
+  ></button>
+</div>
+<div class="modal-body pt-2">
+  <p class="mb-0" i18n="@@apiCredentials.updated.message.string">
+    The client <strong>{{ clientName }}</strong> has been successfully updated.
+  </p>
+</div>

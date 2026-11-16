@@ -95,8 +95,6 @@ application:
     clientSecret: ${APPLICATION_SALESFORCE_CLIENT_SECRET}
     loginUrl: ${APPLICATION_SALESFORCE_LOGIN_URL}
     apiBaseUrl: ${APPLICATION_SALESFORCE_BASEURL}
-    username: ${APPLICATION_SALESFORCE_USERNAME}
-    password: ${APPLICATION_SALESFORCE_PASSWORD}
   userService:
     apiUrl: ${APPLICATION_USER_SERVICE_URL}
   apiCredentialsService:

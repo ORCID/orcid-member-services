@@ -12,6 +12,7 @@ interface ClientDetailsSummaryDto {
   clientDetailsId: string
   clientName: string
   editable?: boolean
+  deactivatedDate?: string | null
   slClient?: boolean | null
   homepageUrl?: string | null
   description?: string | null
@@ -31,6 +32,7 @@ interface ClientDetailsDto {
   website?: string | null
   membershipType?: string
   decryptedSecret?: string | null
+  deactivatedDate?: string | null
 }
 
 type ClientDetailsResponse = ClientDetailsDto | Client
@@ -55,7 +57,7 @@ function toClientFromSummary(dto: ClientDetailsSummaryDto): Client {
   return {
     clientId: dto.clientDetailsId,
     clientName: dto.clientName,
-    editable: dto.editable ?? true,
+    editable: dto.editable ?? dto.deactivatedDate == null,
     slClient: dto.slClient ?? undefined,
     homepageUrl: dto.homepageUrl ?? undefined,
     description: dto.description ?? undefined,
@@ -81,7 +83,7 @@ function toClientFromDetails(dto: ClientDetailsResponse): Client {
   return {
     clientId: dto.clientDetailsId,
     clientName: dto.clientName,
-    editable: true,
+    editable: dto.deactivatedDate == null,
     slClient: dto.slClient ?? undefined,
     homepageUrl: dto.website ?? undefined,
     description: dto.description ?? undefined,
@@ -155,6 +157,10 @@ export class ApiCredentialsService {
       .pipe(map((page) => ({ ...page, content: page.content.map(toClientFromSummary) })))
   }
 
+  getClientSecret(clientId: string): Observable<{ clientSecret: string }> {
+    return this.http.get<{ clientSecret: string }>(`${this.resourceUrl}/${clientId}/secret`)
+  }
+
   resetClientSecret(clientId: string): Observable<{ clientSecret: string }> {
     return this.http.post<{ clientSecret: string }>(`${this.resourceUrl}/${clientId}/reset-secret`, {})
   }
@@ -164,7 +170,7 @@ export class ApiCredentialsService {
   }
 
   submitAffiliationManagerCredentialsApplication(application: AffiliationManagerCredentialsApplication): Observable<void> {
-    return this.http.post<void>(`${this.resourceUrl}/apply/affiliation-manager`, application)
+    return this.http.post<void>(`${this.resourceUrl}/applyForAMCreds`, application)
   }
 
   requestSLClientChange(request: SlClientChangeRequest): Observable<void> {

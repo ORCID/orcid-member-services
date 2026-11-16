@@ -524,3 +524,11 @@ fa-icon {
 .modal {
   z-index: 1500;
 }
+
+// .modal-content is rendered outside the dialog component, so it is styled here.
+.client-updated-modal .modal-content {
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}

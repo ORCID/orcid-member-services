@@ -173,6 +173,28 @@ describe('ApiCredentialsService', () => {
     req.flush({ content: [summary], totalElements: 1, totalPages: 1, number: 0, size: 20 })
   })
 
+  it('should fetch a client secret', () => {
+    service.getClientSecret('abc123').subscribe((res) => {
+      expect(res).toEqual({ clientSecret: 's3cret' })
+    })
+
+    const req = httpMock.expectOne(`${service.resourceUrl}/abc123/secret`)
+    expect(req.request.method).toBe('GET')
+    req.flush({ clientSecret: 's3cret' })
+  })
+
+  it('should mark a summary as non-editable when deactivatedDate is set', () => {
+    const summary = { clientDetailsId: 'abc123', clientName: 'Test', deactivatedDate: '2026-01-01T00:00:00' }
+
+    service.getClientsForMember('memberId').subscribe((res) => {
+      expect(res[0].editable).toBeFalse()
+    })
+
+    httpMock
+      .expectOne(`${service.resourceUrl}/member/memberId`)
+      .flush({ content: [summary], totalElements: 1, totalPages: 1, number: 0, size: 20 })
+  })
+
   it('should reset a client secret', () => {
     service.resetClientSecret('abc123').subscribe((res) => {
       expect(res).toEqual({ clientSecret: 'newSecret' })
@@ -207,7 +229,7 @@ describe('ApiCredentialsService', () => {
 
     service.submitAffiliationManagerCredentialsApplication(application).subscribe()
 
-    const req = httpMock.expectOne('/memberservice/apicreds/apply/affiliation-manager')
+    const req = httpMock.expectOne('/memberservice/apicreds/applyForAMCreds')
     expect(req.request.method).toBe('POST')
     expect(req.request.body).toEqual(application)
     req.flush(null)

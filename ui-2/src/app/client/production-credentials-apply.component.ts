@@ -9,6 +9,7 @@ import { AlertService } from '../shared/service/alert.service'
 import { CLIENT_DESCRIPTION_MAX_LENGTH } from './model/client'
 import { ProductionCredentialsApplication } from './model/production-credentials-application'
 import { ApiCredentialsService } from './service/api-credentials.service'
+import { redirectUriListValidator, websiteUrlValidator } from './validators/url.validators'
 
 // TODO: values are placeholders (TBD) — confirm the real enum/labels with the product owner.
 interface IntegrationTypeOption {
@@ -33,6 +34,10 @@ export class ProductionCredentialsApplyComponent {
   private destroyRef = inject(DestroyRef)
 
   protected readonly descriptionMaxLength = CLIENT_DESCRIPTION_MAX_LENGTH
+
+  protected invalidRedirectUris(): string[] {
+    return this.applyForm.controls.redirectUris.getError('invalidRedirectUris') ?? []
+  }
 
   protected faBan = faBan
   protected faSave = faSave
@@ -67,12 +72,12 @@ export class ProductionCredentialsApplyComponent {
     integrationType: this.fb.control<string | null>(null, [Validators.required]),
     authenticateOrcidIds: this.fb.control<'YES' | 'NO' | null>(null, [Validators.required]),
     displayName: this.fb.control<string>('', [Validators.required]),
-    homepageUrl: this.fb.control<string | null>(null, [Validators.required]),
+    homepageUrl: this.fb.control<string | null>(null, [Validators.required, websiteUrlValidator()]),
     description: this.fb.control<string | null>(null, [
       Validators.required,
       Validators.maxLength(CLIENT_DESCRIPTION_MAX_LENGTH),
     ]),
-    redirectUris: this.fb.control<string | null>(null, [Validators.required]),
+    redirectUris: this.fb.control<string | null>(null, [Validators.required, redirectUriListValidator()]),
     notes: this.fb.control<string | null>(null),
   })
 
@@ -88,7 +93,7 @@ export class ProductionCredentialsApplyComponent {
           control.clearValidators()
         } else {
           this.showRedirectUris.set(true)
-          control.setValidators([Validators.required])
+          control.setValidators([Validators.required, redirectUriListValidator()])
         }
         control.updateValueAndValidity()
       })
@@ -112,7 +117,7 @@ export class ProductionCredentialsApplyComponent {
       systemIntegrationType: integrationType,
       authenticateIdsAnswer: authenticateOrcidIds,
       integrationDisplayName: value.displayName,
-      integrationHomepageUrl: homepageUrl,
+      integrationHomepageUrl: homepageUrl.trim(),
       integrationDescription: description,
       redirectUris: (value.redirectUris ?? '')
         .split('\n')

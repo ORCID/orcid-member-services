@@ -1,23 +1,25 @@
 # src/main/docker/Dockerfile
 
-FROM eclipse-temurin:21-jre-jammy
-
-RUN apt-get update && \
-    apt-get install -y iputils-ping python3 curl && \
-    rm -rf /var/lib/apt/lists/*
+FROM eclipse-temurin:21-jre-noble
 
 ENV SPRING_OUTPUT_ANSI_ENABLED=ALWAYS
 
 EXPOSE 9010
 
-# add orcid ca to allow Java application to trust other containers
-ADD src/main/docker/cacerts /opt/java/openjdk/lib/security/cacerts
-
-# add orcid ca to system to allow curl healthchecks to work
-ADD src/main/docker/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+# orcid CAs so the JVM and curl trust other containers
+COPY src/main/docker/orcid_ec_2022.crt  /usr/local/share/ca-certificates/orcid_ec_2022.crt
+COPY src/main/docker/orcid_rsa_2022.crt /usr/local/share/ca-certificates/orcid_rsa_2022.crt
 
 COPY src/main/docker/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh && sync
+
+# update-ca-certificates regenerates both the system bundle (for curl healthchecks)
+# and, via ca-certificates-java, the JKS trust store the JVM reads
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ca-certificates ca-certificates-java curl iputils-ping python3 \
+ && update-ca-certificates \
+ && ln -sf /etc/ssl/certs/java/cacerts /opt/java/openjdk/lib/security/cacerts \
+ && chmod +x /entrypoint.sh \
+ && rm -rf /var/lib/apt/lists/*
 
 COPY target/*.jar app.jar
 

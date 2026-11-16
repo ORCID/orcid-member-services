@@ -1,13 +1,15 @@
 import { Component, ChangeDetectionStrategy, DestroyRef, OnInit, inject, signal } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { faEnvelope, faPencilAlt, faPlus } from '@fortawesome/free-solid-svg-icons'
-import { Client, isSlClient } from './model/client'
+import { faEnvelope, faPencilAlt } from '@fortawesome/free-solid-svg-icons'
+import { CLIENT_UPDATED_STATE_KEY, Client, isSlClient } from './model/client'
 import { FaIconComponent } from '@fortawesome/angular-fontawesome'
-import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router'
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { AlertMessage, AlertType } from '../app.constants'
 import { isConsortiumMember } from '../member/model/member.model'
 import { MemberService } from '../member/service/member.service'
 import { AlertService } from '../shared/service/alert.service'
+import { ClientUpdatedDialogComponent } from './client-updated-dialog.component'
 import { ApiCredentialsService } from './service/api-credentials.service'
 
 @Component({
@@ -20,21 +22,33 @@ import { ApiCredentialsService } from './service/api-credentials.service'
 export class ApiCredentialsComponent implements OnInit {
   protected faEnvelope = faEnvelope
   protected faPencilAlt = faPencilAlt
-  protected faPlus = faPlus
   protected isSlClient = isSlClient
 
   private apiCredentialsService = inject(ApiCredentialsService)
   private memberService = inject(MemberService)
   private activatedRoute = inject(ActivatedRoute)
   private alertService = inject(AlertService)
+  private modalService = inject(NgbModal)
   private destroyRef = inject(DestroyRef)
 
+  // Read during construction because the navigation is only current until it completes.
+  private updatedClientName = inject(Router).currentNavigation()?.extras.state?.[CLIENT_UPDATED_STATE_KEY] as
+    | string
+    | undefined
+
   protected productionCredentials = signal<Client[]>([])
-  protected sandboxCredentials = signal<Client[]>([])
   protected memberId = signal<string | null>(null)
   protected canApplyForAffiliationManager = signal(false)
 
   ngOnInit(): void {
+    if (this.updatedClientName) {
+      const ref = this.modalService.open(ClientUpdatedDialogComponent, {
+        ariaLabelledBy: 'client-updated-title',
+        centered: true,
+        windowClass: 'client-updated-modal',
+      })
+      ref.componentInstance.clientName = this.updatedClientName
+    }
     const memberId =
       this.activatedRoute.snapshot.paramMap.get('memberId') ??
       this.activatedRoute.parent?.snapshot.paramMap.get('memberId')

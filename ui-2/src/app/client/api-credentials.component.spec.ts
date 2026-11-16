@@ -1,16 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { ActivatedRoute, convertToParamMap, RouterModule } from '@angular/router'
+import { ActivatedRoute, convertToParamMap, Navigation, Router, RouterModule } from '@angular/router'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { of, throwError } from 'rxjs'
 
 import { ApiCredentialsComponent } from './api-credentials.component'
+import { ClientUpdatedDialogComponent } from './client-updated-dialog.component'
 import { ApiCredentialsService } from './service/api-credentials.service'
 import { Client } from './model/client'
 import { MemberService } from '../member/service/member.service'
 
 type ApiCredentialsComponentInternals = {
   productionCredentials: () => Client[]
-  sandboxCredentials: () => Client[]
 }
 
 const internals = (component: ApiCredentialsComponent): ApiCredentialsComponentInternals =>
@@ -51,6 +52,36 @@ describe('ManageApiCredentialsComponent', () => {
     expect(component).toBeTruthy()
   })
 
+  describe('client updated modal', () => {
+    let modalService: NgbModal
+    let componentInstance: { clientName?: string }
+
+    const createWithNavigationState = (state: Record<string, unknown> | undefined) => {
+      const router = TestBed.inject(Router)
+      spyOn(router, 'currentNavigation').and.returnValue({ extras: { state } } as unknown as Navigation)
+      modalService = TestBed.inject(NgbModal)
+      componentInstance = {}
+      spyOn(modalService, 'open').and.returnValue({ componentInstance } as NgbModalRef)
+      recreate()
+    }
+
+    it('should open the modal with the updated client name after a save', () => {
+      createWithNavigationState({ clientUpdated: 'BieJournals (test system)' })
+
+      expect(modalService.open).toHaveBeenCalledWith(
+        ClientUpdatedDialogComponent,
+        jasmine.objectContaining({ centered: true, windowClass: 'client-updated-modal' })
+      )
+      expect(componentInstance.clientName).toBe('BieJournals (test system)')
+    })
+
+    it('should not open the modal on a normal visit', () => {
+      createWithNavigationState(undefined)
+
+      expect(modalService.open).not.toHaveBeenCalled()
+    })
+  })
+
   it('should populate production credentials from the clients of the route member', () => {
     expect(apiCredentialsService.getClientsForMember).toHaveBeenCalledWith('memberId')
     expect(internals(component).productionCredentials()).toEqual(mockClients)
@@ -80,13 +111,20 @@ describe('ManageApiCredentialsComponent', () => {
     expect(action(rows[3])).toBeNull()
   })
 
-  it('should keep sandbox credentials empty when search fails', () => {
+  it('should keep production credentials empty when search fails', () => {
     apiCredentialsService.getClientsForMember.and.returnValue(throwError(() => new Error('failed')))
     fixture = TestBed.createComponent(ApiCredentialsComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
 
-    expect(internals(component).sandboxCredentials()).toEqual([])
+    expect(internals(component).productionCredentials()).toEqual([])
+  })
+
+  it('should not render the sandbox section', () => {
+    const page: HTMLElement = fixture.nativeElement
+    expect(page.querySelectorAll('.credentials-section').length).toBe(1)
+    expect(page.querySelectorAll('.credentials-table').length).toBe(1)
+    expect(page.textContent?.toLowerCase()).not.toContain('sandbox')
   })
 
   it('should not call search when no route member id is available', () => {

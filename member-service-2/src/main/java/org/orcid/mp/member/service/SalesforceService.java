@@ -27,6 +27,8 @@ public class SalesforceService {
 
     static final String MAIN_CONTACT_ROLE = "Main relationship contact (OFFICIAL)";
 
+    static final String TECHNICAL_CONTACT_ROLE = "Technical contact";
+
     static final String SALESFORCE_SYNC_USERNAME = "salesforce-sync";
 
     private static final Logger LOG = LoggerFactory.getLogger(SalesforceService.class);

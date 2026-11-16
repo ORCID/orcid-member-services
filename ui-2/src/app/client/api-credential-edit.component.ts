@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http'
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { catchError, map, of, switchMap } from 'rxjs'
 import { FormArray, FormControl, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -20,10 +21,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { AlertMessage, AlertType } from '../app.constants'
 import { AlertService } from '../shared/service/alert.service'
-import { CLIENT_DESCRIPTION_MAX_LENGTH, Client, isSlClient } from './model/client'
+import { CLIENT_DESCRIPTION_MAX_LENGTH, CLIENT_UPDATED_STATE_KEY, Client, isSlClient } from './model/client'
 import { SlClientChangeRequest } from './model/sl-client-change-request'
 import { ApiCredentialsService } from './service/api-credentials.service'
 import { ResetClientSecretDialogComponent } from './reset-client-secret-dialog.component'
+import { redirectUriValidator, websiteUrlValidator } from './validators/url.validators'
 
 @Component({
   selector: 'app-api-credential-edit',
@@ -50,7 +52,9 @@ export class ApiCredentialEditComponent implements OnInit {
   protected isRequestMode = signal(false)
   protected accessBlocked = signal(false)
   protected clientSecretRevealed = signal(true)
+  protected isLoadingSecret = signal(false)
   protected secretReset = signal(false)
+  protected previousClientSecret = signal<string | null>(null)
   protected clientId = signal('')
 
   protected faBan = faBan
@@ -71,7 +75,7 @@ export class ApiCredentialEditComponent implements OnInit {
 
   editForm = this.fb.group({
     clientName: this.fb.control<string>('', [Validators.required]),
-    homepageUrl: this.fb.control<string | null>(null, [Validators.required]),
+    homepageUrl: this.fb.control<string | null>(null, [Validators.required, websiteUrlValidator()]),
     description: this.fb.control<string | null>(null, [
       Validators.required,
       Validators.maxLength(CLIENT_DESCRIPTION_MAX_LENGTH),
@@ -86,6 +90,7 @@ export class ApiCredentialEditComponent implements OnInit {
       if (credential) {
         this.applyAccess(credential)
         this.updateForm(credential)
+        this.clientSecretRevealed.set(false)
       } else {
         this.isCreateMode.set(true)
       }
@@ -127,12 +132,12 @@ export class ApiCredentialEditComponent implements OnInit {
 
     this.redirectUris.clear()
     ;(credential.redirectUris ?? []).forEach((uri) => {
-      this.redirectUris.push(new FormControl<string | null>(uri, [Validators.required]))
+      this.redirectUris.push(new FormControl<string | null>(uri, [Validators.required, redirectUriValidator()]))
     })
   }
 
   addRedirectUri() {
-    this.redirectUris.push(new FormControl<string | null>(null, [Validators.required]))
+    this.redirectUris.push(new FormControl<string | null>(null, [Validators.required, redirectUriValidator()]))
   }
 
   removeRedirectUri(index: number) {
@@ -140,15 +145,38 @@ export class ApiCredentialEditComponent implements OnInit {
   }
 
   toggleSecret() {
-    this.clientSecretRevealed.update((revealed) => !revealed)
+    if (this.clientSecretRevealed()) {
+      this.clientSecretRevealed.set(false)
+      return
+    }
+    if (this.editForm.controls.clientSecret.value) {
+      this.clientSecretRevealed.set(true)
+      return
+    }
+    this.isLoadingSecret.set(true)
+    this.apiCredentialsService.getClientSecret(this.clientId()).subscribe({
+      next: (res) => {
+        this.isLoadingSecret.set(false)
+        this.editForm.controls.clientSecret.setValue(res.clientSecret)
+        this.clientSecretRevealed.set(true)
+      },
+      error: (error: unknown) => {
+        this.isLoadingSecret.set(false)
+        const notFound = error instanceof HttpErrorResponse && error.status === 404
+        this.alertService.broadcast(
+          AlertType.TOAST,
+          notFound ? AlertMessage.API_CREDENTIAL_SECRET_NOT_FOUND : AlertMessage.API_CREDENTIAL_SECRET_LOAD_ERROR
+        )
+      },
+    })
   }
 
   displayClientSecret(): string {
     const secret = this.editForm.controls.clientSecret.value
-    if (!secret) {
-      return 'Client secret unavailable'
+    if (!this.clientSecretRevealed()) {
+      return '•'.repeat(secret?.length || 36)
     }
-    return this.clientSecretRevealed() ? secret : '•'.repeat(secret.length)
+    return secret || 'Client secret unavailable'
   }
 
   copySuccess() {
@@ -181,18 +209,35 @@ export class ApiCredentialEditComponent implements OnInit {
     if (!this.canResetSecret()) {
       return
     }
-    this.apiCredentialsService.resetClientSecret(this.clientId()).subscribe({
-      next: (res) => {
-        this.editForm.controls.clientSecret.setValue(res.clientSecret)
-        this.clientSecretRevealed.set(true)
-        this.secretReset.set(true)
-        this.alertService.broadcast(AlertType.TOAST, AlertMessage.API_CREDENTIAL_SECRET_RESET)
-      },
-      error: (error: unknown) => {
-        this.validationErrors.set(this.getErrorMessages(error))
-        this.alertService.broadcast(AlertType.TOAST, AlertMessage.API_CREDENTIAL_SAVE_ERROR)
-      },
-    })
+    const clientId = this.clientId()
+    const loadedSecret = this.editForm.controls.clientSecret.value
+    // the notice names the secret being replaced, so fetch it first if it was never revealed
+    const previousSecret$ = loadedSecret
+      ? of<string | null>(loadedSecret)
+      : this.apiCredentialsService.getClientSecret(clientId).pipe(
+          map((res): string | null => res.clientSecret),
+          catchError(() => of(null))
+        )
+
+    previousSecret$
+      .pipe(
+        switchMap((previous) =>
+          this.apiCredentialsService.resetClientSecret(clientId).pipe(map((res) => ({ previous, res })))
+        )
+      )
+      .subscribe({
+        next: ({ previous, res }) => {
+          this.previousClientSecret.set(previous)
+          this.editForm.controls.clientSecret.setValue(res.clientSecret)
+          this.clientSecretRevealed.set(true)
+          this.secretReset.set(true)
+          this.alertService.broadcast(AlertType.TOAST, AlertMessage.API_CREDENTIAL_SECRET_RESET)
+        },
+        error: (error: unknown) => {
+          this.validationErrors.set(this.getErrorMessages(error))
+          this.alertService.broadcast(AlertType.TOAST, AlertMessage.API_CREDENTIAL_SAVE_ERROR)
+        },
+      })
   }
 
   save() {
@@ -208,11 +253,11 @@ export class ApiCredentialEditComponent implements OnInit {
     this.invalidForm.set(false)
     this.validationErrors.set([])
     const value = this.editForm.getRawValue()
-    const redirectUris = value.redirectUris.filter((uri): uri is string => !!uri)
+    const redirectUris = value.redirectUris.map((uri) => uri?.trim()).filter((uri): uri is string => !!uri)
 
     if (this.isRequestMode()) {
       this.requestChanges({
-        homepageUrl: value.homepageUrl ?? '',
+        homepageUrl: value.homepageUrl?.trim() ?? '',
         redirectUris,
       })
       return
@@ -222,7 +267,7 @@ export class ApiCredentialEditComponent implements OnInit {
       clientId: this.clientId(),
       clientName: value.clientName,
       editable: true,
-      homepageUrl: value.homepageUrl ?? undefined,
+      homepageUrl: value.homepageUrl?.trim() ?? undefined,
       description: value.description ?? undefined,
       redirectUris,
     }
@@ -240,8 +285,9 @@ export class ApiCredentialEditComponent implements OnInit {
           this.clientSecretRevealed.set(true)
           this.alertService.broadcast(AlertType.TOAST, AlertMessage.API_CREDENTIAL_CREATED)
         } else {
-          this.alertService.broadcast(AlertType.TOAST, AlertMessage.API_CREDENTIAL_UPDATED)
-          this.router.navigate(this.collectionRoute())
+          this.router.navigate(this.collectionRoute(), {
+            state: { [CLIENT_UPDATED_STATE_KEY]: result?.clientName || value.clientName },
+          })
         }
       },
       error: (error: unknown) => {

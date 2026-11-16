@@ -27,6 +27,8 @@ export const AlertMessage = Object.freeze({
   AFFILIATION_DELETE_FAILURE: 'There was a problem deleting the affiliation',
   API_CREDENTIAL_UPDATED: 'Client updated',
   API_CREDENTIAL_SECRET_RESET: 'Client secret reset',
+  API_CREDENTIAL_SECRET_LOAD_ERROR: 'Unable to load client secret',
+  API_CREDENTIAL_SECRET_NOT_FOUND: 'This client has no secret yet. Reset the client secret to generate one.',
   API_CREDENTIAL_SEARCH_ERROR: 'Unable to load API credentials',
   API_CREDENTIAL_CREATED: 'Client created',
   API_CREDENTIAL_SAVE_ERROR: 'Unable to save client',

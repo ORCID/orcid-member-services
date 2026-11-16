@@ -2,6 +2,7 @@ package org.orcid.mp.member.service;
 
 
 import org.orcid.mp.member.apicreds.AMCredentialsApplication;
+import org.orcid.mp.member.apicreds.ApiClientUpdateNotification;
 import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
 import org.orcid.mp.member.apicreds.SlClientChangeRequest;
 import org.orcid.mp.member.client.MailgunClient;
@@ -44,6 +45,8 @@ public class MailService {
     static final String SL_CLIENT_CHANGE_SUBJECT = "Request changes to client";
 
     static final String AM_CREDENTIALS_APPLICATION = "Request for Affiliation Manager Credentials";
+
+    static final String CLIENT_UPDATED_SUBJECT = "Update to your ORCID Member API Credentials";
 
     @Value("${application.mail.contactUpdateRecipient}")
     private String contactUpdateRecipient;
@@ -208,6 +211,27 @@ public class MailService {
             mailgunClient.sendMail(recipient, slClientChangeRequest.getRequestedByEmail(), SL_CLIENT_CHANGE_SUBJECT, content);
         } catch (MailException e) {
             LOGGER.error("Error sending request to change S&L client", e);
+        }
+    }
+
+    public void sendClientUpdatedEmail(ApiClientUpdateNotification notification) {
+        String recipients = String.join(", ", notification.getRecipients());
+        LOGGER.debug("Sending client updated email for client {} to '{}'", notification.getClientId(), recipients);
+        Context context = new Context(Locale.ENGLISH);
+        context.setVariable("clientId", notification.getClientId());
+        context.setVariable("clientName", notification.getClientName());
+        context.setVariable("homepageUrl", notification.getHomepageUrl());
+        context.setVariable("description", notification.getDescription());
+        context.setVariable("addedRedirectUris", notification.getAddedRedirectUris());
+        context.setVariable("removedRedirectUris", notification.getRemovedRedirectUris());
+        context.setVariable("secretReset", notification.isSecretReset());
+        context.setVariable("memberSupportEmail", contactUpdateRecipient);
+
+        String content = templateEngine.process("mail/clientUpdated", context);
+        try {
+            mailgunClient.sendMail(recipients, contactUpdateRecipient, CLIENT_UPDATED_SUBJECT, content);
+        } catch (MailException e) {
+            LOGGER.error("Error sending client updated email for client {}", notification.getClientId(), e);
         }
     }
 

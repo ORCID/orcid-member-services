@@ -17,6 +17,7 @@ type ApiCredentialEditComponentInternals = {
   isRequestMode: () => boolean
   accessBlocked: () => boolean
   clientSecretRevealed: () => boolean
+  isLoadingSecret: () => boolean
   secretReset: () => boolean
   invalidForm: () => boolean
   validationErrors: () => string[]
@@ -51,6 +52,7 @@ describe('ApiCredentialEditComponent', () => {
       'create',
       'update',
       'resetClientSecret',
+      'getClientSecret',
     ])
     const alertServiceSpy = jasmine.createSpyObj('AlertService', ['broadcast'])
     const modalServiceSpy = jasmine.createSpyObj('NgbModal', ['open'])
@@ -128,8 +130,10 @@ describe('ApiCredentialEditComponent', () => {
     component.save()
 
     expect(apiCredentialsService.update).toHaveBeenCalled()
-    expect(alertService.broadcast).toHaveBeenCalledWith(AlertType.TOAST, AlertMessage.API_CREDENTIAL_UPDATED)
-    expect(router.navigate).toHaveBeenCalledWith(['/api-credentials', 'memberId'])
+    expect(alertService.broadcast).not.toHaveBeenCalledWith(AlertType.TOAST, AlertMessage.API_CREDENTIAL_UPDATED)
+    expect(router.navigate).toHaveBeenCalledWith(['/api-credentials', 'memberId'], {
+      state: { clientUpdated: 'Test client' },
+    })
   })
 
   it('should broadcast an error and stop saving when update fails', () => {
@@ -153,6 +157,76 @@ describe('ApiCredentialEditComponent', () => {
     expect(internals(component).redirectUris.length).toBe(initialLength)
   })
 
+  it('should show an invalid URL message for the homepage and not call update', () => {
+    fixture.detectChanges()
+    component.editForm.controls.homepageUrl.setValue('example.org')
+    component.editForm.controls.homepageUrl.markAsTouched()
+    fixture.detectChanges()
+
+    expect(component.editForm.controls.homepageUrl.hasError('invalidUrl')).toBeTrue()
+    expect(fixture.nativeElement.querySelector('[data-cy="invalidHomepageUrl"]').textContent).toContain(
+      'valid URL starting with http'
+    )
+
+    component.save()
+
+    expect(apiCredentialsService.update).not.toHaveBeenCalled()
+    expect(internals(component).invalidForm()).toBe(true)
+  })
+
+  it('should show the empty message, not the invalid message, for a blank homepage', () => {
+    fixture.detectChanges()
+    component.editForm.controls.homepageUrl.setValue('')
+    component.editForm.controls.homepageUrl.markAsTouched()
+    fixture.detectChanges()
+
+    expect(fixture.nativeElement.querySelector('[data-cy="fieldIsRequired"]')).not.toBeNull()
+    expect(fixture.nativeElement.querySelector('[data-cy="invalidHomepageUrl"]')).toBeNull()
+  })
+
+  it('should flag an invalid redirect URI, show a message and not call update', () => {
+    fixture.detectChanges()
+    const uriControl = internals(component).redirectUris.at(0)
+    uriControl.setValue('not-a-uri')
+    uriControl.markAsTouched()
+    fixture.detectChanges()
+
+    expect(uriControl.hasError('invalidRedirectUri')).toBeTrue()
+    expect(fixture.nativeElement.textContent).toContain('valid redirect URI starting with http')
+
+    component.save()
+
+    expect(apiCredentialsService.update).not.toHaveBeenCalled()
+  })
+
+  it('should validate redirect URIs that are added', () => {
+    fixture.detectChanges()
+    component.addRedirectUri()
+    const added = internals(component).redirectUris.at(1)
+
+    added.setValue('myapp://callback')
+    expect(added.hasError('invalidRedirectUri')).toBeTrue()
+
+    added.setValue('https://example.org/second')
+    expect(added.valid).toBeTrue()
+  })
+
+  it('should trim the homepage and redirect URIs before updating', () => {
+    fixture.detectChanges()
+    component.editForm.controls.homepageUrl.setValue('  https://new.example.org  ')
+    internals(component).redirectUris.at(0).setValue('  https://new.example.org/cb  ')
+    apiCredentialsService.update.and.returnValue(of(mockCredential))
+
+    component.save()
+
+    expect(apiCredentialsService.update).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        homepageUrl: 'https://new.example.org',
+        redirectUris: ['https://new.example.org/cb'],
+      })
+    )
+  })
+
   it('should require at least one redirect URI', () => {
     fixture.detectChanges()
 
@@ -164,11 +238,124 @@ describe('ApiCredentialEditComponent', () => {
 
   it('should toggle the client secret visibility', () => {
     fixture.detectChanges()
+    expect(internals(component).clientSecretRevealed()).toBe(false)
+
+    component.toggleSecret()
     expect(internals(component).clientSecretRevealed()).toBe(true)
+
+    component.toggleSecret()
+    expect(internals(component).clientSecretRevealed()).toBe(false)
+  })
+
+  it('should mask the secret until it is revealed', () => {
+    fixture.detectChanges()
+
+    expect(component.displayClientSecret()).toBe('•'.repeat('super-secret'.length))
+  })
+
+  it('should load the secret from the server the first time it is revealed', () => {
+    fixture.detectChanges()
+    component.editForm.controls.clientSecret.setValue(null)
+    apiCredentialsService.getClientSecret.and.returnValue(of({ clientSecret: 'server-secret' }))
+
+    component.toggleSecret()
+
+    expect(apiCredentialsService.getClientSecret).toHaveBeenCalledWith('APP-ABC123')
+    expect(component.displayClientSecret()).toBe('server-secret')
+    expect(internals(component).clientSecretRevealed()).toBe(true)
+    expect(internals(component).isLoadingSecret()).toBe(false)
+  })
+
+  it('should not call the server again once the secret is loaded', () => {
+    fixture.detectChanges()
+    component.editForm.controls.clientSecret.setValue(null)
+    apiCredentialsService.getClientSecret.and.returnValue(of({ clientSecret: 'server-secret' }))
+
+    component.toggleSecret()
+    component.toggleSecret()
+    component.toggleSecret()
+
+    expect(apiCredentialsService.getClientSecret).toHaveBeenCalledTimes(1)
+    expect(internals(component).clientSecretRevealed()).toBe(true)
+  })
+
+  it('should tell the user when the client has no secret yet', () => {
+    fixture.detectChanges()
+    component.editForm.controls.clientSecret.setValue(null)
+    apiCredentialsService.getClientSecret.and.returnValue(
+      throwError(() => new HttpErrorResponse({ status: 404 }))
+    )
 
     component.toggleSecret()
 
     expect(internals(component).clientSecretRevealed()).toBe(false)
+    expect(alertService.broadcast).toHaveBeenCalledWith(AlertType.TOAST, AlertMessage.API_CREDENTIAL_SECRET_NOT_FOUND)
+  })
+
+  it('should keep the secret hidden and show an error when loading it fails', () => {
+    fixture.detectChanges()
+    component.editForm.controls.clientSecret.setValue(null)
+    apiCredentialsService.getClientSecret.and.returnValue(throwError(() => new Error('failed')))
+
+    component.toggleSecret()
+
+    expect(internals(component).clientSecretRevealed()).toBe(false)
+    expect(internals(component).isLoadingSecret()).toBe(false)
+    expect(alertService.broadcast).toHaveBeenCalledWith(AlertType.TOAST, AlertMessage.API_CREDENTIAL_SECRET_LOAD_ERROR)
+  })
+
+  it('should show the reset notice above the secret, naming the previous secret', () => {
+    fixture.detectChanges()
+    apiCredentialsService.resetClientSecret.and.returnValue(of({ clientSecret: 'new-secret' }))
+
+    component.performReset()
+    fixture.detectChanges()
+
+    const notice = fixture.nativeElement.querySelector('[data-cy="secretResetNotice"]') as HTMLElement
+    expect(notice.textContent).toContain('The client secret has been reset')
+    expect(notice.textContent).toContain('The current client secret super-secret will be discarded in the next 24 hours')
+    expect(notice.compareDocumentPosition(fixture.nativeElement.querySelector('[data-cy="toggleSecret"]'))).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING
+    )
+    expect(apiCredentialsService.getClientSecret).not.toHaveBeenCalled()
+  })
+
+  it('should fetch the previous secret before resetting when it was never revealed', () => {
+    fixture.detectChanges()
+    component.editForm.controls.clientSecret.setValue(null)
+    apiCredentialsService.getClientSecret.and.returnValue(of({ clientSecret: 'old-secret' }))
+    apiCredentialsService.resetClientSecret.and.returnValue(of({ clientSecret: 'new-secret' }))
+
+    component.performReset()
+    fixture.detectChanges()
+
+    expect(apiCredentialsService.getClientSecret).toHaveBeenCalledBefore(apiCredentialsService.resetClientSecret)
+    expect(fixture.nativeElement.querySelector('[data-cy="secretResetNotice"]').textContent).toContain('old-secret')
+    expect(component.editForm.controls.clientSecret.value).toBe('new-secret')
+  })
+
+  it('should still reset when the previous secret cannot be loaded', () => {
+    fixture.detectChanges()
+    component.editForm.controls.clientSecret.setValue(null)
+    apiCredentialsService.getClientSecret.and.returnValue(throwError(() => new HttpErrorResponse({ status: 404 })))
+    apiCredentialsService.resetClientSecret.and.returnValue(of({ clientSecret: 'new-secret' }))
+
+    component.performReset()
+    fixture.detectChanges()
+
+    const notice = fixture.nativeElement.querySelector('[data-cy="secretResetNotice"]').textContent
+    expect(notice).toContain('The current client secret will be discarded in the next 24 hours')
+    expect(component.editForm.controls.clientSecret.value).toBe('new-secret')
+  })
+
+  it('should disable the reset button after a reset', () => {
+    fixture.detectChanges()
+    apiCredentialsService.resetClientSecret.and.returnValue(of({ clientSecret: 'new-secret' }))
+
+    component.performReset()
+    fixture.detectChanges()
+
+    expect(fixture.nativeElement.querySelector('.reset-secret').disabled).toBeTrue()
   })
 
   it('should reset the client secret', () => {

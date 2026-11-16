@@ -1,3 +1,7 @@
+# nodeenv cannot parse the pre-release entries nodejs.org now lists; use the mise-pinned node
+default_language_version:
+  node: system
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0

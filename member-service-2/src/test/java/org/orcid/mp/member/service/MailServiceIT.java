@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.orcid.mp.member.MemberServiceApplication;
 import org.orcid.mp.member.apicreds.AMCredentialsApplication;
+import org.orcid.mp.member.apicreds.ApiClientUpdateNotification;
 import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
 import org.orcid.mp.member.apicreds.SlClientChangeRequest;
 import org.orcid.mp.member.client.MailgunClient;
@@ -183,6 +184,62 @@ class MailServiceIT {
         assertThat(contentCaptor.getValue()).contains("https://some-other.url");
         assertThat(contentCaptor.getValue()).contains("someone (requesting-user@email.com)");
         assertThat(contentCaptor.getValue()).contains("Test Org");
+    }
+
+    @Test
+    void testSendClientUpdatedEmail() throws MailException {
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+
+        ApiClientUpdateNotification notification = clientUpdate();
+        notification.setHomepageUrl("https://updated-homepage-url.org");
+        notification.setAddedRedirectUris(List.of("https://added.example.org/cb"));
+        notification.setRemovedRedirectUris(List.of("https://removed.example.org/cb"));
+        mailService.sendClientUpdatedEmail(notification);
+
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
+        assertThat(recipientCaptor.getValue()).isEqualTo("main@member.org, tech@member.org, owner@member.org");
+        assertThat(ccCaptor.getValue()).isEqualTo("mp@orcid.org");
+        assertThat(subjectCaptor.getValue()).isEqualTo("Update to your ORCID Member API Credentials");
+
+        String content = contentCaptor.getValue();
+        assertThat(content).contains("A change has been made to your Member API Credentials for the client below:");
+        assertThat(content).contains("My client");
+        assertThat(content).contains("APP-1234567890ABCDEF");
+        assertThat(content).contains("What has changed?");
+        assertThat(content).contains("Homepage URL");
+        assertThat(content).contains("https://updated-homepage-url.org");
+        assertThat(content).contains("Redirect URIs added");
+        assertThat(content).contains("https://added.example.org/cb");
+        assertThat(content).contains("Redirect URIs removed");
+        assertThat(content).contains("https://removed.example.org/cb");
+        assertThat(content).doesNotContain("<strong>Description</strong>");
+        assertThat(content).doesNotContain("has been reset");
+        assertThat(content).contains("Member Support Team");
+        assertThat(content).contains("mailto:mp@orcid.org");
+    }
+
+    @Test
+    void testSendClientSecretResetEmail() throws MailException {
+        Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+
+        ApiClientUpdateNotification notification = clientUpdate();
+        notification.setSecretReset(true);
+        mailService.sendClientUpdatedEmail(notification);
+
+        Mockito.verify(mailgunClient).sendMail(recipientCaptor.capture(), ccCaptor.capture(), subjectCaptor.capture(), contentCaptor.capture());
+        String content = contentCaptor.getValue();
+        assertThat(content).contains("Client secret");
+        assertThat(content).contains("The client secret has been reset");
+        assertThat(content).doesNotContain("<strong>Homepage URL</strong>");
+        assertThat(content).doesNotContain("Redirect URIs added");
+    }
+
+    private ApiClientUpdateNotification clientUpdate() {
+        ApiClientUpdateNotification notification = new ApiClientUpdateNotification();
+        notification.setRecipients(List.of("main@member.org", "tech@member.org", "owner@member.org"));
+        notification.setClientId("APP-1234567890ABCDEF");
+        notification.setClientName("My client");
+        return notification;
     }
 
     @Test

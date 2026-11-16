@@ -7,19 +7,25 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.orcid.mp.member.apicreds.ApiClientDetails;
+import org.orcid.mp.member.apicreds.ApiClientSecret;
 import org.orcid.mp.member.apicreds.ApiClientSummaryPage;
 import org.orcid.mp.member.apicreds.ProductionCredentialsApplication;
 import org.orcid.mp.member.domain.User;
+import org.orcid.mp.member.error.BadRequestAlertException;
 import org.orcid.mp.member.service.ApiCredentialsService;
 import org.orcid.mp.member.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -168,5 +174,162 @@ class ApiCredentialsResourceTest {
         // Assert
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         verify(apiClientDetailsService).applyForApiCredentials(application);
+    }
+
+    @Test
+    void updateApiClient_WhenUserBelongsToMember_ShouldDelegateToService() {
+        mockUser.setAdmin(false);
+        mockUser.setMemberId("MEMBER-MATCH");
+        when(userService.getLoggedInUser()).thenReturn(mockUser);
+        ApiClientDetails existing = client("MEMBER-MATCH");
+        when(apiClientDetailsService.getApiClientDetails("APP-123")).thenReturn(existing);
+        ApiClientDetails request = new ApiClientDetails();
+        ApiClientDetails updated = new ApiClientDetails();
+        when(apiClientDetailsService.updateApiClient(existing, request)).thenReturn(updated);
+
+        ResponseEntity<ApiClientDetails> response = apiCredentialsResource.updateApiClient("APP-123", request);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isSameAs(updated);
+    }
+
+    @Test
+    void updateApiClient_WhenUserIsAdmin_ShouldDelegateToService() {
+        mockUser.setAdmin(true);
+        when(userService.getLoggedInUser()).thenReturn(mockUser);
+        ApiClientDetails existing = client("ANY-MEMBER");
+        when(apiClientDetailsService.getApiClientDetails("APP-123")).thenReturn(existing);
+        when(apiClientDetailsService.updateApiClient(any(), any())).thenReturn(existing);
+
+        assertThat(apiCredentialsResource.updateApiClient("APP-123", new ApiClientDetails()).getStatusCode())
+                .isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    void updateApiClient_WhenUserDoesNotBelongToMember_ShouldThrowAccessDenied() {
+        mockUser.setAdmin(false);
+        mockUser.setMemberId("MEMBER-OTHER");
+        when(userService.getLoggedInUser()).thenReturn(mockUser);
+        when(apiClientDetailsService.getApiClientDetails("APP-123")).thenReturn(client("MEMBER-TARGET"));
+
+        assertThatThrownBy(() -> apiCredentialsResource.updateApiClient("APP-123", new ApiClientDetails()))
+                .isInstanceOf(AccessDeniedException.class);
+        verify(apiClientDetailsService, never()).updateApiClient(any(), any());
+    }
+
+    @Test
+    void updateApiClient_WhenClientIsSl_ShouldThrowAccessDenied() {
+        mockUser.setAdmin(true);
+        when(userService.getLoggedInUser()).thenReturn(mockUser);
+        ApiClientDetails sl = client("MEMBER-1");
+        sl.setSlClient(true);
+        when(apiClientDetailsService.getApiClientDetails("APP-123")).thenReturn(sl);
+
+        assertThatThrownBy(() -> apiCredentialsResource.updateApiClient("APP-123", new ApiClientDetails()))
+                .isInstanceOf(AccessDeniedException.class);
+        verify(apiClientDetailsService, never()).updateApiClient(any(), any());
+    }
+
+    @Test
+    void updateApiClient_WhenClientIsDeactivated_ShouldThrowBadRequest() {
+        mockUser.setAdmin(true);
+        when(userService.getLoggedInUser()).thenReturn(mockUser);
+        ApiClientDetails deactivated = client("MEMBER-1");
+        deactivated.setDeactivatedDate(LocalDateTime.now());
+        when(apiClientDetailsService.getApiClientDetails("APP-123")).thenReturn(deactivated);
+
+        assertThatThrownBy(() -> apiCredentialsResource.updateApiClient("APP-123", new ApiClientDetails()))
+                .isInstanceOf(BadRequestAlertException.class);
+    }
+
+    @Test
+    void updateApiClient_WhenClientMissing_ShouldThrow404() {
+        when(apiClientDetailsService.getApiClientDetails("APP-404")).thenReturn(null);
+
+        assertThatThrownBy(() -> apiCredentialsResource.updateApiClient("APP-404", new ApiClientDetails()))
+                .isInstanceOfSatisfying(ResponseStatusException.class,
+                        e -> assertThat(e.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND));
+    }
+
+    @Test
+    void getClientSecret_WhenUserBelongsToMember_ShouldReturnSecretWithNoStore() {
+        mockUser.setAdmin(false);
+        mockUser.setMemberId("MEMBER-MATCH");
+        when(userService.getLoggedInUser()).thenReturn(mockUser);
+        when(apiClientDetailsService.getApiClientDetails("APP-123")).thenReturn(client("MEMBER-MATCH"));
+        when(apiClientDetailsService.getClientSecret("APP-123")).thenReturn("s3cret");
+
+        ResponseEntity<ApiClientSecret> response = apiCredentialsResource.getClientSecret("APP-123");
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().getClientSecret()).isEqualTo("s3cret");
+        assertThat(response.getHeaders().getCacheControl()).contains("no-store");
+    }
+
+    @Test
+    void getClientSecret_ForSlClient_ShouldStillBeAllowed() {
+        mockUser.setAdmin(true);
+        when(userService.getLoggedInUser()).thenReturn(mockUser);
+        ApiClientDetails sl = client("MEMBER-1");
+        sl.setSlClient(true);
+        when(apiClientDetailsService.getApiClientDetails("APP-123")).thenReturn(sl);
+        when(apiClientDetailsService.getClientSecret("APP-123")).thenReturn("s3cret");
+
+        assertThat(apiCredentialsResource.getClientSecret("APP-123").getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    void getClientSecret_WhenUserDoesNotBelongToMember_ShouldThrowAccessDenied() {
+        mockUser.setAdmin(false);
+        mockUser.setMemberId("MEMBER-OTHER");
+        when(userService.getLoggedInUser()).thenReturn(mockUser);
+        when(apiClientDetailsService.getApiClientDetails("APP-123")).thenReturn(client("MEMBER-TARGET"));
+
+        assertThatThrownBy(() -> apiCredentialsResource.getClientSecret("APP-123"))
+                .isInstanceOf(AccessDeniedException.class);
+        verify(apiClientDetailsService, never()).getClientSecret(any());
+    }
+
+    @Test
+    void getClientSecret_WhenClientMissing_ShouldReturn404() {
+        when(apiClientDetailsService.getApiClientDetails("APP-404")).thenReturn(null);
+
+        assertThat(apiCredentialsResource.getClientSecret("APP-404").getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    void resetClientSecret_WhenUserBelongsToMember_ShouldReturnNewSecretWithNoStore() {
+        mockUser.setAdmin(false);
+        mockUser.setMemberId("MEMBER-MATCH");
+        when(userService.getLoggedInUser()).thenReturn(mockUser);
+        ApiClientDetails existing = client("MEMBER-MATCH");
+        when(apiClientDetailsService.getApiClientDetails("APP-123")).thenReturn(existing);
+        when(apiClientDetailsService.resetClientSecret(existing)).thenReturn("new-secret");
+
+        ResponseEntity<ApiClientSecret> response = apiCredentialsResource.resetClientSecret("APP-123");
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().getClientSecret()).isEqualTo("new-secret");
+        assertThat(response.getHeaders().getCacheControl()).contains("no-store");
+    }
+
+    @Test
+    void resetClientSecret_WhenClientIsSl_ShouldThrowAccessDenied() {
+        mockUser.setAdmin(true);
+        when(userService.getLoggedInUser()).thenReturn(mockUser);
+        ApiClientDetails sl = client("MEMBER-1");
+        sl.setSlClient(true);
+        when(apiClientDetailsService.getApiClientDetails("APP-123")).thenReturn(sl);
+
+        assertThatThrownBy(() -> apiCredentialsResource.resetClientSecret("APP-123"))
+                .isInstanceOf(AccessDeniedException.class);
+        verify(apiClientDetailsService, never()).resetClientSecret(any());
+    }
+
+    private ApiClientDetails client(String memberId) {
+        ApiClientDetails details = new ApiClientDetails();
+        details.setClientDetailsId("APP-123");
+        details.setMemberId(memberId);
+        return details;
     }
 }
