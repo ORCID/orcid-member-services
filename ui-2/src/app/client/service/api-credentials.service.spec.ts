@@ -238,6 +238,7 @@ describe('ApiCredentialsService', () => {
   it('should submit an S&L client change request to the member-service endpoint', () => {
     const request: SlClientChangeRequest = {
       homepageUrl: 'https://example.org',
+      description: 'A description',
       redirectUris: ['https://example.org/callback'],
     }
     let completed = false
@@ -257,6 +258,7 @@ describe('ApiCredentialsService', () => {
     service
       .requestSLClientChange({
         homepageUrl: 'h',
+        description: 'd',
         redirectUris: [],
       })
       .subscribe({ error: (e) => (status = e.status) })

@@ -203,6 +203,7 @@ public class MailService {
         context.setVariable("orgName", slClientChangeRequest.getOrgName());
         context.setVariable("redirectUris", slClientChangeRequest.getRedirectUris());
         context.setVariable("homepageUrl", slClientChangeRequest.getHomepageUrl());
+        context.setVariable("description", slClientChangeRequest.getDescription());
 
         String content = templateEngine.process("mail/requestSLClientChange", context);
         String recipient = contactUpdateRecipient;

@@ -502,7 +502,7 @@ describe('ApiCredentialEditComponent in S&L request mode', () => {
 
     expect(internals(component).isRequestMode()).toBeTrue()
     expect(component.editForm.controls.clientName.disabled).toBeTrue()
-    expect(component.editForm.controls.description.disabled).toBeTrue()
+    expect(component.editForm.controls.description.enabled).toBeTrue()
     expect(component.editForm.controls.description.value).toBe('Search for your works')
     expect(internals(component).clientSecretRevealed()).toBeFalse()
   })
@@ -528,7 +528,7 @@ describe('ApiCredentialEditComponent in S&L request mode', () => {
   it('should send only the collated request and return to the list', () => {
     setup(slCredential)
     apiCredentialsService.requestSLClientChange.and.returnValue(of(undefined))
-    component.editForm.patchValue({ homepageUrl: 'https://new.example.org' })
+    component.editForm.patchValue({ homepageUrl: 'https://new.example.org', description: 'Updated description' })
     component.addRedirectUri()
     component.redirectUris.at(1).setValue('https://new-redirect.org')
 
@@ -536,6 +536,7 @@ describe('ApiCredentialEditComponent in S&L request mode', () => {
 
     expect(apiCredentialsService.requestSLClientChange).toHaveBeenCalledOnceWith({
       homepageUrl: 'https://new.example.org',
+      description: 'Updated description',
       redirectUris: ['https://search-link-redirect.com', 'https://new-redirect.org'],
     })
     expect(apiCredentialsService.update).not.toHaveBeenCalled()

@@ -5,5 +5,6 @@
  */
 export interface SlClientChangeRequest {
   homepageUrl: string
+  description: string
   redirectUris: string[]
 }

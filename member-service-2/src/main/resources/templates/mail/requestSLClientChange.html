@@ -27,6 +27,11 @@
         <span th:text="(@{|${homepageUrl}|})">http://updated-homepage-url.com</span>
     </p>
 
+    <p th:if="${description != null}">
+        <strong>Description of client application</strong><br/>
+        <span th:text="${description}">Updated description</span>
+    </p>
+
     <hr/>
     <strong>Redirect URIs</strong>
     <hr/>
