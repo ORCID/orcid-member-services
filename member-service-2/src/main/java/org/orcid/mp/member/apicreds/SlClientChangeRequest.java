@@ -8,11 +8,21 @@ public class SlClientChangeRequest {
 
     private String homepageUrl;
 
+    private String description;
+
     private String requestedByName;
 
     private String requestedByEmail;
 
     private String orgName;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public List<String> getRedirectUris() {
         return redirectUris;

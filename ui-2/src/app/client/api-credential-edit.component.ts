@@ -103,8 +103,6 @@ export class ApiCredentialEditComponent implements OnInit {
     this.isRequestMode.set(slClient)
     if (slClient) {
       this.clientSecretRevealed.set(false)
-      // the S&L change request email only carries the homepage URL and redirect URIs
-      this.editForm.controls.description.disable()
     } else if (credential.slClient === undefined || !credential.editable) {
       this.accessBlocked.set(true)
       this.validationErrors.set(['This client cannot be edited.'])
@@ -258,6 +256,7 @@ export class ApiCredentialEditComponent implements OnInit {
     if (this.isRequestMode()) {
       this.requestChanges({
         homepageUrl: value.homepageUrl?.trim() ?? '',
+        description: value.description?.trim() ?? '',
         redirectUris,
       })
       return

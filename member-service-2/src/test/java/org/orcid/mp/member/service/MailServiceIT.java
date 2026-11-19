@@ -249,6 +249,7 @@ class MailServiceIT {
         request.setRequestedByEmail("a.user@aaf.edu.au");
         request.setOrgName("Australian Access Federation - AAF");
         request.setHomepageUrl("http://updated-homepage-url.com");
+        request.setDescription("Updated client description");
         request.setRedirectUris(List.of("https://redirect1.url", "https://redirect2.url"));
 
         Mockito.doNothing().when(mailgunClient).sendMail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
@@ -265,6 +266,7 @@ class MailServiceIT {
         assertThat(content).contains("Andrew User (a.user@aaf.edu.au)");
         assertThat(content).contains("Australian Access Federation - AAF");
         assertThat(content).contains("http://updated-homepage-url.com");
+        assertThat(content).contains("Updated client description");
         assertThat(content).contains("https://redirect1.url");
         assertThat(content).contains("https://redirect2.url");
     }
