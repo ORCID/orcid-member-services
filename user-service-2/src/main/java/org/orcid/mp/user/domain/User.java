@@ -46,7 +46,7 @@ public class User implements Serializable {
 
     @Email
     @Size(min = 5, max = 254)
-    @Indexed
+    @Indexed(unique = true)
     private String email;
 
     private boolean activated = false;
