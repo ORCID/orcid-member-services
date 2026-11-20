@@ -28,12 +28,12 @@ public class InternalResource {
 
     /**
      * Endpoint for internal clients to access user.
-     *
+     * <p>
      * {@code GET  /internal/users/:loginOrId}
      *
      * @param loginOrId - the id or login of the user to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
-     *         body the user, or with status {@code 404 (Not Found)}.
+     * body the user, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{loginOrId}")
     public ResponseEntity<UserDTO> getUserByLoginOrId(@PathVariable String loginOrId) {
@@ -64,7 +64,7 @@ public class InternalResource {
      * {@code PUT /internal/users/memberName/:oldMemberName/:newMemberName} : Updates memberName
      * for existing Users.
      *
-     * @param memberId  the memberId for finding users to update
+     * @param memberId      the memberId for finding users to update
      * @param newMemberName the new Value of the memberName to update
      * @return the {@link ResponseEntity} with status {@code 200 (OK)}.
      */
@@ -85,14 +85,9 @@ public class InternalResource {
     @PostMapping()
     public ResponseEntity<String> createMainContactUser(@RequestBody User user) {
         LOG.info("Internal request to create main contact user for member {}", user.getMemberId());
-        try {
-            UserDTO userDTO = userMapper.toUserDTO(user);
-            userService.createUser(userDTO, userDTO.getCreatedBy());
-            return ResponseEntity.ok("success");
-        } catch (Exception e) {
-            LOG.error("Error creating main contact user", e);
-            return ResponseEntity.status(500).build();
-        }
+        UserDTO userDTO = userMapper.toUserDTO(user);
+        userService.createUser(userDTO, userDTO.getCreatedBy());
+        return ResponseEntity.ok("success");
     }
 
 }
