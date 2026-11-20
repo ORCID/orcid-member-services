@@ -84,7 +84,7 @@ public class InternalResource {
      */
     @PostMapping()
     public ResponseEntity<String> createMainContactUser(@RequestBody User user) {
-        LOG.info("Internal request to create main contact user for member {}", user.getMemberId());
+        LOG.debug("Internal request to create main contact user for member {}", user.getMemberId());
         UserDTO userDTO = userMapper.toUserDTO(user);
         userService.createUser(userDTO, userDTO.getCreatedBy());
         return ResponseEntity.ok("success");
