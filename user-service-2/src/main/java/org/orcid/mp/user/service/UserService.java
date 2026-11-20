@@ -68,6 +68,8 @@ public class UserService {
 
     public static final int BATCH_SIZE = 100;
 
+    private static final String DEFAULT_LANG_KEY = "en";
+
     @Autowired
     private UserRepository userRepository;
 
@@ -172,8 +174,13 @@ public class UserService {
     }
 
     public UserDTO createUser(UserDTO userDTO, String createdBy) {
+        return createUser(userDTO, createdBy, DEFAULT_LANG_KEY);
+    }
+
+
+    public UserDTO createUser(UserDTO userDTO, String createdBy, String langKey) {
         LOG.debug("REST request to save UserDTO : {}", userDTO);
-        UserValidation validation = userValidator.validate(userDTO, getCurrentUser().getLangKey());
+        UserValidation validation = userValidator.validate(userDTO, langKey);
         if (!validation.isValid()) {
             throw new BadRequestAlertException("Invalid user: " + String.join(", ", validation.getErrors()));
         }
@@ -269,8 +276,18 @@ public class UserService {
      * @return updated user.
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
+        return updateUser(userDTO, DEFAULT_LANG_KEY);
+    }
+
+    /**
+     * Update all information for a specific user, and return the modified user.
+     *
+     * @param userDTO user to update.
+     * @return updated user.
+     */
+    public Optional<UserDTO> updateUser(UserDTO userDTO, String langKey) {
         LOG.debug("Request to update UserDTO : {}", userDTO);
-        UserValidation validation = userValidator.validate(userDTO, getCurrentUser().getLangKey());
+        UserValidation validation = userValidator.validate(userDTO, langKey);
         if (!validation.isValid()) {
             throw new BadRequestAlertException("Invalid user: " + String.join(", ", validation.getErrors()));
         }
