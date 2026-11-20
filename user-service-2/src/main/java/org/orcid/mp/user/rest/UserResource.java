@@ -77,9 +77,7 @@ public class UserResource {
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
         LOG.debug("REST request to update User : {}", userDTO);
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO, getCurrentUser().getLangKey());
-        return updatedUser
-                .map(user -> ResponseEntity.ok().body(user))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok().body(updatedUser.get());
     }
 
     /**
