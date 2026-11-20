@@ -103,7 +103,6 @@ public class User implements Serializable {
     private Boolean admin = false;
 
     @Field("created_by")
-    @JsonIgnore
     private String createdBy;
 
     @CreatedDate
@@ -113,7 +112,6 @@ public class User implements Serializable {
 
     @LastModifiedBy
     @Field("last_modified_by")
-    @JsonIgnore
     private String lastModifiedBy;
 
     @LastModifiedDate
