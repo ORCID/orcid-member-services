@@ -310,7 +310,6 @@ public class SalesforceService {
         } else if (salesforceMemberData.getMembershipType() != null && salesforceMemberData.getMembershipType().toLowerCase().contains(Member.API_ACCESS_LEVEL_BASIC.toLowerCase())) {
             return Member.API_ACCESS_LEVEL_BASIC;
         }
-        LOG.warn("Unknown member type for salesforce id {}: {}", salesforceMemberData.getId(), salesforceMemberData.getMemberType());
         return Member.API_ACCESS_LEVEL_UNKNOWN;
     }
 
