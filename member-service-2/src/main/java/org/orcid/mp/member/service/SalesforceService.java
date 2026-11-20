@@ -9,10 +9,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.orcid.mp.member.client.SalesforceClient;
 import org.orcid.mp.member.domain.Member;
 import org.orcid.mp.member.domain.User;
+import org.orcid.mp.member.salesforce.*;
 import org.orcid.mp.member.salesforce.request.AddConsortiumMember;
 import org.orcid.mp.member.salesforce.request.MemberContactUpdate;
 import org.orcid.mp.member.salesforce.request.RemoveConsortiumMember;
-import org.orcid.mp.member.salesforce.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class SalesforceService {
         this.memberService = memberService;
     }
 
-    public void processMemberContact(MemberContactUpdate memberContactUpdate, String salesforceId)  {
+    public void processMemberContact(MemberContactUpdate memberContactUpdate, String salesforceId) {
         User user = userService.getLoggedInUser();
         memberContactUpdate.setRequestedByEmail(user.getEmail());
         memberContactUpdate.setRequestedByName(user.getFirstName() + " " + user.getLastName());
@@ -133,7 +133,8 @@ public class SalesforceService {
             }
             try {
                 ConsortiumLeadDetails consortiumLeadDetails = objectMapper.treeToValue(memberElement, ConsortiumLeadDetails.class);
-                List<ConsortiumMember> members = objectMapper.treeToValue(consortiumMembers, new TypeReference<List<ConsortiumMember>>() {});
+                List<ConsortiumMember> members = objectMapper.treeToValue(consortiumMembers, new TypeReference<List<ConsortiumMember>>() {
+                });
                 consortiumLeadDetails.setConsortiumMembers(members);
                 return consortiumLeadDetails;
             } catch (JsonProcessingException e) {
@@ -193,9 +194,14 @@ public class SalesforceService {
         LOG.debug("Syncing member with SF ID {}", salesforceMemberData.getId());
         try {
             processSalesforceMemberData(salesforceMemberData);
-            processSalesforceContactData(salesforceMemberData);
         } catch (Exception e) {
             LOG.warn("Failed to sync member {}", salesforceMemberData.getId(), e);
+        }
+
+        try {
+            processSalesforceContactData(salesforceMemberData);
+        } catch (Exception e) {
+            LOG.warn("Failed to sync contact data for {}", salesforceMemberData.getId(), e);
         }
     }
 
