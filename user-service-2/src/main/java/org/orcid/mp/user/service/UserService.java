@@ -31,12 +31,15 @@ import org.orcid.mp.user.security.AuthoritiesConstants;
 import org.orcid.mp.user.security.EncryptUtil;
 import org.orcid.mp.user.security.SecurityUtil;
 import org.orcid.mp.user.util.RandomUtil;
+import org.orcid.mp.user.validation.UserValidation;
+import org.orcid.mp.user.validation.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -82,6 +85,9 @@ public class UserService {
 
     @Autowired
     private EncryptUtil encryptUtil;
+
+    @Autowired
+    private UserValidator userValidator;
 
     public void completePasswordReset(String newPassword, String key) throws ExpiredKeyException, InvalidKeyException {
         LOG.debug("Reset user password for reset key {}", key);
@@ -166,6 +172,11 @@ public class UserService {
     }
 
     public UserDTO createUser(UserDTO userDTO, String createdBy) {
+        LOG.debug("REST request to save UserDTO : {}", userDTO);
+        UserValidation validation = userValidator.validate(userDTO, getCurrentUser().getLangKey());
+        if (!validation.isValid()) {
+            throw new BadRequestAlertException("Invalid user: " + String.join(", ", validation.getErrors()));
+        }
         if (!StringUtils.isBlank(userDTO.getId())) {
             throw new BadRequestAlertException("A new user cannot already have an ID");
         }
@@ -258,6 +269,12 @@ public class UserService {
      * @return updated user.
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
+        LOG.debug("Request to update UserDTO : {}", userDTO);
+        UserValidation validation = userValidator.validate(userDTO, getCurrentUser().getLangKey());
+        if (!validation.isValid()) {
+            throw new BadRequestAlertException("Invalid user: " + String.join(", ", validation.getErrors()));
+        }
+
         Member member = memberServiceClient.getMember(userDTO.getMemberId());
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (!existingUser.isPresent()) {

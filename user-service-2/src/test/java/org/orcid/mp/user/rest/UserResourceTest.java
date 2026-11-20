@@ -112,8 +112,7 @@ public class UserResourceTest {
         ResponseEntity<UserDTO> response = userResource.updateUser(new UserDTO());
         assertTrue(response.getStatusCode().is2xxSuccessful());
 
-        Mockito.verify(userValidator, Mockito.times(1)).validate(Mockito.any(UserDTO.class), Mockito.anyString());
-        Mockito.verify(userService, Mockito.times(1)).updateUser(Mockito.any(UserDTO.class));
+        Mockito.verify(userService, Mockito.times(1)).updateUser    (Mockito.any(UserDTO.class));
     }
 
     @Test

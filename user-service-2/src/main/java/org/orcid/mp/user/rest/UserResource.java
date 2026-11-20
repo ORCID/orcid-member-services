@@ -76,10 +76,6 @@ public class UserResource {
     @PutMapping
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
         LOG.debug("REST request to update User : {}", userDTO);
-        if (!userValidator.validate(userDTO, getCurrentUser().getLangKey()).isValid()) {
-            return ResponseEntity.badRequest().body(userDTO);
-        }
-
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
         return updatedUser
                 .map(user -> ResponseEntity.ok().body(user))
@@ -203,9 +199,6 @@ public class UserResource {
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
         LOG.debug("REST request to save UserDTO : {}", userDTO);
-        if (!userValidator.validate(userDTO, getCurrentUser().getLangKey()).isValid()) {
-            return ResponseEntity.badRequest().body(userDTO);
-        }
         UserDTO user = userService.createUser(userDTO, SecurityUtil.getCurrentUserLogin().get());
         return ResponseEntity.created(new URI("/api/users/" + user.getEmail())).body(user);
     }
