@@ -115,3 +115,8 @@ application:
       key-id: ${APPLICATION_SECURITY_JWT_KEY_ID}
   cron:
     enabled: ${ENABLE_SCHEDULER:true}
+  data:
+    migration:
+      corruptedUser:
+        original: ${APPLICATION_DATA_MIGRATION_CORRUPTED_USER_ORIGINAL}
+        duplicate: ${APPLICATION_DATA_MIGRATION_CORRUPTED_USER_DUPLICATE}
