@@ -22,6 +22,8 @@ import org.orcid.mp.user.pojo.MfaSetup;
 import org.orcid.mp.user.security.AuthoritiesConstants;
 import org.orcid.mp.user.security.EncryptUtil;
 import org.orcid.mp.user.security.MockSecurityContext;
+import org.orcid.mp.user.validation.UserValidation;
+import org.orcid.mp.user.validation.UserValidator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -68,6 +70,9 @@ public class UserServiceTest {
     @Captor
     private ArgumentCaptor<User> userCaptor;
 
+    @Mock
+    private UserValidator userValidator;
+
     @InjectMocks
     private UserService userService;
 
@@ -76,7 +81,15 @@ public class UserServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        SecurityContextHolder.setContext(new MockSecurityContext("username"));
+
+        Authentication authentication = Mockito.mock(Authentication.class);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        Mockito.when(authentication.getPrincipal()).thenReturn("some@email.com");
+        Mockito.when(userRepository.findOneByEmailIgnoreCase(Mockito.eq("some@email.com"))).thenReturn(getCurrentUser());
+
+        when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any())).thenReturn(validUserValidation());
         featureManager = new TestFeatureManager(PortalFeatures.class);
         featureManager.disableAll();
         TestFeatureManagerProvider.setFeatureManager(featureManager);
@@ -582,7 +595,7 @@ public class UserServiceTest {
 
     @Test
     public void testDisableMfa_currentUser() {
-        when(userRepository.findOneByEmailIgnoreCase(eq("username"))).thenReturn(Optional.of(getUserUsingMfa()));
+        when(userRepository.findOneByEmailIgnoreCase(eq("some@email.com"))).thenReturn(Optional.of(getUserUsingMfa()));
         when(userRepository.findById(eq("userId"))).thenReturn(Optional.of(getUserUsingMfa()));
         userService.disableMfa("userId");
         verify(userRepository).save(userCaptor.capture());
@@ -594,7 +607,7 @@ public class UserServiceTest {
 
     @Test
     public void testDisableMfa_adminUser() {
-        when(userRepository.findOneByEmailIgnoreCase(eq("username"))).thenReturn(Optional.of(getAdminUser()));
+        when(userRepository.findOneByEmailIgnoreCase(eq("some@email.com"))).thenReturn(Optional.of(getAdminUser()));
         when(userRepository.findById(eq("userId"))).thenReturn(Optional.of(getUserUsingMfa()));
         userService.disableMfa("userId");
         verify(userRepository).save(userCaptor.capture());
@@ -606,7 +619,7 @@ public class UserServiceTest {
 
     @Test
     public void testDisableMfa_notAdminUserOrCurrentUser() {
-        when(userRepository.findOneByEmailIgnoreCase(eq("username"))).thenReturn(Optional.of(getNonAdminUser()));
+        when(userRepository.findOneByEmailIgnoreCase(eq("some@email.com"))).thenReturn(Optional.of(getNonAdminUser()));
         when(userRepository.findById(eq("userId"))).thenReturn(Optional.of(getUserUsingMfa()));
 
         assertThrows(BadRequestAlertException.class, () -> {
@@ -794,6 +807,18 @@ public class UserServiceTest {
     }
 
     @Test
+    void testUpdateUserWithInvalidUserThrows() {
+        UserValidation invalid = new UserValidation();
+        invalid.setValid(false);
+        invalid.setErrors(Arrays.asList("some error"));
+        when(userValidator.validate(Mockito.any(UserDTO.class), Mockito.any())).thenReturn(invalid);
+        when(userRepository.findOneByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.of(getUser("username")));
+
+        assertThrows(BadRequestAlertException.class, () -> userService.updateUser(getUserDTO()));
+        verify(userRepository, Mockito.never()).save(Mockito.any(User.class));
+    }
+
+    @Test
     void testUpdateUserAsAdminForNonSuperadminMemberThrows() {
         when(memberServiceClient.getMember(Mockito.anyString())).thenReturn(memberWithoutSuperadminEnabled());
 
@@ -846,5 +871,21 @@ public class UserServiceTest {
         member.setClientName("member");
         member.setSuperadminEnabled(false);
         return member;
+    }
+
+    private UserValidation validUserValidation() {
+        UserValidation validation = new UserValidation();
+        validation.setValid(true);
+        validation.setErrors(new ArrayList<>());
+        return validation;
+    }
+
+    private Optional<User> getCurrentUser() {
+        User user = new User();
+        user.setEmail("some@email.com");
+        user.setLangKey("en");
+        user.setMemberId("some-memberId");
+        user.setMainContact(true);
+        return Optional.of(user);
     }
 }
